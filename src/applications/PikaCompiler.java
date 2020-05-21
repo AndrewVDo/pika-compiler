@@ -5,7 +5,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintStream;
 
-import optimizer.Optimizer;
+//import optimizer.Optimizer;
 import asmCodeGenerator.ASMCodeGenerator;
 import asmCodeGenerator.codeStorage.ASMCodeFragment;
 import lexicalAnalyzer.LexicalAnalyzer;
