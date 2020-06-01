@@ -1,6 +1,8 @@
 exec {
-	const quarters :=  6.
-	const dimes    :=  3.
+	#this comment should be stripped by the parser
+
+	#this comment should be ignored as well # const quarters :=  6.
+	#heh this too#const dimes    :=  3.
 	const nickels  :=  7.
 	const pennies  := 17.
     
@@ -21,4 +23,6 @@ exec {
     
 	print boot; boof, _n_.
 	print boot, boof, _n_.
+	#comment
+	#comment2  #
 }
