@@ -1,0 +1,7 @@
+exec {
+	#should be ignored
+	#should also be ignored# const quarter := 25.
+	#ignore #const dime := 10.
+	#ignore          
+	
+}
