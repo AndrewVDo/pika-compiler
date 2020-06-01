@@ -5,6 +5,8 @@ import inputHandler.InputHandler;
 import java.io.FileNotFoundException;
 import java.util.Iterator;
 
+import org.junit.Test;
+
 import junit.framework.TestCase;
 
 import static inputHandler.tests.FixtureDefinitions.*;
@@ -15,13 +17,15 @@ public class TestInputHandler extends TestCase {
 		return InputHandler.fromFilename(filename, terminator);
 	}
 
-
+	@Test
 	public void testHappyPath() throws FileNotFoundException {
 		happyPath("\n");
 	}
+	@Test
 	public void testHappyPathOtherTerminator() throws FileNotFoundException {
 		happyPath("aa");
 	}
+	@Test
 	public void testHappyPathEmptyTerminator() throws FileNotFoundException {
 		happyPath("");
 	}

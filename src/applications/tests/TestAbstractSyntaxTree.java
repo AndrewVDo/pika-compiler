@@ -7,6 +7,8 @@ import static applications.tests.FixtureDefinitions.AST_EXPECTED_TOKEN_ONLY_FILE
 import java.io.FileNotFoundException;
 import java.io.PrintStream;
 
+import org.junit.Test;
+
 import parseTree.ParseTreePrinter;
 import parseTree.ParseTreePrinter.Level;
 
@@ -16,9 +18,11 @@ import applications.PikaAbstractSyntaxTree;
 public class TestAbstractSyntaxTree extends FileFixturesTestCase {
 
 	
+	@Test
 	public void testAbstractSyntaxTreeFull() throws Exception {
 		tokenPrinterSingleTest(Level.FULL, AST_EXPECTED_FULL_FILENAME);
 	}
+	@Test
 	public void testAbstractSyntaxTreeTokenOnly() throws Exception {
 		tokenPrinterSingleTest(Level.TOKEN_ONLY, AST_EXPECTED_TOKEN_ONLY_FILENAME);
 	}

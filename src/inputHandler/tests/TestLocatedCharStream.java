@@ -11,10 +11,13 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
 
+import org.junit.Test;
+
 import tests.FileFixturesTestCase;
 
 public class TestLocatedCharStream extends FileFixturesTestCase {
 
+	@Test
 	public void testLocCharStream() throws Exception {
 		String actualOutput =	locCharStreamOutput(SIMPLE_FIXTURE_FILENAME);
 		String expectedOutput = getContents(SIMPLE_LCHAR_FILENAME);

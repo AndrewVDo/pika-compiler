@@ -6,6 +6,8 @@ import static applications.tests.FixtureDefinitions.SEMANTIC_EXPECTED_FILENAME;
 import java.io.FileNotFoundException;
 import java.io.PrintStream;
 
+import org.junit.Test;
+
 import parseTree.ParseTreePrinter;
 import parseTree.ParseTreePrinter.Level;
 
@@ -14,6 +16,8 @@ import tokens.Tokens;
 import applications.PikaSemanticChecker;
 
 public class TestSemanticChecker extends FileFixturesTestCase {
+
+	@Test
 	public void testSemanticChecker() throws Exception {
 		semanticCheckerSingleTest(Level.FULL, Tokens.Level.FULL, SEMANTIC_EXPECTED_FILENAME);
 	}
