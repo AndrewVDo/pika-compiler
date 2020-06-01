@@ -9,19 +9,22 @@ import static applications.tests.FixtureDefinitions.MILESTONE_1_TESTS_EXPECTED;
 import java.io.FileNotFoundException;
 import java.io.PrintStream;
 
+import org.junit.Test;
+
 import tests.FileFixturesTestCase;
 import tokens.Tokens;
 import applications.PikaTokenPrinter;
 
 public class TestTokenPrinter extends FileFixturesTestCase {
 
-
+	@Test
 	public void testTokenPrinter() throws Exception {
 		String actualOutput =	tokenPrinterOutput(TOKEN_PRINTER_INPUT_FILENAME);
 		String expectedOutput = getContents(TOKEN_PRINTER_EXPECTED_FILENAME);
 		assertEquals(expectedOutput, actualOutput);
 	}
 	
+	@Test
 	public void testMilestoneOne() throws Exception {
 		assertEquals(
 				MILESTONE_1_TESTS_INPUT.length,

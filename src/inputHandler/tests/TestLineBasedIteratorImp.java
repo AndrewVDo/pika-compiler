@@ -5,6 +5,8 @@ import junit.framework.TestCase;
 
 import static inputHandler.tests.FixtureDefinitions.*;
 
+import org.junit.Test;
+
 
 public class TestLineBasedIteratorImp extends TestCase {
 
@@ -12,7 +14,7 @@ public class TestLineBasedIteratorImp extends TestCase {
 		return new LineBasedReader(filename);
 	}
 	
-	
+	@Test
 	public void testHappyPath() {
 		LineBasedReader reader = factory(SIMPLE_FIXTURE_FILENAME);
 		
@@ -24,6 +26,7 @@ public class TestLineBasedIteratorImp extends TestCase {
 		assertFalse(reader.hasNext());
 	}
 	
+	@Test
 	public void testFileNotFound() {
 		try {
 			factory(NONEXISTENT_FILENAME);

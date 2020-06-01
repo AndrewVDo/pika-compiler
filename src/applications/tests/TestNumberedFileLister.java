@@ -6,12 +6,15 @@ import static applications.tests.FixtureDefinitions.NUMBERED_FILE_INPUT_FILENAME
 import java.io.FileNotFoundException;
 import java.io.PrintStream;
 
+import org.junit.Test;
+
 import tests.FileFixturesTestCase;
 import applications.NumberedFileLister;
 
 public class TestNumberedFileLister extends FileFixturesTestCase {
 
 	
+	@Test
 	public void testListFile() throws Exception {
 		String actualOutput =	listFileOutput(NUMBERED_FILE_INPUT_FILENAME);
 		String expectedOutput = getContents(NUMBERED_FILE_EXPECTED_FILENAME);
