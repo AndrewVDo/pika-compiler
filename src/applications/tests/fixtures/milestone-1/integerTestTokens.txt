@@ -10,6 +10,7 @@
 (ASSIGN)
 (number, 0)
 (TERMINATOR)
+(CONST)
 (identifier, negative)
 (ASSIGN)
 (number, -10)
