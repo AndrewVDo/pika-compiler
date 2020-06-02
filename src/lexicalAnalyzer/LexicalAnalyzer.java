@@ -39,7 +39,7 @@ public class LexicalAnalyzer extends ScannerImp implements Scanner {
 			scanComment(ch);
 			return findNextToken();
 		}
-		else if(isNumber(ch) > 0) {
+		else if(ch.isSign() || ch.isDigit() || (ch.isDecimal() && input.peek().isDigit())) {
 			return scanNumber(ch);
 		}
 		else if(ch.isLowerCase()) {
@@ -81,35 +81,58 @@ public class LexicalAnalyzer extends ScannerImp implements Scanner {
 
 	private Token scanNumber(LocatedChar firstChar) {
 		StringBuffer buffer = new StringBuffer();
-		buffer.append(firstChar.getCharacter());
-		appendSubsequentDigits(buffer);
-		
-		//check to see if what comes after is the fractional part of a float or an ending '.'
-		LocatedChar decimalPoint = input.next();
-		if(isNumber(decimalPoint) != 2) {
-			input.pushback(decimalPoint);
-			return IntegerToken.make(firstChar.getLocation(), buffer.toString());
-		}
+		LocatedChar currChar = firstChar;
 
-		//append decimal point with traling digits
-		buffer.append(decimalPoint.getCharacter());
-		appendSubsequentDigits(buffer);
-
-		//check to see if there's an exponent
-		LocatedChar expPoint = input.next();
-		if(expPoint.getCharacter() == 'E') {
-			buffer.append(expPoint);
-			LocatedChar expValue = input.next();
-			if(isNumber(expValue) != 1) {
-				//E must be followed by a digit
-				lexicalError(expValue);
+		if(currChar.isSign()) {
+			if(input.peek().isWhitespace()) {
+				return PunctuatorScanner.scan(firstChar, input);
 			}
-			buffer.append(expValue);
-			appendSubsequentDigits(buffer);
+			buffer.append(currChar.getCharacter());
+			currChar = input.next();
 		}
 
+		assert(currChar.isDigit() || currChar.isDecimal());
+
+		if(currChar.isDigit()) {
+			buffer.append(currChar.getCharacter());
+			appendSubsequentDigits(buffer);
+
+			currChar = input.next();
+			assert(currChar.isDecimal() || currChar.isWhitespace());
+			if(currChar.isWhitespace() || (currChar.isDecimal() && !input.peek().isDigit()) ) {
+				input.pushback(currChar);
+				return IntegerToken.make(firstChar.getLocation(), buffer.toString());
+			}
+		}
+
+		// System.out.println("curr: " + currChar + " next: " + input.peek() + " first " + firstChar);
+		assert(currChar.isDecimal() && input.peek().isDigit());
+
+		buffer.append(currChar.getCharacter());
+		appendSubsequentDigits(buffer);
+		currChar = input.next();
+
+		if(currChar.getCharacter() == 'E') {
+			buffer.append(currChar.getCharacter());
+			
+			if(input.peek().isSign()) {
+				currChar = input.next();
+				buffer.append(currChar.getCharacter());
+			}
+			
+			if(!input.peek().isDigit()) {
+				lexicalError(input.peek());
+			}
+			appendSubsequentDigits(buffer);
+			currChar = input.next();
+		}
+
+		assert(currChar.isWhitespace() || currChar.isDecimal());
+		input.pushback(currChar);
+		// System.out.println("make a float: " + buffer.toString());
 		return FloatToken.make(firstChar.getLocation(), buffer.toString());
 	}
+
 	private void appendSubsequentDigits(StringBuffer buffer) {
 		LocatedChar c = input.next();
 		while(c.isDigit()) {
@@ -190,37 +213,6 @@ public class LexicalAnalyzer extends ScannerImp implements Scanner {
 
 	private boolean isEndOfInput(LocatedChar lc) {
 		return lc == LocatedCharStream.FLAG_END_OF_INPUT;
-	}
-
-	private int isNumber(LocatedChar lc) {
-		assert(
-			lc.getLocation().getLineNumber() == input.peek().getLocation().getLineNumber() &&
-			lc.getLocation().getPosition() + 1 == input.peek().getLocation().getPosition()
-		);
-		LocatedChar seq [] = {
-			lc,
-			input.next(),
-			input.next(),
-		};
-		
-		//0 - not a number
-		//1 - (+|-)? [0..9]* 
-		//2 - (+|-)? .[0..9]^+
-		int answer = 0;
-
-		if(	seq[0].isDigit() || 
-			(seq[0].isSign() && seq[1].isDigit()) ) {
-			answer = 1;
-		}
-		else if((seq[0].isDecimal() && seq[1].isDigit()) ||
-				(seq[0].isSign() && seq[1].isDecimal() && seq[2].isDigit()) ) {
-			answer = 2;
-		}
-
-		input.pushback(seq[2]);
-		input.pushback(seq[1]);
-
-		return answer;
 	}
 	
 	
