@@ -20,10 +20,12 @@ public class FixtureDefinitions {
 	public static final String MILESTONE_1_TESTS_INPUT [] = {
 			MILESTONE_1_DIRECTORY + "commentTest.pika",
 			MILESTONE_1_DIRECTORY + "integerTest.pika",
+			MILESTONE_1_DIRECTORY + "floatTest.pika",
 	};
 	
 	public static final String MILESTONE_1_TESTS_EXPECTED [] = {
 			MILESTONE_1_DIRECTORY + "commentTestTokens.txt",
 			MILESTONE_1_DIRECTORY + "integerTestTokens.txt",
+			MILESTONE_1_DIRECTORY + "floatTestTokens.txt",
 	};
 }
