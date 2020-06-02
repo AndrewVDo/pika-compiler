@@ -1,6 +1,5 @@
 package lexicalAnalyzer;
 
-
 import logging.PikaLogger;
 
 import inputHandler.InputHandler;
@@ -8,6 +7,7 @@ import inputHandler.LocatedChar;
 import inputHandler.LocatedCharStream;
 import inputHandler.PushbackCharStream;
 import inputHandler.TextLocation;
+import tokens.FloatToken;
 import tokens.IdentifierToken;
 import tokens.LextantToken;
 import tokens.NullToken;
@@ -39,7 +39,7 @@ public class LexicalAnalyzer extends ScannerImp implements Scanner {
 			scanComment(ch);
 			return findNextToken();
 		}
-		else if(isNumber(ch)) {
+		else if(isNumber(ch) > 0) {
 			return scanNumber(ch);
 		}
 		else if(ch.isLowerCase()) {
@@ -84,7 +84,31 @@ public class LexicalAnalyzer extends ScannerImp implements Scanner {
 		buffer.append(firstChar.getCharacter());
 		appendSubsequentDigits(buffer);
 		
-		return IntegerToken.make(firstChar.getLocation(), buffer.toString());
+		//check to see if what comes after is the fractional part of a float or an ending '.'
+		LocatedChar decimalPoint = input.next();
+		if(isNumber(decimalPoint) != 2) {
+			input.pushback(decimalPoint);
+			return IntegerToken.make(firstChar.getLocation(), buffer.toString());
+		}
+
+		//append decimal point with traling digits
+		buffer.append(decimalPoint.getCharacter());
+		appendSubsequentDigits(buffer);
+
+		//check to see if there's an exponent
+		LocatedChar expPoint = input.next();
+		if(expPoint.getCharacter() == 'E') {
+			buffer.append(expPoint);
+			LocatedChar expValue = input.next();
+			if(isNumber(expValue) != 1) {
+				//E must be followed by a digit
+				lexicalError(expValue);
+			}
+			buffer.append(expValue);
+			appendSubsequentDigits(buffer);
+		}
+
+		return FloatToken.make(firstChar.getLocation(), buffer.toString());
 	}
 	private void appendSubsequentDigits(StringBuffer buffer) {
 		LocatedChar c = input.next();
@@ -168,13 +192,35 @@ public class LexicalAnalyzer extends ScannerImp implements Scanner {
 		return lc == LocatedCharStream.FLAG_END_OF_INPUT;
 	}
 
-	private boolean isNumber(LocatedChar lc) {
-		return(
-			lc.isDigit() ||
-			(
-				(lc.getCharacter() == '+' || lc.getCharacter() == '-') && input.peek().isDigit()
-			)
+	private int isNumber(LocatedChar lc) {
+		assert(
+			lc.getLocation().getLineNumber() == input.peek().getLocation().getLineNumber() &&
+			lc.getLocation().getPosition() + 1 == input.peek().getLocation().getPosition()
 		);
+		LocatedChar seq [] = {
+			lc,
+			input.next(),
+			input.next(),
+		};
+		
+		//0 - not a number
+		//1 - (+|-)? [0..9]* 
+		//2 - (+|-)? .[0..9]^+
+		int answer = 0;
+
+		if(	seq[0].isDigit() || 
+			(seq[0].isSign() && seq[1].isDigit()) ) {
+			answer = 1;
+		}
+		else if((seq[0].isDecimal() && seq[1].isDigit()) ||
+				(seq[0].isSign() && seq[1].isDecimal() && seq[2].isDigit()) ) {
+			answer = 2;
+		}
+
+		input.pushback(seq[2]);
+		input.pushback(seq[1]);
+
+		return answer;
 	}
 	
 	
