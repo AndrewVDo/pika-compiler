@@ -85,71 +85,35 @@
         Jump         $$general-runtime-error   
         DLabel       $usable-memory-start      
         DLabel       $global-memory-block      
-        DataZ        2                         
+        DataZ        12                        
         Label        $$main                    
         PushD        $global-memory-block      
         PushI        0                         
-        Add                                    %% a
-        Label        -compare-1-arg1           
+        Add                                    %% integertest
         PushI        5                         
-        Label        -compare-1-arg2           
         PushI        3                         
-        Label        -compare-1-sub            
         Subtract                               
-        JumpPos      -compare-1-true           
-        Jump         -compare-1-false          
-        Label        -compare-1-true           
-        PushI        1                         
-        Jump         -compare-1-join           
-        Label        -compare-1-false          
-        PushI        0                         
-        Jump         -compare-1-join           
-        Label        -compare-1-join           
-        StoreC                                 
+        StoreI                                 
         PushD        $global-memory-block      
-        PushI        1                         
-        Add                                    %% b
-        Label        -compare-2-arg1           
-        PushF        3.200000                  
-        Label        -compare-2-arg2           
-        PushF        5.000000                  
-        Label        -compare-2-sub            
+        PushI        4                         
+        Add                                    %% floatingtest
+        PushF        10.200000                 
+        PushF        3.250000                  
         FSubtract                              
-        JumpFPos     -compare-2-true           
-        Jump         -compare-2-false          
-        Label        -compare-2-true           
-        PushI        1                         
-        Jump         -compare-2-join           
-        Label        -compare-2-false          
-        PushI        0                         
-        Jump         -compare-2-join           
-        Label        -compare-2-join           
-        StoreC                                 
+        StoreF                                 
         PushD        $global-memory-block      
         PushI        0                         
-        Add                                    %% a
-        LoadC                                  
-        JumpTrue     -print-boolean-3-true     
-        PushD        $boolean-false-string     
-        Jump         -print-boolean-3-join     
-        Label        -print-boolean-3-true     
-        PushD        $boolean-true-string      
-        Label        -print-boolean-3-join     
-        PushD        $print-format-boolean     
+        Add                                    %% integertest
+        LoadI                                  
+        PushD        $print-format-integer     
         Printf                                 
         PushD        $print-format-newline     
         Printf                                 
         PushD        $global-memory-block      
-        PushI        1                         
-        Add                                    %% b
-        LoadC                                  
-        JumpTrue     -print-boolean-4-true     
-        PushD        $boolean-false-string     
-        Jump         -print-boolean-4-join     
-        Label        -print-boolean-4-true     
-        PushD        $boolean-true-string      
-        Label        -print-boolean-4-join     
-        PushD        $print-format-boolean     
+        PushI        4                         
+        Add                                    %% floatingtest
+        LoadF                                  
+        PushD        $print-format-floating    
         Printf                                 
         PushD        $print-format-newline     
         Printf                                 
