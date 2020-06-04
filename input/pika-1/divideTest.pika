@@ -1,0 +1,5 @@
+exec {
+	const three := 9 / 3.
+	const half := 10.0 / 20.1.
+	print three, _n_, half, _n_.
+}

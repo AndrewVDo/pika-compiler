@@ -298,6 +298,15 @@ public class ASMCodeGenerator {
 				ASMOpcode opcode = (ASMOpcode)variant;
 				code.add(opcode);
 			}
+			else if(variant instanceof SimpleCodeGenerator) {
+				SimpleCodeGenerator generator = (SimpleCodeGenerator) variant;
+				ASMCodeFragment fragment = generator.generate(node);
+				code.append(fragment);
+				
+				if(fragment.isAddress()) {
+					code.markAsAddress();
+				}
+			}
 			else {
 				// throw exception
 			}

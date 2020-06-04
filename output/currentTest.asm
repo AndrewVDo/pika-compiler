@@ -83,27 +83,59 @@
         Label        $$i-divide-by-zero        
         PushD        $errors-int-divide-by-zero 
         Jump         $$general-runtime-error   
+        DLabel       $errors-float-divide-by-zero 
+        DataC        102                       %% "floating divide by zero"
+        DataC        108                       
+        DataC        111                       
+        DataC        97                        
+        DataC        116                       
+        DataC        105                       
+        DataC        110                       
+        DataC        103                       
+        DataC        32                        
+        DataC        100                       
+        DataC        105                       
+        DataC        118                       
+        DataC        105                       
+        DataC        100                       
+        DataC        101                       
+        DataC        32                        
+        DataC        98                        
+        DataC        121                       
+        DataC        32                        
+        DataC        122                       
+        DataC        101                       
+        DataC        114                       
+        DataC        111                       
+        DataC        0                         
+        Label        $$f-divide-by-zero        
+        PushD        $errors-float-divide-by-zero 
+        Jump         $$general-runtime-error   
         DLabel       $usable-memory-start      
         DLabel       $global-memory-block      
         DataZ        12                        
         Label        $$main                    
         PushD        $global-memory-block      
         PushI        0                         
-        Add                                    %% integertest
-        PushI        5                         
+        Add                                    %% three
+        PushI        9                         
         PushI        3                         
-        Subtract                               
+        Duplicate                              
+        JumpFalse    $$i-divide-by-zero        
+        Divide                                 
         StoreI                                 
         PushD        $global-memory-block      
         PushI        4                         
-        Add                                    %% floatingtest
-        PushF        10.200000                 
-        PushF        3.250000                  
-        FSubtract                              
+        Add                                    %% half
+        PushF        10.000000                 
+        PushF        20.100000                 
+        Duplicate                              
+        JumpFZero    $$f-divide-by-zero        
+        FDivide                                
         StoreF                                 
         PushD        $global-memory-block      
         PushI        0                         
-        Add                                    %% integertest
+        Add                                    %% three
         LoadI                                  
         PushD        $print-format-integer     
         Printf                                 
@@ -111,10 +143,16 @@
         Printf                                 
         PushD        $global-memory-block      
         PushI        4                         
-        Add                                    %% floatingtest
+        Add                                    %% half
         LoadF                                  
         PushD        $print-format-floating    
         Printf                                 
         PushD        $print-format-newline     
+        Printf                                 
+        PushD        $global-memory-block      
+        PushI        0                         
+        Add                                    %% three
+        LoadI                                  
+        PushD        $print-format-integer     
         Printf                                 
         Halt                                   
