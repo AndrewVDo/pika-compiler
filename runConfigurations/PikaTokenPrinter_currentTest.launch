@@ -11,7 +11,7 @@
 </listAttribute>
 <stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="applications.PikaTokenPrinter"/>
 <stringAttribute key="org.eclipse.jdt.launching.MODULE_NAME" value="pikaStudents"/>
-<stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="input/pika-1/floatTest.pika"/>
+<stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="input/currentTest.pika"/>
 <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="pikaStudents"/>
 <stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-ea"/>
 </launchConfiguration>
