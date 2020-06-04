@@ -42,6 +42,7 @@ public class PikaCompiler extends PikaApplication {
 	private static void generateCodeIfNoErrors(String filename, ParseNode decoratedTree)
 			throws FileNotFoundException {
 		String outfile = outputFilename(filename);
+		System.out.println(outfile);
 		
 		if(thereAreErrors()) {
 			stopProcessing(outfile);
