@@ -267,7 +267,7 @@ public class Parser {
 		return left;
 	}
 	private boolean startsAdditiveExpression(Token token) {
-		return startsLiteral(token);
+		return startsMultiplicativeExpression(token);
 	}	
 
 	// multiplicativeExpression -> atomicExpression [MULT atomicExpression]*  (left-assoc)
