@@ -117,25 +117,21 @@
         Label        $$main                    
         PushD        $global-memory-block      
         PushI        0                         
-        Add                                    %% three
-        PushI        9                         
+        Add                                    %% integertest
+        PushI        5                         
         PushI        3                         
-        Duplicate                              
-        JumpFalse    $$i-divide-by-zero        
-        Divide                                 
+        Subtract                               
         StoreI                                 
         PushD        $global-memory-block      
         PushI        4                         
-        Add                                    %% half
-        PushF        10.000000                 
-        PushF        20.100000                 
-        Duplicate                              
-        JumpFZero    $$f-divide-by-zero        
-        FDivide                                
+        Add                                    %% floatingtest
+        PushF        10.200000                 
+        PushF        3.200000                  
+        FSubtract                              
         StoreF                                 
         PushD        $global-memory-block      
         PushI        0                         
-        Add                                    %% three
+        Add                                    %% integertest
         LoadI                                  
         PushD        $print-format-integer     
         Printf                                 
@@ -143,16 +139,10 @@
         Printf                                 
         PushD        $global-memory-block      
         PushI        4                         
-        Add                                    %% half
+        Add                                    %% floatingtest
         LoadF                                  
         PushD        $print-format-floating    
         Printf                                 
         PushD        $print-format-newline     
-        Printf                                 
-        PushD        $global-memory-block      
-        PushI        0                         
-        Add                                    %% three
-        LoadI                                  
-        PushD        $print-format-integer     
         Printf                                 
         Halt                                   

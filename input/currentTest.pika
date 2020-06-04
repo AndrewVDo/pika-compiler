@@ -1,5 +1,5 @@
 exec {
-	const three := 9 / 3.
-	const half := 10.0 / 20.1.
-	print three, _n_, half, _n_.
+	const integertest := 5 - 3.
+	const floatingtest := 10.2 - 3.2.
+	print integertest, _n_, floatingtest, _n_.
 }
