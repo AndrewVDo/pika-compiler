@@ -1,6 +1,5 @@
 exec {
-	const avogadro := 6.022E+23.
-	const pi := 3.14159.
-	const twopi := pi + pi.
-	print twopi; _n_.
+	const a := 5 > 3.
+	const b:= 3.2 > 5.0.
+	print a, _n_, b, _n_.
 }

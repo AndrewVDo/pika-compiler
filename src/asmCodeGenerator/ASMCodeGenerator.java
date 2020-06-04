@@ -239,6 +239,9 @@ public class ASMCodeGenerator {
 			ASMCodeFragment arg1 = removeValueCode(node.child(0));
 			ASMCodeFragment arg2 = removeValueCode(node.child(1));
 			
+			ASMOpcode ComparisonOpcodes[] = opcodeForComparisonOperator(node); //{Subtract, JumpPos}
+
+			
 			Labeller labeller = new Labeller("compare");
 			
 			String startLabel = labeller.newLabel("arg1");
@@ -248,15 +251,16 @@ public class ASMCodeGenerator {
 			String falseLabel = labeller.newLabel("false");
 			String joinLabel  = labeller.newLabel("join");
 			
+			
 			newValueCode(node);
 			code.add(Label, startLabel);
 			code.append(arg1);
 			code.add(Label, arg2Label);
 			code.append(arg2);
 			code.add(Label, subLabel);
-			code.add(Subtract);
+			code.add(ComparisonOpcodes[0]);
 			
-			code.add(JumpPos, trueLabel);
+			code.add(ComparisonOpcodes[1], trueLabel);
 			code.add(Jump, falseLabel);
 
 			code.add(Label, trueLabel);
@@ -267,6 +271,19 @@ public class ASMCodeGenerator {
 			code.add(Jump, joinLabel);
 			code.add(Label, joinLabel);
 
+		}
+		private ASMOpcode[] opcodeForComparisonOperator(BinaryOperatorNode node) {
+			if(node.child(0).getType() == PrimitiveType.INTEGER && 
+					node.child(1).getType() == PrimitiveType.INTEGER) {
+				return new ASMOpcode[] {Subtract, JumpPos};
+			}
+			else if(node.child(0).getType() == PrimitiveType.FLOATING && 
+					node.child(1).getType() == PrimitiveType.FLOATING) {
+				return new ASMOpcode[] {FSubtract, JumpFPos};
+			}
+			else {
+				throw new RuntimeException("Comparison not supported");
+			}
 		}
 		private void visitNormalBinaryOperatorNode(BinaryOperatorNode node) {
 			newValueCode(node);
