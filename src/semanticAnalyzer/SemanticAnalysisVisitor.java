@@ -98,6 +98,9 @@ class SemanticAnalysisVisitor extends ParseNodeVisitor.Default {
 		if(!identifier.getBinding().getIsVar()) {
 			assignToConstError(node);
 		}
+		
+		Type declerationType = identifier.getType();
+		node.setType(declerationType);
 	}
 
 	///////////////////////////////////////////////////////////////////////////

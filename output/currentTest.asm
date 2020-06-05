@@ -113,36 +113,28 @@
         Jump         $$general-runtime-error   
         DLabel       $usable-memory-start      
         DLabel       $global-memory-block      
-        DataZ        12                        
+        DataZ        4                         
         Label        $$main                    
         PushD        $global-memory-block      
         PushI        0                         
-        Add                                    %% integertest
+        Add                                    %% changer
         PushI        5                         
-        PushI        3                         
-        Subtract                               
         StoreI                                 
         PushD        $global-memory-block      
-        PushI        4                         
-        Add                                    %% floatingtest
-        PushF        10.200000                 
-        PushF        3.200000                  
-        FSubtract                              
-        StoreF                                 
-        PushD        $global-memory-block      
         PushI        0                         
-        Add                                    %% integertest
+        Add                                    %% changer
         LoadI                                  
         PushD        $print-format-integer     
         Printf                                 
-        PushD        $print-format-newline     
-        Printf                                 
         PushD        $global-memory-block      
-        PushI        4                         
-        Add                                    %% floatingtest
-        LoadF                                  
-        PushD        $print-format-floating    
-        Printf                                 
-        PushD        $print-format-newline     
+        PushI        0                         
+        Add                                    %% changer
+        PushI        10                        
+        StoreI                                 
+        PushD        $global-memory-block      
+        PushI        0                         
+        Add                                    %% changer
+        LoadI                                  
+        PushD        $print-format-integer     
         Printf                                 
         Halt                                   
