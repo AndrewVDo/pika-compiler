@@ -4,9 +4,10 @@ import java.util.Arrays;
 
 import logging.PikaLogger;
 import parseTree.*;
+import parseTree.nodeTypes.AssignmentStatementNode;
 import parseTree.nodeTypes.BinaryOperatorNode;
 import parseTree.nodeTypes.BooleanConstantNode;
-import parseTree.nodeTypes.MainBlockNode;
+import parseTree.nodeTypes.BlockStatementNode;
 import parseTree.nodeTypes.DeclarationNode;
 import parseTree.nodeTypes.ErrorNode;
 import parseTree.nodeTypes.FloatingConstantNode;
@@ -44,7 +45,7 @@ public class Parser {
 
 	////////////////////////////////////////////////////////////
 	// "program" is the start symbol S
-	// S -> EXEC mainBlock
+	// S -> EXEC blockStatement
 	
 	private ParseNode parseProgram() {
 		if(!startsProgram(nowReading)) {
@@ -53,7 +54,7 @@ public class Parser {
 		ParseNode program = new ProgramNode(nowReading);
 		
 		expect(Keyword.EXEC);
-		ParseNode mainBlock = parseMainBlock();
+		ParseNode mainBlock = parseBlockStatement();
 		program.appendChild(mainBlock);
 		
 		if(!(nowReading instanceof NullToken)) {
@@ -68,14 +69,14 @@ public class Parser {
 	
 	
 	///////////////////////////////////////////////////////////
-	// mainBlock
+	// blockStatement
 	
-	// mainBlock -> { statement* }
-	private ParseNode parseMainBlock() {
-		if(!startsMainBlock(nowReading)) {
+	// blockStatement -> { statement* }
+	private ParseNode parseBlockStatement() {
+		if(!startsBlockStatement(nowReading)) {
 			return syntaxErrorNode("mainBlock");
 		}
-		ParseNode mainBlock = new MainBlockNode(nowReading);
+		ParseNode mainBlock = new BlockStatementNode(nowReading);
 		expect(Punctuator.OPEN_BRACE);
 		
 		while(startsStatement(nowReading)) {
@@ -85,7 +86,7 @@ public class Parser {
 		expect(Punctuator.CLOSE_BRACE);
 		return mainBlock;
 	}
-	private boolean startsMainBlock(Token token) {
+	private boolean startsBlockStatement(Token token) {
 		return token.isLextant(Punctuator.OPEN_BRACE);
 	}
 	
@@ -93,7 +94,7 @@ public class Parser {
 	///////////////////////////////////////////////////////////
 	// statements
 	
-	// statement-> declaration | printStmt
+	// statement-> declaration | printStmt | blockStatement | assignment
 	private ParseNode parseStatement() {
 		if(!startsStatement(nowReading)) {
 			return syntaxErrorNode("statement");
@@ -101,14 +102,51 @@ public class Parser {
 		if(startsDeclaration(nowReading)) {
 			return parseDeclaration();
 		}
+		if(startsBlockStatement(nowReading)) {
+			return parseBlockStatement();
+		}
 		if(startsPrintStatement(nowReading)) {
 			return parsePrintStatement();
 		}
+		if(startsAssignmentStatement(nowReading)) {
+			return parseAssignmentStatement();
+		}
 		return syntaxErrorNode("statement");
 	}
+
 	private boolean startsStatement(Token token) {
 		return startsPrintStatement(token) ||
+			   startsBlockStatement(token) ||	
+			   startsAssignmentStatement(token) ||
 			   startsDeclaration(token);
+	}
+	
+	// assignment -> target := expression .
+	private ParseNode parseAssignmentStatement() {
+		if(!startsAssignmentStatement(nowReading)) {
+			return syntaxErrorNode("assignmentStatement");
+		}
+		
+		ParseNode target = parseTarget();
+		Token assignmentToken = nowReading;
+		expect(Punctuator.ASSIGN);
+		ParseNode expression = parseExpression();
+		expect(Punctuator.TERMINATOR);
+		return AssignmentStatementNode.withChildren(assignmentToken, target, expression);
+	}
+
+	private boolean startsAssignmentStatement(Token token) {
+		return startsTarget(token);
+	}
+	private ParseNode parseTarget() {
+		if(!startsTarget(nowReading)) {
+			syntaxErrorNode("target");
+		}
+		return parseIdentifier();
+	}
+	// target -> identifier
+	private boolean startsTarget(Token token) {
+		return startsIdentifier(token);
 	}
 	
 	// printStmt -> PRINT printExpressionList .
@@ -188,7 +226,7 @@ public class Parser {
 	}
 	
 	
-	// declaration -> CONST identifier := expression .
+	// declaration -> (CONST | VAR) identifier := expression .
 	private ParseNode parseDeclaration() {
 		if(!startsDeclaration(nowReading)) {
 			return syntaxErrorNode("declaration");
@@ -204,7 +242,7 @@ public class Parser {
 		return DeclarationNode.withChildren(declarationToken, identifier, initializer);
 	}
 	private boolean startsDeclaration(Token token) {
-		return token.isLextant(Keyword.CONST);
+		return token.isLextant(Keyword.CONST, Keyword.VAR);
 	}
 
 

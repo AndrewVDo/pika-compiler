@@ -6,12 +6,13 @@ import tokens.Token;
 
 public enum Keyword implements Lextant {
 	CONST("const"),
+	VAR("var"),
 	PRINT("print"),
 	NEWLINE("_n_"),
 	TRUE("_true_"),
 	FALSE("_false_"),
 	EXEC("exec"),
-	NULL_KEYWORD("");
+	NULL_KEYWORD(""),;
 
 	private String lexeme;
 	private Token prototype;
