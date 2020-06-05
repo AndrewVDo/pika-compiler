@@ -1,6 +1,4 @@
 exec {
-	var changer := 5.
-	print changer.
-	changer := 10.
-	print changer.
+	var x := 5.
+	print x, _n_, _t_, x, , , _t_, x.
 }

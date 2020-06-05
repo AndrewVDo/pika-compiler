@@ -1,0 +1,3 @@
+exec {
+	print _t_, _t_, _n_, _t_.
+}
