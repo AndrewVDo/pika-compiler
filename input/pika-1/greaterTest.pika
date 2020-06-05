@@ -1,0 +1,5 @@
+exec {
+	const a := 5 > 3.
+	const b:= 3.2 > 5.0.
+	print a, _n_, b, _n_.
+}

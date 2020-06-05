@@ -9,6 +9,7 @@ import parseTree.nodeTypes.BooleanConstantNode;
 import parseTree.nodeTypes.MainBlockNode;
 import parseTree.nodeTypes.DeclarationNode;
 import parseTree.nodeTypes.ErrorNode;
+import parseTree.nodeTypes.FloatingConstantNode;
 import parseTree.nodeTypes.IdentifierNode;
 import parseTree.nodeTypes.IntegerConstantNode;
 import parseTree.nodeTypes.NewlineNode;
@@ -256,7 +257,7 @@ public class Parser {
 		}
 		
 		ParseNode left = parseMultiplicativeExpression();
-		while(nowReading.isLextant(Punctuator.ADD)) {
+		while(nowReading.isLextant(Punctuator.ADD, Punctuator.SUBTRACT)) {
 			Token additiveToken = nowReading;
 			readToken();
 			ParseNode right = parseMultiplicativeExpression();
@@ -266,7 +267,7 @@ public class Parser {
 		return left;
 	}
 	private boolean startsAdditiveExpression(Token token) {
-		return startsLiteral(token);
+		return startsMultiplicativeExpression(token);
 	}	
 
 	// multiplicativeExpression -> atomicExpression [MULT atomicExpression]*  (left-assoc)
@@ -276,7 +277,7 @@ public class Parser {
 		}
 		
 		ParseNode left = parseAtomicExpression();
-		while(nowReading.isLextant(Punctuator.MULTIPLY)) {
+		while(nowReading.isLextant(Punctuator.MULTIPLY, Punctuator.DIVIDE)) {
 			Token multiplicativeToken = nowReading;
 			readToken();
 			ParseNode right = parseAtomicExpression();
@@ -300,7 +301,7 @@ public class Parser {
 		return startsLiteral(token);
 	}
 	
-	// literal -> number | identifier | booleanConstant
+	// literal -> number | identifier | booleanConstant | floatingConstant
 	private ParseNode parseLiteral() {
 		if(!startsLiteral(nowReading)) {
 			return syntaxErrorNode("literal");
@@ -308,6 +309,9 @@ public class Parser {
 		
 		if(startsIntNumber(nowReading)) {
 			return parseIntNumber();
+		}
+		if(startsFloatNumber(nowReading)) {
+			return parseFloatNumber();
 		}
 		if(startsIdentifier(nowReading)) {
 			return parseIdentifier();
@@ -319,7 +323,7 @@ public class Parser {
 		return syntaxErrorNode("literal");
 	}
 	private boolean startsLiteral(Token token) {
-		return startsIntNumber(token) || startsIdentifier(token) || startsBooleanConstant(token);
+		return startsIntNumber(token) || startsIdentifier(token) || startsBooleanConstant(token) || startsFloatNumber(token);
 	}
 
 	// number (terminal)
@@ -331,7 +335,19 @@ public class Parser {
 		return new IntegerConstantNode(previouslyRead);
 	}
 	private boolean startsIntNumber(Token token) {
-		return token instanceof NumberToken;
+		return token instanceof IntegerToken;
+	}
+	
+	// float (terminal)
+	private ParseNode parseFloatNumber() {
+		if(!startsFloatNumber(nowReading)) {
+			return syntaxErrorNode("float constant");
+		}
+		readToken();
+		return new FloatingConstantNode(previouslyRead);
+	}
+	private boolean startsFloatNumber(Token token) {
+		return token instanceof FloatToken;
 	}
 
 	// identifier (terminal)

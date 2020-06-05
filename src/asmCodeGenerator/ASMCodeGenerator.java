@@ -13,6 +13,7 @@ import parseTree.nodeTypes.BinaryOperatorNode;
 import parseTree.nodeTypes.BooleanConstantNode;
 import parseTree.nodeTypes.MainBlockNode;
 import parseTree.nodeTypes.DeclarationNode;
+import parseTree.nodeTypes.FloatingConstantNode;
 import parseTree.nodeTypes.IdentifierNode;
 import parseTree.nodeTypes.IntegerConstantNode;
 import parseTree.nodeTypes.NewlineNode;
@@ -137,7 +138,10 @@ public class ASMCodeGenerator {
 		private void turnAddressIntoValue(ASMCodeFragment code, ParseNode node) {
 			if(node.getType() == PrimitiveType.INTEGER) {
 				code.add(LoadI);
-			}	
+			}
+			else if(node.getType() == PrimitiveType.FLOATING) {
+				code.add(LoadF);
+			}
 			else if(node.getType() == PrimitiveType.BOOLEAN) {
 				code.add(LoadC);
 			}	
@@ -206,6 +210,9 @@ public class ASMCodeGenerator {
 			if(type == PrimitiveType.INTEGER) {
 				return StoreI;
 			}
+			if(type == PrimitiveType.FLOATING) {
+				return StoreF;
+			}
 			if(type == PrimitiveType.BOOLEAN) {
 				return StoreC;
 			}
@@ -232,6 +239,9 @@ public class ASMCodeGenerator {
 			ASMCodeFragment arg1 = removeValueCode(node.child(0));
 			ASMCodeFragment arg2 = removeValueCode(node.child(1));
 			
+			ASMOpcode ComparisonOpcodes[] = opcodeForComparisonOperator(node); //{Subtract, JumpPos}
+
+			
 			Labeller labeller = new Labeller("compare");
 			
 			String startLabel = labeller.newLabel("arg1");
@@ -241,15 +251,16 @@ public class ASMCodeGenerator {
 			String falseLabel = labeller.newLabel("false");
 			String joinLabel  = labeller.newLabel("join");
 			
+			
 			newValueCode(node);
 			code.add(Label, startLabel);
 			code.append(arg1);
 			code.add(Label, arg2Label);
 			code.append(arg2);
 			code.add(Label, subLabel);
-			code.add(Subtract);
+			code.add(ComparisonOpcodes[0]);
 			
-			code.add(JumpPos, trueLabel);
+			code.add(ComparisonOpcodes[1], trueLabel);
 			code.add(Jump, falseLabel);
 
 			code.add(Label, trueLabel);
@@ -261,6 +272,19 @@ public class ASMCodeGenerator {
 			code.add(Label, joinLabel);
 
 		}
+		private ASMOpcode[] opcodeForComparisonOperator(BinaryOperatorNode node) {
+			if(node.child(0).getType() == PrimitiveType.INTEGER && 
+					node.child(1).getType() == PrimitiveType.INTEGER) {
+				return new ASMOpcode[] {Subtract, JumpPos};
+			}
+			else if(node.child(0).getType() == PrimitiveType.FLOATING && 
+					node.child(1).getType() == PrimitiveType.FLOATING) {
+				return new ASMOpcode[] {FSubtract, JumpFPos};
+			}
+			else {
+				throw new RuntimeException("Comparison not supported");
+			}
+		}
 		private void visitNormalBinaryOperatorNode(BinaryOperatorNode node) {
 			newValueCode(node);
 			ASMCodeFragment arg1 = removeValueCode(node.child(0));
@@ -269,8 +293,23 @@ public class ASMCodeGenerator {
 			code.append(arg1);
 			code.append(arg2);
 			
-			ASMOpcode opcode = opcodeForOperator(node.getOperator());
-			code.add(opcode);							// type-dependent! (opcode is different for floats and for ints)
+			Object variant = node.getSignature().getVariant();
+			if(variant instanceof ASMOpcode) {
+				ASMOpcode opcode = (ASMOpcode)variant;
+				code.add(opcode);
+			}
+			else if(variant instanceof SimpleCodeGenerator) {
+				SimpleCodeGenerator generator = (SimpleCodeGenerator) variant;
+				ASMCodeFragment fragment = generator.generate(node);
+				code.append(fragment);
+				
+				if(fragment.isAddress()) {
+					code.markAsAddress();
+				}
+			}
+			else {
+				// throw exception
+			}
 		}
 		private ASMOpcode opcodeForOperator(Lextant lextant) {
 			assert(lextant instanceof Punctuator);
@@ -300,6 +339,11 @@ public class ASMCodeGenerator {
 			newValueCode(node);
 			
 			code.add(PushI, node.getValue());
+		}
+		public void visit(FloatingConstantNode node) {
+			newValueCode(node);
+			
+			code.add(PushF, node.getValue());
 		}
 	}
 

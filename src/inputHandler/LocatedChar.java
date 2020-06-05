@@ -62,4 +62,10 @@ public class LocatedChar {
 	public boolean isComment() {
 		return character == '#';
 	}
+	public boolean isSign() {
+		return (character == '+' || character == '-');
+	}
+	public boolean isDecimal() {
+		return character == '.';
+	}
 }
