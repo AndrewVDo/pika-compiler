@@ -245,20 +245,25 @@ public class ASMCodeGenerator {
 		public void visitLeave(BinaryOperatorNode node) {
 			Lextant operator = node.getOperator();
 
-			if(operator == Punctuator.GREATER) {
+			if(isComparisonOperator(operator)) {
 				visitComparisonOperatorNode(node, operator);
 			}
 			else {
 				visitNormalBinaryOperatorNode(node);
 			}
 		}
+			
+		private boolean isComparisonOperator(Lextant operator) {
+			return operator == Punctuator.GREATER || operator == Punctuator.LESSER
+					|| operator == Punctuator.GREATEREQUAL || operator == Punctuator.LESSEREQUAL
+					|| operator == Punctuator.EQUAL || operator == Punctuator.NOTEQUAL;
+		}
+		
 		private void visitComparisonOperatorNode(BinaryOperatorNode node,
 				Lextant operator) {
 
 			ASMCodeFragment arg1 = removeValueCode(node.child(0));
 			ASMCodeFragment arg2 = removeValueCode(node.child(1));
-			
-			ASMOpcode ComparisonOpcodes[] = opcodeForComparisonOperator(node); //{Subtract, JumpPos}
 
 			
 			Labeller labeller = new Labeller("compare");
@@ -270,17 +275,17 @@ public class ASMCodeGenerator {
 			String falseLabel = labeller.newLabel("false");
 			String joinLabel  = labeller.newLabel("join");
 			
+			ASMCodeFragment comparisonLogic = ComparisonCodeGenerator.generate(node, operator, trueLabel, falseLabel);
 			
+	
 			newValueCode(node);
 			code.add(Label, startLabel);
 			code.append(arg1);
 			code.add(Label, arg2Label);
 			code.append(arg2);
 			code.add(Label, subLabel);
-			code.add(ComparisonOpcodes[0]);
 			
-			code.add(ComparisonOpcodes[1], trueLabel);
-			code.add(Jump, falseLabel);
+			code.append(comparisonLogic);
 
 			code.add(Label, trueLabel);
 			code.add(PushI, 1);
@@ -291,19 +296,7 @@ public class ASMCodeGenerator {
 			code.add(Label, joinLabel);
 
 		}
-		private ASMOpcode[] opcodeForComparisonOperator(BinaryOperatorNode node) {
-			if(node.child(0).getType() == PrimitiveType.INTEGER && 
-					node.child(1).getType() == PrimitiveType.INTEGER) {
-				return new ASMOpcode[] {Subtract, JumpPos};
-			}
-			else if(node.child(0).getType() == PrimitiveType.FLOATING && 
-					node.child(1).getType() == PrimitiveType.FLOATING) {
-				return new ASMOpcode[] {FSubtract, JumpFPos};
-			}
-			else {
-				throw new RuntimeException("Comparison not supported");
-			}
-		}
+		
 		private void visitNormalBinaryOperatorNode(BinaryOperatorNode node) {
 			newValueCode(node);
 			ASMCodeFragment arg1 = removeValueCode(node.child(0));
