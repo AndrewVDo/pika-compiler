@@ -120,49 +120,37 @@
         Jump         $$general-runtime-error   
         DLabel       $usable-memory-start      
         DLabel       $global-memory-block      
-        DataZ        5                         
+        DataZ        1                         
         Label        $$main                    
         PushD        $global-memory-block      
         PushI        0                         
-        Add                                    %% booptwo
-        PushI        5                         
-        StoreI                                 
-        PushD        $global-memory-block      
-        PushI        4                         
-        Add                                    %% boop
-        PushI        97                        
+        Add                                    %% a
+        Label        -compare-1-arg1           
+        PushI        1                         
+        Label        -compare-1-arg2           
+        PushI        1                         
+        Label        -compare-1-sub            
+        BEqual                                 
+        JumpFalse    -compare-1-true           
+        Jump         -compare-1-false          
+        Label        -compare-1-true           
+        PushI        1                         
+        Jump         -compare-1-join           
+        Label        -compare-1-false          
+        PushI        0                         
+        Jump         -compare-1-join           
+        Label        -compare-1-join           
         StoreC                                 
         PushD        $global-memory-block      
         PushI        0                         
-        Add                                    %% booptwo
-        LoadI                                  
-        PushD        $print-format-integer     
-        Printf                                 
-        PushD        $print-format-tab         
-        Printf                                 
-        PushD        $global-memory-block      
-        PushI        4                         
-        Add                                    %% boop
+        Add                                    %% a
         LoadC                                  
-        PushD        $print-format-character   
-        Printf                                 
-        PushD        $global-memory-block      
-        PushI        4                         
-        Add                                    %% boop
-        PushI        98                        
-        StoreC                                 
-        PushD        $global-memory-block      
-        PushI        0                         
-        Add                                    %% booptwo
-        LoadI                                  
-        PushD        $print-format-integer     
-        Printf                                 
-        PushD        $print-format-tab         
-        Printf                                 
-        PushD        $global-memory-block      
-        PushI        4                         
-        Add                                    %% boop
-        LoadC                                  
-        PushD        $print-format-character   
+        JumpTrue     -print-boolean-2-true     
+        PushD        $boolean-false-string     
+        Jump         -print-boolean-2-join     
+        Label        -print-boolean-2-true     
+        PushD        $boolean-true-string      
+        Label        -print-boolean-2-join     
+        PushD        $print-format-boolean     
         Printf                                 
         Halt                                   
