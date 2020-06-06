@@ -7,6 +7,7 @@ import inputHandler.LocatedChar;
 import inputHandler.LocatedCharStream;
 import inputHandler.PushbackCharStream;
 import inputHandler.TextLocation;
+import tokens.CharacterToken;
 import tokens.FloatToken;
 import tokens.IdentifierToken;
 import tokens.LextantToken;
@@ -39,6 +40,9 @@ public class LexicalAnalyzer extends ScannerImp implements Scanner {
 			scanComment(ch);
 			return findNextToken();
 		}
+		else if(ch.isCharacterStart()) {
+			return scanCharacter(ch);
+		}
 		else if(ch.isSign() || ch.isDigit() || (ch.isDecimal() && input.peek().isDigit())) {
 			return scanNumber(ch);
 		}
@@ -57,6 +61,29 @@ public class LexicalAnalyzer extends ScannerImp implements Scanner {
 		}
 	}
 
+
+	private Token scanCharacter(LocatedChar first) {	
+		if(!first.isCharacterStart()) {
+			lexicalError(first);
+		}
+		
+		StringBuffer buffer = new StringBuffer();
+		buffer.append(first.getCharacter());
+		
+		LocatedChar character = input.next();
+		if(!character.inCharacterEncodingRange()) {
+			lexicalError(character);
+		}
+		buffer.append(character.getCharacter());
+		
+		LocatedChar end = input.next();
+		if(!end.isCharacterStart()) {
+			lexicalError(end);
+		}
+		buffer.append(end.getCharacter());
+		
+		return CharacterToken.make(character.getLocation(), buffer.toString());
+	}
 
 	private void scanComment(LocatedChar ch) {
 		LocatedChar next = input.next();

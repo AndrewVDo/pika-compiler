@@ -68,4 +68,10 @@ public class LocatedChar {
 	public boolean isDecimal() {
 		return character == '.';
 	}
+	public boolean isCharacterStart() {
+		return character == '^';
+	}
+	public boolean inCharacterEncodingRange() {
+		return ((int)character >= 32 && (int)character <= 126);
+	}
 }
