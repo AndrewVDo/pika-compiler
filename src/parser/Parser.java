@@ -7,6 +7,7 @@ import parseTree.*;
 import parseTree.nodeTypes.AssignmentStatementNode;
 import parseTree.nodeTypes.BinaryOperatorNode;
 import parseTree.nodeTypes.BooleanConstantNode;
+import parseTree.nodeTypes.CharacterConstantNode;
 import parseTree.nodeTypes.BlockStatementNode;
 import parseTree.nodeTypes.DeclarationNode;
 import parseTree.nodeTypes.ErrorNode;
@@ -263,7 +264,7 @@ public class Parser {
 	// literal                  -> intNumber | identifier | booleanConstant
 
 	// expr  -> comparisonExpression
-	private ParseNode parseExpression() {		
+	private ParseNode parseExpression() {
 		if(!startsExpression(nowReading)) {
 			return syntaxErrorNode("expression");
 		}
@@ -352,12 +353,14 @@ public class Parser {
 		return startsLiteral(token);
 	}
 	
-	// literal -> number | identifier | booleanConstant | floatingConstant
+	// literal -> number | identifier | booleanConstant | floatingConstant | characterConstant
 	private ParseNode parseLiteral() {
 		if(!startsLiteral(nowReading)) {
 			return syntaxErrorNode("literal");
 		}
-		
+		if(startsCharacter(nowReading)) {
+			return parseCharacter();
+		}
 		if(startsIntNumber(nowReading)) {
 			return parseIntNumber();
 		}
@@ -374,7 +377,19 @@ public class Parser {
 		return syntaxErrorNode("literal");
 	}
 	private boolean startsLiteral(Token token) {
-		return startsIntNumber(token) || startsIdentifier(token) || startsBooleanConstant(token) || startsFloatNumber(token);
+		return startsCharacter(token) || startsIntNumber(token) || startsIdentifier(token) || startsBooleanConstant(token) || startsFloatNumber(token);
+	}
+	
+	// character (terminal)
+	private ParseNode parseCharacter() {
+		if(!startsCharacter(nowReading)) {
+			return syntaxErrorNode("character constant");
+		}
+		readToken();
+		return new CharacterConstantNode(previouslyRead);
+	}
+	private boolean startsCharacter(Token token) {
+		return token instanceof CharacterToken;
 	}
 
 	// number (terminal)

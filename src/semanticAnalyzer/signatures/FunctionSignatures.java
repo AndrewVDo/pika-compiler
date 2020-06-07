@@ -98,17 +98,15 @@ public class FunctionSignatures extends ArrayList<FunctionSignature> {
 		for(Punctuator comparison : comparisons) {
 			FunctionSignature SigI = new FunctionSignature(1, PrimitiveType.INTEGER, PrimitiveType.INTEGER, PrimitiveType.BOOLEAN);
 			FunctionSignature SigF = new FunctionSignature(1, PrimitiveType.FLOATING, PrimitiveType.FLOATING, PrimitiveType.BOOLEAN);
-			// FunctionSignature SigC = new FunctionSignature(1, PrimitiveType.CHARACTER, PrimitiveType.CHARACTER, PrimitiveType.BOOLEAN);
-			// FunctionSignature SigB = new FunctionSignature(1, PrimitiveType.BOOLEAN, PrimitiveType.BOOLEAN, PrimitiveType.BOOLEAN);
+			FunctionSignature SigC = new FunctionSignature(1, PrimitiveType.CHARACTER, PrimitiveType.CHARACTER, PrimitiveType.BOOLEAN);
+			FunctionSignature SigB = new FunctionSignature(1, PrimitiveType.BOOLEAN, PrimitiveType.BOOLEAN, PrimitiveType.BOOLEAN);
 		
-//			if(comparison == Punctuator.EQUAL || comparison == Punctuator.NOTEQUAL) {
-//				new FunctionSignatures(comparison, SigI, SigF, SigC, SigB);
-//			}
-//			else {
-//				new FunctionSignatures(comparison, SigI, SigF, SigC);
-//			}
-			
-			new FunctionSignatures(comparison, SigI, SigF);
+			if(comparison == Punctuator.EQUAL || comparison == Punctuator.NOTEQUAL) {
+				new FunctionSignatures(comparison, SigI, SigF, SigC, SigB);
+			}
+			else {
+				new FunctionSignatures(comparison, SigI, SigF, SigC);
+			}
 		}
 		
 		// First, we use the operator itself (in this case the Punctuator ADD) as the key.

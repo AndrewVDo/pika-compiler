@@ -16,6 +16,8 @@ import static asmCodeGenerator.codeStorage.ASMOpcode.JumpFalse;
 import static asmCodeGenerator.codeStorage.ASMOpcode.JumpFZero;
 import static asmCodeGenerator.codeStorage.ASMOpcode.Jump;
 import static asmCodeGenerator.codeStorage.ASMOpcode.Nop;
+import static asmCodeGenerator.codeStorage.ASMOpcode.BEqual;
+import static asmCodeGenerator.codeStorage.ASMOpcode.JumpTrue;
 
 import parseTree.ParseNode;
 import semanticAnalyzer.types.PrimitiveType;
@@ -25,10 +27,27 @@ public class ComparisonCodeGenerator {
 	static public ASMCodeFragment generate(ParseNode node, Lextant operator, String trueLabel, String falseLabel) {
 		ASMCodeFragment fragment = new ASMCodeFragment(CodeType.GENERATES_VALUE);
 		
-		if(node.child(0).getType() != node.child(1).getType()) {
-			throw new RuntimeException("Illegal Comparison between " + node.child(0).getType() + " and " + node.child(1).getType());
-		}
+		assert(node.child(0).getType() == node.child(1).getType());
 		Type type = node.child(0).getType();
+		
+		if(type == PrimitiveType.BOOLEAN) {
+			assert(operator == Punctuator.EQUAL || operator == Punctuator.NOTEQUAL);
+			
+			fragment.add(BEqual);
+			
+			if(operator == Punctuator.EQUAL) {
+				fragment.add(JumpTrue, trueLabel);
+				fragment.add(Jump, falseLabel);
+			}
+			else if(operator == Punctuator.NOTEQUAL) {
+				fragment.add(JumpFalse, trueLabel);
+				fragment.add(Jump, falseLabel);
+
+			}
+			
+			return fragment;
+		}
+		
 		ASMOpcode subtract = Nop;
 		ASMOpcode jumppos = Nop;
 		ASMOpcode jumpneg = Nop;
@@ -45,6 +64,12 @@ public class ComparisonCodeGenerator {
 			jumppos = JumpFPos;
 			jumpneg = JumpFNeg;
 			jumpzero = JumpFZero;
+		}
+		else if(type == PrimitiveType.CHARACTER) {
+			subtract = Subtract;
+			jumppos = JumpPos;
+			jumpneg = JumpNeg;
+			jumpzero = JumpFalse;
 		}
 		
 		fragment.add(subtract);
