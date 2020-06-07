@@ -1,0 +1,9 @@
+exec {
+	const intex := 5.
+
+	const stringexample := "mary had a little lamb\nmary had a little lamb".
+	print intex, _t_, stringexample.
+	
+	#const exmptystring := "".
+	
+}

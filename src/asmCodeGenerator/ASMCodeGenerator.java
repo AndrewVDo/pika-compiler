@@ -22,6 +22,7 @@ import parseTree.nodeTypes.NewlineNode;
 import parseTree.nodeTypes.PrintStatementNode;
 import parseTree.nodeTypes.ProgramNode;
 import parseTree.nodeTypes.SpaceNode;
+import parseTree.nodeTypes.StringConstantNode;
 import parseTree.nodeTypes.TabNode;
 import semanticAnalyzer.types.PrimitiveType;
 import semanticAnalyzer.types.Type;
@@ -151,6 +152,9 @@ public class ASMCodeGenerator {
 			else if(node.getType() == PrimitiveType.CHARACTER) {
 				code.add(LoadC);
 			}
+			else if(node.getType() == PrimitiveType.STRING) {
+				// nothing
+			}
 			else {
 				assert false : "node " + node;
 			}
@@ -229,6 +233,9 @@ public class ASMCodeGenerator {
 			}
 			if(type == PrimitiveType.CHARACTER) {
 				return StoreC;
+			}
+			if(type == PrimitiveType.STRING) {
+				return StoreI;
 			}
 			assert false: "Type " + type + " unimplemented in opcodeForStore()";
 			return null;
@@ -363,6 +370,30 @@ public class ASMCodeGenerator {
 			
 			code.add(PushI, node.getValue());
 		}
+		public void visit(StringConstantNode node) {
+			newAddressCode(node);
+			
+			String javaString = node.getValue().substring(1, node.getValue().length()-1) + '\0';
+			assert(javaString.charAt(javaString.length()-1) == '\0');
+			
+			code.add(Label, "STRING_BEGIN");
+
+			for(int i = 0; i < javaString.length(); i++) {
+				code.add(Duplicate);
+				code.add(PushI, i);
+				code.add(Add);
+				char ch = javaString.charAt(i);
+				code.add(PushI, ch);
+				code.add(StoreC);
+			}
+			code.add(Label, "STRING_END");
+
+			code.add(Duplicate);
+			code.add(PushI, javaString.length());
+			code.add(Add);
+			code.add(Exchange);
+		}
+		
 		public void visit(FloatingConstantNode node) {
 			newValueCode(node);
 			

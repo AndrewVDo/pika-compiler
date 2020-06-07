@@ -17,6 +17,10 @@
         DataC        37                        %% "%c"
         DataC        99                        
         DataC        0                         
+        DLabel       $print-format-string      
+        DataC        37                        %% "%s"
+        DataC        115                       
+        DataC        0                         
         DLabel       $print-format-newline     
         DataC        10                        %% "\n"
         DataC        0                         
@@ -120,37 +124,269 @@
         Jump         $$general-runtime-error   
         DLabel       $usable-memory-start      
         DLabel       $global-memory-block      
-        DataZ        1                         
+        DataZ        8                         
         Label        $$main                    
         PushD        $global-memory-block      
         PushI        0                         
-        Add                                    %% a
-        Label        -compare-1-arg1           
-        PushI        1                         
-        Label        -compare-1-arg2           
-        PushI        1                         
-        Label        -compare-1-sub            
-        BEqual                                 
-        JumpFalse    -compare-1-true           
-        Jump         -compare-1-false          
-        Label        -compare-1-true           
-        PushI        1                         
-        Jump         -compare-1-join           
-        Label        -compare-1-false          
+        Add                                    %% intex
+        PushI        5                         
+        StoreI                                 
+        PushD        $global-memory-block      
+        PushI        4                         
+        Add                                    %% stringexample
+        Label        STRING_BEGIN              
+        Duplicate                              
         PushI        0                         
-        Jump         -compare-1-join           
-        Label        -compare-1-join           
+        Add                                    
+        PushI        109                       
         StoreC                                 
+        Duplicate                              
+        PushI        1                         
+        Add                                    
+        PushI        97                        
+        StoreC                                 
+        Duplicate                              
+        PushI        2                         
+        Add                                    
+        PushI        114                       
+        StoreC                                 
+        Duplicate                              
+        PushI        3                         
+        Add                                    
+        PushI        121                       
+        StoreC                                 
+        Duplicate                              
+        PushI        4                         
+        Add                                    
+        PushI        32                        
+        StoreC                                 
+        Duplicate                              
+        PushI        5                         
+        Add                                    
+        PushI        104                       
+        StoreC                                 
+        Duplicate                              
+        PushI        6                         
+        Add                                    
+        PushI        97                        
+        StoreC                                 
+        Duplicate                              
+        PushI        7                         
+        Add                                    
+        PushI        100                       
+        StoreC                                 
+        Duplicate                              
+        PushI        8                         
+        Add                                    
+        PushI        32                        
+        StoreC                                 
+        Duplicate                              
+        PushI        9                         
+        Add                                    
+        PushI        97                        
+        StoreC                                 
+        Duplicate                              
+        PushI        10                        
+        Add                                    
+        PushI        32                        
+        StoreC                                 
+        Duplicate                              
+        PushI        11                        
+        Add                                    
+        PushI        108                       
+        StoreC                                 
+        Duplicate                              
+        PushI        12                        
+        Add                                    
+        PushI        105                       
+        StoreC                                 
+        Duplicate                              
+        PushI        13                        
+        Add                                    
+        PushI        116                       
+        StoreC                                 
+        Duplicate                              
+        PushI        14                        
+        Add                                    
+        PushI        116                       
+        StoreC                                 
+        Duplicate                              
+        PushI        15                        
+        Add                                    
+        PushI        108                       
+        StoreC                                 
+        Duplicate                              
+        PushI        16                        
+        Add                                    
+        PushI        101                       
+        StoreC                                 
+        Duplicate                              
+        PushI        17                        
+        Add                                    
+        PushI        32                        
+        StoreC                                 
+        Duplicate                              
+        PushI        18                        
+        Add                                    
+        PushI        108                       
+        StoreC                                 
+        Duplicate                              
+        PushI        19                        
+        Add                                    
+        PushI        97                        
+        StoreC                                 
+        Duplicate                              
+        PushI        20                        
+        Add                                    
+        PushI        109                       
+        StoreC                                 
+        Duplicate                              
+        PushI        21                        
+        Add                                    
+        PushI        98                        
+        StoreC                                 
+        Duplicate                              
+        PushI        22                        
+        Add                                    
+        PushI        92                        
+        StoreC                                 
+        Duplicate                              
+        PushI        23                        
+        Add                                    
+        PushI        110                       
+        StoreC                                 
+        Duplicate                              
+        PushI        24                        
+        Add                                    
+        PushI        109                       
+        StoreC                                 
+        Duplicate                              
+        PushI        25                        
+        Add                                    
+        PushI        97                        
+        StoreC                                 
+        Duplicate                              
+        PushI        26                        
+        Add                                    
+        PushI        114                       
+        StoreC                                 
+        Duplicate                              
+        PushI        27                        
+        Add                                    
+        PushI        121                       
+        StoreC                                 
+        Duplicate                              
+        PushI        28                        
+        Add                                    
+        PushI        32                        
+        StoreC                                 
+        Duplicate                              
+        PushI        29                        
+        Add                                    
+        PushI        104                       
+        StoreC                                 
+        Duplicate                              
+        PushI        30                        
+        Add                                    
+        PushI        97                        
+        StoreC                                 
+        Duplicate                              
+        PushI        31                        
+        Add                                    
+        PushI        100                       
+        StoreC                                 
+        Duplicate                              
+        PushI        32                        
+        Add                                    
+        PushI        32                        
+        StoreC                                 
+        Duplicate                              
+        PushI        33                        
+        Add                                    
+        PushI        97                        
+        StoreC                                 
+        Duplicate                              
+        PushI        34                        
+        Add                                    
+        PushI        32                        
+        StoreC                                 
+        Duplicate                              
+        PushI        35                        
+        Add                                    
+        PushI        108                       
+        StoreC                                 
+        Duplicate                              
+        PushI        36                        
+        Add                                    
+        PushI        105                       
+        StoreC                                 
+        Duplicate                              
+        PushI        37                        
+        Add                                    
+        PushI        116                       
+        StoreC                                 
+        Duplicate                              
+        PushI        38                        
+        Add                                    
+        PushI        116                       
+        StoreC                                 
+        Duplicate                              
+        PushI        39                        
+        Add                                    
+        PushI        108                       
+        StoreC                                 
+        Duplicate                              
+        PushI        40                        
+        Add                                    
+        PushI        101                       
+        StoreC                                 
+        Duplicate                              
+        PushI        41                        
+        Add                                    
+        PushI        32                        
+        StoreC                                 
+        Duplicate                              
+        PushI        42                        
+        Add                                    
+        PushI        108                       
+        StoreC                                 
+        Duplicate                              
+        PushI        43                        
+        Add                                    
+        PushI        97                        
+        StoreC                                 
+        Duplicate                              
+        PushI        44                        
+        Add                                    
+        PushI        109                       
+        StoreC                                 
+        Duplicate                              
+        PushI        45                        
+        Add                                    
+        PushI        98                        
+        StoreC                                 
+        Duplicate                              
+        PushI        46                        
+        Add                                    
+        PushI        0                         
+        StoreC                                 
+        Label        STRING_END                
+        Duplicate                              
+        PushI        47                        
+        Add                                    
+        Exchange                               
+        StoreI                                 
         PushD        $global-memory-block      
         PushI        0                         
-        Add                                    %% a
-        LoadC                                  
-        JumpTrue     -print-boolean-2-true     
-        PushD        $boolean-false-string     
-        Jump         -print-boolean-2-join     
-        Label        -print-boolean-2-true     
-        PushD        $boolean-true-string      
-        Label        -print-boolean-2-join     
-        PushD        $print-format-boolean     
+        Add                                    %% intex
+        LoadI                                  
+        PushD        $print-format-integer     
+        Printf                                 
+        PushD        $print-format-tab         
+        Printf                                 
+        PushD        $global-memory-block      
+        PushI        4                         
+        Add                                    %% stringexample
+        PushD        $print-format-string      
         Printf                                 
         Halt                                   
