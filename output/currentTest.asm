@@ -16,6 +16,9 @@
         DLabel       $print-format-newline     
         DataC        10                        %% "\n"
         DataC        0                         
+        DLabel       $print-format-tab         
+        DataC        9                         %% "\t"
+        DataC        0                         
         DLabel       $print-format-space       
         DataC        32                        %% " "
         DataC        0                         
@@ -117,23 +120,30 @@
         Label        $$main                    
         PushD        $global-memory-block      
         PushI        0                         
-        Add                                    %% changer
+        Add                                    %% x
         PushI        5                         
         StoreI                                 
         PushD        $global-memory-block      
         PushI        0                         
-        Add                                    %% changer
+        Add                                    %% x
         LoadI                                  
         PushD        $print-format-integer     
         Printf                                 
+        PushD        $print-format-newline     
+        Printf                                 
+        PushD        $print-format-tab         
+        Printf                                 
         PushD        $global-memory-block      
         PushI        0                         
-        Add                                    %% changer
-        PushI        10                        
-        StoreI                                 
+        Add                                    %% x
+        LoadI                                  
+        PushD        $print-format-integer     
+        Printf                                 
+        PushD        $print-format-tab         
+        Printf                                 
         PushD        $global-memory-block      
         PushI        0                         
-        Add                                    %% changer
+        Add                                    %% x
         LoadI                                  
         PushD        $print-format-integer     
         Printf                                 
