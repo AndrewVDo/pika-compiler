@@ -3,13 +3,15 @@ package semanticAnalyzer;
 import java.util.Arrays;
 import java.util.List;
 
+import lexicalAnalyzer.Keyword;
 import lexicalAnalyzer.Lextant;
 import logging.PikaLogger;
 import parseTree.ParseNode;
 import parseTree.ParseNodeVisitor;
+import parseTree.nodeTypes.AssignmentStatementNode;
 import parseTree.nodeTypes.BinaryOperatorNode;
 import parseTree.nodeTypes.BooleanConstantNode;
-import parseTree.nodeTypes.MainBlockNode;
+import parseTree.nodeTypes.BlockStatementNode;
 import parseTree.nodeTypes.DeclarationNode;
 import parseTree.nodeTypes.ErrorNode;
 import parseTree.nodeTypes.FloatingConstantNode;
@@ -43,9 +45,11 @@ class SemanticAnalysisVisitor extends ParseNodeVisitor.Default {
 	public void visitLeave(ProgramNode node) {
 		leaveScope(node);
 	}
-	public void visitEnter(MainBlockNode node) {
+	public void visitEnter(BlockStatementNode node) {
+		enterSubscope(node);
 	}
-	public void visitLeave(MainBlockNode node) {
+	public void visitLeave(BlockStatementNode node) {
+		leaveScope(node);
 	}
 	
 	
@@ -55,7 +59,6 @@ class SemanticAnalysisVisitor extends ParseNodeVisitor.Default {
 		Scope scope = Scope.createProgramScope();
 		node.setScope(scope);
 	}	
-	@SuppressWarnings("unused")
 	private void enterSubscope(ParseNode node) {
 		Scope baseScope = node.getLocalScope();
 		Scope scope = baseScope.createSubscope();
@@ -79,7 +82,25 @@ class SemanticAnalysisVisitor extends ParseNodeVisitor.Default {
 		node.setType(declarationType);
 		
 		identifier.setType(declarationType);
-		addBinding(identifier, declarationType);
+		boolean isVar = node.getToken().isLextant(Keyword.VAR);
+		addBinding(identifier, declarationType, isVar);
+	}
+	@Override
+	public void visitLeave(AssignmentStatementNode node) {
+		IdentifierNode identifier = (IdentifierNode) node.child(0);
+		ParseNode expression = node.child(1);
+		
+		// check to see if type of identifier is same as type of expression
+		if(!identifier.getType().equals(expression.getType())) {
+			typeCheckError(node, Arrays.asList(identifier.getType(), expression.getType()));
+		}
+		// check identifier is not const
+		if(!identifier.getBinding().getIsVar()) {
+			assignToConstError(node);
+		}
+		
+		Type declerationType = identifier.getType();
+		node.setType(declerationType);
 	}
 
 	///////////////////////////////////////////////////////////////////////////
@@ -150,14 +171,20 @@ class SemanticAnalysisVisitor extends ParseNodeVisitor.Default {
 		ParseNode parent = node.getParent();
 		return (parent instanceof DeclarationNode) && (node == parent.child(0));
 	}
-	private void addBinding(IdentifierNode identifierNode, Type type) {
+	private void addBinding(IdentifierNode identifierNode, Type type, boolean isVar) {
 		Scope scope = identifierNode.getLocalScope();
-		Binding binding = scope.createBinding(identifierNode, type);
+		Binding binding = scope.createBinding(identifierNode, type, isVar);
 		identifierNode.setBinding(binding);
 	}
 	
 	///////////////////////////////////////////////////////////////////////////
 	// error logging/printing
+	
+	private void assignToConstError(ParseNode node) {
+		Token token = node.getToken();
+		
+		logError("attempt to assign to const-declared variable at " + token.getLocation());	
+	}
 
 	private void typeCheckError(ParseNode node, List<Type> operandTypes) {
 		Token token = node.getToken();

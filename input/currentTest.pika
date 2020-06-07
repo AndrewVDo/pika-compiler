@@ -1,5 +1,6 @@
 exec {
-	const integertest := 5 - 3.
-	const floatingtest := 10.2 - 3.2.
-	print integertest, _n_, floatingtest, _n_.
+	var changer := 5.
+	print changer.
+	changer := 10.
+	print changer.
 }

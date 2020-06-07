@@ -1,0 +1,6 @@
+exec {
+	var changer := 5.
+	print changer.
+	changer := 10.
+	print changer.
+}

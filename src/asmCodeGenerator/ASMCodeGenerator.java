@@ -9,9 +9,10 @@ import asmCodeGenerator.runtime.RunTime;
 import lexicalAnalyzer.Lextant;
 import lexicalAnalyzer.Punctuator;
 import parseTree.*;
+import parseTree.nodeTypes.AssignmentStatementNode;
 import parseTree.nodeTypes.BinaryOperatorNode;
 import parseTree.nodeTypes.BooleanConstantNode;
-import parseTree.nodeTypes.MainBlockNode;
+import parseTree.nodeTypes.BlockStatementNode;
 import parseTree.nodeTypes.DeclarationNode;
 import parseTree.nodeTypes.FloatingConstantNode;
 import parseTree.nodeTypes.IdentifierNode;
@@ -168,7 +169,7 @@ public class ASMCodeGenerator {
 				code.append(childCode);
 			}
 		}
-		public void visitLeave(MainBlockNode node) {
+		public void visitLeave(BlockStatementNode node) {
 			newVoidCode(node);
 			for(ParseNode child : node.getChildren()) {
 				ASMCodeFragment childCode = removeVoidCode(child);
@@ -218,6 +219,18 @@ public class ASMCodeGenerator {
 			}
 			assert false: "Type " + type + " unimplemented in opcodeForStore()";
 			return null;
+		}
+		
+		public void visitLeave(AssignmentStatementNode node) {
+			newVoidCode(node);
+			ASMCodeFragment lvalue = removeAddressCode(node.child(0));
+			ASMCodeFragment rvalue = removeValueCode(node.child(1));
+			
+			code.append(lvalue);
+			code.append(rvalue);
+			
+			Type type = node.getType();
+			code.add(opcodeForStore(type));
 		}
 
 
