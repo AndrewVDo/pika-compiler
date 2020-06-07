@@ -1,4 +1,31 @@
 exec {
-	var x := 5.
-	print x, _n_, _t_, x, , , _t_, x.
+	const ia := 7.
+	var ib := 3.
+	const fa := 2.1.
+	const fb := 3.15.
+	
+	var a := ia < ib.
+	var b := ia > ib.
+	var c := ia >= ib.
+	var d := ia <= ib.
+	var e := ia == ib.
+	var f := ia != ib.
+	var g := ia >= ia.
+	var h := ia <= ia.
+	var i := ia == ia.
+	
+	print a, _t_, b, _t_, c, _t_, d, _t_, e, _t_, f, _t_, g, _t_, h, _t_, i.
+	
+	 a := fa < fb.
+	 b := fa > fb.
+	 c := fa >= fb.
+	 d := fa <= fb.
+	 e := fa == fb.
+	 f := fa != fb.
+ 	 g := fa >= fa.
+	 h := fa <= fa.
+	 i := fa == fa.
+	 
+	 print a, _t_, b, _t_, c, _t_, d, _t_, e, _t_, f, _t_, g, _t_, h, _t_, i.
+	
 }

@@ -280,7 +280,7 @@ public class Parser {
 		}
 		
 		ParseNode left = parseAdditiveExpression();
-		if(nowReading.isLextant(Punctuator.GREATER)) {
+		if(isComparisonLextant(nowReading)) {
 			Token compareToken = nowReading;
 			readToken();
 			ParseNode right = parseAdditiveExpression();
@@ -290,6 +290,13 @@ public class Parser {
 		return left;
 
 	}
+	
+	private boolean isComparisonLextant(Token token) {
+		return(token.isLextant(Punctuator.GREATER) || token.isLextant(Punctuator.LESSER) || 
+			token.isLextant(Punctuator.GREATEREQUAL) || token.isLextant(Punctuator.LESSEREQUAL) ||
+			token.isLextant(Punctuator.EQUAL) || token.isLextant(Punctuator.NOTEQUAL) );
+	}
+	
 	private boolean startsComparisonExpression(Token token) {
 		return startsAdditiveExpression(token);
 	}
