@@ -120,37 +120,36 @@
         Jump         $$general-runtime-error   
         DLabel       $usable-memory-start      
         DLabel       $global-memory-block      
-        DataZ        1                         
+        DataZ        24                        
         Label        $$main                    
         PushD        $global-memory-block      
         PushI        0                         
-        Add                                    %% a
-        Label        -compare-1-arg1           
+        Add                                    %% original
         PushI        1                         
-        Label        -compare-1-arg2           
-        PushI        1                         
-        Label        -compare-1-sub            
-        BEqual                                 
-        JumpFalse    -compare-1-true           
-        Jump         -compare-1-false          
-        Label        -compare-1-true           
-        PushI        1                         
-        Jump         -compare-1-join           
-        Label        -compare-1-false          
-        PushI        0                         
-        Jump         -compare-1-join           
-        Label        -compare-1-join           
-        StoreC                                 
+        StoreI                                 
         PushD        $global-memory-block      
-        PushI        0                         
-        Add                                    %% a
-        LoadC                                  
-        JumpTrue     -print-boolean-2-true     
-        PushD        $boolean-false-string     
-        Jump         -print-boolean-2-join     
-        Label        -print-boolean-2-true     
-        PushD        $boolean-true-string      
-        Label        -print-boolean-2-join     
-        PushD        $print-format-boolean     
-        Printf                                 
+        PushI        4                         
+        Add                                    %% Capone
+        PushI        2                         
+        StoreI                                 
+        PushD        $global-memory-block      
+        PushI        8                         
+        Add                                    %% cApTwo
+        PushI        3                         
+        StoreI                                 
+        PushD        $global-memory-block      
+        PushI        12                        
+        Add                                    %% uN_der
+        PushI        4                         
+        StoreI                                 
+        PushD        $global-memory-block      
+        PushI        16                        
+        Add                                    %% hella$ers
+        PushI        5                         
+        StoreI                                 
+        PushD        $global-memory-block      
+        PushI        20                        
+        Add                                    %% num3r0s
+        PushI        6                         
+        StoreI                                 
         Halt                                   
