@@ -50,7 +50,7 @@ public class LexicalAnalyzer extends ScannerImp implements Scanner {
 		else if(ch.isSign() || ch.isDigit() || (ch.isDecimal() && input.peek().isDigit())) {
 			return scanNumber(ch);
 		}
-		else if(ch.isLowerCase()) {
+		else if(ch.isLowerCase() || ch.isUpperCase()) {
 			return scanIdentifier(ch);
 		}
 		else if(isPunctuatorStart(ch)) {
@@ -116,7 +116,9 @@ public class LexicalAnalyzer extends ScannerImp implements Scanner {
 		while(next.getCharacter() != '\n' && next.getCharacter() != '#') {
 			next = input.next();
 		}
-		assert(next.getCharacter() == '\n' || next.getCharacter() == '#');
+		if(next.getCharacter() != '\n' && next.getCharacter() != '#') {
+			lexicalError(next);
+		}
 		return; 
 	}
 
@@ -144,22 +146,25 @@ public class LexicalAnalyzer extends ScannerImp implements Scanner {
 			currChar = input.next();
 		}
 
-		assert(currChar.isDigit() || currChar.isDecimal());
+		if(!currChar.isDigit() && !currChar.isDecimal()) {
+			lexicalError(currChar);
+		}
 
 		if(currChar.isDigit()) {
 			buffer.append(currChar.getCharacter());
 			appendSubsequentDigits(buffer);
 
 			currChar = input.next();
-			assert(currChar.isDecimal() || currChar.isWhitespace());
-			if(currChar.isWhitespace() || (currChar.isDecimal() && !input.peek().isDigit()) ) {
+			
+			if(!currChar.isDecimal() || (currChar.isDecimal() && !input.peek().isDigit()) ) {
 				input.pushback(currChar);
 				return IntegerToken.make(firstChar.getLocation(), buffer.toString());
 			}
 		}
 
-		// System.out.println("curr: " + currChar + " next: " + input.peek() + " first " + firstChar);
-		assert(currChar.isDecimal() && input.peek().isDigit());
+		if(!currChar.isDecimal() && !input.peek().isDigit()) {
+			lexicalError(currChar);
+		}
 
 		buffer.append(currChar.getCharacter());
 		appendSubsequentDigits(buffer);
@@ -181,9 +186,7 @@ public class LexicalAnalyzer extends ScannerImp implements Scanner {
 			currChar = input.next();
 		}
 
-		assert(currChar.isWhitespace() || currChar.isDecimal());
 		input.pushback(currChar);
-		// System.out.println("make a float: " + buffer.toString());
 		return FloatToken.make(firstChar.getLocation(), buffer.toString());
 	}
 
@@ -201,11 +204,20 @@ public class LexicalAnalyzer extends ScannerImp implements Scanner {
 	// Identifier and keyword lexical analysis	
 
 	private Token scanIdentifier(LocatedChar firstChar) {
+		if(!firstChar.isLowerCase() && !firstChar.isUpperCase()) {
+			lexicalError(firstChar);
+		}
+		
 		StringBuffer buffer = new StringBuffer();
 		buffer.append(firstChar.getCharacter());
-		appendSubsequentLowercase(buffer);
+		appendIdentifierChars(buffer);
 
 		String lexeme = buffer.toString();
+		
+		if(lexeme.length() > 32) {
+			lexicalErrorIdentifierLength(firstChar);
+		}
+		
 		if(Keyword.isAKeyword(lexeme)) {
 			return LextantToken.make(firstChar.getLocation(), lexeme, Keyword.forLexeme(lexeme));
 		}
@@ -213,9 +225,9 @@ public class LexicalAnalyzer extends ScannerImp implements Scanner {
 			return IdentifierToken.make(firstChar.getLocation(), lexeme);
 		}
 	}
-	private void appendSubsequentLowercase(StringBuffer buffer) {
+	private void appendIdentifierChars(StringBuffer buffer) {
 		LocatedChar c = input.next();
-		while(c.isLowerCase()) {
+		while(c.isLowerCase() || c.isUpperCase() || c.isNonLeadingIdentifierChars()) {
 			buffer.append(c.getCharacter());
 			c = input.next();
 		}
@@ -276,6 +288,10 @@ public class LexicalAnalyzer extends ScannerImp implements Scanner {
 	private void lexicalError(LocatedChar ch) {
 		PikaLogger log = PikaLogger.getLogger("compiler.lexicalAnalyzer");
 		log.severe("Lexical error: invalid character " + ch);
+	}
+	private void lexicalErrorIdentifierLength(LocatedChar ch) {
+		PikaLogger log = PikaLogger.getLogger("compiler.lexicalAnalyzer");
+		log.severe("Lexical error: identifer exceeded 32 character limit " + ch);
 	}
 
 	

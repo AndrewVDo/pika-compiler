@@ -11,6 +11,7 @@ import parseTree.ParseNodeVisitor;
 import parseTree.nodeTypes.AssignmentStatementNode;
 import parseTree.nodeTypes.BinaryOperatorNode;
 import parseTree.nodeTypes.BooleanConstantNode;
+import parseTree.nodeTypes.CastExpressionNode;
 import parseTree.nodeTypes.CharacterConstantNode;
 import parseTree.nodeTypes.BlockStatementNode;
 import parseTree.nodeTypes.DeclarationNode;
@@ -132,6 +133,31 @@ class SemanticAnalysisVisitor extends ParseNodeVisitor.Default {
 		LextantToken token = (LextantToken) node.getToken();
 		return token.getLextant();
 	}
+	
+	@Override
+	public void visitLeave(CastExpressionNode node) {
+		assert node.nChildren() == 1;
+		ParseNode innerExpression = node.child(0);
+		List<Type> innerType = Arrays.asList(innerExpression.getType());
+		
+		Lextant newType = newTypeFor(node);
+		FunctionSignatures signatures = FunctionSignatures.signaturesOf(newType);
+		FunctionSignature signature = signatures.acceptingSignature(innerType);
+		
+		if(signature.accepts(innerType)) {
+			node.setType(signature.resultType());
+			node.setSignature(signature);
+		}
+		else {
+			castTypeError(node.getType(), innerType.get(1));
+			node.setType(PrimitiveType.ERROR);
+		}
+		assert(true);
+	}
+	private Lextant newTypeFor(CastExpressionNode node) {
+		LextantToken token = (LextantToken) node.getToken();
+		return token.getLextant();
+	}
 
 
 	///////////////////////////////////////////////////////////////////////////
@@ -205,6 +231,9 @@ class SemanticAnalysisVisitor extends ParseNodeVisitor.Default {
 		
 		logError("operator " + token.getLexeme() + " not defined for types " 
 				 + operandTypes  + " at " + token.getLocation());	
+	}
+	private void castTypeError(Type newType, Type oldType) {
+		logError("invalid cast from " + oldType + " to " + newType );
 	}
 	private void logError(String message) {
 		PikaLogger log = PikaLogger.getLogger("compiler.semanticAnalyzer");

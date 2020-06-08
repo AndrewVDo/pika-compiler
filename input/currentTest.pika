@@ -1,4 +1,8 @@
 exec {
+<<<<<<< HEAD
 	const a := "abc".
 	print a.
 }
+=======
+}
+>>>>>>> master

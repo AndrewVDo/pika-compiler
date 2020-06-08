@@ -12,6 +12,7 @@ import parseTree.*;
 import parseTree.nodeTypes.AssignmentStatementNode;
 import parseTree.nodeTypes.BinaryOperatorNode;
 import parseTree.nodeTypes.BooleanConstantNode;
+import parseTree.nodeTypes.CastExpressionNode;
 import parseTree.nodeTypes.CharacterConstantNode;
 import parseTree.nodeTypes.BlockStatementNode;
 import parseTree.nodeTypes.DeclarationNode;
@@ -334,7 +335,7 @@ public class ASMCodeGenerator {
 				}
 			}
 			else {
-				// throw exception
+				throw new Error("Compiler error: binary operation failed");
 			}
 		}
 		private ASMOpcode opcodeForOperator(Lextant lextant) {
@@ -347,6 +348,34 @@ public class ASMCodeGenerator {
 				assert false : "unimplemented operator in opcodeForOperator";
 			}
 			return null;
+		}
+		
+		
+		public void visitLeave(CastExpressionNode node) {
+			newValueCode(node);
+			ASMCodeFragment innerExpression = removeValueCode(node.child(0));
+			Type oldType = node.child(0).getType();
+			Type newType = node.getType();
+			
+			code.append(innerExpression);
+			
+			Object variant = node.getSignature().getVariant();
+			if(variant instanceof ASMOpcode) {
+				ASMOpcode opcode = (ASMOpcode)variant;
+				code.add(opcode);
+			}
+			else if(variant instanceof SimpleCodeGenerator) {
+				SimpleCodeGenerator generator = (SimpleCodeGenerator) variant;
+				ASMCodeFragment fragment = generator.generate(node);
+				code.append(fragment);
+				
+				if(fragment.isAddress()) {
+					code.markAsAddress();
+				}
+			}
+			else {
+				throw new Error("Compile error: could not cast from " + oldType + " to " + newType);
+			}
 		}
 
 		///////////////////////////////////////////////////////////////////////////
