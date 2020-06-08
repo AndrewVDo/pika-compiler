@@ -23,7 +23,15 @@ public enum Punctuator implements Lextant {
 	TERMINATOR("."), 
 	OPEN_BRACE("{"),
 	CLOSE_BRACE("}"),
-	NULL_PUNCTUATOR("");
+	NULL_PUNCTUATOR(""),
+	
+	OPEN_CAST("["),
+	CLOSE_CAST("]"),
+	DIVIDE_CAST("|"),
+	
+	OPEN_PARANTHESES("("),
+	CLOSE_PARANTHESES(")"),
+	;
 
 	private String lexeme;
 	private Token prototype;

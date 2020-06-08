@@ -120,36 +120,6 @@
         Jump         $$general-runtime-error   
         DLabel       $usable-memory-start      
         DLabel       $global-memory-block      
-        DataZ        24                        
+        DataZ        0                         
         Label        $$main                    
-        PushD        $global-memory-block      
-        PushI        0                         
-        Add                                    %% original
-        PushI        1                         
-        StoreI                                 
-        PushD        $global-memory-block      
-        PushI        4                         
-        Add                                    %% Capone
-        PushI        2                         
-        StoreI                                 
-        PushD        $global-memory-block      
-        PushI        8                         
-        Add                                    %% cApTwo
-        PushI        3                         
-        StoreI                                 
-        PushD        $global-memory-block      
-        PushI        12                        
-        Add                                    %% uN_der
-        PushI        4                         
-        StoreI                                 
-        PushD        $global-memory-block      
-        PushI        16                        
-        Add                                    %% hella$ers
-        PushI        5                         
-        StoreI                                 
-        PushD        $global-memory-block      
-        PushI        20                        
-        Add                                    %% num3r0s
-        PushI        6                         
-        StoreI                                 
         Halt                                   
