@@ -24,4 +24,6 @@ exec {
 	print [ someInt5 | bool], _t_, [ someChar3 | bool], _t_, [ someInt6 | bool], _n_. 
 	
 	print [ 5.0 | float ], _t_, [ ^d^ | char ], _t_, [ _true_ | bool ], _t_, [ _false_ | bool ], _t_, [ 3 | int ], _n_.
+	
+	print ( 1 + 1 ) * [ 2.1 | int ] * ( ( 1) + ( 2 * [ 2.1 + 2.8 | int ] ) ), _n_.
 }
