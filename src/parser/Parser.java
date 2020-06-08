@@ -7,6 +7,7 @@ import parseTree.*;
 import parseTree.nodeTypes.AssignmentStatementNode;
 import parseTree.nodeTypes.BinaryOperatorNode;
 import parseTree.nodeTypes.BooleanConstantNode;
+import parseTree.nodeTypes.CastExpressionNode;
 import parseTree.nodeTypes.CharacterConstantNode;
 import parseTree.nodeTypes.BlockStatementNode;
 import parseTree.nodeTypes.DeclarationNode;
@@ -260,18 +261,40 @@ public class Parser {
 	// comparisonExpression     -> additiveExpression [> additiveExpression]?
 	// additiveExpression       -> multiplicativeExpression [+ multiplicativeExpression]*  (left-assoc)
 	// multiplicativeExpression -> atomicExpression [MULT atomicExpression]*  (left-assoc)
+	
+	// casting && parantheses
+	
 	// atomicExpression         -> literal
 	// literal                  -> intNumber | identifier | booleanConstant
 
 	// expr  -> comparisonExpression
 	private ParseNode parseExpression() {
+		if(startsCast(nowReading)) {
+			return parseCast();
+		}
 		if(!startsExpression(nowReading)) {
 			return syntaxErrorNode("expression");
 		}
+		Token whatsNow = nowReading;
 		return parseComparisonExpression();
 	}
+	private ParseNode parseCast() {
+		expect(Punctuator.OPEN_CAST);
+		ParseNode innerExpression = parseExpression();
+		expect(Punctuator.DIVIDE_CAST);
+		
+		Token newType = nowReading;
+		readToken();
+		expect(Punctuator.CLOSE_CAST);
+		
+		
+		return CastExpressionNode.withChildren(newType, innerExpression);
+	}
+	private boolean startsCast(Token token) {
+		return token.isLextant(Punctuator.OPEN_CAST);
+	}
 	private boolean startsExpression(Token token) {
-		return startsComparisonExpression(token);
+		return startsComparisonExpression(token) || token.isLextant(Punctuator.OPEN_CAST);
 	}
 
 	// comparisonExpression -> additiveExpression [> additiveExpression]?
@@ -341,7 +364,7 @@ public class Parser {
 	private boolean startsMultiplicativeExpression(Token token) {
 		return startsAtomicExpression(token);
 	}
-	
+		
 	// atomicExpression -> literal
 	private ParseNode parseAtomicExpression() {
 		if(!startsAtomicExpression(nowReading)) {
@@ -379,7 +402,7 @@ public class Parser {
 	private boolean startsLiteral(Token token) {
 		return startsCharacter(token) || startsIntNumber(token) || startsIdentifier(token) || startsBooleanConstant(token) || startsFloatNumber(token);
 	}
-	
+
 	// character (terminal)
 	private ParseNode parseCharacter() {
 		if(!startsCharacter(nowReading)) {

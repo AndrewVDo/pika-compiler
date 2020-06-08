@@ -7,7 +7,11 @@ import java.util.Map;
 
 import asmCodeGenerator.codeStorage.ASMOpcode;
 import asmCodeGenerator.IntegerDivideCodeGenerator;
+import asmCodeGenerator.CharToBoolCodeGenerator;
+import asmCodeGenerator.CharToIntCodeGenerator;
 import asmCodeGenerator.FloatingDivideCodeGenerator;
+import asmCodeGenerator.IntToCharCodeGenerator;
+import lexicalAnalyzer.Keyword;
 import lexicalAnalyzer.Punctuator;
 import semanticAnalyzer.types.Type;
 
@@ -108,6 +112,29 @@ public class FunctionSignatures extends ArrayList<FunctionSignature> {
 				new FunctionSignatures(comparison, SigI, SigF, SigC);
 			}
 		}
+		
+		new FunctionSignatures(Keyword.INT,
+				new FunctionSignature(new CharToIntCodeGenerator(), PrimitiveType.CHARACTER, PrimitiveType.INTEGER),
+				new FunctionSignature(ASMOpcode.ConvertI, PrimitiveType.FLOATING, PrimitiveType.INTEGER),
+				new FunctionSignature(ASMOpcode.Nop, PrimitiveType.INTEGER, PrimitiveType.INTEGER)
+		);
+		
+		new FunctionSignatures(Keyword.CHAR,
+				new FunctionSignature(new IntToCharCodeGenerator(), PrimitiveType.INTEGER, PrimitiveType.CHARACTER),
+				new FunctionSignature(ASMOpcode.Nop, PrimitiveType.CHARACTER, PrimitiveType.CHARACTER)
+		);
+		
+		new FunctionSignatures(Keyword.FLOAT,
+				new FunctionSignature(ASMOpcode.ConvertF, PrimitiveType.INTEGER, PrimitiveType.FLOATING),
+				new FunctionSignature(ASMOpcode.Nop, PrimitiveType.FLOATING, PrimitiveType.FLOATING)
+		);
+		
+		new FunctionSignatures(Keyword.BOOL,
+				new FunctionSignature(new CharToBoolCodeGenerator(), PrimitiveType.CHARACTER, PrimitiveType.BOOLEAN),
+				new FunctionSignature(new CharToBoolCodeGenerator(), PrimitiveType.INTEGER, PrimitiveType.BOOLEAN),
+				new FunctionSignature(ASMOpcode.Nop, PrimitiveType.BOOLEAN, PrimitiveType.BOOLEAN)
+		);
+		
 		
 		// First, we use the operator itself (in this case the Punctuator ADD) as the key.
 		// Then, we give that key two signatures: one an (INT x INT -> INT) and the other
