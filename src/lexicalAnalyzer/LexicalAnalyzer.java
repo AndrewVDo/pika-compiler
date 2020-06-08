@@ -129,11 +129,8 @@ public class LexicalAnalyzer extends ScannerImp implements Scanner {
 			appendSubsequentDigits(buffer);
 
 			currChar = input.next();
-			if(!currChar.isDecimal() && !currChar.isWhitespace()) {
-				lexicalError(currChar);
-			}
 			
-			if(currChar.isWhitespace() || (currChar.isDecimal() && !input.peek().isDigit()) ) {
+			if(!currChar.isDecimal() || (currChar.isDecimal() && !input.peek().isDigit()) ) {
 				input.pushback(currChar);
 				return IntegerToken.make(firstChar.getLocation(), buffer.toString());
 			}
@@ -162,9 +159,6 @@ public class LexicalAnalyzer extends ScannerImp implements Scanner {
 			currChar = input.next();
 		}
 
-		if(!currChar.isWhitespace() && !currChar.isDecimal()) {
-			lexicalError(currChar);
-		}
 		input.pushback(currChar);
 		return FloatToken.make(firstChar.getLocation(), buffer.toString());
 	}
