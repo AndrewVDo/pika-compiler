@@ -148,7 +148,7 @@ class SemanticAnalysisVisitor extends ParseNodeVisitor.Default {
 			node.setSignature(signature);
 		}
 		else {
-			castTypeError(node, innerType);
+			castTypeError(node.getType(), innerType.get(1));
 			node.setType(PrimitiveType.ERROR);
 		}
 		assert(true);
@@ -227,8 +227,8 @@ class SemanticAnalysisVisitor extends ParseNodeVisitor.Default {
 		logError("operator " + token.getLexeme() + " not defined for types " 
 				 + operandTypes  + " at " + token.getLocation());	
 	}
-	private void castTypeError(ParseNode node, List<Type> operandTypes) {
-		//TODO
+	private void castTypeError(Type newType, Type oldType) {
+		logError("invalid cast from " + oldType + " to " + newType );
 	}
 	private void logError(String message) {
 		PikaLogger log = PikaLogger.getLogger("compiler.semanticAnalyzer");
