@@ -47,6 +47,9 @@ public class ComparisonCodeGenerator {
 			
 			return fragment;
 		}
+		if(type == PrimitiveType.STRING) {
+			assert(operator == Punctuator.EQUAL || operator == Punctuator.NOTEQUAL);
+		}
 		
 		ASMOpcode subtract = Nop;
 		ASMOpcode jumppos = Nop;
@@ -66,6 +69,12 @@ public class ComparisonCodeGenerator {
 			jumpzero = JumpFZero;
 		}
 		else if(type == PrimitiveType.CHARACTER) {
+			subtract = Subtract;
+			jumppos = JumpPos;
+			jumpneg = JumpNeg;
+			jumpzero = JumpFalse;
+		}
+		else if(type == PrimitiveType.STRING) {
 			subtract = Subtract;
 			jumppos = JumpPos;
 			jumpneg = JumpNeg;

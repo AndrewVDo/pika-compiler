@@ -154,7 +154,7 @@ public class ASMCodeGenerator {
 				code.add(LoadC);
 			}
 			else if(node.getType() == PrimitiveType.STRING) {
-//				code.add(LoadI);
+				code.add(LoadI);
 			}
 			else {
 				assert false : "node " + node;
@@ -236,7 +236,7 @@ public class ASMCodeGenerator {
 				return StoreC;
 			}
 			if(type == PrimitiveType.STRING) {
-//				return StoreI; PushD perhaps?
+				return StoreI;
 			}
 			assert false: "Type " + type + " unimplemented in opcodeForStore()";
 			return null;
@@ -284,6 +284,7 @@ public class ASMCodeGenerator {
 			Labeller labeller = new Labeller("compare");
 			
 			String startLabel = labeller.newLabel("arg1");
+			
 			String arg2Label  = labeller.newLabel("arg2");
 			String subLabel   = labeller.newLabel("sub");
 			String trueLabel  = labeller.newLabel("true");
@@ -400,35 +401,20 @@ public class ASMCodeGenerator {
 			code.add(PushI, node.getValue());
 		}
 		public void visit(StringConstantNode node) {
-			newAddressCode(node);
+			newValueCode(node);
 			
-			String stringIdentifier = ((IdentifierNode)node.getParent().child(0)).getBinding().getLexeme();
-			stringIdentifier += "-string-data";
-			
-			int before = node.getValue().length();
+			String stringIdentifier = stringIdentifier(node);
 			String pikaString = convertJavaToPikaString(node.getValue());
-			int after = pikaString.length();
 			
-			
+			//loader allocates string
 			code.add(DLabel, stringIdentifier);
 			code.add(DataS, pikaString);
 			code.add(PushD, stringIdentifier);
-			
-						
-//			for(int i = 0; i < javaString.length(); i++) {
-//				code.add(Duplicate);
-//				code.add(PushI, i);
-//				code.add(Add);
-//				char ch = javaString.charAt(i);
-//				System.out.println(ch);
-//				code.add(PushI, ch);
-//				code.add(StoreC);
-//			}
-//
-//			code.add(Duplicate);
-//			code.add(PushI, javaString.length());
-//			code.add(Add);
-//			code.add(Exchange);
+
+		}
+		private String stringIdentifier(ParseNode node) {
+			ParseNode originalIdentifier = node.getParent().child(0);
+			return originalIdentifier.getToken().getLexeme() + "-string-data";
 		}
 		private String convertJavaToPikaString(String javaString) {
 			String pikaString = javaString.substring(1, javaString.length()-1);

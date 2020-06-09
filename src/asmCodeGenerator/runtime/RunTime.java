@@ -107,8 +107,6 @@ public class RunTime {
 		frag.add(PushD, floatDivideByZeroMessage);
 		frag.add(Jump, GENERAL_RUNTIME_ERROR);
 	}
-	
-	
 	public static ASMCodeFragment getEnvironment() {
 		RunTime rt = new RunTime();
 		return rt.environmentASM();
