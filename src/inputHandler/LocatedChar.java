@@ -80,4 +80,7 @@ public class LocatedChar {
 	public boolean inCharacterEncodingRange() {
 		return ((int)character >= 32 && (int)character <= 126);
 	}
+	public boolean isStringStart() {
+		return character == '"';
+	}
 }

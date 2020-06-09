@@ -23,6 +23,7 @@ import parseTree.nodeTypes.NewlineNode;
 import parseTree.nodeTypes.PrintStatementNode;
 import parseTree.nodeTypes.ProgramNode;
 import parseTree.nodeTypes.SpaceNode;
+import parseTree.nodeTypes.StringConstantNode;
 import parseTree.nodeTypes.TabNode;
 import semanticAnalyzer.types.PrimitiveType;
 import semanticAnalyzer.types.Type;
@@ -152,6 +153,9 @@ public class ASMCodeGenerator {
 			else if(node.getType() == PrimitiveType.CHARACTER) {
 				code.add(LoadC);
 			}
+			else if(node.getType() == PrimitiveType.STRING) {
+				code.add(LoadI);
+			}
 			else {
 				assert false : "node " + node;
 			}
@@ -231,6 +235,9 @@ public class ASMCodeGenerator {
 			if(type == PrimitiveType.CHARACTER) {
 				return StoreC;
 			}
+			if(type == PrimitiveType.STRING) {
+				return StoreI;
+			}
 			assert false: "Type " + type + " unimplemented in opcodeForStore()";
 			return null;
 		}
@@ -277,6 +284,7 @@ public class ASMCodeGenerator {
 			Labeller labeller = new Labeller("compare");
 			
 			String startLabel = labeller.newLabel("arg1");
+			
 			String arg2Label  = labeller.newLabel("arg2");
 			String subLabel   = labeller.newLabel("sub");
 			String trueLabel  = labeller.newLabel("true");
@@ -392,6 +400,35 @@ public class ASMCodeGenerator {
 			
 			code.add(PushI, node.getValue());
 		}
+		public void visit(StringConstantNode node) {
+			newValueCode(node);
+			
+			String stringIdentifier = stringIdentifier(node);
+			String pikaString = convertJavaToPikaString(node.getValue());
+			
+			//loader allocates string
+			code.add(DLabel, stringIdentifier);
+			code.add(DataS, pikaString);
+			code.add(PushD, stringIdentifier);
+
+		}
+		private String stringIdentifier(ParseNode node) {
+			ParseNode originalIdentifier = node.getParent().child(0);
+			return originalIdentifier.getToken().getLexeme() + "-string-data";
+		}
+		private String convertJavaToPikaString(String javaString) {
+			String pikaString = javaString.substring(1, javaString.length()-1);
+			pikaString += '\0';
+			
+			for(int i = 0; i < pikaString.length()-1; i++) {
+				if(pikaString.charAt(i) == '\\' && pikaString.charAt(i+1) == 'n') {
+					pikaString = pikaString.substring(0, i) + '\n' + pikaString.substring(i+2, pikaString.length());
+				}
+			}
+			
+			return pikaString;
+		}
+		
 		public void visit(FloatingConstantNode node) {
 			newValueCode(node);
 			

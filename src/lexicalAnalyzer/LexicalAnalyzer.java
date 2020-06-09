@@ -12,6 +12,7 @@ import tokens.FloatToken;
 import tokens.IdentifierToken;
 import tokens.LextantToken;
 import tokens.NullToken;
+import tokens.StringToken;
 import tokens.IntegerToken;
 import tokens.Token;
 
@@ -43,6 +44,9 @@ public class LexicalAnalyzer extends ScannerImp implements Scanner {
 		else if(ch.isCharacterStart()) {
 			return scanCharacter(ch);
 		}
+		else if(ch.isStringStart()) {
+			return scanString(ch);
+		}
 		else if(ch.isSign() || ch.isDigit() || (ch.isDecimal() && input.peek().isDigit())) {
 			return scanNumber(ch);
 		}
@@ -65,6 +69,7 @@ public class LexicalAnalyzer extends ScannerImp implements Scanner {
 	private Token scanCharacter(LocatedChar first) {	
 		if(!first.isCharacterStart()) {
 			lexicalError(first);
+			return null;
 		}
 		
 		StringBuffer buffer = new StringBuffer();
@@ -73,16 +78,37 @@ public class LexicalAnalyzer extends ScannerImp implements Scanner {
 		LocatedChar character = input.next();
 		if(!character.inCharacterEncodingRange()) {
 			lexicalError(character);
+			return null;
 		}
 		buffer.append(character.getCharacter());
 		
 		LocatedChar end = input.next();
 		if(!end.isCharacterStart()) {
 			lexicalError(end);
+			return null;
 		}
 		buffer.append(end.getCharacter());
 		
 		return CharacterToken.make(character.getLocation(), buffer.toString());
+	}
+	
+	private Token scanString(LocatedChar ch) {
+		StringBuffer buffer = new StringBuffer();
+		buffer.append(ch.getCharacter());
+		LocatedChar next = input.next();
+		while(next.getCharacter() != '\n' && next.getCharacter() != '\"') {
+			buffer.append(next.getCharacter());
+			next = input.next();
+		}
+		
+		//no ending " found
+		if(next.getCharacter() != '\"') {
+			lexicalError(next);
+			return null;
+		}
+		
+		buffer.append(ch.getCharacter());
+		return StringToken.make(ch.getLocation(), buffer.toString());
 	}
 
 	private void scanComment(LocatedChar ch) {
@@ -154,6 +180,7 @@ public class LexicalAnalyzer extends ScannerImp implements Scanner {
 			
 			if(!input.peek().isDigit()) {
 				lexicalError(input.peek());
+				return null;
 			}
 			appendSubsequentDigits(buffer);
 			currChar = input.next();
