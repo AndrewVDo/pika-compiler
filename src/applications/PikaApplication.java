@@ -48,7 +48,7 @@ public class PikaApplication {
 	protected static boolean endsWithSeparator(String filePath) {
 		return (!filePath.endsWith(File.separator));
 	}
-	protected static String outputFilename(String filename) {
+	public static String outputFilename(String filename) {
 		return outputDirectory + basename(filename) + ".asm";
 	}
 	// removes preceding directory names and the file extension

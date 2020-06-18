@@ -1,9 +1,0 @@
-exec {
-    const quarter := 0.25.
-    const dime := .1.
-    const debt := -5.27.
-    const owned := -.27.
-    const big := .25E+15.
-    const small := -5.2E-10.
-    const last := 1.0E2.
-}

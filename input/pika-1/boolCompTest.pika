@@ -1,9 +1,0 @@
-exec {
- var a := _true_ != _true_.
- print a.
- #var b := _true_ == _false_.
- #var c := _true_ == _true_.
- #var d := _false_ != _true_.
- #var e := _false_ != _false_.
- #print a, b, c, d, e.
- }

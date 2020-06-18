@@ -1,5 +1,0 @@
-exec {
-    const positive := +5.
-    const neutral := 0.
-    const negative := -10.
-}

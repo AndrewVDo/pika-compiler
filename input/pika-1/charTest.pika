@@ -1,9 +1,0 @@
-exec {
-	var booptwo := 5.
-	var boop := ^a^.
-	print booptwo, _t_, boop.
-	
-	boop := ^b^.
-	print booptwo, _t_, boop.
-	
-}
