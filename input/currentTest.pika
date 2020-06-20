@@ -1,4 +1,7 @@
 exec {
-	print  3 == 4 == _true_, _n_.
-	print  4 == 4 == _true_, _n_.
+	var v := "now".
+    const w := v.
+    v := "how".
+    const z := "cow".
+    print v; w; "brown"; z, _n_.
 }

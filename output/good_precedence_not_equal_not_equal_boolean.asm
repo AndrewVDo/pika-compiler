@@ -1,0 +1,2337 @@
+        Jump         $$main                    
+        DLabel       $eat-location-zero        
+        DataZ        8                         
+        DLabel       $print-format-integer     
+        DataC        37                        %% "%d"
+        DataC        100                       
+        DataC        0                         
+        DLabel       $print-format-floating    
+        DataC        37                        %% "%g"
+        DataC        103                       
+        DataC        0                         
+        DLabel       $print-format-boolean     
+        DataC        37                        %% "%s"
+        DataC        115                       
+        DataC        0                         
+        DLabel       $print-format-character   
+        DataC        37                        %% "%c"
+        DataC        99                        
+        DataC        0                         
+        DLabel       $print-format-string      
+        DataC        37                        %% "%s"
+        DataC        115                       
+        DataC        0                         
+        DLabel       $print-format-newline     
+        DataC        10                        %% "\n"
+        DataC        0                         
+        DLabel       $print-format-tab         
+        DataC        9                         %% "\t"
+        DataC        0                         
+        DLabel       $print-format-space       
+        DataC        32                        %% " "
+        DataC        0                         
+        DLabel       $boolean-true-string      
+        DataC        116                       %% "true"
+        DataC        114                       
+        DataC        117                       
+        DataC        101                       
+        DataC        0                         
+        DLabel       $boolean-false-string     
+        DataC        102                       %% "false"
+        DataC        97                        
+        DataC        108                       
+        DataC        115                       
+        DataC        101                       
+        DataC        0                         
+        DLabel       $errors-general-message   
+        DataC        82                        %% "Runtime error: %s\n"
+        DataC        117                       
+        DataC        110                       
+        DataC        116                       
+        DataC        105                       
+        DataC        109                       
+        DataC        101                       
+        DataC        32                        
+        DataC        101                       
+        DataC        114                       
+        DataC        114                       
+        DataC        111                       
+        DataC        114                       
+        DataC        58                        
+        DataC        32                        
+        DataC        37                        
+        DataC        115                       
+        DataC        10                        
+        DataC        0                         
+        Label        $$general-runtime-error   
+        PushD        $errors-general-message   
+        Printf                                 
+        Halt                                   
+        DLabel       $errors-int-divide-by-zero 
+        DataC        105                       %% "integer divide by zero"
+        DataC        110                       
+        DataC        116                       
+        DataC        101                       
+        DataC        103                       
+        DataC        101                       
+        DataC        114                       
+        DataC        32                        
+        DataC        100                       
+        DataC        105                       
+        DataC        118                       
+        DataC        105                       
+        DataC        100                       
+        DataC        101                       
+        DataC        32                        
+        DataC        98                        
+        DataC        121                       
+        DataC        32                        
+        DataC        122                       
+        DataC        101                       
+        DataC        114                       
+        DataC        111                       
+        DataC        0                         
+        Label        $$i-divide-by-zero        
+        PushD        $errors-int-divide-by-zero 
+        Jump         $$general-runtime-error   
+        DLabel       $errors-float-divide-by-zero 
+        DataC        102                       %% "floating divide by zero"
+        DataC        108                       
+        DataC        111                       
+        DataC        97                        
+        DataC        116                       
+        DataC        105                       
+        DataC        110                       
+        DataC        103                       
+        DataC        32                        
+        DataC        100                       
+        DataC        105                       
+        DataC        118                       
+        DataC        105                       
+        DataC        100                       
+        DataC        101                       
+        DataC        32                        
+        DataC        98                        
+        DataC        121                       
+        DataC        32                        
+        DataC        122                       
+        DataC        101                       
+        DataC        114                       
+        DataC        111                       
+        DataC        0                         
+        Label        $$f-divide-by-zero        
+        PushD        $errors-float-divide-by-zero 
+        Jump         $$general-runtime-error   
+        DLabel       $usable-memory-start      
+        DLabel       $global-memory-block      
+        DataZ        0                         
+        Label        $$main                    
+        Label        -compare-5330-arg1        
+        Label        -compare-5329-arg1        
+        PushI        1                         
+        Label        -compare-5329-arg2        
+        PushI        1                         
+        Label        -compare-5329-sub         
+        BEqual                                 
+        JumpFalse    -compare-5329-true        
+        Jump         -compare-5329-false       
+        Label        -compare-5329-true        
+        PushI        1                         
+        Jump         -compare-5329-join        
+        Label        -compare-5329-false       
+        PushI        0                         
+        Jump         -compare-5329-join        
+        Label        -compare-5329-join        
+        Label        -compare-5330-arg2        
+        PushI        1                         
+        Label        -compare-5330-sub         
+        BEqual                                 
+        JumpFalse    -compare-5330-true        
+        Jump         -compare-5330-false       
+        Label        -compare-5330-true        
+        PushI        1                         
+        Jump         -compare-5330-join        
+        Label        -compare-5330-false       
+        PushI        0                         
+        Jump         -compare-5330-join        
+        Label        -compare-5330-join        
+        JumpTrue     -print-boolean-5331-true  
+        PushD        $boolean-false-string     
+        Jump         -print-boolean-5331-join  
+        Label        -print-boolean-5331-true  
+        PushD        $boolean-true-string      
+        Label        -print-boolean-5331-join  
+        PushD        $print-format-boolean     
+        Printf                                 
+        PushD        $print-format-newline     
+        Printf                                 
+        Label        -compare-5333-arg1        
+        Label        -compare-5332-arg1        
+        PushI        0                         
+        Label        -compare-5332-arg2        
+        PushI        0                         
+        Label        -compare-5332-sub         
+        BEqual                                 
+        JumpFalse    -compare-5332-true        
+        Jump         -compare-5332-false       
+        Label        -compare-5332-true        
+        PushI        1                         
+        Jump         -compare-5332-join        
+        Label        -compare-5332-false       
+        PushI        0                         
+        Jump         -compare-5332-join        
+        Label        -compare-5332-join        
+        Label        -compare-5333-arg2        
+        PushI        0                         
+        Label        -compare-5333-sub         
+        BEqual                                 
+        JumpFalse    -compare-5333-true        
+        Jump         -compare-5333-false       
+        Label        -compare-5333-true        
+        PushI        1                         
+        Jump         -compare-5333-join        
+        Label        -compare-5333-false       
+        PushI        0                         
+        Jump         -compare-5333-join        
+        Label        -compare-5333-join        
+        JumpTrue     -print-boolean-5334-true  
+        PushD        $boolean-false-string     
+        Jump         -print-boolean-5334-join  
+        Label        -print-boolean-5334-true  
+        PushD        $boolean-true-string      
+        Label        -print-boolean-5334-join  
+        PushD        $print-format-boolean     
+        Printf                                 
+        PushD        $print-format-newline     
+        Printf                                 
+        Label        -compare-5336-arg1        
+        Label        -compare-5335-arg1        
+        PushI        0                         
+        Label        -compare-5335-arg2        
+        PushI        0                         
+        Label        -compare-5335-sub         
+        BEqual                                 
+        JumpFalse    -compare-5335-true        
+        Jump         -compare-5335-false       
+        Label        -compare-5335-true        
+        PushI        1                         
+        Jump         -compare-5335-join        
+        Label        -compare-5335-false       
+        PushI        0                         
+        Jump         -compare-5335-join        
+        Label        -compare-5335-join        
+        Label        -compare-5336-arg2        
+        PushI        1                         
+        Label        -compare-5336-sub         
+        BEqual                                 
+        JumpFalse    -compare-5336-true        
+        Jump         -compare-5336-false       
+        Label        -compare-5336-true        
+        PushI        1                         
+        Jump         -compare-5336-join        
+        Label        -compare-5336-false       
+        PushI        0                         
+        Jump         -compare-5336-join        
+        Label        -compare-5336-join        
+        JumpTrue     -print-boolean-5337-true  
+        PushD        $boolean-false-string     
+        Jump         -print-boolean-5337-join  
+        Label        -print-boolean-5337-true  
+        PushD        $boolean-true-string      
+        Label        -print-boolean-5337-join  
+        PushD        $print-format-boolean     
+        Printf                                 
+        PushD        $print-format-newline     
+        Printf                                 
+        Label        -compare-5339-arg1        
+        Label        -compare-5338-arg1        
+        PushI        0                         
+        Label        -compare-5338-arg2        
+        PushI        1                         
+        Label        -compare-5338-sub         
+        BEqual                                 
+        JumpFalse    -compare-5338-true        
+        Jump         -compare-5338-false       
+        Label        -compare-5338-true        
+        PushI        1                         
+        Jump         -compare-5338-join        
+        Label        -compare-5338-false       
+        PushI        0                         
+        Jump         -compare-5338-join        
+        Label        -compare-5338-join        
+        Label        -compare-5339-arg2        
+        PushI        0                         
+        Label        -compare-5339-sub         
+        BEqual                                 
+        JumpFalse    -compare-5339-true        
+        Jump         -compare-5339-false       
+        Label        -compare-5339-true        
+        PushI        1                         
+        Jump         -compare-5339-join        
+        Label        -compare-5339-false       
+        PushI        0                         
+        Jump         -compare-5339-join        
+        Label        -compare-5339-join        
+        JumpTrue     -print-boolean-5340-true  
+        PushD        $boolean-false-string     
+        Jump         -print-boolean-5340-join  
+        Label        -print-boolean-5340-true  
+        PushD        $boolean-true-string      
+        Label        -print-boolean-5340-join  
+        PushD        $print-format-boolean     
+        Printf                                 
+        PushD        $print-format-newline     
+        Printf                                 
+        Label        -compare-5342-arg1        
+        Label        -compare-5341-arg1        
+        PushI        1                         
+        Label        -compare-5341-arg2        
+        PushI        0                         
+        Label        -compare-5341-sub         
+        BEqual                                 
+        JumpFalse    -compare-5341-true        
+        Jump         -compare-5341-false       
+        Label        -compare-5341-true        
+        PushI        1                         
+        Jump         -compare-5341-join        
+        Label        -compare-5341-false       
+        PushI        0                         
+        Jump         -compare-5341-join        
+        Label        -compare-5341-join        
+        Label        -compare-5342-arg2        
+        PushI        0                         
+        Label        -compare-5342-sub         
+        BEqual                                 
+        JumpFalse    -compare-5342-true        
+        Jump         -compare-5342-false       
+        Label        -compare-5342-true        
+        PushI        1                         
+        Jump         -compare-5342-join        
+        Label        -compare-5342-false       
+        PushI        0                         
+        Jump         -compare-5342-join        
+        Label        -compare-5342-join        
+        JumpTrue     -print-boolean-5343-true  
+        PushD        $boolean-false-string     
+        Jump         -print-boolean-5343-join  
+        Label        -print-boolean-5343-true  
+        PushD        $boolean-true-string      
+        Label        -print-boolean-5343-join  
+        PushD        $print-format-boolean     
+        Printf                                 
+        PushD        $print-format-newline     
+        Printf                                 
+        Label        -compare-5345-arg1        
+        Label        -compare-5344-arg1        
+        PushI        1                         
+        Label        -compare-5344-arg2        
+        PushI        0                         
+        Label        -compare-5344-sub         
+        BEqual                                 
+        JumpFalse    -compare-5344-true        
+        Jump         -compare-5344-false       
+        Label        -compare-5344-true        
+        PushI        1                         
+        Jump         -compare-5344-join        
+        Label        -compare-5344-false       
+        PushI        0                         
+        Jump         -compare-5344-join        
+        Label        -compare-5344-join        
+        Label        -compare-5345-arg2        
+        PushI        0                         
+        Label        -compare-5345-sub         
+        BEqual                                 
+        JumpFalse    -compare-5345-true        
+        Jump         -compare-5345-false       
+        Label        -compare-5345-true        
+        PushI        1                         
+        Jump         -compare-5345-join        
+        Label        -compare-5345-false       
+        PushI        0                         
+        Jump         -compare-5345-join        
+        Label        -compare-5345-join        
+        JumpTrue     -print-boolean-5346-true  
+        PushD        $boolean-false-string     
+        Jump         -print-boolean-5346-join  
+        Label        -print-boolean-5346-true  
+        PushD        $boolean-true-string      
+        Label        -print-boolean-5346-join  
+        PushD        $print-format-boolean     
+        Printf                                 
+        PushD        $print-format-newline     
+        Printf                                 
+        Label        -compare-5348-arg1        
+        Label        -compare-5347-arg1        
+        PushI        0                         
+        Label        -compare-5347-arg2        
+        PushI        0                         
+        Label        -compare-5347-sub         
+        BEqual                                 
+        JumpFalse    -compare-5347-true        
+        Jump         -compare-5347-false       
+        Label        -compare-5347-true        
+        PushI        1                         
+        Jump         -compare-5347-join        
+        Label        -compare-5347-false       
+        PushI        0                         
+        Jump         -compare-5347-join        
+        Label        -compare-5347-join        
+        Label        -compare-5348-arg2        
+        PushI        0                         
+        Label        -compare-5348-sub         
+        BEqual                                 
+        JumpFalse    -compare-5348-true        
+        Jump         -compare-5348-false       
+        Label        -compare-5348-true        
+        PushI        1                         
+        Jump         -compare-5348-join        
+        Label        -compare-5348-false       
+        PushI        0                         
+        Jump         -compare-5348-join        
+        Label        -compare-5348-join        
+        JumpTrue     -print-boolean-5349-true  
+        PushD        $boolean-false-string     
+        Jump         -print-boolean-5349-join  
+        Label        -print-boolean-5349-true  
+        PushD        $boolean-true-string      
+        Label        -print-boolean-5349-join  
+        PushD        $print-format-boolean     
+        Printf                                 
+        PushD        $print-format-newline     
+        Printf                                 
+        Label        -compare-5351-arg1        
+        Label        -compare-5350-arg1        
+        PushI        1                         
+        Label        -compare-5350-arg2        
+        PushI        1                         
+        Label        -compare-5350-sub         
+        BEqual                                 
+        JumpFalse    -compare-5350-true        
+        Jump         -compare-5350-false       
+        Label        -compare-5350-true        
+        PushI        1                         
+        Jump         -compare-5350-join        
+        Label        -compare-5350-false       
+        PushI        0                         
+        Jump         -compare-5350-join        
+        Label        -compare-5350-join        
+        Label        -compare-5351-arg2        
+        PushI        0                         
+        Label        -compare-5351-sub         
+        BEqual                                 
+        JumpFalse    -compare-5351-true        
+        Jump         -compare-5351-false       
+        Label        -compare-5351-true        
+        PushI        1                         
+        Jump         -compare-5351-join        
+        Label        -compare-5351-false       
+        PushI        0                         
+        Jump         -compare-5351-join        
+        Label        -compare-5351-join        
+        JumpTrue     -print-boolean-5352-true  
+        PushD        $boolean-false-string     
+        Jump         -print-boolean-5352-join  
+        Label        -print-boolean-5352-true  
+        PushD        $boolean-true-string      
+        Label        -print-boolean-5352-join  
+        PushD        $print-format-boolean     
+        Printf                                 
+        PushD        $print-format-newline     
+        Printf                                 
+        Label        -compare-5354-arg1        
+        Label        -compare-5353-arg1        
+        PushI        1                         
+        Label        -compare-5353-arg2        
+        PushI        1                         
+        Label        -compare-5353-sub         
+        BEqual                                 
+        JumpFalse    -compare-5353-true        
+        Jump         -compare-5353-false       
+        Label        -compare-5353-true        
+        PushI        1                         
+        Jump         -compare-5353-join        
+        Label        -compare-5353-false       
+        PushI        0                         
+        Jump         -compare-5353-join        
+        Label        -compare-5353-join        
+        Label        -compare-5354-arg2        
+        PushI        0                         
+        Label        -compare-5354-sub         
+        BEqual                                 
+        JumpFalse    -compare-5354-true        
+        Jump         -compare-5354-false       
+        Label        -compare-5354-true        
+        PushI        1                         
+        Jump         -compare-5354-join        
+        Label        -compare-5354-false       
+        PushI        0                         
+        Jump         -compare-5354-join        
+        Label        -compare-5354-join        
+        JumpTrue     -print-boolean-5355-true  
+        PushD        $boolean-false-string     
+        Jump         -print-boolean-5355-join  
+        Label        -print-boolean-5355-true  
+        PushD        $boolean-true-string      
+        Label        -print-boolean-5355-join  
+        PushD        $print-format-boolean     
+        Printf                                 
+        PushD        $print-format-newline     
+        Printf                                 
+        Label        -compare-5357-arg1        
+        Label        -compare-5356-arg1        
+        PushI        0                         
+        Label        -compare-5356-arg2        
+        PushI        1                         
+        Label        -compare-5356-sub         
+        BEqual                                 
+        JumpFalse    -compare-5356-true        
+        Jump         -compare-5356-false       
+        Label        -compare-5356-true        
+        PushI        1                         
+        Jump         -compare-5356-join        
+        Label        -compare-5356-false       
+        PushI        0                         
+        Jump         -compare-5356-join        
+        Label        -compare-5356-join        
+        Label        -compare-5357-arg2        
+        PushI        0                         
+        Label        -compare-5357-sub         
+        BEqual                                 
+        JumpFalse    -compare-5357-true        
+        Jump         -compare-5357-false       
+        Label        -compare-5357-true        
+        PushI        1                         
+        Jump         -compare-5357-join        
+        Label        -compare-5357-false       
+        PushI        0                         
+        Jump         -compare-5357-join        
+        Label        -compare-5357-join        
+        JumpTrue     -print-boolean-5358-true  
+        PushD        $boolean-false-string     
+        Jump         -print-boolean-5358-join  
+        Label        -print-boolean-5358-true  
+        PushD        $boolean-true-string      
+        Label        -print-boolean-5358-join  
+        PushD        $print-format-boolean     
+        Printf                                 
+        PushD        $print-format-newline     
+        Printf                                 
+        Label        -compare-5360-arg1        
+        Label        -compare-5359-arg1        
+        PushI        0                         
+        Label        -compare-5359-arg2        
+        PushI        0                         
+        Label        -compare-5359-sub         
+        BEqual                                 
+        JumpFalse    -compare-5359-true        
+        Jump         -compare-5359-false       
+        Label        -compare-5359-true        
+        PushI        1                         
+        Jump         -compare-5359-join        
+        Label        -compare-5359-false       
+        PushI        0                         
+        Jump         -compare-5359-join        
+        Label        -compare-5359-join        
+        Label        -compare-5360-arg2        
+        PushI        1                         
+        Label        -compare-5360-sub         
+        BEqual                                 
+        JumpFalse    -compare-5360-true        
+        Jump         -compare-5360-false       
+        Label        -compare-5360-true        
+        PushI        1                         
+        Jump         -compare-5360-join        
+        Label        -compare-5360-false       
+        PushI        0                         
+        Jump         -compare-5360-join        
+        Label        -compare-5360-join        
+        JumpTrue     -print-boolean-5361-true  
+        PushD        $boolean-false-string     
+        Jump         -print-boolean-5361-join  
+        Label        -print-boolean-5361-true  
+        PushD        $boolean-true-string      
+        Label        -print-boolean-5361-join  
+        PushD        $print-format-boolean     
+        Printf                                 
+        PushD        $print-format-newline     
+        Printf                                 
+        Label        -compare-5363-arg1        
+        Label        -compare-5362-arg1        
+        PushI        1                         
+        Label        -compare-5362-arg2        
+        PushI        0                         
+        Label        -compare-5362-sub         
+        BEqual                                 
+        JumpFalse    -compare-5362-true        
+        Jump         -compare-5362-false       
+        Label        -compare-5362-true        
+        PushI        1                         
+        Jump         -compare-5362-join        
+        Label        -compare-5362-false       
+        PushI        0                         
+        Jump         -compare-5362-join        
+        Label        -compare-5362-join        
+        Label        -compare-5363-arg2        
+        PushI        0                         
+        Label        -compare-5363-sub         
+        BEqual                                 
+        JumpFalse    -compare-5363-true        
+        Jump         -compare-5363-false       
+        Label        -compare-5363-true        
+        PushI        1                         
+        Jump         -compare-5363-join        
+        Label        -compare-5363-false       
+        PushI        0                         
+        Jump         -compare-5363-join        
+        Label        -compare-5363-join        
+        JumpTrue     -print-boolean-5364-true  
+        PushD        $boolean-false-string     
+        Jump         -print-boolean-5364-join  
+        Label        -print-boolean-5364-true  
+        PushD        $boolean-true-string      
+        Label        -print-boolean-5364-join  
+        PushD        $print-format-boolean     
+        Printf                                 
+        PushD        $print-format-newline     
+        Printf                                 
+        Label        -compare-5366-arg1        
+        Label        -compare-5365-arg1        
+        PushI        0                         
+        Label        -compare-5365-arg2        
+        PushI        1                         
+        Label        -compare-5365-sub         
+        BEqual                                 
+        JumpFalse    -compare-5365-true        
+        Jump         -compare-5365-false       
+        Label        -compare-5365-true        
+        PushI        1                         
+        Jump         -compare-5365-join        
+        Label        -compare-5365-false       
+        PushI        0                         
+        Jump         -compare-5365-join        
+        Label        -compare-5365-join        
+        Label        -compare-5366-arg2        
+        PushI        0                         
+        Label        -compare-5366-sub         
+        BEqual                                 
+        JumpFalse    -compare-5366-true        
+        Jump         -compare-5366-false       
+        Label        -compare-5366-true        
+        PushI        1                         
+        Jump         -compare-5366-join        
+        Label        -compare-5366-false       
+        PushI        0                         
+        Jump         -compare-5366-join        
+        Label        -compare-5366-join        
+        JumpTrue     -print-boolean-5367-true  
+        PushD        $boolean-false-string     
+        Jump         -print-boolean-5367-join  
+        Label        -print-boolean-5367-true  
+        PushD        $boolean-true-string      
+        Label        -print-boolean-5367-join  
+        PushD        $print-format-boolean     
+        Printf                                 
+        PushD        $print-format-newline     
+        Printf                                 
+        Label        -compare-5369-arg1        
+        Label        -compare-5368-arg1        
+        PushI        1                         
+        Label        -compare-5368-arg2        
+        PushI        1                         
+        Label        -compare-5368-sub         
+        BEqual                                 
+        JumpFalse    -compare-5368-true        
+        Jump         -compare-5368-false       
+        Label        -compare-5368-true        
+        PushI        1                         
+        Jump         -compare-5368-join        
+        Label        -compare-5368-false       
+        PushI        0                         
+        Jump         -compare-5368-join        
+        Label        -compare-5368-join        
+        Label        -compare-5369-arg2        
+        PushI        1                         
+        Label        -compare-5369-sub         
+        BEqual                                 
+        JumpFalse    -compare-5369-true        
+        Jump         -compare-5369-false       
+        Label        -compare-5369-true        
+        PushI        1                         
+        Jump         -compare-5369-join        
+        Label        -compare-5369-false       
+        PushI        0                         
+        Jump         -compare-5369-join        
+        Label        -compare-5369-join        
+        JumpTrue     -print-boolean-5370-true  
+        PushD        $boolean-false-string     
+        Jump         -print-boolean-5370-join  
+        Label        -print-boolean-5370-true  
+        PushD        $boolean-true-string      
+        Label        -print-boolean-5370-join  
+        PushD        $print-format-boolean     
+        Printf                                 
+        PushD        $print-format-newline     
+        Printf                                 
+        Label        -compare-5372-arg1        
+        Label        -compare-5371-arg1        
+        PushI        0                         
+        Label        -compare-5371-arg2        
+        PushI        0                         
+        Label        -compare-5371-sub         
+        BEqual                                 
+        JumpFalse    -compare-5371-true        
+        Jump         -compare-5371-false       
+        Label        -compare-5371-true        
+        PushI        1                         
+        Jump         -compare-5371-join        
+        Label        -compare-5371-false       
+        PushI        0                         
+        Jump         -compare-5371-join        
+        Label        -compare-5371-join        
+        Label        -compare-5372-arg2        
+        PushI        1                         
+        Label        -compare-5372-sub         
+        BEqual                                 
+        JumpFalse    -compare-5372-true        
+        Jump         -compare-5372-false       
+        Label        -compare-5372-true        
+        PushI        1                         
+        Jump         -compare-5372-join        
+        Label        -compare-5372-false       
+        PushI        0                         
+        Jump         -compare-5372-join        
+        Label        -compare-5372-join        
+        JumpTrue     -print-boolean-5373-true  
+        PushD        $boolean-false-string     
+        Jump         -print-boolean-5373-join  
+        Label        -print-boolean-5373-true  
+        PushD        $boolean-true-string      
+        Label        -print-boolean-5373-join  
+        PushD        $print-format-boolean     
+        Printf                                 
+        PushD        $print-format-newline     
+        Printf                                 
+        Label        -compare-5375-arg1        
+        Label        -compare-5374-arg1        
+        PushI        1                         
+        Label        -compare-5374-arg2        
+        PushI        1                         
+        Label        -compare-5374-sub         
+        BEqual                                 
+        JumpFalse    -compare-5374-true        
+        Jump         -compare-5374-false       
+        Label        -compare-5374-true        
+        PushI        1                         
+        Jump         -compare-5374-join        
+        Label        -compare-5374-false       
+        PushI        0                         
+        Jump         -compare-5374-join        
+        Label        -compare-5374-join        
+        Label        -compare-5375-arg2        
+        PushI        0                         
+        Label        -compare-5375-sub         
+        BEqual                                 
+        JumpFalse    -compare-5375-true        
+        Jump         -compare-5375-false       
+        Label        -compare-5375-true        
+        PushI        1                         
+        Jump         -compare-5375-join        
+        Label        -compare-5375-false       
+        PushI        0                         
+        Jump         -compare-5375-join        
+        Label        -compare-5375-join        
+        JumpTrue     -print-boolean-5376-true  
+        PushD        $boolean-false-string     
+        Jump         -print-boolean-5376-join  
+        Label        -print-boolean-5376-true  
+        PushD        $boolean-true-string      
+        Label        -print-boolean-5376-join  
+        PushD        $print-format-boolean     
+        Printf                                 
+        PushD        $print-format-newline     
+        Printf                                 
+        Label        -compare-5378-arg1        
+        Label        -compare-5377-arg1        
+        PushI        1                         
+        Label        -compare-5377-arg2        
+        PushI        0                         
+        Label        -compare-5377-sub         
+        BEqual                                 
+        JumpFalse    -compare-5377-true        
+        Jump         -compare-5377-false       
+        Label        -compare-5377-true        
+        PushI        1                         
+        Jump         -compare-5377-join        
+        Label        -compare-5377-false       
+        PushI        0                         
+        Jump         -compare-5377-join        
+        Label        -compare-5377-join        
+        Label        -compare-5378-arg2        
+        PushI        0                         
+        Label        -compare-5378-sub         
+        BEqual                                 
+        JumpFalse    -compare-5378-true        
+        Jump         -compare-5378-false       
+        Label        -compare-5378-true        
+        PushI        1                         
+        Jump         -compare-5378-join        
+        Label        -compare-5378-false       
+        PushI        0                         
+        Jump         -compare-5378-join        
+        Label        -compare-5378-join        
+        JumpTrue     -print-boolean-5379-true  
+        PushD        $boolean-false-string     
+        Jump         -print-boolean-5379-join  
+        Label        -print-boolean-5379-true  
+        PushD        $boolean-true-string      
+        Label        -print-boolean-5379-join  
+        PushD        $print-format-boolean     
+        Printf                                 
+        PushD        $print-format-newline     
+        Printf                                 
+        Label        -compare-5381-arg1        
+        Label        -compare-5380-arg1        
+        PushI        0                         
+        Label        -compare-5380-arg2        
+        PushI        1                         
+        Label        -compare-5380-sub         
+        BEqual                                 
+        JumpFalse    -compare-5380-true        
+        Jump         -compare-5380-false       
+        Label        -compare-5380-true        
+        PushI        1                         
+        Jump         -compare-5380-join        
+        Label        -compare-5380-false       
+        PushI        0                         
+        Jump         -compare-5380-join        
+        Label        -compare-5380-join        
+        Label        -compare-5381-arg2        
+        PushI        1                         
+        Label        -compare-5381-sub         
+        BEqual                                 
+        JumpFalse    -compare-5381-true        
+        Jump         -compare-5381-false       
+        Label        -compare-5381-true        
+        PushI        1                         
+        Jump         -compare-5381-join        
+        Label        -compare-5381-false       
+        PushI        0                         
+        Jump         -compare-5381-join        
+        Label        -compare-5381-join        
+        JumpTrue     -print-boolean-5382-true  
+        PushD        $boolean-false-string     
+        Jump         -print-boolean-5382-join  
+        Label        -print-boolean-5382-true  
+        PushD        $boolean-true-string      
+        Label        -print-boolean-5382-join  
+        PushD        $print-format-boolean     
+        Printf                                 
+        PushD        $print-format-newline     
+        Printf                                 
+        Label        -compare-5384-arg1        
+        Label        -compare-5383-arg1        
+        PushI        1                         
+        Label        -compare-5383-arg2        
+        PushI        0                         
+        Label        -compare-5383-sub         
+        BEqual                                 
+        JumpFalse    -compare-5383-true        
+        Jump         -compare-5383-false       
+        Label        -compare-5383-true        
+        PushI        1                         
+        Jump         -compare-5383-join        
+        Label        -compare-5383-false       
+        PushI        0                         
+        Jump         -compare-5383-join        
+        Label        -compare-5383-join        
+        Label        -compare-5384-arg2        
+        PushI        0                         
+        Label        -compare-5384-sub         
+        BEqual                                 
+        JumpFalse    -compare-5384-true        
+        Jump         -compare-5384-false       
+        Label        -compare-5384-true        
+        PushI        1                         
+        Jump         -compare-5384-join        
+        Label        -compare-5384-false       
+        PushI        0                         
+        Jump         -compare-5384-join        
+        Label        -compare-5384-join        
+        JumpTrue     -print-boolean-5385-true  
+        PushD        $boolean-false-string     
+        Jump         -print-boolean-5385-join  
+        Label        -print-boolean-5385-true  
+        PushD        $boolean-true-string      
+        Label        -print-boolean-5385-join  
+        PushD        $print-format-boolean     
+        Printf                                 
+        PushD        $print-format-newline     
+        Printf                                 
+        Label        -compare-5387-arg1        
+        Label        -compare-5386-arg1        
+        PushI        0                         
+        Label        -compare-5386-arg2        
+        PushI        0                         
+        Label        -compare-5386-sub         
+        BEqual                                 
+        JumpFalse    -compare-5386-true        
+        Jump         -compare-5386-false       
+        Label        -compare-5386-true        
+        PushI        1                         
+        Jump         -compare-5386-join        
+        Label        -compare-5386-false       
+        PushI        0                         
+        Jump         -compare-5386-join        
+        Label        -compare-5386-join        
+        Label        -compare-5387-arg2        
+        PushI        1                         
+        Label        -compare-5387-sub         
+        BEqual                                 
+        JumpFalse    -compare-5387-true        
+        Jump         -compare-5387-false       
+        Label        -compare-5387-true        
+        PushI        1                         
+        Jump         -compare-5387-join        
+        Label        -compare-5387-false       
+        PushI        0                         
+        Jump         -compare-5387-join        
+        Label        -compare-5387-join        
+        JumpTrue     -print-boolean-5388-true  
+        PushD        $boolean-false-string     
+        Jump         -print-boolean-5388-join  
+        Label        -print-boolean-5388-true  
+        PushD        $boolean-true-string      
+        Label        -print-boolean-5388-join  
+        PushD        $print-format-boolean     
+        Printf                                 
+        PushD        $print-format-newline     
+        Printf                                 
+        Label        -compare-5390-arg1        
+        Label        -compare-5389-arg1        
+        PushI        0                         
+        Label        -compare-5389-arg2        
+        PushI        1                         
+        Label        -compare-5389-sub         
+        BEqual                                 
+        JumpFalse    -compare-5389-true        
+        Jump         -compare-5389-false       
+        Label        -compare-5389-true        
+        PushI        1                         
+        Jump         -compare-5389-join        
+        Label        -compare-5389-false       
+        PushI        0                         
+        Jump         -compare-5389-join        
+        Label        -compare-5389-join        
+        Label        -compare-5390-arg2        
+        PushI        0                         
+        Label        -compare-5390-sub         
+        BEqual                                 
+        JumpFalse    -compare-5390-true        
+        Jump         -compare-5390-false       
+        Label        -compare-5390-true        
+        PushI        1                         
+        Jump         -compare-5390-join        
+        Label        -compare-5390-false       
+        PushI        0                         
+        Jump         -compare-5390-join        
+        Label        -compare-5390-join        
+        JumpTrue     -print-boolean-5391-true  
+        PushD        $boolean-false-string     
+        Jump         -print-boolean-5391-join  
+        Label        -print-boolean-5391-true  
+        PushD        $boolean-true-string      
+        Label        -print-boolean-5391-join  
+        PushD        $print-format-boolean     
+        Printf                                 
+        PushD        $print-format-newline     
+        Printf                                 
+        Label        -compare-5393-arg1        
+        Label        -compare-5392-arg1        
+        PushI        0                         
+        Label        -compare-5392-arg2        
+        PushI        0                         
+        Label        -compare-5392-sub         
+        BEqual                                 
+        JumpFalse    -compare-5392-true        
+        Jump         -compare-5392-false       
+        Label        -compare-5392-true        
+        PushI        1                         
+        Jump         -compare-5392-join        
+        Label        -compare-5392-false       
+        PushI        0                         
+        Jump         -compare-5392-join        
+        Label        -compare-5392-join        
+        Label        -compare-5393-arg2        
+        PushI        1                         
+        Label        -compare-5393-sub         
+        BEqual                                 
+        JumpFalse    -compare-5393-true        
+        Jump         -compare-5393-false       
+        Label        -compare-5393-true        
+        PushI        1                         
+        Jump         -compare-5393-join        
+        Label        -compare-5393-false       
+        PushI        0                         
+        Jump         -compare-5393-join        
+        Label        -compare-5393-join        
+        JumpTrue     -print-boolean-5394-true  
+        PushD        $boolean-false-string     
+        Jump         -print-boolean-5394-join  
+        Label        -print-boolean-5394-true  
+        PushD        $boolean-true-string      
+        Label        -print-boolean-5394-join  
+        PushD        $print-format-boolean     
+        Printf                                 
+        PushD        $print-format-newline     
+        Printf                                 
+        Label        -compare-5396-arg1        
+        Label        -compare-5395-arg1        
+        PushI        1                         
+        Label        -compare-5395-arg2        
+        PushI        0                         
+        Label        -compare-5395-sub         
+        BEqual                                 
+        JumpFalse    -compare-5395-true        
+        Jump         -compare-5395-false       
+        Label        -compare-5395-true        
+        PushI        1                         
+        Jump         -compare-5395-join        
+        Label        -compare-5395-false       
+        PushI        0                         
+        Jump         -compare-5395-join        
+        Label        -compare-5395-join        
+        Label        -compare-5396-arg2        
+        PushI        0                         
+        Label        -compare-5396-sub         
+        BEqual                                 
+        JumpFalse    -compare-5396-true        
+        Jump         -compare-5396-false       
+        Label        -compare-5396-true        
+        PushI        1                         
+        Jump         -compare-5396-join        
+        Label        -compare-5396-false       
+        PushI        0                         
+        Jump         -compare-5396-join        
+        Label        -compare-5396-join        
+        JumpTrue     -print-boolean-5397-true  
+        PushD        $boolean-false-string     
+        Jump         -print-boolean-5397-join  
+        Label        -print-boolean-5397-true  
+        PushD        $boolean-true-string      
+        Label        -print-boolean-5397-join  
+        PushD        $print-format-boolean     
+        Printf                                 
+        PushD        $print-format-newline     
+        Printf                                 
+        Label        -compare-5399-arg1        
+        Label        -compare-5398-arg1        
+        PushI        1                         
+        Label        -compare-5398-arg2        
+        PushI        0                         
+        Label        -compare-5398-sub         
+        BEqual                                 
+        JumpFalse    -compare-5398-true        
+        Jump         -compare-5398-false       
+        Label        -compare-5398-true        
+        PushI        1                         
+        Jump         -compare-5398-join        
+        Label        -compare-5398-false       
+        PushI        0                         
+        Jump         -compare-5398-join        
+        Label        -compare-5398-join        
+        Label        -compare-5399-arg2        
+        PushI        0                         
+        Label        -compare-5399-sub         
+        BEqual                                 
+        JumpFalse    -compare-5399-true        
+        Jump         -compare-5399-false       
+        Label        -compare-5399-true        
+        PushI        1                         
+        Jump         -compare-5399-join        
+        Label        -compare-5399-false       
+        PushI        0                         
+        Jump         -compare-5399-join        
+        Label        -compare-5399-join        
+        JumpTrue     -print-boolean-5400-true  
+        PushD        $boolean-false-string     
+        Jump         -print-boolean-5400-join  
+        Label        -print-boolean-5400-true  
+        PushD        $boolean-true-string      
+        Label        -print-boolean-5400-join  
+        PushD        $print-format-boolean     
+        Printf                                 
+        PushD        $print-format-newline     
+        Printf                                 
+        Label        -compare-5403-arg1        
+        Label        -compare-5402-arg1        
+        Label        -compare-5401-arg1        
+        PushI        1                         
+        Label        -compare-5401-arg2        
+        PushI        0                         
+        Label        -compare-5401-sub         
+        BEqual                                 
+        JumpFalse    -compare-5401-true        
+        Jump         -compare-5401-false       
+        Label        -compare-5401-true        
+        PushI        1                         
+        Jump         -compare-5401-join        
+        Label        -compare-5401-false       
+        PushI        0                         
+        Jump         -compare-5401-join        
+        Label        -compare-5401-join        
+        Label        -compare-5402-arg2        
+        PushI        0                         
+        Label        -compare-5402-sub         
+        BEqual                                 
+        JumpFalse    -compare-5402-true        
+        Jump         -compare-5402-false       
+        Label        -compare-5402-true        
+        PushI        1                         
+        Jump         -compare-5402-join        
+        Label        -compare-5402-false       
+        PushI        0                         
+        Jump         -compare-5402-join        
+        Label        -compare-5402-join        
+        Label        -compare-5403-arg2        
+        PushI        1                         
+        Label        -compare-5403-sub         
+        BEqual                                 
+        JumpFalse    -compare-5403-true        
+        Jump         -compare-5403-false       
+        Label        -compare-5403-true        
+        PushI        1                         
+        Jump         -compare-5403-join        
+        Label        -compare-5403-false       
+        PushI        0                         
+        Jump         -compare-5403-join        
+        Label        -compare-5403-join        
+        JumpTrue     -print-boolean-5404-true  
+        PushD        $boolean-false-string     
+        Jump         -print-boolean-5404-join  
+        Label        -print-boolean-5404-true  
+        PushD        $boolean-true-string      
+        Label        -print-boolean-5404-join  
+        PushD        $print-format-boolean     
+        Printf                                 
+        PushD        $print-format-newline     
+        Printf                                 
+        Label        -compare-5407-arg1        
+        Label        -compare-5406-arg1        
+        Label        -compare-5405-arg1        
+        PushI        1                         
+        Label        -compare-5405-arg2        
+        PushI        0                         
+        Label        -compare-5405-sub         
+        BEqual                                 
+        JumpFalse    -compare-5405-true        
+        Jump         -compare-5405-false       
+        Label        -compare-5405-true        
+        PushI        1                         
+        Jump         -compare-5405-join        
+        Label        -compare-5405-false       
+        PushI        0                         
+        Jump         -compare-5405-join        
+        Label        -compare-5405-join        
+        Label        -compare-5406-arg2        
+        PushI        1                         
+        Label        -compare-5406-sub         
+        BEqual                                 
+        JumpFalse    -compare-5406-true        
+        Jump         -compare-5406-false       
+        Label        -compare-5406-true        
+        PushI        1                         
+        Jump         -compare-5406-join        
+        Label        -compare-5406-false       
+        PushI        0                         
+        Jump         -compare-5406-join        
+        Label        -compare-5406-join        
+        Label        -compare-5407-arg2        
+        PushI        1                         
+        Label        -compare-5407-sub         
+        BEqual                                 
+        JumpFalse    -compare-5407-true        
+        Jump         -compare-5407-false       
+        Label        -compare-5407-true        
+        PushI        1                         
+        Jump         -compare-5407-join        
+        Label        -compare-5407-false       
+        PushI        0                         
+        Jump         -compare-5407-join        
+        Label        -compare-5407-join        
+        JumpTrue     -print-boolean-5408-true  
+        PushD        $boolean-false-string     
+        Jump         -print-boolean-5408-join  
+        Label        -print-boolean-5408-true  
+        PushD        $boolean-true-string      
+        Label        -print-boolean-5408-join  
+        PushD        $print-format-boolean     
+        Printf                                 
+        PushD        $print-format-newline     
+        Printf                                 
+        Label        -compare-5411-arg1        
+        Label        -compare-5410-arg1        
+        Label        -compare-5409-arg1        
+        PushI        0                         
+        Label        -compare-5409-arg2        
+        PushI        0                         
+        Label        -compare-5409-sub         
+        BEqual                                 
+        JumpFalse    -compare-5409-true        
+        Jump         -compare-5409-false       
+        Label        -compare-5409-true        
+        PushI        1                         
+        Jump         -compare-5409-join        
+        Label        -compare-5409-false       
+        PushI        0                         
+        Jump         -compare-5409-join        
+        Label        -compare-5409-join        
+        Label        -compare-5410-arg2        
+        PushI        1                         
+        Label        -compare-5410-sub         
+        BEqual                                 
+        JumpFalse    -compare-5410-true        
+        Jump         -compare-5410-false       
+        Label        -compare-5410-true        
+        PushI        1                         
+        Jump         -compare-5410-join        
+        Label        -compare-5410-false       
+        PushI        0                         
+        Jump         -compare-5410-join        
+        Label        -compare-5410-join        
+        Label        -compare-5411-arg2        
+        PushI        0                         
+        Label        -compare-5411-sub         
+        BEqual                                 
+        JumpFalse    -compare-5411-true        
+        Jump         -compare-5411-false       
+        Label        -compare-5411-true        
+        PushI        1                         
+        Jump         -compare-5411-join        
+        Label        -compare-5411-false       
+        PushI        0                         
+        Jump         -compare-5411-join        
+        Label        -compare-5411-join        
+        JumpTrue     -print-boolean-5412-true  
+        PushD        $boolean-false-string     
+        Jump         -print-boolean-5412-join  
+        Label        -print-boolean-5412-true  
+        PushD        $boolean-true-string      
+        Label        -print-boolean-5412-join  
+        PushD        $print-format-boolean     
+        Printf                                 
+        PushD        $print-format-newline     
+        Printf                                 
+        Label        -compare-5415-arg1        
+        Label        -compare-5414-arg1        
+        Label        -compare-5413-arg1        
+        PushI        1                         
+        Label        -compare-5413-arg2        
+        PushI        0                         
+        Label        -compare-5413-sub         
+        BEqual                                 
+        JumpFalse    -compare-5413-true        
+        Jump         -compare-5413-false       
+        Label        -compare-5413-true        
+        PushI        1                         
+        Jump         -compare-5413-join        
+        Label        -compare-5413-false       
+        PushI        0                         
+        Jump         -compare-5413-join        
+        Label        -compare-5413-join        
+        Label        -compare-5414-arg2        
+        PushI        0                         
+        Label        -compare-5414-sub         
+        BEqual                                 
+        JumpFalse    -compare-5414-true        
+        Jump         -compare-5414-false       
+        Label        -compare-5414-true        
+        PushI        1                         
+        Jump         -compare-5414-join        
+        Label        -compare-5414-false       
+        PushI        0                         
+        Jump         -compare-5414-join        
+        Label        -compare-5414-join        
+        Label        -compare-5415-arg2        
+        PushI        0                         
+        Label        -compare-5415-sub         
+        BEqual                                 
+        JumpFalse    -compare-5415-true        
+        Jump         -compare-5415-false       
+        Label        -compare-5415-true        
+        PushI        1                         
+        Jump         -compare-5415-join        
+        Label        -compare-5415-false       
+        PushI        0                         
+        Jump         -compare-5415-join        
+        Label        -compare-5415-join        
+        JumpTrue     -print-boolean-5416-true  
+        PushD        $boolean-false-string     
+        Jump         -print-boolean-5416-join  
+        Label        -print-boolean-5416-true  
+        PushD        $boolean-true-string      
+        Label        -print-boolean-5416-join  
+        PushD        $print-format-boolean     
+        Printf                                 
+        PushD        $print-format-newline     
+        Printf                                 
+        Label        -compare-5419-arg1        
+        Label        -compare-5418-arg1        
+        Label        -compare-5417-arg1        
+        PushI        1                         
+        Label        -compare-5417-arg2        
+        PushI        1                         
+        Label        -compare-5417-sub         
+        BEqual                                 
+        JumpFalse    -compare-5417-true        
+        Jump         -compare-5417-false       
+        Label        -compare-5417-true        
+        PushI        1                         
+        Jump         -compare-5417-join        
+        Label        -compare-5417-false       
+        PushI        0                         
+        Jump         -compare-5417-join        
+        Label        -compare-5417-join        
+        Label        -compare-5418-arg2        
+        PushI        0                         
+        Label        -compare-5418-sub         
+        BEqual                                 
+        JumpFalse    -compare-5418-true        
+        Jump         -compare-5418-false       
+        Label        -compare-5418-true        
+        PushI        1                         
+        Jump         -compare-5418-join        
+        Label        -compare-5418-false       
+        PushI        0                         
+        Jump         -compare-5418-join        
+        Label        -compare-5418-join        
+        Label        -compare-5419-arg2        
+        PushI        1                         
+        Label        -compare-5419-sub         
+        BEqual                                 
+        JumpFalse    -compare-5419-true        
+        Jump         -compare-5419-false       
+        Label        -compare-5419-true        
+        PushI        1                         
+        Jump         -compare-5419-join        
+        Label        -compare-5419-false       
+        PushI        0                         
+        Jump         -compare-5419-join        
+        Label        -compare-5419-join        
+        JumpTrue     -print-boolean-5420-true  
+        PushD        $boolean-false-string     
+        Jump         -print-boolean-5420-join  
+        Label        -print-boolean-5420-true  
+        PushD        $boolean-true-string      
+        Label        -print-boolean-5420-join  
+        PushD        $print-format-boolean     
+        Printf                                 
+        PushD        $print-format-newline     
+        Printf                                 
+        Label        -compare-5423-arg1        
+        Label        -compare-5422-arg1        
+        Label        -compare-5421-arg1        
+        PushI        0                         
+        Label        -compare-5421-arg2        
+        PushI        1                         
+        Label        -compare-5421-sub         
+        BEqual                                 
+        JumpFalse    -compare-5421-true        
+        Jump         -compare-5421-false       
+        Label        -compare-5421-true        
+        PushI        1                         
+        Jump         -compare-5421-join        
+        Label        -compare-5421-false       
+        PushI        0                         
+        Jump         -compare-5421-join        
+        Label        -compare-5421-join        
+        Label        -compare-5422-arg2        
+        PushI        1                         
+        Label        -compare-5422-sub         
+        BEqual                                 
+        JumpFalse    -compare-5422-true        
+        Jump         -compare-5422-false       
+        Label        -compare-5422-true        
+        PushI        1                         
+        Jump         -compare-5422-join        
+        Label        -compare-5422-false       
+        PushI        0                         
+        Jump         -compare-5422-join        
+        Label        -compare-5422-join        
+        Label        -compare-5423-arg2        
+        PushI        0                         
+        Label        -compare-5423-sub         
+        BEqual                                 
+        JumpFalse    -compare-5423-true        
+        Jump         -compare-5423-false       
+        Label        -compare-5423-true        
+        PushI        1                         
+        Jump         -compare-5423-join        
+        Label        -compare-5423-false       
+        PushI        0                         
+        Jump         -compare-5423-join        
+        Label        -compare-5423-join        
+        JumpTrue     -print-boolean-5424-true  
+        PushD        $boolean-false-string     
+        Jump         -print-boolean-5424-join  
+        Label        -print-boolean-5424-true  
+        PushD        $boolean-true-string      
+        Label        -print-boolean-5424-join  
+        PushD        $print-format-boolean     
+        Printf                                 
+        PushD        $print-format-newline     
+        Printf                                 
+        Label        -compare-5427-arg1        
+        Label        -compare-5426-arg1        
+        Label        -compare-5425-arg1        
+        PushI        1                         
+        Label        -compare-5425-arg2        
+        PushI        1                         
+        Label        -compare-5425-sub         
+        BEqual                                 
+        JumpFalse    -compare-5425-true        
+        Jump         -compare-5425-false       
+        Label        -compare-5425-true        
+        PushI        1                         
+        Jump         -compare-5425-join        
+        Label        -compare-5425-false       
+        PushI        0                         
+        Jump         -compare-5425-join        
+        Label        -compare-5425-join        
+        Label        -compare-5426-arg2        
+        PushI        1                         
+        Label        -compare-5426-sub         
+        BEqual                                 
+        JumpFalse    -compare-5426-true        
+        Jump         -compare-5426-false       
+        Label        -compare-5426-true        
+        PushI        1                         
+        Jump         -compare-5426-join        
+        Label        -compare-5426-false       
+        PushI        0                         
+        Jump         -compare-5426-join        
+        Label        -compare-5426-join        
+        Label        -compare-5427-arg2        
+        PushI        0                         
+        Label        -compare-5427-sub         
+        BEqual                                 
+        JumpFalse    -compare-5427-true        
+        Jump         -compare-5427-false       
+        Label        -compare-5427-true        
+        PushI        1                         
+        Jump         -compare-5427-join        
+        Label        -compare-5427-false       
+        PushI        0                         
+        Jump         -compare-5427-join        
+        Label        -compare-5427-join        
+        JumpTrue     -print-boolean-5428-true  
+        PushD        $boolean-false-string     
+        Jump         -print-boolean-5428-join  
+        Label        -print-boolean-5428-true  
+        PushD        $boolean-true-string      
+        Label        -print-boolean-5428-join  
+        PushD        $print-format-boolean     
+        Printf                                 
+        PushD        $print-format-newline     
+        Printf                                 
+        Label        -compare-5431-arg1        
+        Label        -compare-5430-arg1        
+        Label        -compare-5429-arg1        
+        PushI        0                         
+        Label        -compare-5429-arg2        
+        PushI        0                         
+        Label        -compare-5429-sub         
+        BEqual                                 
+        JumpFalse    -compare-5429-true        
+        Jump         -compare-5429-false       
+        Label        -compare-5429-true        
+        PushI        1                         
+        Jump         -compare-5429-join        
+        Label        -compare-5429-false       
+        PushI        0                         
+        Jump         -compare-5429-join        
+        Label        -compare-5429-join        
+        Label        -compare-5430-arg2        
+        PushI        0                         
+        Label        -compare-5430-sub         
+        BEqual                                 
+        JumpFalse    -compare-5430-true        
+        Jump         -compare-5430-false       
+        Label        -compare-5430-true        
+        PushI        1                         
+        Jump         -compare-5430-join        
+        Label        -compare-5430-false       
+        PushI        0                         
+        Jump         -compare-5430-join        
+        Label        -compare-5430-join        
+        Label        -compare-5431-arg2        
+        PushI        1                         
+        Label        -compare-5431-sub         
+        BEqual                                 
+        JumpFalse    -compare-5431-true        
+        Jump         -compare-5431-false       
+        Label        -compare-5431-true        
+        PushI        1                         
+        Jump         -compare-5431-join        
+        Label        -compare-5431-false       
+        PushI        0                         
+        Jump         -compare-5431-join        
+        Label        -compare-5431-join        
+        JumpTrue     -print-boolean-5432-true  
+        PushD        $boolean-false-string     
+        Jump         -print-boolean-5432-join  
+        Label        -print-boolean-5432-true  
+        PushD        $boolean-true-string      
+        Label        -print-boolean-5432-join  
+        PushD        $print-format-boolean     
+        Printf                                 
+        PushD        $print-format-newline     
+        Printf                                 
+        Label        -compare-5435-arg1        
+        Label        -compare-5434-arg1        
+        Label        -compare-5433-arg1        
+        PushI        1                         
+        Label        -compare-5433-arg2        
+        PushI        1                         
+        Label        -compare-5433-sub         
+        BEqual                                 
+        JumpFalse    -compare-5433-true        
+        Jump         -compare-5433-false       
+        Label        -compare-5433-true        
+        PushI        1                         
+        Jump         -compare-5433-join        
+        Label        -compare-5433-false       
+        PushI        0                         
+        Jump         -compare-5433-join        
+        Label        -compare-5433-join        
+        Label        -compare-5434-arg2        
+        PushI        1                         
+        Label        -compare-5434-sub         
+        BEqual                                 
+        JumpFalse    -compare-5434-true        
+        Jump         -compare-5434-false       
+        Label        -compare-5434-true        
+        PushI        1                         
+        Jump         -compare-5434-join        
+        Label        -compare-5434-false       
+        PushI        0                         
+        Jump         -compare-5434-join        
+        Label        -compare-5434-join        
+        Label        -compare-5435-arg2        
+        PushI        0                         
+        Label        -compare-5435-sub         
+        BEqual                                 
+        JumpFalse    -compare-5435-true        
+        Jump         -compare-5435-false       
+        Label        -compare-5435-true        
+        PushI        1                         
+        Jump         -compare-5435-join        
+        Label        -compare-5435-false       
+        PushI        0                         
+        Jump         -compare-5435-join        
+        Label        -compare-5435-join        
+        JumpTrue     -print-boolean-5436-true  
+        PushD        $boolean-false-string     
+        Jump         -print-boolean-5436-join  
+        Label        -print-boolean-5436-true  
+        PushD        $boolean-true-string      
+        Label        -print-boolean-5436-join  
+        PushD        $print-format-boolean     
+        Printf                                 
+        PushD        $print-format-newline     
+        Printf                                 
+        Label        -compare-5439-arg1        
+        Label        -compare-5438-arg1        
+        Label        -compare-5437-arg1        
+        PushI        1                         
+        Label        -compare-5437-arg2        
+        PushI        1                         
+        Label        -compare-5437-sub         
+        BEqual                                 
+        JumpFalse    -compare-5437-true        
+        Jump         -compare-5437-false       
+        Label        -compare-5437-true        
+        PushI        1                         
+        Jump         -compare-5437-join        
+        Label        -compare-5437-false       
+        PushI        0                         
+        Jump         -compare-5437-join        
+        Label        -compare-5437-join        
+        Label        -compare-5438-arg2        
+        PushI        0                         
+        Label        -compare-5438-sub         
+        BEqual                                 
+        JumpFalse    -compare-5438-true        
+        Jump         -compare-5438-false       
+        Label        -compare-5438-true        
+        PushI        1                         
+        Jump         -compare-5438-join        
+        Label        -compare-5438-false       
+        PushI        0                         
+        Jump         -compare-5438-join        
+        Label        -compare-5438-join        
+        Label        -compare-5439-arg2        
+        PushI        1                         
+        Label        -compare-5439-sub         
+        BEqual                                 
+        JumpFalse    -compare-5439-true        
+        Jump         -compare-5439-false       
+        Label        -compare-5439-true        
+        PushI        1                         
+        Jump         -compare-5439-join        
+        Label        -compare-5439-false       
+        PushI        0                         
+        Jump         -compare-5439-join        
+        Label        -compare-5439-join        
+        JumpTrue     -print-boolean-5440-true  
+        PushD        $boolean-false-string     
+        Jump         -print-boolean-5440-join  
+        Label        -print-boolean-5440-true  
+        PushD        $boolean-true-string      
+        Label        -print-boolean-5440-join  
+        PushD        $print-format-boolean     
+        Printf                                 
+        PushD        $print-format-newline     
+        Printf                                 
+        Label        -compare-5443-arg1        
+        Label        -compare-5442-arg1        
+        Label        -compare-5441-arg1        
+        PushI        0                         
+        Label        -compare-5441-arg2        
+        PushI        0                         
+        Label        -compare-5441-sub         
+        BEqual                                 
+        JumpFalse    -compare-5441-true        
+        Jump         -compare-5441-false       
+        Label        -compare-5441-true        
+        PushI        1                         
+        Jump         -compare-5441-join        
+        Label        -compare-5441-false       
+        PushI        0                         
+        Jump         -compare-5441-join        
+        Label        -compare-5441-join        
+        Label        -compare-5442-arg2        
+        PushI        0                         
+        Label        -compare-5442-sub         
+        BEqual                                 
+        JumpFalse    -compare-5442-true        
+        Jump         -compare-5442-false       
+        Label        -compare-5442-true        
+        PushI        1                         
+        Jump         -compare-5442-join        
+        Label        -compare-5442-false       
+        PushI        0                         
+        Jump         -compare-5442-join        
+        Label        -compare-5442-join        
+        Label        -compare-5443-arg2        
+        PushI        0                         
+        Label        -compare-5443-sub         
+        BEqual                                 
+        JumpFalse    -compare-5443-true        
+        Jump         -compare-5443-false       
+        Label        -compare-5443-true        
+        PushI        1                         
+        Jump         -compare-5443-join        
+        Label        -compare-5443-false       
+        PushI        0                         
+        Jump         -compare-5443-join        
+        Label        -compare-5443-join        
+        JumpTrue     -print-boolean-5444-true  
+        PushD        $boolean-false-string     
+        Jump         -print-boolean-5444-join  
+        Label        -print-boolean-5444-true  
+        PushD        $boolean-true-string      
+        Label        -print-boolean-5444-join  
+        PushD        $print-format-boolean     
+        Printf                                 
+        PushD        $print-format-newline     
+        Printf                                 
+        Label        -compare-5447-arg1        
+        Label        -compare-5446-arg1        
+        Label        -compare-5445-arg1        
+        PushI        0                         
+        Label        -compare-5445-arg2        
+        PushI        0                         
+        Label        -compare-5445-sub         
+        BEqual                                 
+        JumpFalse    -compare-5445-true        
+        Jump         -compare-5445-false       
+        Label        -compare-5445-true        
+        PushI        1                         
+        Jump         -compare-5445-join        
+        Label        -compare-5445-false       
+        PushI        0                         
+        Jump         -compare-5445-join        
+        Label        -compare-5445-join        
+        Label        -compare-5446-arg2        
+        PushI        1                         
+        Label        -compare-5446-sub         
+        BEqual                                 
+        JumpFalse    -compare-5446-true        
+        Jump         -compare-5446-false       
+        Label        -compare-5446-true        
+        PushI        1                         
+        Jump         -compare-5446-join        
+        Label        -compare-5446-false       
+        PushI        0                         
+        Jump         -compare-5446-join        
+        Label        -compare-5446-join        
+        Label        -compare-5447-arg2        
+        PushI        1                         
+        Label        -compare-5447-sub         
+        BEqual                                 
+        JumpFalse    -compare-5447-true        
+        Jump         -compare-5447-false       
+        Label        -compare-5447-true        
+        PushI        1                         
+        Jump         -compare-5447-join        
+        Label        -compare-5447-false       
+        PushI        0                         
+        Jump         -compare-5447-join        
+        Label        -compare-5447-join        
+        JumpTrue     -print-boolean-5448-true  
+        PushD        $boolean-false-string     
+        Jump         -print-boolean-5448-join  
+        Label        -print-boolean-5448-true  
+        PushD        $boolean-true-string      
+        Label        -print-boolean-5448-join  
+        PushD        $print-format-boolean     
+        Printf                                 
+        PushD        $print-format-newline     
+        Printf                                 
+        Label        -compare-5451-arg1        
+        Label        -compare-5450-arg1        
+        Label        -compare-5449-arg1        
+        PushI        0                         
+        Label        -compare-5449-arg2        
+        PushI        1                         
+        Label        -compare-5449-sub         
+        BEqual                                 
+        JumpFalse    -compare-5449-true        
+        Jump         -compare-5449-false       
+        Label        -compare-5449-true        
+        PushI        1                         
+        Jump         -compare-5449-join        
+        Label        -compare-5449-false       
+        PushI        0                         
+        Jump         -compare-5449-join        
+        Label        -compare-5449-join        
+        Label        -compare-5450-arg2        
+        PushI        0                         
+        Label        -compare-5450-sub         
+        BEqual                                 
+        JumpFalse    -compare-5450-true        
+        Jump         -compare-5450-false       
+        Label        -compare-5450-true        
+        PushI        1                         
+        Jump         -compare-5450-join        
+        Label        -compare-5450-false       
+        PushI        0                         
+        Jump         -compare-5450-join        
+        Label        -compare-5450-join        
+        Label        -compare-5451-arg2        
+        PushI        0                         
+        Label        -compare-5451-sub         
+        BEqual                                 
+        JumpFalse    -compare-5451-true        
+        Jump         -compare-5451-false       
+        Label        -compare-5451-true        
+        PushI        1                         
+        Jump         -compare-5451-join        
+        Label        -compare-5451-false       
+        PushI        0                         
+        Jump         -compare-5451-join        
+        Label        -compare-5451-join        
+        JumpTrue     -print-boolean-5452-true  
+        PushD        $boolean-false-string     
+        Jump         -print-boolean-5452-join  
+        Label        -print-boolean-5452-true  
+        PushD        $boolean-true-string      
+        Label        -print-boolean-5452-join  
+        PushD        $print-format-boolean     
+        Printf                                 
+        PushD        $print-format-newline     
+        Printf                                 
+        Label        -compare-5455-arg1        
+        Label        -compare-5454-arg1        
+        Label        -compare-5453-arg1        
+        PushI        0                         
+        Label        -compare-5453-arg2        
+        PushI        1                         
+        Label        -compare-5453-sub         
+        BEqual                                 
+        JumpFalse    -compare-5453-true        
+        Jump         -compare-5453-false       
+        Label        -compare-5453-true        
+        PushI        1                         
+        Jump         -compare-5453-join        
+        Label        -compare-5453-false       
+        PushI        0                         
+        Jump         -compare-5453-join        
+        Label        -compare-5453-join        
+        Label        -compare-5454-arg2        
+        PushI        1                         
+        Label        -compare-5454-sub         
+        BEqual                                 
+        JumpFalse    -compare-5454-true        
+        Jump         -compare-5454-false       
+        Label        -compare-5454-true        
+        PushI        1                         
+        Jump         -compare-5454-join        
+        Label        -compare-5454-false       
+        PushI        0                         
+        Jump         -compare-5454-join        
+        Label        -compare-5454-join        
+        Label        -compare-5455-arg2        
+        PushI        0                         
+        Label        -compare-5455-sub         
+        BEqual                                 
+        JumpFalse    -compare-5455-true        
+        Jump         -compare-5455-false       
+        Label        -compare-5455-true        
+        PushI        1                         
+        Jump         -compare-5455-join        
+        Label        -compare-5455-false       
+        PushI        0                         
+        Jump         -compare-5455-join        
+        Label        -compare-5455-join        
+        JumpTrue     -print-boolean-5456-true  
+        PushD        $boolean-false-string     
+        Jump         -print-boolean-5456-join  
+        Label        -print-boolean-5456-true  
+        PushD        $boolean-true-string      
+        Label        -print-boolean-5456-join  
+        PushD        $print-format-boolean     
+        Printf                                 
+        PushD        $print-format-newline     
+        Printf                                 
+        Label        -compare-5459-arg1        
+        Label        -compare-5458-arg1        
+        Label        -compare-5457-arg1        
+        PushI        1                         
+        Label        -compare-5457-arg2        
+        PushI        0                         
+        Label        -compare-5457-sub         
+        BEqual                                 
+        JumpFalse    -compare-5457-true        
+        Jump         -compare-5457-false       
+        Label        -compare-5457-true        
+        PushI        1                         
+        Jump         -compare-5457-join        
+        Label        -compare-5457-false       
+        PushI        0                         
+        Jump         -compare-5457-join        
+        Label        -compare-5457-join        
+        Label        -compare-5458-arg2        
+        PushI        0                         
+        Label        -compare-5458-sub         
+        BEqual                                 
+        JumpFalse    -compare-5458-true        
+        Jump         -compare-5458-false       
+        Label        -compare-5458-true        
+        PushI        1                         
+        Jump         -compare-5458-join        
+        Label        -compare-5458-false       
+        PushI        0                         
+        Jump         -compare-5458-join        
+        Label        -compare-5458-join        
+        Label        -compare-5459-arg2        
+        PushI        1                         
+        Label        -compare-5459-sub         
+        BEqual                                 
+        JumpFalse    -compare-5459-true        
+        Jump         -compare-5459-false       
+        Label        -compare-5459-true        
+        PushI        1                         
+        Jump         -compare-5459-join        
+        Label        -compare-5459-false       
+        PushI        0                         
+        Jump         -compare-5459-join        
+        Label        -compare-5459-join        
+        JumpTrue     -print-boolean-5460-true  
+        PushD        $boolean-false-string     
+        Jump         -print-boolean-5460-join  
+        Label        -print-boolean-5460-true  
+        PushD        $boolean-true-string      
+        Label        -print-boolean-5460-join  
+        PushD        $print-format-boolean     
+        Printf                                 
+        PushD        $print-format-newline     
+        Printf                                 
+        Label        -compare-5463-arg1        
+        Label        -compare-5462-arg1        
+        Label        -compare-5461-arg1        
+        PushI        0                         
+        Label        -compare-5461-arg2        
+        PushI        1                         
+        Label        -compare-5461-sub         
+        BEqual                                 
+        JumpFalse    -compare-5461-true        
+        Jump         -compare-5461-false       
+        Label        -compare-5461-true        
+        PushI        1                         
+        Jump         -compare-5461-join        
+        Label        -compare-5461-false       
+        PushI        0                         
+        Jump         -compare-5461-join        
+        Label        -compare-5461-join        
+        Label        -compare-5462-arg2        
+        PushI        0                         
+        Label        -compare-5462-sub         
+        BEqual                                 
+        JumpFalse    -compare-5462-true        
+        Jump         -compare-5462-false       
+        Label        -compare-5462-true        
+        PushI        1                         
+        Jump         -compare-5462-join        
+        Label        -compare-5462-false       
+        PushI        0                         
+        Jump         -compare-5462-join        
+        Label        -compare-5462-join        
+        Label        -compare-5463-arg2        
+        PushI        1                         
+        Label        -compare-5463-sub         
+        BEqual                                 
+        JumpFalse    -compare-5463-true        
+        Jump         -compare-5463-false       
+        Label        -compare-5463-true        
+        PushI        1                         
+        Jump         -compare-5463-join        
+        Label        -compare-5463-false       
+        PushI        0                         
+        Jump         -compare-5463-join        
+        Label        -compare-5463-join        
+        JumpTrue     -print-boolean-5464-true  
+        PushD        $boolean-false-string     
+        Jump         -print-boolean-5464-join  
+        Label        -print-boolean-5464-true  
+        PushD        $boolean-true-string      
+        Label        -print-boolean-5464-join  
+        PushD        $print-format-boolean     
+        Printf                                 
+        PushD        $print-format-newline     
+        Printf                                 
+        Label        -compare-5467-arg1        
+        Label        -compare-5466-arg1        
+        Label        -compare-5465-arg1        
+        PushI        0                         
+        Label        -compare-5465-arg2        
+        PushI        1                         
+        Label        -compare-5465-sub         
+        BEqual                                 
+        JumpFalse    -compare-5465-true        
+        Jump         -compare-5465-false       
+        Label        -compare-5465-true        
+        PushI        1                         
+        Jump         -compare-5465-join        
+        Label        -compare-5465-false       
+        PushI        0                         
+        Jump         -compare-5465-join        
+        Label        -compare-5465-join        
+        Label        -compare-5466-arg2        
+        PushI        0                         
+        Label        -compare-5466-sub         
+        BEqual                                 
+        JumpFalse    -compare-5466-true        
+        Jump         -compare-5466-false       
+        Label        -compare-5466-true        
+        PushI        1                         
+        Jump         -compare-5466-join        
+        Label        -compare-5466-false       
+        PushI        0                         
+        Jump         -compare-5466-join        
+        Label        -compare-5466-join        
+        Label        -compare-5467-arg2        
+        PushI        1                         
+        Label        -compare-5467-sub         
+        BEqual                                 
+        JumpFalse    -compare-5467-true        
+        Jump         -compare-5467-false       
+        Label        -compare-5467-true        
+        PushI        1                         
+        Jump         -compare-5467-join        
+        Label        -compare-5467-false       
+        PushI        0                         
+        Jump         -compare-5467-join        
+        Label        -compare-5467-join        
+        JumpTrue     -print-boolean-5468-true  
+        PushD        $boolean-false-string     
+        Jump         -print-boolean-5468-join  
+        Label        -print-boolean-5468-true  
+        PushD        $boolean-true-string      
+        Label        -print-boolean-5468-join  
+        PushD        $print-format-boolean     
+        Printf                                 
+        PushD        $print-format-newline     
+        Printf                                 
+        Label        -compare-5471-arg1        
+        Label        -compare-5470-arg1        
+        Label        -compare-5469-arg1        
+        PushI        0                         
+        Label        -compare-5469-arg2        
+        PushI        1                         
+        Label        -compare-5469-sub         
+        BEqual                                 
+        JumpFalse    -compare-5469-true        
+        Jump         -compare-5469-false       
+        Label        -compare-5469-true        
+        PushI        1                         
+        Jump         -compare-5469-join        
+        Label        -compare-5469-false       
+        PushI        0                         
+        Jump         -compare-5469-join        
+        Label        -compare-5469-join        
+        Label        -compare-5470-arg2        
+        PushI        0                         
+        Label        -compare-5470-sub         
+        BEqual                                 
+        JumpFalse    -compare-5470-true        
+        Jump         -compare-5470-false       
+        Label        -compare-5470-true        
+        PushI        1                         
+        Jump         -compare-5470-join        
+        Label        -compare-5470-false       
+        PushI        0                         
+        Jump         -compare-5470-join        
+        Label        -compare-5470-join        
+        Label        -compare-5471-arg2        
+        PushI        0                         
+        Label        -compare-5471-sub         
+        BEqual                                 
+        JumpFalse    -compare-5471-true        
+        Jump         -compare-5471-false       
+        Label        -compare-5471-true        
+        PushI        1                         
+        Jump         -compare-5471-join        
+        Label        -compare-5471-false       
+        PushI        0                         
+        Jump         -compare-5471-join        
+        Label        -compare-5471-join        
+        JumpTrue     -print-boolean-5472-true  
+        PushD        $boolean-false-string     
+        Jump         -print-boolean-5472-join  
+        Label        -print-boolean-5472-true  
+        PushD        $boolean-true-string      
+        Label        -print-boolean-5472-join  
+        PushD        $print-format-boolean     
+        Printf                                 
+        PushD        $print-format-newline     
+        Printf                                 
+        Label        -compare-5475-arg1        
+        Label        -compare-5474-arg1        
+        Label        -compare-5473-arg1        
+        PushI        1                         
+        Label        -compare-5473-arg2        
+        PushI        1                         
+        Label        -compare-5473-sub         
+        BEqual                                 
+        JumpFalse    -compare-5473-true        
+        Jump         -compare-5473-false       
+        Label        -compare-5473-true        
+        PushI        1                         
+        Jump         -compare-5473-join        
+        Label        -compare-5473-false       
+        PushI        0                         
+        Jump         -compare-5473-join        
+        Label        -compare-5473-join        
+        Label        -compare-5474-arg2        
+        PushI        1                         
+        Label        -compare-5474-sub         
+        BEqual                                 
+        JumpFalse    -compare-5474-true        
+        Jump         -compare-5474-false       
+        Label        -compare-5474-true        
+        PushI        1                         
+        Jump         -compare-5474-join        
+        Label        -compare-5474-false       
+        PushI        0                         
+        Jump         -compare-5474-join        
+        Label        -compare-5474-join        
+        Label        -compare-5475-arg2        
+        PushI        1                         
+        Label        -compare-5475-sub         
+        BEqual                                 
+        JumpFalse    -compare-5475-true        
+        Jump         -compare-5475-false       
+        Label        -compare-5475-true        
+        PushI        1                         
+        Jump         -compare-5475-join        
+        Label        -compare-5475-false       
+        PushI        0                         
+        Jump         -compare-5475-join        
+        Label        -compare-5475-join        
+        JumpTrue     -print-boolean-5476-true  
+        PushD        $boolean-false-string     
+        Jump         -print-boolean-5476-join  
+        Label        -print-boolean-5476-true  
+        PushD        $boolean-true-string      
+        Label        -print-boolean-5476-join  
+        PushD        $print-format-boolean     
+        Printf                                 
+        PushD        $print-format-newline     
+        Printf                                 
+        Label        -compare-5479-arg1        
+        Label        -compare-5478-arg1        
+        Label        -compare-5477-arg1        
+        PushI        0                         
+        Label        -compare-5477-arg2        
+        PushI        0                         
+        Label        -compare-5477-sub         
+        BEqual                                 
+        JumpFalse    -compare-5477-true        
+        Jump         -compare-5477-false       
+        Label        -compare-5477-true        
+        PushI        1                         
+        Jump         -compare-5477-join        
+        Label        -compare-5477-false       
+        PushI        0                         
+        Jump         -compare-5477-join        
+        Label        -compare-5477-join        
+        Label        -compare-5478-arg2        
+        PushI        1                         
+        Label        -compare-5478-sub         
+        BEqual                                 
+        JumpFalse    -compare-5478-true        
+        Jump         -compare-5478-false       
+        Label        -compare-5478-true        
+        PushI        1                         
+        Jump         -compare-5478-join        
+        Label        -compare-5478-false       
+        PushI        0                         
+        Jump         -compare-5478-join        
+        Label        -compare-5478-join        
+        Label        -compare-5479-arg2        
+        PushI        0                         
+        Label        -compare-5479-sub         
+        BEqual                                 
+        JumpFalse    -compare-5479-true        
+        Jump         -compare-5479-false       
+        Label        -compare-5479-true        
+        PushI        1                         
+        Jump         -compare-5479-join        
+        Label        -compare-5479-false       
+        PushI        0                         
+        Jump         -compare-5479-join        
+        Label        -compare-5479-join        
+        JumpTrue     -print-boolean-5480-true  
+        PushD        $boolean-false-string     
+        Jump         -print-boolean-5480-join  
+        Label        -print-boolean-5480-true  
+        PushD        $boolean-true-string      
+        Label        -print-boolean-5480-join  
+        PushD        $print-format-boolean     
+        Printf                                 
+        PushD        $print-format-newline     
+        Printf                                 
+        Label        -compare-5483-arg1        
+        Label        -compare-5482-arg1        
+        Label        -compare-5481-arg1        
+        PushI        0                         
+        Label        -compare-5481-arg2        
+        PushI        1                         
+        Label        -compare-5481-sub         
+        BEqual                                 
+        JumpFalse    -compare-5481-true        
+        Jump         -compare-5481-false       
+        Label        -compare-5481-true        
+        PushI        1                         
+        Jump         -compare-5481-join        
+        Label        -compare-5481-false       
+        PushI        0                         
+        Jump         -compare-5481-join        
+        Label        -compare-5481-join        
+        Label        -compare-5482-arg2        
+        PushI        0                         
+        Label        -compare-5482-sub         
+        BEqual                                 
+        JumpFalse    -compare-5482-true        
+        Jump         -compare-5482-false       
+        Label        -compare-5482-true        
+        PushI        1                         
+        Jump         -compare-5482-join        
+        Label        -compare-5482-false       
+        PushI        0                         
+        Jump         -compare-5482-join        
+        Label        -compare-5482-join        
+        Label        -compare-5483-arg2        
+        PushI        0                         
+        Label        -compare-5483-sub         
+        BEqual                                 
+        JumpFalse    -compare-5483-true        
+        Jump         -compare-5483-false       
+        Label        -compare-5483-true        
+        PushI        1                         
+        Jump         -compare-5483-join        
+        Label        -compare-5483-false       
+        PushI        0                         
+        Jump         -compare-5483-join        
+        Label        -compare-5483-join        
+        JumpTrue     -print-boolean-5484-true  
+        PushD        $boolean-false-string     
+        Jump         -print-boolean-5484-join  
+        Label        -print-boolean-5484-true  
+        PushD        $boolean-true-string      
+        Label        -print-boolean-5484-join  
+        PushD        $print-format-boolean     
+        Printf                                 
+        PushD        $print-format-newline     
+        Printf                                 
+        Label        -compare-5487-arg1        
+        Label        -compare-5486-arg1        
+        Label        -compare-5485-arg1        
+        PushI        0                         
+        Label        -compare-5485-arg2        
+        PushI        0                         
+        Label        -compare-5485-sub         
+        BEqual                                 
+        JumpFalse    -compare-5485-true        
+        Jump         -compare-5485-false       
+        Label        -compare-5485-true        
+        PushI        1                         
+        Jump         -compare-5485-join        
+        Label        -compare-5485-false       
+        PushI        0                         
+        Jump         -compare-5485-join        
+        Label        -compare-5485-join        
+        Label        -compare-5486-arg2        
+        PushI        0                         
+        Label        -compare-5486-sub         
+        BEqual                                 
+        JumpFalse    -compare-5486-true        
+        Jump         -compare-5486-false       
+        Label        -compare-5486-true        
+        PushI        1                         
+        Jump         -compare-5486-join        
+        Label        -compare-5486-false       
+        PushI        0                         
+        Jump         -compare-5486-join        
+        Label        -compare-5486-join        
+        Label        -compare-5487-arg2        
+        PushI        0                         
+        Label        -compare-5487-sub         
+        BEqual                                 
+        JumpFalse    -compare-5487-true        
+        Jump         -compare-5487-false       
+        Label        -compare-5487-true        
+        PushI        1                         
+        Jump         -compare-5487-join        
+        Label        -compare-5487-false       
+        PushI        0                         
+        Jump         -compare-5487-join        
+        Label        -compare-5487-join        
+        JumpTrue     -print-boolean-5488-true  
+        PushD        $boolean-false-string     
+        Jump         -print-boolean-5488-join  
+        Label        -print-boolean-5488-true  
+        PushD        $boolean-true-string      
+        Label        -print-boolean-5488-join  
+        PushD        $print-format-boolean     
+        Printf                                 
+        PushD        $print-format-newline     
+        Printf                                 
+        Label        -compare-5491-arg1        
+        Label        -compare-5490-arg1        
+        Label        -compare-5489-arg1        
+        PushI        0                         
+        Label        -compare-5489-arg2        
+        PushI        1                         
+        Label        -compare-5489-sub         
+        BEqual                                 
+        JumpFalse    -compare-5489-true        
+        Jump         -compare-5489-false       
+        Label        -compare-5489-true        
+        PushI        1                         
+        Jump         -compare-5489-join        
+        Label        -compare-5489-false       
+        PushI        0                         
+        Jump         -compare-5489-join        
+        Label        -compare-5489-join        
+        Label        -compare-5490-arg2        
+        PushI        1                         
+        Label        -compare-5490-sub         
+        BEqual                                 
+        JumpFalse    -compare-5490-true        
+        Jump         -compare-5490-false       
+        Label        -compare-5490-true        
+        PushI        1                         
+        Jump         -compare-5490-join        
+        Label        -compare-5490-false       
+        PushI        0                         
+        Jump         -compare-5490-join        
+        Label        -compare-5490-join        
+        Label        -compare-5491-arg2        
+        PushI        1                         
+        Label        -compare-5491-sub         
+        BEqual                                 
+        JumpFalse    -compare-5491-true        
+        Jump         -compare-5491-false       
+        Label        -compare-5491-true        
+        PushI        1                         
+        Jump         -compare-5491-join        
+        Label        -compare-5491-false       
+        PushI        0                         
+        Jump         -compare-5491-join        
+        Label        -compare-5491-join        
+        JumpTrue     -print-boolean-5492-true  
+        PushD        $boolean-false-string     
+        Jump         -print-boolean-5492-join  
+        Label        -print-boolean-5492-true  
+        PushD        $boolean-true-string      
+        Label        -print-boolean-5492-join  
+        PushD        $print-format-boolean     
+        Printf                                 
+        PushD        $print-format-newline     
+        Printf                                 
+        Label        -compare-5495-arg1        
+        Label        -compare-5494-arg1        
+        Label        -compare-5493-arg1        
+        PushI        0                         
+        Label        -compare-5493-arg2        
+        PushI        1                         
+        Label        -compare-5493-sub         
+        BEqual                                 
+        JumpFalse    -compare-5493-true        
+        Jump         -compare-5493-false       
+        Label        -compare-5493-true        
+        PushI        1                         
+        Jump         -compare-5493-join        
+        Label        -compare-5493-false       
+        PushI        0                         
+        Jump         -compare-5493-join        
+        Label        -compare-5493-join        
+        Label        -compare-5494-arg2        
+        PushI        1                         
+        Label        -compare-5494-sub         
+        BEqual                                 
+        JumpFalse    -compare-5494-true        
+        Jump         -compare-5494-false       
+        Label        -compare-5494-true        
+        PushI        1                         
+        Jump         -compare-5494-join        
+        Label        -compare-5494-false       
+        PushI        0                         
+        Jump         -compare-5494-join        
+        Label        -compare-5494-join        
+        Label        -compare-5495-arg2        
+        PushI        1                         
+        Label        -compare-5495-sub         
+        BEqual                                 
+        JumpFalse    -compare-5495-true        
+        Jump         -compare-5495-false       
+        Label        -compare-5495-true        
+        PushI        1                         
+        Jump         -compare-5495-join        
+        Label        -compare-5495-false       
+        PushI        0                         
+        Jump         -compare-5495-join        
+        Label        -compare-5495-join        
+        JumpTrue     -print-boolean-5496-true  
+        PushD        $boolean-false-string     
+        Jump         -print-boolean-5496-join  
+        Label        -print-boolean-5496-true  
+        PushD        $boolean-true-string      
+        Label        -print-boolean-5496-join  
+        PushD        $print-format-boolean     
+        Printf                                 
+        PushD        $print-format-newline     
+        Printf                                 
+        Halt                                   

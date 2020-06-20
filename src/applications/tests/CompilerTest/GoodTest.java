@@ -23,10 +23,11 @@ public class GoodTest extends CompilerTestFixture{
             expectedOutput = getContents(expectedName);
         } catch (Exception e) {
             warnUserNoExpectedFile(programOutput, expectedName);
-            assertFalse(true); // expected file missing
+            fail("Could not find expected output");
         }
 
         assertEquals(expectedOutput, programOutput);
+        System.out.println(programOutput);
     }
 
     public static Stream<Arguments> findTestFiles() throws Exception {

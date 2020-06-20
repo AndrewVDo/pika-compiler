@@ -1,9 +1,11 @@
 package semanticAnalyzer.signatures;
 
+import java.security.Key;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 
 import asmCodeGenerator.codeStorage.ASMOpcode;
 import asmCodeGenerator.IntegerDivideCodeGenerator;
@@ -134,6 +136,10 @@ public class FunctionSignatures extends ArrayList<FunctionSignature> {
 				new FunctionSignature(new CharToBoolCodeGenerator(), PrimitiveType.CHARACTER, PrimitiveType.BOOLEAN),
 				new FunctionSignature(new CharToBoolCodeGenerator(), PrimitiveType.INTEGER, PrimitiveType.BOOLEAN),
 				new FunctionSignature(ASMOpcode.Nop, PrimitiveType.BOOLEAN, PrimitiveType.BOOLEAN)
+		);
+
+		new FunctionSignatures(Keyword.STRING,
+				new FunctionSignature(ASMOpcode.Nop, PrimitiveType.STRING, PrimitiveType.STRING)
 		);
 		
 		

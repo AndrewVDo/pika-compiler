@@ -139,7 +139,7 @@ public class LexicalAnalyzer extends ScannerImp implements Scanner {
 		LocatedChar currChar = firstChar;
 
 		if(currChar.isSign()) {
-			if(input.peek().isWhitespace()) {
+			if(input.peek().isWhitespace() || input.peek().isSign()) {
 				return PunctuatorScanner.scan(firstChar, input);
 			}
 			buffer.append(currChar.getCharacter());
