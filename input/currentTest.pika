@@ -1,16 +1,4 @@
 exec {
-	var a := "abc".
-	var b := "def".
-	print a, _t_, b, _n_.
-	
-	var c := a.
-	a := b.
-	b := c.
-	
-	print a, _t_, b, _t_, c, _n_.
-	
-	var haha := "djdk\ndjfnkdnf".
-	print haha, _n_.
-	
-	print a == a, _n_, a != b, _n_, a != c, _n_, b == c.
+	print  3 == 4 == _true_, _n_.
+	print  4 == 4 == _true_, _n_.
 }
