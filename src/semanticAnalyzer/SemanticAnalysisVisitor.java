@@ -149,7 +149,7 @@ class SemanticAnalysisVisitor extends ParseNodeVisitor.Default {
 			node.setSignature(signature);
 		}
 		else {
-			castTypeError(node.getType(), innerType.get(1));
+			castTypeError(node.getType(), innerType.get(0));
 			node.setType(PrimitiveType.ERROR);
 		}
 		assert(true);

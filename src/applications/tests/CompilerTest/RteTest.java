@@ -1,6 +1,7 @@
 package applications.tests.CompilerTest;
 
 import applications.PikaCompiler;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -11,9 +12,12 @@ import static applications.tests.CompilerTest.TestFinder.*;
 
 public class RteTest extends CompilerTestFixture {
 
+    @Test
+    public void testDummy() {}
+
     @ParameterizedTest(name = "Run {index}: inputName={0}, outputName={1}, expectedName={2}")
     @MethodSource("findTestFiles")
-    public void MilestoneOneRte(String inputName, String outputName, String expectedName) throws Exception {
+    public void testMilestoneOneRte(String inputName, String outputName, String expectedName) throws Exception {
         PikaCompiler.compile(inputName);
         String programOutput = runEmulator(outputName);
         boolean findRunTimeError = programOutput.contains("Runtime error");

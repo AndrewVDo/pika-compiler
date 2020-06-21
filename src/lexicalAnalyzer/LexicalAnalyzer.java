@@ -69,7 +69,7 @@ public class LexicalAnalyzer extends ScannerImp implements Scanner {
 	private Token scanCharacter(LocatedChar first) {	
 		if(!first.isCharacterStart()) {
 			lexicalError(first);
-			return null;
+			return NullToken.make(first.getLocation());
 		}
 		
 		StringBuffer buffer = new StringBuffer();
@@ -78,14 +78,14 @@ public class LexicalAnalyzer extends ScannerImp implements Scanner {
 		LocatedChar character = input.next();
 		if(!character.inCharacterEncodingRange()) {
 			lexicalError(character);
-			return null;
+			return NullToken.make(first.getLocation());
 		}
 		buffer.append(character.getCharacter());
 		
 		LocatedChar end = input.next();
 		if(!end.isCharacterStart()) {
 			lexicalError(end);
-			return null;
+			return NullToken.make(first.getLocation());
 		}
 		buffer.append(end.getCharacter());
 		
@@ -104,7 +104,7 @@ public class LexicalAnalyzer extends ScannerImp implements Scanner {
 		//no ending " found
 		if(next.getCharacter() != '\"') {
 			lexicalError(next);
-			return null;
+			return NullToken.make(ch.getLocation());
 		}
 		
 		buffer.append(ch.getCharacter());
@@ -180,7 +180,7 @@ public class LexicalAnalyzer extends ScannerImp implements Scanner {
 			
 			if(!input.peek().isDigit()) {
 				lexicalError(input.peek());
-				return null;
+				return NullToken.make(firstChar.getLocation());
 			}
 			appendSubsequentDigits(buffer);
 			currChar = input.next();

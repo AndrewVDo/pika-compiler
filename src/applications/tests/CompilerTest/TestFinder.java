@@ -34,7 +34,6 @@ public class TestFinder {
         ArrayList<Arguments> result = new ArrayList<Arguments>();
 
         for (File file : files) {
-            System.out.println(file.getName());
             if (DIR_EXEMPT.contains(file.getName())) {
                 continue;
             }
