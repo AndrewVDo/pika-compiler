@@ -5,6 +5,9 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.stream.Stream;
 
 import static applications.tests.CompilerTest.TestFinder.*;
@@ -32,6 +35,27 @@ public class GoodTest extends CompilerTestFixture{
 
     public static Stream<Arguments> findTestFiles() throws Exception {
         return findTestsByPrefix(PIKA_ONE, GOOD_TEST);
+    }
+
+    private void createExpected(String programOutput, String expectedName) {
+        try {
+            File expectedFile = new File(expectedName);
+            if (expectedFile.createNewFile()) {
+                System.out.println("Expected output created");
+            }
+            else {
+                System.out.println("File already exists");
+            }
+
+            FileWriter expectedWriter = new FileWriter(expectedName);
+            expectedWriter.write(programOutput);
+            expectedWriter.close();
+            System.out.println("Expected results written to file");
+        }
+        catch(IOException e) {
+            System.out.println("IOException error");
+            e.printStackTrace();
+        }
     }
 
 }

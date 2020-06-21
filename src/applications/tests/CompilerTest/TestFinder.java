@@ -53,7 +53,7 @@ public class TestFinder {
             else {
                 String inputName = subDir + file.getName();
                 String outputName = PikaApplication.outputFilename(inputName);
-                String expectedName = expectedDir + file.getName().replaceAll(".pika", "_expected.txt");
+                String expectedName = expectedDir + file.getName();
                 result.add(Arguments.of(inputName, outputName, expectedName));
             }
         }

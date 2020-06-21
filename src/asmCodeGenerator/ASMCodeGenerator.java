@@ -413,8 +413,8 @@ public class ASMCodeGenerator {
 
 		}
 		private String stringIdentifier(ParseNode node) {
-			Labeller label = new Labeller(node.getParent().child(0).getToken().getLexeme());
-			return label.newLabel("string");
+			Labeller label = new Labeller(node.getToken().getLexeme());
+			return label.newLabel("string").replace("\"", "");
 		}
 		private String convertJavaToPikaString(String javaString) {
 			String pikaString = javaString.substring(1, javaString.length()-1);
