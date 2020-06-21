@@ -126,998 +126,998 @@
         DLabel       $global-memory-block      
         DataZ        0                         
         Label        $$main                    
-        Label        -compare-6217-arg1        
+        Label        -compare-6230-arg1        
         PushF        8.100000                  
         PushF        1.600000                  
         FSubtract                              
-        Label        -compare-6217-arg2        
+        Label        -compare-6230-arg2        
         PushF        9.500000                  
-        Label        -compare-6217-sub         
+        Label        -compare-6230-sub         
         FSubtract                              
-        JumpFZero    -compare-6217-false       
-        Jump         -compare-6217-true        
-        Label        -compare-6217-true        
+        JumpFZero    -compare-6230-false       
+        Jump         -compare-6230-true        
+        Label        -compare-6230-true        
         PushI        1                         
-        Jump         -compare-6217-join        
-        Label        -compare-6217-false       
+        Jump         -compare-6230-join        
+        Label        -compare-6230-false       
         PushI        0                         
-        Jump         -compare-6217-join        
-        Label        -compare-6217-join        
-        JumpTrue     -print-boolean-6218-true  
+        Jump         -compare-6230-join        
+        Label        -compare-6230-join        
+        JumpTrue     -print-boolean-6231-true  
         PushD        $boolean-false-string     
-        Jump         -print-boolean-6218-join  
-        Label        -print-boolean-6218-true  
+        Jump         -print-boolean-6231-join  
+        Label        -print-boolean-6231-true  
         PushD        $boolean-true-string      
-        Label        -print-boolean-6218-join  
+        Label        -print-boolean-6231-join  
         PushD        $print-format-boolean     
         Printf                                 
         PushD        $print-format-newline     
         Printf                                 
-        Label        -compare-6219-arg1        
+        Label        -compare-6232-arg1        
         PushF        7.900000                  
         PushF        6.200000                  
         FSubtract                              
-        Label        -compare-6219-arg2        
+        Label        -compare-6232-arg2        
         PushF        2.000000                  
-        Label        -compare-6219-sub         
+        Label        -compare-6232-sub         
         FSubtract                              
-        JumpFZero    -compare-6219-false       
-        Jump         -compare-6219-true        
-        Label        -compare-6219-true        
+        JumpFZero    -compare-6232-false       
+        Jump         -compare-6232-true        
+        Label        -compare-6232-true        
         PushI        1                         
-        Jump         -compare-6219-join        
-        Label        -compare-6219-false       
+        Jump         -compare-6232-join        
+        Label        -compare-6232-false       
         PushI        0                         
-        Jump         -compare-6219-join        
-        Label        -compare-6219-join        
-        JumpTrue     -print-boolean-6220-true  
+        Jump         -compare-6232-join        
+        Label        -compare-6232-join        
+        JumpTrue     -print-boolean-6233-true  
         PushD        $boolean-false-string     
-        Jump         -print-boolean-6220-join  
-        Label        -print-boolean-6220-true  
+        Jump         -print-boolean-6233-join  
+        Label        -print-boolean-6233-true  
         PushD        $boolean-true-string      
-        Label        -print-boolean-6220-join  
+        Label        -print-boolean-6233-join  
         PushD        $print-format-boolean     
         Printf                                 
         PushD        $print-format-newline     
         Printf                                 
-        Label        -compare-6221-arg1        
+        Label        -compare-6234-arg1        
         PushF        6.300000                  
         PushF        4.600000                  
         FSubtract                              
-        Label        -compare-6221-arg2        
+        Label        -compare-6234-arg2        
         PushF        5.200000                  
-        Label        -compare-6221-sub         
+        Label        -compare-6234-sub         
         FSubtract                              
-        JumpFZero    -compare-6221-false       
-        Jump         -compare-6221-true        
-        Label        -compare-6221-true        
+        JumpFZero    -compare-6234-false       
+        Jump         -compare-6234-true        
+        Label        -compare-6234-true        
         PushI        1                         
-        Jump         -compare-6221-join        
-        Label        -compare-6221-false       
+        Jump         -compare-6234-join        
+        Label        -compare-6234-false       
         PushI        0                         
-        Jump         -compare-6221-join        
-        Label        -compare-6221-join        
-        JumpTrue     -print-boolean-6222-true  
+        Jump         -compare-6234-join        
+        Label        -compare-6234-join        
+        JumpTrue     -print-boolean-6235-true  
         PushD        $boolean-false-string     
-        Jump         -print-boolean-6222-join  
-        Label        -print-boolean-6222-true  
+        Jump         -print-boolean-6235-join  
+        Label        -print-boolean-6235-true  
         PushD        $boolean-true-string      
-        Label        -print-boolean-6222-join  
+        Label        -print-boolean-6235-join  
         PushD        $print-format-boolean     
         Printf                                 
         PushD        $print-format-newline     
         Printf                                 
-        Label        -compare-6223-arg1        
+        Label        -compare-6236-arg1        
         PushF        5.100000                  
         PushF        7.900000                  
         FSubtract                              
-        Label        -compare-6223-arg2        
+        Label        -compare-6236-arg2        
         PushF        5.500000                  
-        Label        -compare-6223-sub         
+        Label        -compare-6236-sub         
         FSubtract                              
-        JumpFZero    -compare-6223-false       
-        Jump         -compare-6223-true        
-        Label        -compare-6223-true        
+        JumpFZero    -compare-6236-false       
+        Jump         -compare-6236-true        
+        Label        -compare-6236-true        
         PushI        1                         
-        Jump         -compare-6223-join        
-        Label        -compare-6223-false       
+        Jump         -compare-6236-join        
+        Label        -compare-6236-false       
         PushI        0                         
-        Jump         -compare-6223-join        
-        Label        -compare-6223-join        
-        JumpTrue     -print-boolean-6224-true  
+        Jump         -compare-6236-join        
+        Label        -compare-6236-join        
+        JumpTrue     -print-boolean-6237-true  
         PushD        $boolean-false-string     
-        Jump         -print-boolean-6224-join  
-        Label        -print-boolean-6224-true  
+        Jump         -print-boolean-6237-join  
+        Label        -print-boolean-6237-true  
         PushD        $boolean-true-string      
-        Label        -print-boolean-6224-join  
+        Label        -print-boolean-6237-join  
         PushD        $print-format-boolean     
         Printf                                 
         PushD        $print-format-newline     
         Printf                                 
-        Label        -compare-6225-arg1        
+        Label        -compare-6238-arg1        
         PushF        1.200000                  
         PushF        4.900000                  
         FSubtract                              
-        Label        -compare-6225-arg2        
+        Label        -compare-6238-arg2        
         PushF        7.100000                  
-        Label        -compare-6225-sub         
+        Label        -compare-6238-sub         
         FSubtract                              
-        JumpFZero    -compare-6225-false       
-        Jump         -compare-6225-true        
-        Label        -compare-6225-true        
+        JumpFZero    -compare-6238-false       
+        Jump         -compare-6238-true        
+        Label        -compare-6238-true        
         PushI        1                         
-        Jump         -compare-6225-join        
-        Label        -compare-6225-false       
+        Jump         -compare-6238-join        
+        Label        -compare-6238-false       
         PushI        0                         
-        Jump         -compare-6225-join        
-        Label        -compare-6225-join        
-        JumpTrue     -print-boolean-6226-true  
+        Jump         -compare-6238-join        
+        Label        -compare-6238-join        
+        JumpTrue     -print-boolean-6239-true  
         PushD        $boolean-false-string     
-        Jump         -print-boolean-6226-join  
-        Label        -print-boolean-6226-true  
+        Jump         -print-boolean-6239-join  
+        Label        -print-boolean-6239-true  
         PushD        $boolean-true-string      
-        Label        -print-boolean-6226-join  
+        Label        -print-boolean-6239-join  
         PushD        $print-format-boolean     
         Printf                                 
         PushD        $print-format-newline     
         Printf                                 
-        Label        -compare-6227-arg1        
+        Label        -compare-6240-arg1        
         PushF        2.400000                  
         PushF        3.300000                  
         FSubtract                              
-        Label        -compare-6227-arg2        
+        Label        -compare-6240-arg2        
         PushF        2.800000                  
-        Label        -compare-6227-sub         
+        Label        -compare-6240-sub         
         FSubtract                              
-        JumpFZero    -compare-6227-false       
-        Jump         -compare-6227-true        
-        Label        -compare-6227-true        
+        JumpFZero    -compare-6240-false       
+        Jump         -compare-6240-true        
+        Label        -compare-6240-true        
         PushI        1                         
-        Jump         -compare-6227-join        
-        Label        -compare-6227-false       
+        Jump         -compare-6240-join        
+        Label        -compare-6240-false       
         PushI        0                         
-        Jump         -compare-6227-join        
-        Label        -compare-6227-join        
-        JumpTrue     -print-boolean-6228-true  
+        Jump         -compare-6240-join        
+        Label        -compare-6240-join        
+        JumpTrue     -print-boolean-6241-true  
         PushD        $boolean-false-string     
-        Jump         -print-boolean-6228-join  
-        Label        -print-boolean-6228-true  
+        Jump         -print-boolean-6241-join  
+        Label        -print-boolean-6241-true  
         PushD        $boolean-true-string      
-        Label        -print-boolean-6228-join  
+        Label        -print-boolean-6241-join  
         PushD        $print-format-boolean     
         Printf                                 
         PushD        $print-format-newline     
         Printf                                 
-        Label        -compare-6229-arg1        
+        Label        -compare-6242-arg1        
         PushF        6.600000                  
         PushF        1.200000                  
         FSubtract                              
-        Label        -compare-6229-arg2        
+        Label        -compare-6242-arg2        
         PushF        4.900000                  
-        Label        -compare-6229-sub         
+        Label        -compare-6242-sub         
         FSubtract                              
-        JumpFZero    -compare-6229-false       
-        Jump         -compare-6229-true        
-        Label        -compare-6229-true        
+        JumpFZero    -compare-6242-false       
+        Jump         -compare-6242-true        
+        Label        -compare-6242-true        
         PushI        1                         
-        Jump         -compare-6229-join        
-        Label        -compare-6229-false       
+        Jump         -compare-6242-join        
+        Label        -compare-6242-false       
         PushI        0                         
-        Jump         -compare-6229-join        
-        Label        -compare-6229-join        
-        JumpTrue     -print-boolean-6230-true  
+        Jump         -compare-6242-join        
+        Label        -compare-6242-join        
+        JumpTrue     -print-boolean-6243-true  
         PushD        $boolean-false-string     
-        Jump         -print-boolean-6230-join  
-        Label        -print-boolean-6230-true  
+        Jump         -print-boolean-6243-join  
+        Label        -print-boolean-6243-true  
         PushD        $boolean-true-string      
-        Label        -print-boolean-6230-join  
+        Label        -print-boolean-6243-join  
         PushD        $print-format-boolean     
         Printf                                 
         PushD        $print-format-newline     
         Printf                                 
-        Label        -compare-6231-arg1        
+        Label        -compare-6244-arg1        
         PushF        9.400000                  
         PushF        3.200000                  
         FSubtract                              
-        Label        -compare-6231-arg2        
+        Label        -compare-6244-arg2        
         PushF        4.900000                  
-        Label        -compare-6231-sub         
+        Label        -compare-6244-sub         
         FSubtract                              
-        JumpFZero    -compare-6231-false       
-        Jump         -compare-6231-true        
-        Label        -compare-6231-true        
+        JumpFZero    -compare-6244-false       
+        Jump         -compare-6244-true        
+        Label        -compare-6244-true        
         PushI        1                         
-        Jump         -compare-6231-join        
-        Label        -compare-6231-false       
+        Jump         -compare-6244-join        
+        Label        -compare-6244-false       
         PushI        0                         
-        Jump         -compare-6231-join        
-        Label        -compare-6231-join        
-        JumpTrue     -print-boolean-6232-true  
+        Jump         -compare-6244-join        
+        Label        -compare-6244-join        
+        JumpTrue     -print-boolean-6245-true  
         PushD        $boolean-false-string     
-        Jump         -print-boolean-6232-join  
-        Label        -print-boolean-6232-true  
+        Jump         -print-boolean-6245-join  
+        Label        -print-boolean-6245-true  
         PushD        $boolean-true-string      
-        Label        -print-boolean-6232-join  
+        Label        -print-boolean-6245-join  
         PushD        $print-format-boolean     
         Printf                                 
         PushD        $print-format-newline     
         Printf                                 
-        Label        -compare-6233-arg1        
+        Label        -compare-6246-arg1        
         PushF        6.100000                  
         PushF        5.500000                  
         FSubtract                              
-        Label        -compare-6233-arg2        
+        Label        -compare-6246-arg2        
         PushF        3.600000                  
-        Label        -compare-6233-sub         
+        Label        -compare-6246-sub         
         FSubtract                              
-        JumpFZero    -compare-6233-false       
-        Jump         -compare-6233-true        
-        Label        -compare-6233-true        
+        JumpFZero    -compare-6246-false       
+        Jump         -compare-6246-true        
+        Label        -compare-6246-true        
         PushI        1                         
-        Jump         -compare-6233-join        
-        Label        -compare-6233-false       
+        Jump         -compare-6246-join        
+        Label        -compare-6246-false       
         PushI        0                         
-        Jump         -compare-6233-join        
-        Label        -compare-6233-join        
-        JumpTrue     -print-boolean-6234-true  
+        Jump         -compare-6246-join        
+        Label        -compare-6246-join        
+        JumpTrue     -print-boolean-6247-true  
         PushD        $boolean-false-string     
-        Jump         -print-boolean-6234-join  
-        Label        -print-boolean-6234-true  
+        Jump         -print-boolean-6247-join  
+        Label        -print-boolean-6247-true  
         PushD        $boolean-true-string      
-        Label        -print-boolean-6234-join  
+        Label        -print-boolean-6247-join  
         PushD        $print-format-boolean     
         Printf                                 
         PushD        $print-format-newline     
         Printf                                 
-        Label        -compare-6235-arg1        
+        Label        -compare-6248-arg1        
         PushF        4.800000                  
         PushF        7.300000                  
         FSubtract                              
-        Label        -compare-6235-arg2        
+        Label        -compare-6248-arg2        
         PushF        7.800000                  
-        Label        -compare-6235-sub         
+        Label        -compare-6248-sub         
         FSubtract                              
-        JumpFZero    -compare-6235-false       
-        Jump         -compare-6235-true        
-        Label        -compare-6235-true        
+        JumpFZero    -compare-6248-false       
+        Jump         -compare-6248-true        
+        Label        -compare-6248-true        
         PushI        1                         
-        Jump         -compare-6235-join        
-        Label        -compare-6235-false       
+        Jump         -compare-6248-join        
+        Label        -compare-6248-false       
         PushI        0                         
-        Jump         -compare-6235-join        
-        Label        -compare-6235-join        
-        JumpTrue     -print-boolean-6236-true  
+        Jump         -compare-6248-join        
+        Label        -compare-6248-join        
+        JumpTrue     -print-boolean-6249-true  
         PushD        $boolean-false-string     
-        Jump         -print-boolean-6236-join  
-        Label        -print-boolean-6236-true  
+        Jump         -print-boolean-6249-join  
+        Label        -print-boolean-6249-true  
         PushD        $boolean-true-string      
-        Label        -print-boolean-6236-join  
+        Label        -print-boolean-6249-join  
         PushD        $print-format-boolean     
         Printf                                 
         PushD        $print-format-newline     
         Printf                                 
-        Label        -compare-6237-arg1        
+        Label        -compare-6250-arg1        
         PushF        6.000000                  
         PushF        3.400000                  
         FSubtract                              
-        Label        -compare-6237-arg2        
+        Label        -compare-6250-arg2        
         PushF        3.300000                  
-        Label        -compare-6237-sub         
+        Label        -compare-6250-sub         
         FSubtract                              
-        JumpFZero    -compare-6237-false       
-        Jump         -compare-6237-true        
-        Label        -compare-6237-true        
+        JumpFZero    -compare-6250-false       
+        Jump         -compare-6250-true        
+        Label        -compare-6250-true        
         PushI        1                         
-        Jump         -compare-6237-join        
-        Label        -compare-6237-false       
+        Jump         -compare-6250-join        
+        Label        -compare-6250-false       
         PushI        0                         
-        Jump         -compare-6237-join        
-        Label        -compare-6237-join        
-        JumpTrue     -print-boolean-6238-true  
+        Jump         -compare-6250-join        
+        Label        -compare-6250-join        
+        JumpTrue     -print-boolean-6251-true  
         PushD        $boolean-false-string     
-        Jump         -print-boolean-6238-join  
-        Label        -print-boolean-6238-true  
+        Jump         -print-boolean-6251-join  
+        Label        -print-boolean-6251-true  
         PushD        $boolean-true-string      
-        Label        -print-boolean-6238-join  
+        Label        -print-boolean-6251-join  
         PushD        $print-format-boolean     
         Printf                                 
         PushD        $print-format-newline     
         Printf                                 
-        Label        -compare-6239-arg1        
+        Label        -compare-6252-arg1        
         PushF        4.500000                  
         PushF        3.000000                  
         FSubtract                              
-        Label        -compare-6239-arg2        
+        Label        -compare-6252-arg2        
         PushF        5.400000                  
-        Label        -compare-6239-sub         
+        Label        -compare-6252-sub         
         FSubtract                              
-        JumpFZero    -compare-6239-false       
-        Jump         -compare-6239-true        
-        Label        -compare-6239-true        
+        JumpFZero    -compare-6252-false       
+        Jump         -compare-6252-true        
+        Label        -compare-6252-true        
         PushI        1                         
-        Jump         -compare-6239-join        
-        Label        -compare-6239-false       
+        Jump         -compare-6252-join        
+        Label        -compare-6252-false       
         PushI        0                         
-        Jump         -compare-6239-join        
-        Label        -compare-6239-join        
-        JumpTrue     -print-boolean-6240-true  
+        Jump         -compare-6252-join        
+        Label        -compare-6252-join        
+        JumpTrue     -print-boolean-6253-true  
         PushD        $boolean-false-string     
-        Jump         -print-boolean-6240-join  
-        Label        -print-boolean-6240-true  
+        Jump         -print-boolean-6253-join  
+        Label        -print-boolean-6253-true  
         PushD        $boolean-true-string      
-        Label        -print-boolean-6240-join  
+        Label        -print-boolean-6253-join  
         PushD        $print-format-boolean     
         Printf                                 
         PushD        $print-format-newline     
         Printf                                 
-        Label        -compare-6241-arg1        
+        Label        -compare-6254-arg1        
         PushF        6.800000                  
-        Label        -compare-6241-arg2        
+        Label        -compare-6254-arg2        
         PushF        1.500000                  
         PushF        3.100000                  
         FSubtract                              
-        Label        -compare-6241-sub         
+        Label        -compare-6254-sub         
         FSubtract                              
-        JumpFZero    -compare-6241-false       
-        Jump         -compare-6241-true        
-        Label        -compare-6241-true        
+        JumpFZero    -compare-6254-false       
+        Jump         -compare-6254-true        
+        Label        -compare-6254-true        
         PushI        1                         
-        Jump         -compare-6241-join        
-        Label        -compare-6241-false       
+        Jump         -compare-6254-join        
+        Label        -compare-6254-false       
         PushI        0                         
-        Jump         -compare-6241-join        
-        Label        -compare-6241-join        
-        JumpTrue     -print-boolean-6242-true  
+        Jump         -compare-6254-join        
+        Label        -compare-6254-join        
+        JumpTrue     -print-boolean-6255-true  
         PushD        $boolean-false-string     
-        Jump         -print-boolean-6242-join  
-        Label        -print-boolean-6242-true  
+        Jump         -print-boolean-6255-join  
+        Label        -print-boolean-6255-true  
         PushD        $boolean-true-string      
-        Label        -print-boolean-6242-join  
+        Label        -print-boolean-6255-join  
         PushD        $print-format-boolean     
         Printf                                 
         PushD        $print-format-newline     
         Printf                                 
-        Label        -compare-6243-arg1        
+        Label        -compare-6256-arg1        
         PushF        2.700000                  
-        Label        -compare-6243-arg2        
+        Label        -compare-6256-arg2        
         PushF        1.100000                  
         PushF        4.800000                  
         FSubtract                              
-        Label        -compare-6243-sub         
+        Label        -compare-6256-sub         
         FSubtract                              
-        JumpFZero    -compare-6243-false       
-        Jump         -compare-6243-true        
-        Label        -compare-6243-true        
+        JumpFZero    -compare-6256-false       
+        Jump         -compare-6256-true        
+        Label        -compare-6256-true        
         PushI        1                         
-        Jump         -compare-6243-join        
-        Label        -compare-6243-false       
+        Jump         -compare-6256-join        
+        Label        -compare-6256-false       
         PushI        0                         
-        Jump         -compare-6243-join        
-        Label        -compare-6243-join        
-        JumpTrue     -print-boolean-6244-true  
+        Jump         -compare-6256-join        
+        Label        -compare-6256-join        
+        JumpTrue     -print-boolean-6257-true  
         PushD        $boolean-false-string     
-        Jump         -print-boolean-6244-join  
-        Label        -print-boolean-6244-true  
+        Jump         -print-boolean-6257-join  
+        Label        -print-boolean-6257-true  
         PushD        $boolean-true-string      
-        Label        -print-boolean-6244-join  
+        Label        -print-boolean-6257-join  
         PushD        $print-format-boolean     
         Printf                                 
         PushD        $print-format-newline     
         Printf                                 
-        Label        -compare-6245-arg1        
+        Label        -compare-6258-arg1        
         PushF        5.000000                  
-        Label        -compare-6245-arg2        
+        Label        -compare-6258-arg2        
         PushF        2.600000                  
         PushF        3.300000                  
         FSubtract                              
-        Label        -compare-6245-sub         
+        Label        -compare-6258-sub         
         FSubtract                              
-        JumpFZero    -compare-6245-false       
-        Jump         -compare-6245-true        
-        Label        -compare-6245-true        
+        JumpFZero    -compare-6258-false       
+        Jump         -compare-6258-true        
+        Label        -compare-6258-true        
         PushI        1                         
-        Jump         -compare-6245-join        
-        Label        -compare-6245-false       
+        Jump         -compare-6258-join        
+        Label        -compare-6258-false       
         PushI        0                         
-        Jump         -compare-6245-join        
-        Label        -compare-6245-join        
-        JumpTrue     -print-boolean-6246-true  
+        Jump         -compare-6258-join        
+        Label        -compare-6258-join        
+        JumpTrue     -print-boolean-6259-true  
         PushD        $boolean-false-string     
-        Jump         -print-boolean-6246-join  
-        Label        -print-boolean-6246-true  
+        Jump         -print-boolean-6259-join  
+        Label        -print-boolean-6259-true  
         PushD        $boolean-true-string      
-        Label        -print-boolean-6246-join  
+        Label        -print-boolean-6259-join  
         PushD        $print-format-boolean     
         Printf                                 
         PushD        $print-format-newline     
         Printf                                 
-        Label        -compare-6247-arg1        
+        Label        -compare-6260-arg1        
         PushF        5.200000                  
-        Label        -compare-6247-arg2        
+        Label        -compare-6260-arg2        
         PushF        1.100000                  
         PushF        3.900000                  
         FSubtract                              
-        Label        -compare-6247-sub         
+        Label        -compare-6260-sub         
         FSubtract                              
-        JumpFZero    -compare-6247-false       
-        Jump         -compare-6247-true        
-        Label        -compare-6247-true        
+        JumpFZero    -compare-6260-false       
+        Jump         -compare-6260-true        
+        Label        -compare-6260-true        
         PushI        1                         
-        Jump         -compare-6247-join        
-        Label        -compare-6247-false       
+        Jump         -compare-6260-join        
+        Label        -compare-6260-false       
         PushI        0                         
-        Jump         -compare-6247-join        
-        Label        -compare-6247-join        
-        JumpTrue     -print-boolean-6248-true  
+        Jump         -compare-6260-join        
+        Label        -compare-6260-join        
+        JumpTrue     -print-boolean-6261-true  
         PushD        $boolean-false-string     
-        Jump         -print-boolean-6248-join  
-        Label        -print-boolean-6248-true  
+        Jump         -print-boolean-6261-join  
+        Label        -print-boolean-6261-true  
         PushD        $boolean-true-string      
-        Label        -print-boolean-6248-join  
+        Label        -print-boolean-6261-join  
         PushD        $print-format-boolean     
         Printf                                 
         PushD        $print-format-newline     
         Printf                                 
-        Label        -compare-6249-arg1        
+        Label        -compare-6262-arg1        
         PushF        7.700000                  
-        Label        -compare-6249-arg2        
+        Label        -compare-6262-arg2        
         PushF        6.500000                  
         PushF        6.100000                  
         FSubtract                              
-        Label        -compare-6249-sub         
+        Label        -compare-6262-sub         
         FSubtract                              
-        JumpFZero    -compare-6249-false       
-        Jump         -compare-6249-true        
-        Label        -compare-6249-true        
+        JumpFZero    -compare-6262-false       
+        Jump         -compare-6262-true        
+        Label        -compare-6262-true        
         PushI        1                         
-        Jump         -compare-6249-join        
-        Label        -compare-6249-false       
+        Jump         -compare-6262-join        
+        Label        -compare-6262-false       
         PushI        0                         
-        Jump         -compare-6249-join        
-        Label        -compare-6249-join        
-        JumpTrue     -print-boolean-6250-true  
+        Jump         -compare-6262-join        
+        Label        -compare-6262-join        
+        JumpTrue     -print-boolean-6263-true  
         PushD        $boolean-false-string     
-        Jump         -print-boolean-6250-join  
-        Label        -print-boolean-6250-true  
+        Jump         -print-boolean-6263-join  
+        Label        -print-boolean-6263-true  
         PushD        $boolean-true-string      
-        Label        -print-boolean-6250-join  
+        Label        -print-boolean-6263-join  
         PushD        $print-format-boolean     
         Printf                                 
         PushD        $print-format-newline     
         Printf                                 
-        Label        -compare-6251-arg1        
+        Label        -compare-6264-arg1        
         PushF        2.000000                  
-        Label        -compare-6251-arg2        
+        Label        -compare-6264-arg2        
         PushF        9.200000                  
         PushF        3.100000                  
         FSubtract                              
-        Label        -compare-6251-sub         
+        Label        -compare-6264-sub         
         FSubtract                              
-        JumpFZero    -compare-6251-false       
-        Jump         -compare-6251-true        
-        Label        -compare-6251-true        
+        JumpFZero    -compare-6264-false       
+        Jump         -compare-6264-true        
+        Label        -compare-6264-true        
         PushI        1                         
-        Jump         -compare-6251-join        
-        Label        -compare-6251-false       
+        Jump         -compare-6264-join        
+        Label        -compare-6264-false       
         PushI        0                         
-        Jump         -compare-6251-join        
-        Label        -compare-6251-join        
-        JumpTrue     -print-boolean-6252-true  
+        Jump         -compare-6264-join        
+        Label        -compare-6264-join        
+        JumpTrue     -print-boolean-6265-true  
         PushD        $boolean-false-string     
-        Jump         -print-boolean-6252-join  
-        Label        -print-boolean-6252-true  
+        Jump         -print-boolean-6265-join  
+        Label        -print-boolean-6265-true  
         PushD        $boolean-true-string      
-        Label        -print-boolean-6252-join  
+        Label        -print-boolean-6265-join  
         PushD        $print-format-boolean     
         Printf                                 
         PushD        $print-format-newline     
         Printf                                 
-        Label        -compare-6253-arg1        
+        Label        -compare-6266-arg1        
         PushF        8.800000                  
-        Label        -compare-6253-arg2        
+        Label        -compare-6266-arg2        
         PushF        6.400000                  
         PushF        2.100000                  
         FSubtract                              
-        Label        -compare-6253-sub         
+        Label        -compare-6266-sub         
         FSubtract                              
-        JumpFZero    -compare-6253-false       
-        Jump         -compare-6253-true        
-        Label        -compare-6253-true        
+        JumpFZero    -compare-6266-false       
+        Jump         -compare-6266-true        
+        Label        -compare-6266-true        
         PushI        1                         
-        Jump         -compare-6253-join        
-        Label        -compare-6253-false       
+        Jump         -compare-6266-join        
+        Label        -compare-6266-false       
         PushI        0                         
-        Jump         -compare-6253-join        
-        Label        -compare-6253-join        
-        JumpTrue     -print-boolean-6254-true  
+        Jump         -compare-6266-join        
+        Label        -compare-6266-join        
+        JumpTrue     -print-boolean-6267-true  
         PushD        $boolean-false-string     
-        Jump         -print-boolean-6254-join  
-        Label        -print-boolean-6254-true  
+        Jump         -print-boolean-6267-join  
+        Label        -print-boolean-6267-true  
         PushD        $boolean-true-string      
-        Label        -print-boolean-6254-join  
+        Label        -print-boolean-6267-join  
         PushD        $print-format-boolean     
         Printf                                 
         PushD        $print-format-newline     
         Printf                                 
-        Label        -compare-6255-arg1        
+        Label        -compare-6268-arg1        
         PushF        4.900000                  
-        Label        -compare-6255-arg2        
+        Label        -compare-6268-arg2        
         PushF        8.400000                  
         PushF        1.400000                  
         FSubtract                              
-        Label        -compare-6255-sub         
+        Label        -compare-6268-sub         
         FSubtract                              
-        JumpFZero    -compare-6255-false       
-        Jump         -compare-6255-true        
-        Label        -compare-6255-true        
+        JumpFZero    -compare-6268-false       
+        Jump         -compare-6268-true        
+        Label        -compare-6268-true        
         PushI        1                         
-        Jump         -compare-6255-join        
-        Label        -compare-6255-false       
+        Jump         -compare-6268-join        
+        Label        -compare-6268-false       
         PushI        0                         
-        Jump         -compare-6255-join        
-        Label        -compare-6255-join        
-        JumpTrue     -print-boolean-6256-true  
+        Jump         -compare-6268-join        
+        Label        -compare-6268-join        
+        JumpTrue     -print-boolean-6269-true  
         PushD        $boolean-false-string     
-        Jump         -print-boolean-6256-join  
-        Label        -print-boolean-6256-true  
+        Jump         -print-boolean-6269-join  
+        Label        -print-boolean-6269-true  
         PushD        $boolean-true-string      
-        Label        -print-boolean-6256-join  
+        Label        -print-boolean-6269-join  
         PushD        $print-format-boolean     
         Printf                                 
         PushD        $print-format-newline     
         Printf                                 
-        Label        -compare-6257-arg1        
+        Label        -compare-6270-arg1        
         PushF        8.200000                  
-        Label        -compare-6257-arg2        
+        Label        -compare-6270-arg2        
         PushF        3.000000                  
         PushF        4.400000                  
         FSubtract                              
-        Label        -compare-6257-sub         
+        Label        -compare-6270-sub         
         FSubtract                              
-        JumpFZero    -compare-6257-false       
-        Jump         -compare-6257-true        
-        Label        -compare-6257-true        
+        JumpFZero    -compare-6270-false       
+        Jump         -compare-6270-true        
+        Label        -compare-6270-true        
         PushI        1                         
-        Jump         -compare-6257-join        
-        Label        -compare-6257-false       
+        Jump         -compare-6270-join        
+        Label        -compare-6270-false       
         PushI        0                         
-        Jump         -compare-6257-join        
-        Label        -compare-6257-join        
-        JumpTrue     -print-boolean-6258-true  
+        Jump         -compare-6270-join        
+        Label        -compare-6270-join        
+        JumpTrue     -print-boolean-6271-true  
         PushD        $boolean-false-string     
-        Jump         -print-boolean-6258-join  
-        Label        -print-boolean-6258-true  
+        Jump         -print-boolean-6271-join  
+        Label        -print-boolean-6271-true  
         PushD        $boolean-true-string      
-        Label        -print-boolean-6258-join  
+        Label        -print-boolean-6271-join  
         PushD        $print-format-boolean     
         Printf                                 
         PushD        $print-format-newline     
         Printf                                 
-        Label        -compare-6259-arg1        
+        Label        -compare-6272-arg1        
         PushF        4.100000                  
-        Label        -compare-6259-arg2        
+        Label        -compare-6272-arg2        
         PushF        3.600000                  
         PushF        8.500000                  
         FSubtract                              
-        Label        -compare-6259-sub         
+        Label        -compare-6272-sub         
         FSubtract                              
-        JumpFZero    -compare-6259-false       
-        Jump         -compare-6259-true        
-        Label        -compare-6259-true        
+        JumpFZero    -compare-6272-false       
+        Jump         -compare-6272-true        
+        Label        -compare-6272-true        
         PushI        1                         
-        Jump         -compare-6259-join        
-        Label        -compare-6259-false       
+        Jump         -compare-6272-join        
+        Label        -compare-6272-false       
         PushI        0                         
-        Jump         -compare-6259-join        
-        Label        -compare-6259-join        
-        JumpTrue     -print-boolean-6260-true  
+        Jump         -compare-6272-join        
+        Label        -compare-6272-join        
+        JumpTrue     -print-boolean-6273-true  
         PushD        $boolean-false-string     
-        Jump         -print-boolean-6260-join  
-        Label        -print-boolean-6260-true  
+        Jump         -print-boolean-6273-join  
+        Label        -print-boolean-6273-true  
         PushD        $boolean-true-string      
-        Label        -print-boolean-6260-join  
+        Label        -print-boolean-6273-join  
         PushD        $print-format-boolean     
         Printf                                 
         PushD        $print-format-newline     
         Printf                                 
-        Label        -compare-6261-arg1        
+        Label        -compare-6274-arg1        
         PushF        9.900000                  
-        Label        -compare-6261-arg2        
+        Label        -compare-6274-arg2        
         PushF        7.300000                  
         PushF        2.600000                  
         FSubtract                              
-        Label        -compare-6261-sub         
+        Label        -compare-6274-sub         
         FSubtract                              
-        JumpFZero    -compare-6261-false       
-        Jump         -compare-6261-true        
-        Label        -compare-6261-true        
+        JumpFZero    -compare-6274-false       
+        Jump         -compare-6274-true        
+        Label        -compare-6274-true        
         PushI        1                         
-        Jump         -compare-6261-join        
-        Label        -compare-6261-false       
+        Jump         -compare-6274-join        
+        Label        -compare-6274-false       
         PushI        0                         
-        Jump         -compare-6261-join        
-        Label        -compare-6261-join        
-        JumpTrue     -print-boolean-6262-true  
+        Jump         -compare-6274-join        
+        Label        -compare-6274-join        
+        JumpTrue     -print-boolean-6275-true  
         PushD        $boolean-false-string     
-        Jump         -print-boolean-6262-join  
-        Label        -print-boolean-6262-true  
+        Jump         -print-boolean-6275-join  
+        Label        -print-boolean-6275-true  
         PushD        $boolean-true-string      
-        Label        -print-boolean-6262-join  
+        Label        -print-boolean-6275-join  
         PushD        $print-format-boolean     
         Printf                                 
         PushD        $print-format-newline     
         Printf                                 
-        Label        -compare-6263-arg1        
+        Label        -compare-6276-arg1        
         PushF        3.500000                  
-        Label        -compare-6263-arg2        
+        Label        -compare-6276-arg2        
         PushF        9.000000                  
         PushF        3.700000                  
         FSubtract                              
-        Label        -compare-6263-sub         
+        Label        -compare-6276-sub         
         FSubtract                              
-        JumpFZero    -compare-6263-false       
-        Jump         -compare-6263-true        
-        Label        -compare-6263-true        
+        JumpFZero    -compare-6276-false       
+        Jump         -compare-6276-true        
+        Label        -compare-6276-true        
         PushI        1                         
-        Jump         -compare-6263-join        
-        Label        -compare-6263-false       
+        Jump         -compare-6276-join        
+        Label        -compare-6276-false       
         PushI        0                         
-        Jump         -compare-6263-join        
-        Label        -compare-6263-join        
-        JumpTrue     -print-boolean-6264-true  
+        Jump         -compare-6276-join        
+        Label        -compare-6276-join        
+        JumpTrue     -print-boolean-6277-true  
         PushD        $boolean-false-string     
-        Jump         -print-boolean-6264-join  
-        Label        -print-boolean-6264-true  
+        Jump         -print-boolean-6277-join  
+        Label        -print-boolean-6277-true  
         PushD        $boolean-true-string      
-        Label        -print-boolean-6264-join  
+        Label        -print-boolean-6277-join  
         PushD        $print-format-boolean     
         Printf                                 
         PushD        $print-format-newline     
         Printf                                 
-        Label        -compare-6265-arg1        
+        Label        -compare-6278-arg1        
         PushF        3.100000                  
         PushF        3.500000                  
         FSubtract                              
-        Label        -compare-6265-arg2        
+        Label        -compare-6278-arg2        
         PushF        4.400000                  
         PushF        7.600000                  
         FSubtract                              
-        Label        -compare-6265-sub         
+        Label        -compare-6278-sub         
         FSubtract                              
-        JumpFZero    -compare-6265-false       
-        Jump         -compare-6265-true        
-        Label        -compare-6265-true        
+        JumpFZero    -compare-6278-false       
+        Jump         -compare-6278-true        
+        Label        -compare-6278-true        
         PushI        1                         
-        Jump         -compare-6265-join        
-        Label        -compare-6265-false       
+        Jump         -compare-6278-join        
+        Label        -compare-6278-false       
         PushI        0                         
-        Jump         -compare-6265-join        
-        Label        -compare-6265-join        
-        JumpTrue     -print-boolean-6266-true  
+        Jump         -compare-6278-join        
+        Label        -compare-6278-join        
+        JumpTrue     -print-boolean-6279-true  
         PushD        $boolean-false-string     
-        Jump         -print-boolean-6266-join  
-        Label        -print-boolean-6266-true  
+        Jump         -print-boolean-6279-join  
+        Label        -print-boolean-6279-true  
         PushD        $boolean-true-string      
-        Label        -print-boolean-6266-join  
+        Label        -print-boolean-6279-join  
         PushD        $print-format-boolean     
         Printf                                 
         PushD        $print-format-newline     
         Printf                                 
-        Label        -compare-6267-arg1        
+        Label        -compare-6280-arg1        
         PushF        9.800000                  
         PushF        8.300000                  
         FSubtract                              
-        Label        -compare-6267-arg2        
+        Label        -compare-6280-arg2        
         PushF        8.700000                  
         PushF        3.800000                  
         FSubtract                              
-        Label        -compare-6267-sub         
+        Label        -compare-6280-sub         
         FSubtract                              
-        JumpFZero    -compare-6267-false       
-        Jump         -compare-6267-true        
-        Label        -compare-6267-true        
+        JumpFZero    -compare-6280-false       
+        Jump         -compare-6280-true        
+        Label        -compare-6280-true        
         PushI        1                         
-        Jump         -compare-6267-join        
-        Label        -compare-6267-false       
+        Jump         -compare-6280-join        
+        Label        -compare-6280-false       
         PushI        0                         
-        Jump         -compare-6267-join        
-        Label        -compare-6267-join        
-        JumpTrue     -print-boolean-6268-true  
+        Jump         -compare-6280-join        
+        Label        -compare-6280-join        
+        JumpTrue     -print-boolean-6281-true  
         PushD        $boolean-false-string     
-        Jump         -print-boolean-6268-join  
-        Label        -print-boolean-6268-true  
+        Jump         -print-boolean-6281-join  
+        Label        -print-boolean-6281-true  
         PushD        $boolean-true-string      
-        Label        -print-boolean-6268-join  
+        Label        -print-boolean-6281-join  
         PushD        $print-format-boolean     
         Printf                                 
         PushD        $print-format-newline     
         Printf                                 
-        Label        -compare-6269-arg1        
+        Label        -compare-6282-arg1        
         PushF        7.500000                  
         PushF        3.100000                  
         FSubtract                              
-        Label        -compare-6269-arg2        
+        Label        -compare-6282-arg2        
         PushF        8.700000                  
         PushF        7.700000                  
         FSubtract                              
-        Label        -compare-6269-sub         
+        Label        -compare-6282-sub         
         FSubtract                              
-        JumpFZero    -compare-6269-false       
-        Jump         -compare-6269-true        
-        Label        -compare-6269-true        
+        JumpFZero    -compare-6282-false       
+        Jump         -compare-6282-true        
+        Label        -compare-6282-true        
         PushI        1                         
-        Jump         -compare-6269-join        
-        Label        -compare-6269-false       
+        Jump         -compare-6282-join        
+        Label        -compare-6282-false       
         PushI        0                         
-        Jump         -compare-6269-join        
-        Label        -compare-6269-join        
-        JumpTrue     -print-boolean-6270-true  
+        Jump         -compare-6282-join        
+        Label        -compare-6282-join        
+        JumpTrue     -print-boolean-6283-true  
         PushD        $boolean-false-string     
-        Jump         -print-boolean-6270-join  
-        Label        -print-boolean-6270-true  
+        Jump         -print-boolean-6283-join  
+        Label        -print-boolean-6283-true  
         PushD        $boolean-true-string      
-        Label        -print-boolean-6270-join  
+        Label        -print-boolean-6283-join  
         PushD        $print-format-boolean     
         Printf                                 
         PushD        $print-format-newline     
         Printf                                 
-        Label        -compare-6271-arg1        
+        Label        -compare-6284-arg1        
         PushF        9.600000                  
         PushF        5.100000                  
         FSubtract                              
-        Label        -compare-6271-arg2        
+        Label        -compare-6284-arg2        
         PushF        5.600000                  
         PushF        7.200000                  
         FSubtract                              
-        Label        -compare-6271-sub         
+        Label        -compare-6284-sub         
         FSubtract                              
-        JumpFZero    -compare-6271-false       
-        Jump         -compare-6271-true        
-        Label        -compare-6271-true        
+        JumpFZero    -compare-6284-false       
+        Jump         -compare-6284-true        
+        Label        -compare-6284-true        
         PushI        1                         
-        Jump         -compare-6271-join        
-        Label        -compare-6271-false       
+        Jump         -compare-6284-join        
+        Label        -compare-6284-false       
         PushI        0                         
-        Jump         -compare-6271-join        
-        Label        -compare-6271-join        
-        JumpTrue     -print-boolean-6272-true  
+        Jump         -compare-6284-join        
+        Label        -compare-6284-join        
+        JumpTrue     -print-boolean-6285-true  
         PushD        $boolean-false-string     
-        Jump         -print-boolean-6272-join  
-        Label        -print-boolean-6272-true  
+        Jump         -print-boolean-6285-join  
+        Label        -print-boolean-6285-true  
         PushD        $boolean-true-string      
-        Label        -print-boolean-6272-join  
+        Label        -print-boolean-6285-join  
         PushD        $print-format-boolean     
         Printf                                 
         PushD        $print-format-newline     
         Printf                                 
-        Label        -compare-6273-arg1        
+        Label        -compare-6286-arg1        
         PushF        4.000000                  
         PushF        8.100000                  
         FSubtract                              
-        Label        -compare-6273-arg2        
+        Label        -compare-6286-arg2        
         PushF        5.600000                  
         PushF        2.300000                  
         FSubtract                              
-        Label        -compare-6273-sub         
+        Label        -compare-6286-sub         
         FSubtract                              
-        JumpFZero    -compare-6273-false       
-        Jump         -compare-6273-true        
-        Label        -compare-6273-true        
+        JumpFZero    -compare-6286-false       
+        Jump         -compare-6286-true        
+        Label        -compare-6286-true        
         PushI        1                         
-        Jump         -compare-6273-join        
-        Label        -compare-6273-false       
+        Jump         -compare-6286-join        
+        Label        -compare-6286-false       
         PushI        0                         
-        Jump         -compare-6273-join        
-        Label        -compare-6273-join        
-        JumpTrue     -print-boolean-6274-true  
+        Jump         -compare-6286-join        
+        Label        -compare-6286-join        
+        JumpTrue     -print-boolean-6287-true  
         PushD        $boolean-false-string     
-        Jump         -print-boolean-6274-join  
-        Label        -print-boolean-6274-true  
+        Jump         -print-boolean-6287-join  
+        Label        -print-boolean-6287-true  
         PushD        $boolean-true-string      
-        Label        -print-boolean-6274-join  
+        Label        -print-boolean-6287-join  
         PushD        $print-format-boolean     
         Printf                                 
         PushD        $print-format-newline     
         Printf                                 
-        Label        -compare-6275-arg1        
+        Label        -compare-6288-arg1        
         PushF        4.800000                  
         PushF        1.200000                  
         FSubtract                              
-        Label        -compare-6275-arg2        
+        Label        -compare-6288-arg2        
         PushF        2.000000                  
         PushF        2.600000                  
         FSubtract                              
-        Label        -compare-6275-sub         
+        Label        -compare-6288-sub         
         FSubtract                              
-        JumpFZero    -compare-6275-false       
-        Jump         -compare-6275-true        
-        Label        -compare-6275-true        
+        JumpFZero    -compare-6288-false       
+        Jump         -compare-6288-true        
+        Label        -compare-6288-true        
         PushI        1                         
-        Jump         -compare-6275-join        
-        Label        -compare-6275-false       
+        Jump         -compare-6288-join        
+        Label        -compare-6288-false       
         PushI        0                         
-        Jump         -compare-6275-join        
-        Label        -compare-6275-join        
-        JumpTrue     -print-boolean-6276-true  
+        Jump         -compare-6288-join        
+        Label        -compare-6288-join        
+        JumpTrue     -print-boolean-6289-true  
         PushD        $boolean-false-string     
-        Jump         -print-boolean-6276-join  
-        Label        -print-boolean-6276-true  
+        Jump         -print-boolean-6289-join  
+        Label        -print-boolean-6289-true  
         PushD        $boolean-true-string      
-        Label        -print-boolean-6276-join  
+        Label        -print-boolean-6289-join  
         PushD        $print-format-boolean     
         Printf                                 
         PushD        $print-format-newline     
         Printf                                 
-        Label        -compare-6277-arg1        
+        Label        -compare-6290-arg1        
         PushF        4.800000                  
         PushF        9.800000                  
         FSubtract                              
-        Label        -compare-6277-arg2        
+        Label        -compare-6290-arg2        
         PushF        5.800000                  
         PushF        2.500000                  
         FSubtract                              
-        Label        -compare-6277-sub         
+        Label        -compare-6290-sub         
         FSubtract                              
-        JumpFZero    -compare-6277-false       
-        Jump         -compare-6277-true        
-        Label        -compare-6277-true        
+        JumpFZero    -compare-6290-false       
+        Jump         -compare-6290-true        
+        Label        -compare-6290-true        
         PushI        1                         
-        Jump         -compare-6277-join        
-        Label        -compare-6277-false       
+        Jump         -compare-6290-join        
+        Label        -compare-6290-false       
         PushI        0                         
-        Jump         -compare-6277-join        
-        Label        -compare-6277-join        
-        JumpTrue     -print-boolean-6278-true  
+        Jump         -compare-6290-join        
+        Label        -compare-6290-join        
+        JumpTrue     -print-boolean-6291-true  
         PushD        $boolean-false-string     
-        Jump         -print-boolean-6278-join  
-        Label        -print-boolean-6278-true  
+        Jump         -print-boolean-6291-join  
+        Label        -print-boolean-6291-true  
         PushD        $boolean-true-string      
-        Label        -print-boolean-6278-join  
+        Label        -print-boolean-6291-join  
         PushD        $print-format-boolean     
         Printf                                 
         PushD        $print-format-newline     
         Printf                                 
-        Label        -compare-6279-arg1        
+        Label        -compare-6292-arg1        
         PushF        9.900000                  
         PushF        1.000000                  
         FSubtract                              
-        Label        -compare-6279-arg2        
+        Label        -compare-6292-arg2        
         PushF        9.400000                  
         PushF        5.200000                  
         FSubtract                              
-        Label        -compare-6279-sub         
+        Label        -compare-6292-sub         
         FSubtract                              
-        JumpFZero    -compare-6279-false       
-        Jump         -compare-6279-true        
-        Label        -compare-6279-true        
+        JumpFZero    -compare-6292-false       
+        Jump         -compare-6292-true        
+        Label        -compare-6292-true        
         PushI        1                         
-        Jump         -compare-6279-join        
-        Label        -compare-6279-false       
+        Jump         -compare-6292-join        
+        Label        -compare-6292-false       
         PushI        0                         
-        Jump         -compare-6279-join        
-        Label        -compare-6279-join        
-        JumpTrue     -print-boolean-6280-true  
+        Jump         -compare-6292-join        
+        Label        -compare-6292-join        
+        JumpTrue     -print-boolean-6293-true  
         PushD        $boolean-false-string     
-        Jump         -print-boolean-6280-join  
-        Label        -print-boolean-6280-true  
+        Jump         -print-boolean-6293-join  
+        Label        -print-boolean-6293-true  
         PushD        $boolean-true-string      
-        Label        -print-boolean-6280-join  
+        Label        -print-boolean-6293-join  
         PushD        $print-format-boolean     
         Printf                                 
         PushD        $print-format-newline     
         Printf                                 
-        Label        -compare-6281-arg1        
+        Label        -compare-6294-arg1        
         PushF        8.100000                  
         PushF        5.400000                  
         FSubtract                              
-        Label        -compare-6281-arg2        
+        Label        -compare-6294-arg2        
         PushF        6.500000                  
         PushF        4.300000                  
         FSubtract                              
-        Label        -compare-6281-sub         
+        Label        -compare-6294-sub         
         FSubtract                              
-        JumpFZero    -compare-6281-false       
-        Jump         -compare-6281-true        
-        Label        -compare-6281-true        
+        JumpFZero    -compare-6294-false       
+        Jump         -compare-6294-true        
+        Label        -compare-6294-true        
         PushI        1                         
-        Jump         -compare-6281-join        
-        Label        -compare-6281-false       
+        Jump         -compare-6294-join        
+        Label        -compare-6294-false       
         PushI        0                         
-        Jump         -compare-6281-join        
-        Label        -compare-6281-join        
-        JumpTrue     -print-boolean-6282-true  
+        Jump         -compare-6294-join        
+        Label        -compare-6294-join        
+        JumpTrue     -print-boolean-6295-true  
         PushD        $boolean-false-string     
-        Jump         -print-boolean-6282-join  
-        Label        -print-boolean-6282-true  
+        Jump         -print-boolean-6295-join  
+        Label        -print-boolean-6295-true  
         PushD        $boolean-true-string      
-        Label        -print-boolean-6282-join  
+        Label        -print-boolean-6295-join  
         PushD        $print-format-boolean     
         Printf                                 
         PushD        $print-format-newline     
         Printf                                 
-        Label        -compare-6283-arg1        
+        Label        -compare-6296-arg1        
         PushF        3.100000                  
         PushF        5.000000                  
         FSubtract                              
-        Label        -compare-6283-arg2        
+        Label        -compare-6296-arg2        
         PushF        4.800000                  
         PushF        7.700000                  
         FSubtract                              
-        Label        -compare-6283-sub         
+        Label        -compare-6296-sub         
         FSubtract                              
-        JumpFZero    -compare-6283-false       
-        Jump         -compare-6283-true        
-        Label        -compare-6283-true        
+        JumpFZero    -compare-6296-false       
+        Jump         -compare-6296-true        
+        Label        -compare-6296-true        
         PushI        1                         
-        Jump         -compare-6283-join        
-        Label        -compare-6283-false       
+        Jump         -compare-6296-join        
+        Label        -compare-6296-false       
         PushI        0                         
-        Jump         -compare-6283-join        
-        Label        -compare-6283-join        
-        JumpTrue     -print-boolean-6284-true  
+        Jump         -compare-6296-join        
+        Label        -compare-6296-join        
+        JumpTrue     -print-boolean-6297-true  
         PushD        $boolean-false-string     
-        Jump         -print-boolean-6284-join  
-        Label        -print-boolean-6284-true  
+        Jump         -print-boolean-6297-join  
+        Label        -print-boolean-6297-true  
         PushD        $boolean-true-string      
-        Label        -print-boolean-6284-join  
+        Label        -print-boolean-6297-join  
         PushD        $print-format-boolean     
         Printf                                 
         PushD        $print-format-newline     
         Printf                                 
-        Label        -compare-6285-arg1        
+        Label        -compare-6298-arg1        
         PushF        8.800000                  
         PushF        4.200000                  
         FSubtract                              
-        Label        -compare-6285-arg2        
+        Label        -compare-6298-arg2        
         PushF        4.600000                  
         PushF        2.300000                  
         FSubtract                              
-        Label        -compare-6285-sub         
+        Label        -compare-6298-sub         
         FSubtract                              
-        JumpFZero    -compare-6285-false       
-        Jump         -compare-6285-true        
-        Label        -compare-6285-true        
+        JumpFZero    -compare-6298-false       
+        Jump         -compare-6298-true        
+        Label        -compare-6298-true        
         PushI        1                         
-        Jump         -compare-6285-join        
-        Label        -compare-6285-false       
+        Jump         -compare-6298-join        
+        Label        -compare-6298-false       
         PushI        0                         
-        Jump         -compare-6285-join        
-        Label        -compare-6285-join        
-        JumpTrue     -print-boolean-6286-true  
+        Jump         -compare-6298-join        
+        Label        -compare-6298-join        
+        JumpTrue     -print-boolean-6299-true  
         PushD        $boolean-false-string     
-        Jump         -print-boolean-6286-join  
-        Label        -print-boolean-6286-true  
+        Jump         -print-boolean-6299-join  
+        Label        -print-boolean-6299-true  
         PushD        $boolean-true-string      
-        Label        -print-boolean-6286-join  
+        Label        -print-boolean-6299-join  
         PushD        $print-format-boolean     
         Printf                                 
         PushD        $print-format-newline     
         Printf                                 
-        Label        -compare-6287-arg1        
+        Label        -compare-6300-arg1        
         PushF        3.500000                  
         PushF        3.400000                  
         FSubtract                              
-        Label        -compare-6287-arg2        
+        Label        -compare-6300-arg2        
         PushF        3.600000                  
         PushF        1.300000                  
         FSubtract                              
-        Label        -compare-6287-sub         
+        Label        -compare-6300-sub         
         FSubtract                              
-        JumpFZero    -compare-6287-false       
-        Jump         -compare-6287-true        
-        Label        -compare-6287-true        
+        JumpFZero    -compare-6300-false       
+        Jump         -compare-6300-true        
+        Label        -compare-6300-true        
         PushI        1                         
-        Jump         -compare-6287-join        
-        Label        -compare-6287-false       
+        Jump         -compare-6300-join        
+        Label        -compare-6300-false       
         PushI        0                         
-        Jump         -compare-6287-join        
-        Label        -compare-6287-join        
-        JumpTrue     -print-boolean-6288-true  
+        Jump         -compare-6300-join        
+        Label        -compare-6300-join        
+        JumpTrue     -print-boolean-6301-true  
         PushD        $boolean-false-string     
-        Jump         -print-boolean-6288-join  
-        Label        -print-boolean-6288-true  
+        Jump         -print-boolean-6301-join  
+        Label        -print-boolean-6301-true  
         PushD        $boolean-true-string      
-        Label        -print-boolean-6288-join  
+        Label        -print-boolean-6301-join  
         PushD        $print-format-boolean     
         Printf                                 
         PushD        $print-format-newline     

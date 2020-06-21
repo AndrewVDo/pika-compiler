@@ -129,21 +129,21 @@
         PushD        $global-memory-block      
         PushI        0                         
         Add                                    %% result
-        Label        -compare-6393-arg1        
+        Label        -compare-6446-arg1        
         PushI        81                        
-        Label        -compare-6393-arg2        
+        Label        -compare-6446-arg2        
         PushI        77                        
-        Label        -compare-6393-sub         
+        Label        -compare-6446-sub         
         Subtract                               
-        JumpNeg      -compare-6393-true        
-        Jump         -compare-6393-false       
-        Label        -compare-6393-true        
+        JumpNeg      -compare-6446-true        
+        Jump         -compare-6446-false       
+        Label        -compare-6446-true        
         PushI        1                         
-        Jump         -compare-6393-join        
-        Label        -compare-6393-false       
+        Jump         -compare-6446-join        
+        Label        -compare-6446-false       
         PushI        0                         
-        Jump         -compare-6393-join        
-        Label        -compare-6393-join        
+        Jump         -compare-6446-join        
+        Label        -compare-6446-join        
         StoreC                                 
         PushD        $global-memory-block      
         PushI        1                         
@@ -162,12 +162,12 @@
         PushI        0                         
         Add                                    %% result
         LoadC                                  
-        JumpTrue     -print-boolean-6394-true  
+        JumpTrue     -print-boolean-6447-true  
         PushD        $boolean-false-string     
-        Jump         -print-boolean-6394-join  
-        Label        -print-boolean-6394-true  
+        Jump         -print-boolean-6447-join  
+        Label        -print-boolean-6447-true  
         PushD        $boolean-true-string      
-        Label        -print-boolean-6394-join  
+        Label        -print-boolean-6447-join  
         PushD        $print-format-boolean     
         Printf                                 
         PushD        $print-format-newline     

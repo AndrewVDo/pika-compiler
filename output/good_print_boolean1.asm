@@ -127,23 +127,23 @@
         DataZ        0                         
         Label        $$main                    
         PushI        1                         
-        JumpTrue     -print-boolean-6361-true  
+        JumpTrue     -print-boolean-6405-true  
         PushD        $boolean-false-string     
-        Jump         -print-boolean-6361-join  
-        Label        -print-boolean-6361-true  
+        Jump         -print-boolean-6405-join  
+        Label        -print-boolean-6405-true  
         PushD        $boolean-true-string      
-        Label        -print-boolean-6361-join  
+        Label        -print-boolean-6405-join  
         PushD        $print-format-boolean     
         Printf                                 
         PushD        $print-format-newline     
         Printf                                 
         PushI        0                         
-        JumpTrue     -print-boolean-6362-true  
+        JumpTrue     -print-boolean-6406-true  
         PushD        $boolean-false-string     
-        Jump         -print-boolean-6362-join  
-        Label        -print-boolean-6362-true  
+        Jump         -print-boolean-6406-join  
+        Label        -print-boolean-6406-true  
         PushD        $boolean-true-string      
-        Label        -print-boolean-6362-join  
+        Label        -print-boolean-6406-join  
         PushD        $print-format-boolean     
         Printf                                 
         PushD        $print-format-newline     

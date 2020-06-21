@@ -149,12 +149,12 @@
         PushI        0                         
         Add                                    %% result
         LoadC                                  
-        JumpTrue     -print-boolean-6364-true  
+        JumpTrue     -print-boolean-6413-true  
         PushD        $boolean-false-string     
-        Jump         -print-boolean-6364-join  
-        Label        -print-boolean-6364-true  
+        Jump         -print-boolean-6413-join  
+        Label        -print-boolean-6413-true  
         PushD        $boolean-true-string      
-        Label        -print-boolean-6364-join  
+        Label        -print-boolean-6413-join  
         PushD        $print-format-boolean     
         Printf                                 
         PushD        $print-format-newline     
