@@ -19,7 +19,7 @@ public class GoodTest extends CompilerTestFixture{
     public void testDummy() {}
 
     @ParameterizedTest(name = "Run {index}: inputName={0}, outputName={1}, expectedName={2}")
-    @MethodSource("findTestFiles")
+    @MethodSource("pika1data")
     public void testMilestoneOneGood(String inputName, String outputName, String expectedName) throws Exception {
 
         PikaCompiler.compile(inputName);
@@ -37,9 +37,36 @@ public class GoodTest extends CompilerTestFixture{
         System.out.println(programOutput);
     }
 
-    public static Stream<Arguments> findTestFiles() throws Exception {
+    public static Stream<Arguments> pika1data() throws Exception {
         return findTestsByPrefix(PIKA_ONE, GOOD_TEST);
     }
+
+    @ParameterizedTest(name = "Run {index}: inputName={0}, outputName={1}, expectedName={2}")
+    @MethodSource("pika2data")
+    public void testMilestoneTwoGood(String inputName, String outputName, String expectedName) throws Exception {
+
+        PikaCompiler.compile(inputName);
+        String programOutput = runEmulator(outputName);
+        String expectedOutput = "";
+
+        try {
+            expectedOutput = getContents(expectedName);
+        } catch (Exception e) {
+            warnUserNoExpectedFile(programOutput, expectedName);
+            fail("Could not find expected output");
+        }
+
+        assertEquals(expectedOutput, programOutput);
+        System.out.println(programOutput);
+    }
+
+    public static Stream<Arguments> pika2data() throws Exception {
+        return findTestsByPrefix(PIKA_TWO, GOOD_TEST);
+    }
+
+
+
+
 
     private void createExpected(String programOutput, String expectedName) {
         try {
