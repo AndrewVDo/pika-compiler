@@ -274,10 +274,35 @@ public class Parser {
 			return syntaxErrorNode("expression");
 		}
 		Token whatsNow = nowReading;
-		return parseComparisonExpression();
+		return parseBooleanExpression();
 	}
 	private boolean startsExpression(Token token) {
 		return startsComparisonExpression(token);
+	}
+
+	// booleanExpression -> comparisonExpression [&& comparisonExpression]?
+	private ParseNode parseBooleanExpression() {
+		if(!startsBooleanExpression(nowReading)) {
+			return syntaxErrorNode("boolean expression");
+		}
+
+		ParseNode left = parseComparisonExpression();
+		while(isBooleanLextant(nowReading)) {
+			Token booleanToken = nowReading;
+			readToken();
+			ParseNode right = parseComparisonExpression();
+
+			//break if true or ...
+			left = BinaryOperatorNode.withChildren(booleanToken, left, right);
+		}
+		return left;
+	}
+
+	private boolean startsBooleanExpression(Token token) {
+		return startsComparisonExpression(token);
+	}
+	private boolean isBooleanLextant(Token token) {
+		return(token.isLextant(Punctuator.BOOLEAN_AND) || token.isLextant(Punctuator.BOOLEAN_OR));
 	}
 
 	// comparisonExpression -> additiveExpression [> additiveExpression]?

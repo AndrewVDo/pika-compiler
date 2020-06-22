@@ -31,6 +31,10 @@ public enum Punctuator implements Lextant {
 	
 	OPEN_PARANTHESES("("),
 	CLOSE_PARANTHESES(")"),
+
+	BOOLEAN_AND("&&"),
+	BOOLEAN_OR("||"),
+	BOOLEAN_NOT("!"),
 	;
 
 	private String lexeme;
