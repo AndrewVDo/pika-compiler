@@ -1,0 +1,6 @@
+exec {
+    var id := 5.
+    print id, _n_.
+    id := 4.
+    print id, _n_.
+}
