@@ -1,0 +1,8 @@
+exec {
+    if (_false_) {
+        print "what".
+    }
+    else () {
+        print "heck".
+    }
+}

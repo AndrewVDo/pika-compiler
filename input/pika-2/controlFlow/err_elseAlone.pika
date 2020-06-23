@@ -1,0 +1,8 @@
+exec {
+    else {
+        print 1, _n_.
+    }
+    if {
+        print 2, _n_.
+    }
+}

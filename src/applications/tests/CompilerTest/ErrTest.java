@@ -16,7 +16,7 @@ public class ErrTest extends NoExitTestFixture {
     public void testDummy() {}
 
     @ParameterizedTest(name = "Run {index}: inputName={0}, outputName={1}, expectedName={2}")
-    @MethodSource("findTestFiles")
+    @MethodSource("findPikaOneErr")
     public void testMilestoneOneErr(String inputName, String outputName, String expectedName) throws Exception {
         try {
             setUp();
@@ -28,8 +28,25 @@ public class ErrTest extends NoExitTestFixture {
         fail("Compiler should have exited");
     }
 
-    public static Stream<Arguments> findTestFiles() throws Exception {
+    public static Stream<Arguments> findPikaOneErr() throws Exception {
         return findTestsByPrefix(PIKA_ONE, ERR_TEST);
+    }
+
+    @ParameterizedTest(name = "Run {index}: inputName={0}, outputName={1}, expectedName={2}")
+    @MethodSource("findPikaTwoErr")
+    public void testMilestoneTwoErr(String inputName, String outputName, String expectedName) throws Exception {
+        try {
+            setUp();
+            PikaCompiler.compile(inputName);
+        }
+        catch(ExitException e) {
+            return;
+        }
+        fail("Compiler should have exited");
+    }
+
+    public static Stream<Arguments> findPikaTwoErr() throws Exception {
+        return findTestsByPrefix(PIKA_TWO, ERR_TEST);
     }
 
 }
