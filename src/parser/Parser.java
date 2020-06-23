@@ -1,5 +1,6 @@
 package parser;
 
+import java.security.Key;
 import java.util.Arrays;
 import java.util.function.UnaryOperator;
 
@@ -100,14 +101,49 @@ public class Parser {
 		if(startsAssignmentStatement(nowReading)) {
 			return parseAssignmentStatement();
 		}
+		if(startsControlFlowStatement(nowReading)) {
+			return parseControlFlowStatement();
+		}
 		return syntaxErrorNode("statement");
+	}
+
+	private ParseNode parseControlFlowStatement() {
+		if(!startsControlFlowStatement(nowReading)) {
+			return syntaxErrorNode("controlFlow");
+		}
+		if(nowReading.isLextant(Keyword.ELSE)) {
+			return syntaxErrorNode("else statement without if");
+		}
+
+		Token controlStatement = nowReading;
+		readToken();
+		expect(Punctuator.OPEN_PARANTHESES);
+		ParseNode condition = parseExpression();
+		expect(Punctuator.CLOSE_PARANTHESES);
+		ParseNode innerBlockStatement = parseBlockStatement();
+
+		if(controlStatement.isLextant(Keyword.WHILE)) {
+			return ControlFlowNode.withChildren(controlStatement, condition, innerBlockStatement);
+		}
+
+		if(nowReading.isLextant(Keyword.ELSE)) {
+			readToken();
+			ParseNode elseBlockStatement = parseBlockStatement();
+			return ControlFlowNode.withChildren(controlStatement, condition, innerBlockStatement, elseBlockStatement);
+		}
+
+		return ControlFlowNode.withChildren(controlStatement, condition, innerBlockStatement);
+	}
+	private boolean startsControlFlowStatement(Token token) {
+		return token.isLextant(Keyword.IF, Keyword.WHILE, Keyword.ELSE);
 	}
 
 	private boolean startsStatement(Token token) {
 		return startsPrintStatement(token) ||
 			   startsBlockStatement(token) ||	
 			   startsAssignmentStatement(token) ||
-			   startsDeclaration(token);
+			   startsDeclaration(token) ||
+				startsControlFlowStatement(token);
 	}
 	
 	// assignment -> target := expression .
