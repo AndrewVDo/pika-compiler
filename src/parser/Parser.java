@@ -358,18 +358,38 @@ public class Parser {
 			return syntaxErrorNode("multiplicativeExpression");
 		}
 		
-		ParseNode left = parseBracketedExpression();
+		ParseNode left = parseUnaryExpression();
 		while(nowReading.isLextant(Punctuator.MULTIPLY, Punctuator.DIVIDE)) {
 			Token multiplicativeToken = nowReading;
 			readToken();
-			ParseNode right = parseBracketedExpression();
+			ParseNode right = parseUnaryExpression();
 			
 			left = BinaryOperatorNode.withChildren(multiplicativeToken, left, right);
 		}
 		return left;
 	}
 	private boolean startsMultiplicativeExpression(Token token) {
-		return startsAtomicExpression(token) || startsBracketedExpression(token);
+		return startsUnaryExpression(token);
+	}
+
+	private ParseNode parseUnaryExpression() {
+		if(!startsUnaryExpression(nowReading)) {
+			return syntaxErrorNode("unaryExpression");
+		}
+
+		Token unaryOperator = nowReading;
+		if(isUnaryOperator(unaryOperator)) {
+			readToken();
+			return UnaryOperatorNode.withChildren(unaryOperator, parseUnaryExpression());
+		}
+
+		return parseBracketedExpression();
+	}
+	private boolean isUnaryOperator(Token token) {
+		return token.isLextant(Punctuator.BOOLEAN_NOT);
+	}
+	private boolean startsUnaryExpression(Token token) {
+		return startsBracketedExpression(token) || isUnaryOperator(token);
 	}
 	
 	private ParseNode parseBracketedExpression() {
@@ -404,7 +424,7 @@ public class Parser {
 		return innerExpression;
 	}
 	private boolean startsBracketedExpression(Token token) {
-		return token.isLextant(Punctuator.OPEN_CAST, Punctuator.OPEN_PARANTHESES);
+		return startsAtomicExpression(token) || token.isLextant(Punctuator.OPEN_CAST, Punctuator.OPEN_PARANTHESES);
 	}
 	
 	// atomicExpression -> literal
@@ -513,30 +533,11 @@ public class Parser {
 		if(!startsBooleanConstant(nowReading)) {
 			return syntaxErrorNode("boolean constant");
 		}
-
-		if(nowReading.isLextant(Punctuator.BOOLEAN_NOT)) {
-			return parseBooleanNotExpression();
-		}
-
 		readToken();
 		return new BooleanConstantNode(previouslyRead);
 	}
 	private boolean startsBooleanConstant(Token token) {
-		return token.isLextant(Keyword.TRUE, Keyword.FALSE, Punctuator.BOOLEAN_NOT);
-	}
-	private ParseNode parseBooleanNotExpression() {
-		if(!nowReading.isLextant(Punctuator.BOOLEAN_NOT)) {
-			return syntaxErrorNode("boolean expression");
-		}
-
-		Token booleanNot = nowReading;
-		readToken();
-		if(startsBooleanConstant(nowReading)) {
-			return UnaryOperatorNode.withChildren(booleanNot, parseBooleanConstant());
-		}
-
-		ParseNode innerExpression = parseExpression();
-		return UnaryOperatorNode.withChildren(booleanNot, innerExpression);
+		return token.isLextant(Keyword.TRUE, Keyword.FALSE);// , Punctuator.BOOLEAN_NOT);
 	}
 
 	private void readToken() {

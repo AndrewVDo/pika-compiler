@@ -126,102 +126,102 @@
         DLabel       $global-memory-block      
         DataZ        0                         
         Label        $$main                    
-        Label        -bool-or-62-arg1          
+        Label        -bool-or-6527-arg1        
         PushI        1                         
-        JumpTrue     -bool-or-62-true-condition 
+        JumpTrue     -bool-or-6527-true-condition 
         PushI        0                         
-        Label        -bool-or-62-arg2          
+        Label        -bool-or-6527-arg2        
         PushI        1                         
         Or                                     
-        JumpTrue     -bool-or-62-true-condition 
-        Jump         -bool-or-62-false-condition 
-        Label        -bool-or-62-true-condition 
+        JumpTrue     -bool-or-6527-true-condition 
+        Jump         -bool-or-6527-false-condition 
+        Label        -bool-or-6527-true-condition 
         PushI        1                         
-        Jump         -bool-or-62-end           
-        Label        -bool-or-62-false-condition 
+        Jump         -bool-or-6527-end         
+        Label        -bool-or-6527-false-condition 
         PushI        0                         
-        Label        -bool-or-62-end           
-        JumpTrue     -print-boolean-63-true    
+        Label        -bool-or-6527-end         
+        JumpTrue     -print-boolean-6528-true  
         PushD        $boolean-false-string     
-        Jump         -print-boolean-63-join    
-        Label        -print-boolean-63-true    
+        Jump         -print-boolean-6528-join  
+        Label        -print-boolean-6528-true  
         PushD        $boolean-true-string      
-        Label        -print-boolean-63-join    
+        Label        -print-boolean-6528-join  
         PushD        $print-format-boolean     
         Printf                                 
         PushD        $print-format-newline     
         Printf                                 
-        Label        -bool-or-64-arg1          
+        Label        -bool-or-6529-arg1        
         PushI        1                         
-        JumpTrue     -bool-or-64-true-condition 
+        JumpTrue     -bool-or-6529-true-condition 
         PushI        0                         
-        Label        -bool-or-64-arg2          
+        Label        -bool-or-6529-arg2        
         PushI        0                         
         Or                                     
-        JumpTrue     -bool-or-64-true-condition 
-        Jump         -bool-or-64-false-condition 
-        Label        -bool-or-64-true-condition 
+        JumpTrue     -bool-or-6529-true-condition 
+        Jump         -bool-or-6529-false-condition 
+        Label        -bool-or-6529-true-condition 
         PushI        1                         
-        Jump         -bool-or-64-end           
-        Label        -bool-or-64-false-condition 
+        Jump         -bool-or-6529-end         
+        Label        -bool-or-6529-false-condition 
         PushI        0                         
-        Label        -bool-or-64-end           
-        JumpTrue     -print-boolean-65-true    
+        Label        -bool-or-6529-end         
+        JumpTrue     -print-boolean-6530-true  
         PushD        $boolean-false-string     
-        Jump         -print-boolean-65-join    
-        Label        -print-boolean-65-true    
+        Jump         -print-boolean-6530-join  
+        Label        -print-boolean-6530-true  
         PushD        $boolean-true-string      
-        Label        -print-boolean-65-join    
+        Label        -print-boolean-6530-join  
         PushD        $print-format-boolean     
         Printf                                 
         PushD        $print-format-newline     
         Printf                                 
-        Label        -bool-or-66-arg1          
+        Label        -bool-or-6531-arg1        
         PushI        0                         
-        JumpTrue     -bool-or-66-true-condition 
+        JumpTrue     -bool-or-6531-true-condition 
         PushI        0                         
-        Label        -bool-or-66-arg2          
+        Label        -bool-or-6531-arg2        
         PushI        1                         
         Or                                     
-        JumpTrue     -bool-or-66-true-condition 
-        Jump         -bool-or-66-false-condition 
-        Label        -bool-or-66-true-condition 
+        JumpTrue     -bool-or-6531-true-condition 
+        Jump         -bool-or-6531-false-condition 
+        Label        -bool-or-6531-true-condition 
         PushI        1                         
-        Jump         -bool-or-66-end           
-        Label        -bool-or-66-false-condition 
+        Jump         -bool-or-6531-end         
+        Label        -bool-or-6531-false-condition 
         PushI        0                         
-        Label        -bool-or-66-end           
-        JumpTrue     -print-boolean-67-true    
+        Label        -bool-or-6531-end         
+        JumpTrue     -print-boolean-6532-true  
         PushD        $boolean-false-string     
-        Jump         -print-boolean-67-join    
-        Label        -print-boolean-67-true    
+        Jump         -print-boolean-6532-join  
+        Label        -print-boolean-6532-true  
         PushD        $boolean-true-string      
-        Label        -print-boolean-67-join    
+        Label        -print-boolean-6532-join  
         PushD        $print-format-boolean     
         Printf                                 
         PushD        $print-format-newline     
         Printf                                 
-        Label        -bool-or-68-arg1          
+        Label        -bool-or-6533-arg1        
         PushI        0                         
-        JumpTrue     -bool-or-68-true-condition 
+        JumpTrue     -bool-or-6533-true-condition 
         PushI        0                         
-        Label        -bool-or-68-arg2          
+        Label        -bool-or-6533-arg2        
         PushI        0                         
         Or                                     
-        JumpTrue     -bool-or-68-true-condition 
-        Jump         -bool-or-68-false-condition 
-        Label        -bool-or-68-true-condition 
+        JumpTrue     -bool-or-6533-true-condition 
+        Jump         -bool-or-6533-false-condition 
+        Label        -bool-or-6533-true-condition 
         PushI        1                         
-        Jump         -bool-or-68-end           
-        Label        -bool-or-68-false-condition 
+        Jump         -bool-or-6533-end         
+        Label        -bool-or-6533-false-condition 
         PushI        0                         
-        Label        -bool-or-68-end           
-        JumpTrue     -print-boolean-69-true    
+        Label        -bool-or-6533-end         
+        JumpTrue     -print-boolean-6534-true  
         PushD        $boolean-false-string     
-        Jump         -print-boolean-69-join    
-        Label        -print-boolean-69-true    
+        Jump         -print-boolean-6534-join  
+        Label        -print-boolean-6534-true  
         PushD        $boolean-true-string      
-        Label        -print-boolean-69-join    
+        Label        -print-boolean-6534-join  
         PushD        $print-format-boolean     
         Printf                                 
         PushD        $print-format-newline     
