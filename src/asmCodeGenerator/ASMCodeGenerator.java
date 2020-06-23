@@ -9,22 +9,7 @@ import asmCodeGenerator.runtime.RunTime;
 import lexicalAnalyzer.Lextant;
 import lexicalAnalyzer.Punctuator;
 import parseTree.*;
-import parseTree.nodeTypes.AssignmentStatementNode;
-import parseTree.nodeTypes.BinaryOperatorNode;
-import parseTree.nodeTypes.BooleanConstantNode;
-import parseTree.nodeTypes.CastExpressionNode;
-import parseTree.nodeTypes.CharacterConstantNode;
-import parseTree.nodeTypes.BlockStatementNode;
-import parseTree.nodeTypes.DeclarationNode;
-import parseTree.nodeTypes.FloatingConstantNode;
-import parseTree.nodeTypes.IdentifierNode;
-import parseTree.nodeTypes.IntegerConstantNode;
-import parseTree.nodeTypes.NewlineNode;
-import parseTree.nodeTypes.PrintStatementNode;
-import parseTree.nodeTypes.ProgramNode;
-import parseTree.nodeTypes.SpaceNode;
-import parseTree.nodeTypes.StringConstantNode;
-import parseTree.nodeTypes.TabNode;
+import parseTree.nodeTypes.*;
 import semanticAnalyzer.types.PrimitiveType;
 import semanticAnalyzer.types.Type;
 import symbolTable.Binding;
@@ -257,15 +242,72 @@ public class ASMCodeGenerator {
 
 		///////////////////////////////////////////////////////////////////////////
 		// expressions
+		public void visitLeave(UnaryOperatorNode node) {
+			Lextant operator = node.getOperator();
+
+			if(operator == Punctuator.BOOLEAN_NOT) {
+				visitNormalUnaryOperator(node);
+			}
+		}
+
+		private void visitNormalUnaryOperator(UnaryOperatorNode node) {
+			newValueCode(node);
+			ASMCodeFragment innerCode = removeValueCode(node.child(0));
+
+			code.append(innerCode);
+
+			Object variant = node.getSignature().getVariant();
+			if(variant instanceof ASMOpcode) {
+				ASMOpcode opcode = (ASMOpcode)variant;
+				code.add(opcode);
+			}
+			else {
+				throw new Error("Compiler error: unary operation failed");
+			}
+		}
+
 		public void visitLeave(BinaryOperatorNode node) {
 			Lextant operator = node.getOperator();
 
-			if(isComparisonOperator(operator)) {
+			if(operator == Punctuator.BOOLEAN_OR) {
+				//handle this in normal binary op, change opcode to fragment manufacturer
+				visitBooleanOrOperatorNode(node, operator);
+			}
+			else if(isComparisonOperator(operator)) {
 				visitComparisonOperatorNode(node, operator);
 			}
 			else {
 				visitNormalBinaryOperatorNode(node);
 			}
+		}
+
+		private void visitBooleanOrOperatorNode(BinaryOperatorNode node, Lextant operator) {
+			ASMCodeFragment arg1 = removeValueCode(node.child(0));
+			ASMCodeFragment arg2 = removeValueCode(node.child(1));
+
+			Labeller labeller = new Labeller("bool-or");
+			String arg1Label = labeller.newLabel("arg1");
+			String arg2Label = labeller.newLabel("arg2");
+			String trueLabel = labeller.newLabel("true-condition");
+			String falseLabel = labeller.newLabel("false-condition");
+			String endLabel = labeller.newLabel("end");
+
+			newValueCode(node);
+			code.add(Label, arg1Label);
+			code.append(arg1);
+			code.add(JumpTrue, trueLabel);
+			code.add(PushI, 0);
+			code.add(Label, arg2Label);
+			code.append(arg2);
+			code.add(Or);
+			code.add(JumpTrue, trueLabel);
+			code.add(Jump, falseLabel);
+			code.add(Label, trueLabel);
+			code.add(PushI, 1);
+			code.add(Jump, endLabel);
+			code.add(Label, falseLabel);
+			code.add(PushI, 0);
+			code.add(Label, endLabel);
 		}
 			
 		private boolean isComparisonOperator(Lextant operator) {

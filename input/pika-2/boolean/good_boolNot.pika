@@ -1,0 +1,4 @@
+exec {
+    print !_true_, !_false_, _n_.
+    print !_true_ != ! _false_, _n_.
+}

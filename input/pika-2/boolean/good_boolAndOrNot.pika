@@ -1,0 +1,7 @@
+exec {
+    print !_true_ && _false_ || _false_ || !_false_, _n_.
+    print _true_ && !_false_ && _true_ || _false_, _n_.
+    print !(_true_ || _false_), _n_.
+    print ![1 | bool] || _false_, _n_.
+    print !([(1 + 2) | bool] && _true_), _n_.
+}

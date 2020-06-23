@@ -2,10 +2,15 @@ package parseTree;
 
 import parseTree.nodeTypes.*;
 
+import java.util.function.UnaryOperator;
+
 // Visitor pattern with pre- and post-order visits
 public interface ParseNodeVisitor {
 	
 	// non-leaf nodes: visitEnter and visitLeave
+	void visitEnter(UnaryOperatorNode node);
+	void visitLeave(UnaryOperatorNode node);
+
 	void visitEnter(BinaryOperatorNode node);
 	void visitLeave(BinaryOperatorNode node);
 	
@@ -56,7 +61,9 @@ public interface ParseNodeVisitor {
 		public void defaultVisitForLeaf(ParseNode node) {
 			defaultVisit(node);
 		}
-		
+
+		public void visitEnter(UnaryOperatorNode node) { defaultVisitEnter(node); }
+		public void visitLeave(UnaryOperatorNode node) { defaultVisitLeave(node); }
 		public void visitEnter(BinaryOperatorNode node) {
 			defaultVisitEnter(node);
 		}
