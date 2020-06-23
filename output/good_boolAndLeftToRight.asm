@@ -131,12 +131,12 @@
         And                                    
         PushI        1                         
         And                                    
-        JumpTrue     -print-boolean-5-true     
+        JumpTrue     -print-boolean-6470-true  
         PushD        $boolean-false-string     
-        Jump         -print-boolean-5-join     
-        Label        -print-boolean-5-true     
+        Jump         -print-boolean-6470-join  
+        Label        -print-boolean-6470-true  
         PushD        $boolean-true-string      
-        Label        -print-boolean-5-join     
+        Label        -print-boolean-6470-join  
         PushD        $print-format-boolean     
         Printf                                 
         PushD        $print-format-newline     
@@ -146,12 +146,12 @@
         And                                    
         PushI        1                         
         And                                    
-        JumpTrue     -print-boolean-6-true     
+        JumpTrue     -print-boolean-6471-true  
         PushD        $boolean-false-string     
-        Jump         -print-boolean-6-join     
-        Label        -print-boolean-6-true     
+        Jump         -print-boolean-6471-join  
+        Label        -print-boolean-6471-true  
         PushD        $boolean-true-string      
-        Label        -print-boolean-6-join     
+        Label        -print-boolean-6471-join  
         PushD        $print-format-boolean     
         Printf                                 
         PushD        $print-format-newline     
@@ -161,12 +161,12 @@
         And                                    
         PushI        1                         
         And                                    
-        JumpTrue     -print-boolean-7-true     
+        JumpTrue     -print-boolean-6472-true  
         PushD        $boolean-false-string     
-        Jump         -print-boolean-7-join     
-        Label        -print-boolean-7-true     
+        Jump         -print-boolean-6472-join  
+        Label        -print-boolean-6472-true  
         PushD        $boolean-true-string      
-        Label        -print-boolean-7-join     
+        Label        -print-boolean-6472-join  
         PushD        $print-format-boolean     
         Printf                                 
         PushD        $print-format-newline     
@@ -176,12 +176,12 @@
         And                                    
         PushI        1                         
         And                                    
-        JumpTrue     -print-boolean-8-true     
+        JumpTrue     -print-boolean-6473-true  
         PushD        $boolean-false-string     
-        Jump         -print-boolean-8-join     
-        Label        -print-boolean-8-true     
+        Jump         -print-boolean-6473-join  
+        Label        -print-boolean-6473-true  
         PushD        $boolean-true-string      
-        Label        -print-boolean-8-join     
+        Label        -print-boolean-6473-join  
         PushD        $print-format-boolean     
         Printf                                 
         PushD        $print-format-newline     
@@ -191,12 +191,12 @@
         And                                    
         PushI        0                         
         And                                    
-        JumpTrue     -print-boolean-9-true     
+        JumpTrue     -print-boolean-6474-true  
         PushD        $boolean-false-string     
-        Jump         -print-boolean-9-join     
-        Label        -print-boolean-9-true     
+        Jump         -print-boolean-6474-join  
+        Label        -print-boolean-6474-true  
         PushD        $boolean-true-string      
-        Label        -print-boolean-9-join     
+        Label        -print-boolean-6474-join  
         PushD        $print-format-boolean     
         Printf                                 
         PushD        $print-format-newline     
@@ -206,12 +206,12 @@
         And                                    
         PushI        0                         
         And                                    
-        JumpTrue     -print-boolean-10-true    
+        JumpTrue     -print-boolean-6475-true  
         PushD        $boolean-false-string     
-        Jump         -print-boolean-10-join    
-        Label        -print-boolean-10-true    
+        Jump         -print-boolean-6475-join  
+        Label        -print-boolean-6475-true  
         PushD        $boolean-true-string      
-        Label        -print-boolean-10-join    
+        Label        -print-boolean-6475-join  
         PushD        $print-format-boolean     
         Printf                                 
         PushD        $print-format-newline     
@@ -221,12 +221,12 @@
         And                                    
         PushI        0                         
         And                                    
-        JumpTrue     -print-boolean-11-true    
+        JumpTrue     -print-boolean-6476-true  
         PushD        $boolean-false-string     
-        Jump         -print-boolean-11-join    
-        Label        -print-boolean-11-true    
+        Jump         -print-boolean-6476-join  
+        Label        -print-boolean-6476-true  
         PushD        $boolean-true-string      
-        Label        -print-boolean-11-join    
+        Label        -print-boolean-6476-join  
         PushD        $print-format-boolean     
         Printf                                 
         PushD        $print-format-newline     
@@ -236,12 +236,12 @@
         And                                    
         PushI        0                         
         And                                    
-        JumpTrue     -print-boolean-12-true    
+        JumpTrue     -print-boolean-6477-true  
         PushD        $boolean-false-string     
-        Jump         -print-boolean-12-join    
-        Label        -print-boolean-12-true    
+        Jump         -print-boolean-6477-join  
+        Label        -print-boolean-6477-true  
         PushD        $boolean-true-string      
-        Label        -print-boolean-12-join    
+        Label        -print-boolean-6477-join  
         PushD        $print-format-boolean     
         Printf                                 
         PushD        $print-format-newline     

@@ -1,0 +1,15 @@
+exec {
+    if(_true_) {
+        print "This should be visible", _n_.
+    }
+    else {
+        print "This should not", _n_.
+    }
+
+    if(_false_) {
+        print "nope", _n_.
+    }
+    else {
+        print "Yeah", _n_.
+    }
+}

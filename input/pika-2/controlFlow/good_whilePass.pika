@@ -1,0 +1,7 @@
+exec {
+    var tries := 5.
+    while(_false_) {
+        print "tries: ", tries, _n_.
+        tries := tries - 1.
+    }
+}
