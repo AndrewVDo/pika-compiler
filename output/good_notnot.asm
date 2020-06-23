@@ -129,12 +129,12 @@
         PushI        0                         
         BNegate                                
         BNegate                                
-        JumpTrue     -print-boolean-6559-true  
+        JumpTrue     -print-boolean-94-true    
         PushD        $boolean-false-string     
-        Jump         -print-boolean-6559-join  
-        Label        -print-boolean-6559-true  
+        Jump         -print-boolean-94-join    
+        Label        -print-boolean-94-true    
         PushD        $boolean-true-string      
-        Label        -print-boolean-6559-join  
+        Label        -print-boolean-94-join    
         PushD        $print-format-boolean     
         Printf                                 
         PushD        $print-format-newline     
@@ -143,12 +143,12 @@
         BNegate                                
         BNegate                                
         BNegate                                
-        JumpTrue     -print-boolean-6560-true  
+        JumpTrue     -print-boolean-95-true    
         PushD        $boolean-false-string     
-        Jump         -print-boolean-6560-join  
-        Label        -print-boolean-6560-true  
+        Jump         -print-boolean-95-join    
+        Label        -print-boolean-95-true    
         PushD        $boolean-true-string      
-        Label        -print-boolean-6560-join  
+        Label        -print-boolean-95-join    
         PushD        $print-format-boolean     
         Printf                                 
         Halt                                   
