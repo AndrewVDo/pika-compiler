@@ -8,23 +8,7 @@ import lexicalAnalyzer.Lextant;
 import logging.PikaLogger;
 import parseTree.ParseNode;
 import parseTree.ParseNodeVisitor;
-import parseTree.nodeTypes.AssignmentStatementNode;
-import parseTree.nodeTypes.BinaryOperatorNode;
-import parseTree.nodeTypes.BooleanConstantNode;
-import parseTree.nodeTypes.CastExpressionNode;
-import parseTree.nodeTypes.CharacterConstantNode;
-import parseTree.nodeTypes.BlockStatementNode;
-import parseTree.nodeTypes.DeclarationNode;
-import parseTree.nodeTypes.ErrorNode;
-import parseTree.nodeTypes.FloatingConstantNode;
-import parseTree.nodeTypes.IdentifierNode;
-import parseTree.nodeTypes.IntegerConstantNode;
-import parseTree.nodeTypes.NewlineNode;
-import parseTree.nodeTypes.PrintStatementNode;
-import parseTree.nodeTypes.ProgramNode;
-import parseTree.nodeTypes.SpaceNode;
-import parseTree.nodeTypes.StringConstantNode;
-import parseTree.nodeTypes.TabNode;
+import parseTree.nodeTypes.*;
 import semanticAnalyzer.signatures.FunctionSignature;
 import semanticAnalyzer.signatures.FunctionSignatures;
 import semanticAnalyzer.types.PrimitiveType;
@@ -109,6 +93,30 @@ class SemanticAnalysisVisitor extends ParseNodeVisitor.Default {
 
 	///////////////////////////////////////////////////////////////////////////
 	// expressions
+	@Override
+	public void visitLeave(UnaryOperatorNode node) {
+		assert node.nChildren() == 1;
+		ParseNode innerExpression = node.child(0);
+		List<Type> innerType = Arrays.asList(innerExpression.getType());
+
+		Lextant operator = operatorFor(node);
+		FunctionSignatures signatures = FunctionSignatures.signaturesOf(operator);
+		FunctionSignature signature = signatures.acceptingSignature(innerType);
+
+		if(signature.accepts(innerType)) {
+			node.setType(signature.resultType());
+			node.setSignature(signature);
+		}
+		else {
+			typeCheckError(node, innerType);
+			node.setType(PrimitiveType.ERROR);
+		}
+	}
+	private Lextant operatorFor(UnaryOperatorNode node) {
+		LextantToken token = (LextantToken) node.getToken();
+		return token.getLextant();
+	}
+
 	@Override
 	public void visitLeave(BinaryOperatorNode node) {
 		assert node.nChildren() == 2;

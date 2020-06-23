@@ -1,26 +1,11 @@
 package parser;
 
 import java.util.Arrays;
+import java.util.function.UnaryOperator;
 
 import logging.PikaLogger;
 import parseTree.*;
-import parseTree.nodeTypes.AssignmentStatementNode;
-import parseTree.nodeTypes.BinaryOperatorNode;
-import parseTree.nodeTypes.BooleanConstantNode;
-import parseTree.nodeTypes.CastExpressionNode;
-import parseTree.nodeTypes.CharacterConstantNode;
-import parseTree.nodeTypes.BlockStatementNode;
-import parseTree.nodeTypes.DeclarationNode;
-import parseTree.nodeTypes.ErrorNode;
-import parseTree.nodeTypes.FloatingConstantNode;
-import parseTree.nodeTypes.IdentifierNode;
-import parseTree.nodeTypes.IntegerConstantNode;
-import parseTree.nodeTypes.NewlineNode;
-import parseTree.nodeTypes.PrintStatementNode;
-import parseTree.nodeTypes.ProgramNode;
-import parseTree.nodeTypes.SpaceNode;
-import parseTree.nodeTypes.StringConstantNode;
-import parseTree.nodeTypes.TabNode;
+import parseTree.nodeTypes.*;
 import tokens.*;
 import lexicalAnalyzer.Keyword;
 import lexicalAnalyzer.Lextant;
@@ -274,35 +259,49 @@ public class Parser {
 			return syntaxErrorNode("expression");
 		}
 		Token whatsNow = nowReading;
-		return parseBooleanExpression();
+		return parseBooleanOrExpression();
 	}
 	private boolean startsExpression(Token token) {
 		return startsComparisonExpression(token);
 	}
 
-	// booleanExpression -> comparisonExpression [&& comparisonExpression]?
-	private ParseNode parseBooleanExpression() {
+
+	private ParseNode parseBooleanOrExpression() {
+		if(!startsBooleanExpression(nowReading)) {
+			return syntaxErrorNode("boolean expression");
+		}
+
+		ParseNode left = parseBooleanAndExpression();
+		while(nowReading.isLextant(Punctuator.BOOLEAN_OR)) {
+
+
+			Token booleanToken = nowReading;
+			readToken();
+			ParseNode right = parseBooleanAndExpression();
+
+			left = BinaryOperatorNode.withChildren(booleanToken, left, right);
+		}
+		return left;
+	}
+
+	private ParseNode parseBooleanAndExpression() {
 		if(!startsBooleanExpression(nowReading)) {
 			return syntaxErrorNode("boolean expression");
 		}
 
 		ParseNode left = parseComparisonExpression();
-		while(isBooleanLextant(nowReading)) {
-			Token booleanToken = nowReading;
+		while(nowReading.isLextant(Punctuator.BOOLEAN_AND)) {
+			Token booleanAndToken = nowReading;
 			readToken();
 			ParseNode right = parseComparisonExpression();
 
-			//break if true or ...
-			left = BinaryOperatorNode.withChildren(booleanToken, left, right);
+			left = BinaryOperatorNode.withChildren(booleanAndToken, left, right);
 		}
 		return left;
 	}
 
 	private boolean startsBooleanExpression(Token token) {
 		return startsComparisonExpression(token);
-	}
-	private boolean isBooleanLextant(Token token) {
-		return(token.isLextant(Punctuator.BOOLEAN_AND) || token.isLextant(Punctuator.BOOLEAN_OR));
 	}
 
 	// comparisonExpression -> additiveExpression [> additiveExpression]?
@@ -514,11 +513,30 @@ public class Parser {
 		if(!startsBooleanConstant(nowReading)) {
 			return syntaxErrorNode("boolean constant");
 		}
+
+		if(nowReading.isLextant(Punctuator.BOOLEAN_NOT)) {
+			return parseBooleanNotExpression();
+		}
+
 		readToken();
 		return new BooleanConstantNode(previouslyRead);
 	}
 	private boolean startsBooleanConstant(Token token) {
-		return token.isLextant(Keyword.TRUE, Keyword.FALSE);
+		return token.isLextant(Keyword.TRUE, Keyword.FALSE, Punctuator.BOOLEAN_NOT);
+	}
+	private ParseNode parseBooleanNotExpression() {
+		if(!nowReading.isLextant(Punctuator.BOOLEAN_NOT)) {
+			return syntaxErrorNode("boolean expression");
+		}
+
+		Token booleanNot = nowReading;
+		readToken();
+		if(startsBooleanConstant(nowReading)) {
+			return UnaryOperatorNode.withChildren(booleanNot, parseBooleanConstant());
+		}
+
+		ParseNode innerExpression = parseExpression();
+		return UnaryOperatorNode.withChildren(booleanNot, innerExpression);
 	}
 
 	private void readToken() {

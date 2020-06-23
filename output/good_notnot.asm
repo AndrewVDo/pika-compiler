@@ -126,56 +126,29 @@
         DLabel       $global-memory-block      
         DataZ        0                         
         Label        $$main                    
-        PushI        1                         
-        PushI        1                         
-        And                                    
-        JumpTrue     -print-boolean-1-true     
+        PushI        0                         
+        BNegate                                
+        BNegate                                
+        JumpTrue     -print-boolean-94-true    
         PushD        $boolean-false-string     
-        Jump         -print-boolean-1-join     
-        Label        -print-boolean-1-true     
+        Jump         -print-boolean-94-join    
+        Label        -print-boolean-94-true    
         PushD        $boolean-true-string      
-        Label        -print-boolean-1-join     
+        Label        -print-boolean-94-join    
         PushD        $print-format-boolean     
         Printf                                 
         PushD        $print-format-newline     
         Printf                                 
         PushI        1                         
-        PushI        0                         
-        And                                    
-        JumpTrue     -print-boolean-2-true     
+        BNegate                                
+        BNegate                                
+        BNegate                                
+        JumpTrue     -print-boolean-95-true    
         PushD        $boolean-false-string     
-        Jump         -print-boolean-2-join     
-        Label        -print-boolean-2-true     
+        Jump         -print-boolean-95-join    
+        Label        -print-boolean-95-true    
         PushD        $boolean-true-string      
-        Label        -print-boolean-2-join     
+        Label        -print-boolean-95-join    
         PushD        $print-format-boolean     
-        Printf                                 
-        PushD        $print-format-newline     
-        Printf                                 
-        PushI        0                         
-        PushI        1                         
-        And                                    
-        JumpTrue     -print-boolean-3-true     
-        PushD        $boolean-false-string     
-        Jump         -print-boolean-3-join     
-        Label        -print-boolean-3-true     
-        PushD        $boolean-true-string      
-        Label        -print-boolean-3-join     
-        PushD        $print-format-boolean     
-        Printf                                 
-        PushD        $print-format-newline     
-        Printf                                 
-        PushI        0                         
-        PushI        0                         
-        And                                    
-        JumpTrue     -print-boolean-4-true     
-        PushD        $boolean-false-string     
-        Jump         -print-boolean-4-join     
-        Label        -print-boolean-4-true     
-        PushD        $boolean-true-string      
-        Label        -print-boolean-4-join     
-        PushD        $print-format-boolean     
-        Printf                                 
-        PushD        $print-format-newline     
         Printf                                 
         Halt                                   

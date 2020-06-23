@@ -149,6 +149,10 @@ public class FunctionSignatures extends ArrayList<FunctionSignature> {
 		new FunctionSignatures(Punctuator.BOOLEAN_OR,
 				new FunctionSignature(ASMOpcode.Or, PrimitiveType.BOOLEAN, PrimitiveType.BOOLEAN, PrimitiveType.BOOLEAN)
 		);
+
+		new FunctionSignatures(Punctuator.BOOLEAN_NOT,
+				new FunctionSignature(ASMOpcode.BNegate, PrimitiveType.BOOLEAN, PrimitiveType.BOOLEAN)
+		);
 		
 		
 		// First, we use the operator itself (in this case the Punctuator ADD) as the key.

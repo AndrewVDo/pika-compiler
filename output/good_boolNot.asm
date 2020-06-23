@@ -127,53 +127,50 @@
         DataZ        0                         
         Label        $$main                    
         PushI        1                         
-        PushI        1                         
-        And                                    
-        JumpTrue     -print-boolean-1-true     
+        BNegate                                
+        JumpTrue     -print-boolean-58-true    
         PushD        $boolean-false-string     
-        Jump         -print-boolean-1-join     
-        Label        -print-boolean-1-true     
+        Jump         -print-boolean-58-join    
+        Label        -print-boolean-58-true    
         PushD        $boolean-true-string      
-        Label        -print-boolean-1-join     
+        Label        -print-boolean-58-join    
+        PushD        $print-format-boolean     
+        Printf                                 
+        PushI        0                         
+        BNegate                                
+        JumpTrue     -print-boolean-59-true    
+        PushD        $boolean-false-string     
+        Jump         -print-boolean-59-join    
+        Label        -print-boolean-59-true    
+        PushD        $boolean-true-string      
+        Label        -print-boolean-59-join    
         PushD        $print-format-boolean     
         Printf                                 
         PushD        $print-format-newline     
         Printf                                 
+        Label        -compare-60-arg1          
         PushI        1                         
+        BNegate                                
+        Label        -compare-60-arg2          
         PushI        0                         
-        And                                    
-        JumpTrue     -print-boolean-2-true     
-        PushD        $boolean-false-string     
-        Jump         -print-boolean-2-join     
-        Label        -print-boolean-2-true     
-        PushD        $boolean-true-string      
-        Label        -print-boolean-2-join     
-        PushD        $print-format-boolean     
-        Printf                                 
-        PushD        $print-format-newline     
-        Printf                                 
-        PushI        0                         
+        BNegate                                
+        Label        -compare-60-sub           
+        BEqual                                 
+        JumpFalse    -compare-60-true          
+        Jump         -compare-60-false         
+        Label        -compare-60-true          
         PushI        1                         
-        And                                    
-        JumpTrue     -print-boolean-3-true     
-        PushD        $boolean-false-string     
-        Jump         -print-boolean-3-join     
-        Label        -print-boolean-3-true     
-        PushD        $boolean-true-string      
-        Label        -print-boolean-3-join     
-        PushD        $print-format-boolean     
-        Printf                                 
-        PushD        $print-format-newline     
-        Printf                                 
+        Jump         -compare-60-join          
+        Label        -compare-60-false         
         PushI        0                         
-        PushI        0                         
-        And                                    
-        JumpTrue     -print-boolean-4-true     
+        Jump         -compare-60-join          
+        Label        -compare-60-join          
+        JumpTrue     -print-boolean-61-true    
         PushD        $boolean-false-string     
-        Jump         -print-boolean-4-join     
-        Label        -print-boolean-4-true     
+        Jump         -print-boolean-61-join    
+        Label        -print-boolean-61-true    
         PushD        $boolean-true-string      
-        Label        -print-boolean-4-join     
+        Label        -print-boolean-61-join    
         PushD        $print-format-boolean     
         Printf                                 
         PushD        $print-format-newline     

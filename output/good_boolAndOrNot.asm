@@ -126,54 +126,147 @@
         DLabel       $global-memory-block      
         DataZ        0                         
         Label        $$main                    
+        Label        -bool-or-14-arg1          
+        Label        -bool-or-13-arg1          
+        PushI        1                         
+        BNegate                                
+        PushI        0                         
+        And                                    
+        JumpTrue     -bool-or-13-true-condition 
+        PushI        0                         
+        Label        -bool-or-13-arg2          
+        PushI        0                         
+        Or                                     
+        JumpTrue     -bool-or-13-true-condition 
+        Jump         -bool-or-13-false-condition 
+        Label        -bool-or-13-true-condition 
+        PushI        1                         
+        Jump         -bool-or-13-end           
+        Label        -bool-or-13-false-condition 
+        PushI        0                         
+        Label        -bool-or-13-end           
+        JumpTrue     -bool-or-14-true-condition 
+        PushI        0                         
+        Label        -bool-or-14-arg2          
+        PushI        0                         
+        BNegate                                
+        Or                                     
+        JumpTrue     -bool-or-14-true-condition 
+        Jump         -bool-or-14-false-condition 
+        Label        -bool-or-14-true-condition 
+        PushI        1                         
+        Jump         -bool-or-14-end           
+        Label        -bool-or-14-false-condition 
+        PushI        0                         
+        Label        -bool-or-14-end           
+        JumpTrue     -print-boolean-15-true    
+        PushD        $boolean-false-string     
+        Jump         -print-boolean-15-join    
+        Label        -print-boolean-15-true    
+        PushD        $boolean-true-string      
+        Label        -print-boolean-15-join    
+        PushD        $print-format-boolean     
+        Printf                                 
+        PushD        $print-format-newline     
+        Printf                                 
+        Label        -bool-or-16-arg1          
+        PushI        1                         
+        PushI        0                         
+        BNegate                                
+        And                                    
+        PushI        1                         
+        And                                    
+        JumpTrue     -bool-or-16-true-condition 
+        PushI        0                         
+        Label        -bool-or-16-arg2          
+        PushI        0                         
+        Or                                     
+        JumpTrue     -bool-or-16-true-condition 
+        Jump         -bool-or-16-false-condition 
+        Label        -bool-or-16-true-condition 
+        PushI        1                         
+        Jump         -bool-or-16-end           
+        Label        -bool-or-16-false-condition 
+        PushI        0                         
+        Label        -bool-or-16-end           
+        JumpTrue     -print-boolean-17-true    
+        PushD        $boolean-false-string     
+        Jump         -print-boolean-17-join    
+        Label        -print-boolean-17-true    
+        PushD        $boolean-true-string      
+        Label        -print-boolean-17-join    
+        PushD        $print-format-boolean     
+        Printf                                 
+        PushD        $print-format-newline     
+        Printf                                 
+        Label        -bool-or-18-arg1          
+        PushI        1                         
+        JumpTrue     -bool-or-18-true-condition 
+        PushI        0                         
+        Label        -bool-or-18-arg2          
+        PushI        0                         
+        Or                                     
+        JumpTrue     -bool-or-18-true-condition 
+        Jump         -bool-or-18-false-condition 
+        Label        -bool-or-18-true-condition 
+        PushI        1                         
+        Jump         -bool-or-18-end           
+        Label        -bool-or-18-false-condition 
+        PushI        0                         
+        Label        -bool-or-18-end           
+        BNegate                                
+        JumpTrue     -print-boolean-19-true    
+        PushD        $boolean-false-string     
+        Jump         -print-boolean-19-join    
+        Label        -print-boolean-19-true    
+        PushD        $boolean-true-string      
+        Label        -print-boolean-19-join    
+        PushD        $print-format-boolean     
+        Printf                                 
+        PushD        $print-format-newline     
+        Printf                                 
+        Label        -bool-or-20-arg1          
         PushI        1                         
         PushI        1                         
         And                                    
-        JumpTrue     -print-boolean-1-true     
+        JumpTrue     -bool-or-20-true-condition 
+        PushI        0                         
+        Label        -bool-or-20-arg2          
+        PushI        0                         
+        Or                                     
+        JumpTrue     -bool-or-20-true-condition 
+        Jump         -bool-or-20-false-condition 
+        Label        -bool-or-20-true-condition 
+        PushI        1                         
+        Jump         -bool-or-20-end           
+        Label        -bool-or-20-false-condition 
+        PushI        0                         
+        Label        -bool-or-20-end           
+        BNegate                                
+        JumpTrue     -print-boolean-21-true    
         PushD        $boolean-false-string     
-        Jump         -print-boolean-1-join     
-        Label        -print-boolean-1-true     
+        Jump         -print-boolean-21-join    
+        Label        -print-boolean-21-true    
         PushD        $boolean-true-string      
-        Label        -print-boolean-1-join     
+        Label        -print-boolean-21-join    
         PushD        $print-format-boolean     
         Printf                                 
         PushD        $print-format-newline     
         Printf                                 
         PushI        1                         
-        PushI        0                         
-        And                                    
-        JumpTrue     -print-boolean-2-true     
-        PushD        $boolean-false-string     
-        Jump         -print-boolean-2-join     
-        Label        -print-boolean-2-true     
-        PushD        $boolean-true-string      
-        Label        -print-boolean-2-join     
-        PushD        $print-format-boolean     
-        Printf                                 
-        PushD        $print-format-newline     
-        Printf                                 
-        PushI        0                         
+        PushI        2                         
+        Add                                    
         PushI        1                         
         And                                    
-        JumpTrue     -print-boolean-3-true     
-        PushD        $boolean-false-string     
-        Jump         -print-boolean-3-join     
-        Label        -print-boolean-3-true     
-        PushD        $boolean-true-string      
-        Label        -print-boolean-3-join     
-        PushD        $print-format-boolean     
-        Printf                                 
-        PushD        $print-format-newline     
-        Printf                                 
-        PushI        0                         
-        PushI        0                         
+        PushI        1                         
         And                                    
-        JumpTrue     -print-boolean-4-true     
+        BNegate                                
+        JumpTrue     -print-boolean-22-true    
         PushD        $boolean-false-string     
-        Jump         -print-boolean-4-join     
-        Label        -print-boolean-4-true     
+        Jump         -print-boolean-22-join    
+        Label        -print-boolean-22-true    
         PushD        $boolean-true-string      
-        Label        -print-boolean-4-join     
+        Label        -print-boolean-22-join    
         PushD        $print-format-boolean     
         Printf                                 
         PushD        $print-format-newline     
