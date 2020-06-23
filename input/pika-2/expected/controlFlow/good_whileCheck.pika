@@ -1,7 +1,5 @@
-exec {
-    var tries := 5.
-    while(tries > 0) {
-        print "tries: ", tries, _n_.
-        tries := tries - 1.
-    }
-}
+tries: 5
+tries: 4
+tries: 3
+tries: 2
+tries: 1

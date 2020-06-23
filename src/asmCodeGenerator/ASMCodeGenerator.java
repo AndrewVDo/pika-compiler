@@ -6,6 +6,7 @@ import java.util.Map;
 import asmCodeGenerator.codeStorage.ASMCodeFragment;
 import asmCodeGenerator.codeStorage.ASMOpcode;
 import asmCodeGenerator.runtime.RunTime;
+import lexicalAnalyzer.Keyword;
 import lexicalAnalyzer.Lextant;
 import lexicalAnalyzer.Punctuator;
 import parseTree.*;
@@ -239,6 +240,60 @@ public class ASMCodeGenerator {
 			code.add(opcodeForStore(type));
 		}
 
+		public void visitLeave(ControlFlowNode node) {
+			Lextant controlFlowStatement = node.getControlFlowStatement();
+			if(controlFlowStatement == Keyword.IF) {
+				visitIfStatement(node);
+			}
+			else if(controlFlowStatement == Keyword.WHILE) {
+				visitWhileStatement(node);
+			}
+			else {
+				throw new Error("Compiler error: control flow statement");
+			}
+		}
+		private void visitWhileStatement(ControlFlowNode node) {
+			assert(node.nChildren() == 2);
+			newVoidCode(node);
+
+			ASMCodeFragment condition = removeValueCode(node.child(0));
+			ASMCodeFragment innerExpression = removeVoidCode(node.child(1));
+
+			Labeller labeller = new Labeller("while-statement");
+			String conditionLabel = labeller.newLabel("check-condition");
+			String endLabel = labeller.newLabel("end");
+
+			code.add(Label, conditionLabel);
+			code.append(condition);
+			code.add(JumpFalse, endLabel);
+			code.append(innerExpression);
+			code.add(Jump, conditionLabel);
+			code.add(Label, endLabel);
+		}
+		private void visitIfStatement(ControlFlowNode node) {
+			newVoidCode(node);
+
+			ASMCodeFragment condition = removeValueCode(node.child(0));
+			ASMCodeFragment innerExpression = removeVoidCode(node.child(1));
+
+			Labeller labeller = new Labeller("while-statement");
+			String conditionLabel = labeller.newLabel("check-condition");
+			String elseLabel = labeller.newLabel("else-condition");
+			String endLabel = labeller.newLabel("end");
+
+			code.add(Label, conditionLabel);
+			code.append(condition);
+			code.add(JumpFalse, elseLabel);
+			code.append(innerExpression);
+			code.add(Jump, endLabel);
+			code.add(Label, elseLabel);
+			if(node.nChildren() == 3) {
+				ASMCodeFragment elseExpression = removeVoidCode(node.child(2));
+				code.append(elseExpression);
+			}
+			code.add(Label, endLabel);
+		}
+
 
 		///////////////////////////////////////////////////////////////////////////
 		// expressions
@@ -445,18 +500,15 @@ public class ASMCodeGenerator {
 		public void visit(StringConstantNode node) {
 			newValueCode(node);
 
-			String stringIdentifier = stringIdentifier(node);
+			Labeller labeller = new Labeller("string");
+			String stringLabel = labeller.newLabel("store");
 			String pikaString = convertJavaToPikaString(node.getValue());
 			
 			//loader allocates string
-			code.add(DLabel, stringIdentifier);
+			code.add(DLabel, stringLabel);
 			code.add(DataS, pikaString);
-			code.add(PushD, stringIdentifier);
+			code.add(PushD, stringLabel);
 
-		}
-		private String stringIdentifier(ParseNode node) {
-			Labeller label = new Labeller(node.getToken().getLexeme());
-			return label.newLabel("string").replace("\"", "");
 		}
 		private String convertJavaToPikaString(String javaString) {
 			String pikaString = javaString.substring(1, javaString.length()-1);
