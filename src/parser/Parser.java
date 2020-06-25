@@ -438,19 +438,17 @@ public class Parser {
 			return syntaxErrorNode("array index");
 		}
 
-		ParseNode left = parseBracketedExpression();
+		ParseNode base = parseBracketedExpression();
 		while(nowReading.isLextant(Punctuator.OPEN_BRACKET)) {
-			Token arrayIndexOp = nowReading;
+			Token indexOperator = nowReading;
+			Token indexToken = LextantToken.artificial(indexOperator, Punctuator.ARRAY_INDEXING);
 			readToken();
-			ParseNode right = parseExpression();
+			ParseNode index = parseExpression();
 			expect(Punctuator.CLOSE_BRACKET);
 
-			//TODO check to see left is array?
-			//TODO check to see bracketed properly?
-
-			left = ArrayIndexNode.withChildren(arrayIndexOp, left, right);
+			base = ArrayIndexNode.withChildren(indexToken, base, index);
 		}
-		return left;
+		return base;
 	}
 	private boolean startsIndexExpression(Token token) {
 		return startsBracketedExpression(token);

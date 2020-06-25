@@ -4,4 +4,5 @@ exec {
     print array[2].
     print (array)[2].
     print array[[fl | int]].
+    print array[array[3]].
 }
