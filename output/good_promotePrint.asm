@@ -124,36 +124,16 @@
         Jump         $$general-runtime-error   
         DLabel       $usable-memory-start      
         DLabel       $global-memory-block      
-        DataZ        8                         
+        DataZ        0                         
         Label        $$main                    
-        PushD        $global-memory-block      
-        PushI        0                         
-        Add                                    %% c
-        PushI        42                        
-        StoreI                                 
-        PushD        $global-memory-block      
-        PushI        4                         
-        Add                                    %% d
-        PushD        $global-memory-block      
-        PushI        0                         
-        Add                                    %% c
-        LoadI                                  
-        ConvertI                               
-        StoreI                                 
-        PushD        $global-memory-block      
-        PushI        0                         
-        Add                                    %% c
-        LoadI                                  
-        PushD        $print-format-integer     
-        Printf                                 
-        PushD        $print-format-space       
-        Printf                                 
-        PushD        $global-memory-block      
-        PushI        4                         
-        Add                                    %% d
-        LoadI                                  
-        PushD        $print-format-integer     
-        Printf                                 
-        PushD        $print-format-newline     
+        PushI        97                        
+        PushI        127                       
+        BTAnd                                  
+        PushI        6                         
+        Add                                    
+        ConvertF                               
+        PushF        5.300000                  
+        FAdd                                   
+        PushD        $print-format-floating    
         Printf                                 
         Halt                                   

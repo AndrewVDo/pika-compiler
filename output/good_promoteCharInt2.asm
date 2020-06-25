@@ -144,6 +144,8 @@
         Add                                    %% a
         PushI        10                        
         PushI        98                        
+        PushI        127                       
+        BTAnd                                  
         Add                                    
         StoreI                                 
         PushD        $global-memory-block      
