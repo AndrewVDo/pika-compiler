@@ -68,9 +68,28 @@ public class FunctionSignature {
 		
 		for(int i=0; i<paramTypes.length; i++) {
 			if(!assignableTo(paramTypes[i], types.get(i))) {
-				return types.get(i).promotable(paramTypes[i]);
+				return false;
 			}
 		}		
+		return true;
+	}
+
+	public boolean promotable(List<Type> types, int promoteParam) {
+		resetTypeVariables();
+
+		if(types.size() != paramTypes.length) {
+			return false;
+		}
+
+		for(int i=0; i<paramTypes.length; i++) {
+			if(!assignableTo(paramTypes[i], types.get(i))) {
+				if(i == promoteParam && types.get(i).promotable(paramTypes[i])) {
+					continue;
+				}
+				return false;
+			}
+
+		}
 		return true;
 	}
 

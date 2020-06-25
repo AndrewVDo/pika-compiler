@@ -49,6 +49,15 @@ public class FunctionSignatures extends ArrayList<FunctionSignature> {
 	public boolean accepts(List<Type> types) {
 		return !acceptingSignature(types).isNull();
 	}
+	public List<FunctionSignature> promotableSignatures(List<Type> types, int promoteParam) {
+		List<FunctionSignature> matches = new ArrayList<>();
+		for(FunctionSignature functionSignature: this) {
+			if(functionSignature.promotable(types, promoteParam)) {
+				matches.add(functionSignature);
+			}
+		}
+		return matches;
+	}
 
 	
 	/////////////////////////////////////////////////////////////////////////////////

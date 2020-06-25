@@ -43,7 +43,10 @@ public enum PrimitiveType implements Type {
 
 	@Override
 	public boolean promotable(Type valueType) {
-		PrimitiveType[] ValidPromotions = promotable.get(this);
-		return Arrays.stream(ValidPromotions).anyMatch(valueType::equals);
+		PrimitiveType[] validPromotions = promotable.get(this);
+		if (validPromotions != null) {
+			return Arrays.stream(validPromotions).anyMatch(valueType::equals);
+		}
+		return false;
 	}
 }

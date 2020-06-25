@@ -30,4 +30,6 @@ public interface Type {
 			PrimitiveType.INTEGER, new PrimitiveType[]{PrimitiveType.FLOATING}
 			//PrimitiveType.RATIONAL
 	);
+
+	public static PrimitiveType[] promotionOrder = {PrimitiveType.CHARACTER, PrimitiveType.INTEGER, PrimitiveType.FLOATING};//, PrimitiveType.RATIONAL}
 }
