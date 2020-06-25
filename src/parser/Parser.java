@@ -120,6 +120,10 @@ public class Parser {
 		expect(Punctuator.CLOSE_PARANTHESES);
 		ParseNode innerBlockStatement = parseBlockStatement();
 
+		if(condition instanceof ErrorNode || innerBlockStatement instanceof ErrorNode) {
+			return syntaxErrorNode("controlFlow didn't find a condition or inner statement");
+		}
+
 		if(controlStatement.isLextant(Keyword.WHILE)) {
 			return ControlFlowNode.withChildren(controlStatement, condition, innerBlockStatement);
 		}
@@ -157,19 +161,22 @@ public class Parser {
 		expect(Punctuator.TERMINATOR);
 		return AssignmentStatementNode.withChildren(assignmentToken, target, expression);
 	}
-
 	private boolean startsAssignmentStatement(Token token) {
 		return startsTarget(token);
 	}
 	private ParseNode parseTarget() {
 		if(!startsTarget(nowReading)) {
-			syntaxErrorNode("target");
+			return syntaxErrorNode("target");
 		}
-		return parseIdentifier();
+
+		if(startsBracketedExpression(nowReading)) { //(target)
+			return parseBracketedExpression();
+		}
+		return parseIdentifier();//array index
 	}
 	// target -> identifier
 	private boolean startsTarget(Token token) {
-		return startsIdentifier(token);
+		return startsIdentifier(token) || startsBracketedExpression(token);//array index
 	}
 	
 	// printStmt -> PRINT printExpressionList .
