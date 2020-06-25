@@ -151,9 +151,8 @@ public class FunctionSignatures extends ArrayList<FunctionSignature> {
 				new FunctionSignature(ASMOpcode.BNegate, PrimitiveType.BOOLEAN, PrimitiveType.BOOLEAN)
 		);
 
-		TypeVariable S = new TypeVariable("S");
+		TypeVariable S = new TypeVariable("any");
 		List<TypeVariable> SetS = Arrays.asList(S); // these get reset after each equiv check
-
 		new FunctionSignatures(Punctuator.ARRAY_INDEXING,
 				new FunctionSignature(1/*new ArrayIndexingCodeGenerator()*/, SetS, new ArrayType(S), PrimitiveType.INTEGER, S)
 		);

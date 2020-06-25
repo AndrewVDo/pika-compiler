@@ -141,6 +141,14 @@ class SemanticAnalysisVisitor extends ParseNodeVisitor.Default {
 		LextantToken token = (LextantToken) node.getToken();
 		return token.getLextant();
 	}
+
+	@Override
+	public void visitLeave(ArrayIndexNode node) {
+		assert node.nChildren() == 2;
+		ParseNode base = node.child(0);
+		ParseNode index = node.child(0);
+		//todo semantics for array indexing
+	}
 	
 	@Override
 	public void visitLeave(CastExpressionNode node) {
