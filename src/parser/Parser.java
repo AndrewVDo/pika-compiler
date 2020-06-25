@@ -424,13 +424,13 @@ public class Parser {
 			return UnaryOperatorNode.withChildren(unaryOperator, parseUnaryExpression());
 		}
 
-		return parseBracketedExpression();
+		return parseArrayIndexExpression();
 	}
 	private boolean isUnaryOperator(Token token) {
 		return token.isLextant(Punctuator.BOOLEAN_NOT);
 	}
 	private boolean startsUnaryExpression(Token token) {
-		return startsBracketedExpression(token) || isUnaryOperator(token);
+		return startsIndexExpression(token) || isUnaryOperator(token);
 	}
 
 	private ParseNode parseArrayIndexExpression() {
@@ -438,10 +438,22 @@ public class Parser {
 			return syntaxErrorNode("array index");
 		}
 
-		ParseNode targetableExpression = parseTarget();
+		ParseNode left = parseBracketedExpression();
+		while(nowReading.isLextant(Punctuator.OPEN_BRACKET)) {
+			Token arrayIndexOp = nowReading;
+			readToken();
+			ParseNode right = parseExpression();
+			expect(Punctuator.CLOSE_BRACKET);
+
+			//TODO check to see left is array?
+			//TODO check to see bracketed properly?
+
+			left = ArrayIndexNode.withChildren(arrayIndexOp, left, right);
+		}
+		return left;
 	}
 	private boolean startsIndexExpression(Token token) {
-		return false;
+		return startsBracketedExpression(token);
 	}
 	
 	private ParseNode parseBracketedExpression() {
