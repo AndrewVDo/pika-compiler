@@ -1,11 +1,13 @@
 package semanticAnalyzer.signatures;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import semanticAnalyzer.types.PrimitiveType;
 import semanticAnalyzer.types.Type;
 import lexicalAnalyzer.Lextant;
 import lexicalAnalyzer.Punctuator;
+import semanticAnalyzer.types.TypeVariable;
 
 //immutable
 public class FunctionSignature {
@@ -13,16 +15,21 @@ public class FunctionSignature {
 	private Type resultType;
 	private Type[] paramTypes;
 	Object whichVariant;
+	private List<TypeVariable> typeVariables;
 	
 	
 	///////////////////////////////////////////////////////////////
 	// construction
-	
-	public FunctionSignature(Object whichVariant, Type ...types) {
+
+	public FunctionSignature(Object whichVariant, List<TypeVariable> typeVariables, Type ...types) {
 		assert(types.length >= 1);
+		this.typeVariables = typeVariables;
 		storeParamTypes(types);
 		resultType = types[types.length-1];
 		this.whichVariant = whichVariant;
+	}
+	public FunctionSignature(Object whichVariant, Type ...types) {
+		this(whichVariant, new ArrayList<TypeVariable>(), types);
 	}
 	private void storeParamTypes(Type[] types) {
 		paramTypes = new Type[types.length-1];
@@ -30,6 +37,8 @@ public class FunctionSignature {
 			paramTypes[i] = types[i];
 		}
 	}
+
+
 	
 	
 	///////////////////////////////////////////////////////////////
@@ -39,7 +48,7 @@ public class FunctionSignature {
 		return whichVariant;
 	}
 	public Type resultType() {
-		return resultType;
+		return resultType.getConcreteType();
 	}
 	public boolean isNull() {
 		return false;
@@ -50,6 +59,8 @@ public class FunctionSignature {
 	// main query
 
 	public boolean accepts(List<Type> types) {
+		resetTypeVariables();
+
 		if(types.size() != paramTypes.length) {
 			return false;
 		}
@@ -61,11 +72,18 @@ public class FunctionSignature {
 		}		
 		return true;
 	}
+
+	private void resetTypeVariables() {
+		for(TypeVariable T: typeVariables) {
+			T.reset();
+		}
+	}
+
 	private boolean assignableTo(Type variableType, Type valueType) {
 		if(valueType == PrimitiveType.ERROR && ALL_TYPES_ACCEPT_ERROR_TYPES) {
 			return true;
 		}	
-		return variableType.equals(valueType);
+		return variableType.equivalent(valueType);
 	}
 	
 	// Null object pattern

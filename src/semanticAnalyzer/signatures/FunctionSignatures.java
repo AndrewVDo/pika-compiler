@@ -1,11 +1,6 @@
 package semanticAnalyzer.signatures;
 
-import java.security.Key;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.function.Function;
+import java.util.*;
 
 import asmCodeGenerator.codeStorage.ASMOpcode;
 import asmCodeGenerator.IntegerDivideCodeGenerator;
@@ -15,9 +10,11 @@ import asmCodeGenerator.FloatingDivideCodeGenerator;
 import asmCodeGenerator.IntToCharCodeGenerator;
 import lexicalAnalyzer.Keyword;
 import lexicalAnalyzer.Punctuator;
+import semanticAnalyzer.types.ArrayType;
 import semanticAnalyzer.types.Type;
 
 import semanticAnalyzer.types.PrimitiveType;
+import semanticAnalyzer.types.TypeVariable;
 
 
 public class FunctionSignatures extends ArrayList<FunctionSignature> {
@@ -153,7 +150,13 @@ public class FunctionSignatures extends ArrayList<FunctionSignature> {
 		new FunctionSignatures(Punctuator.BOOLEAN_NOT,
 				new FunctionSignature(ASMOpcode.BNegate, PrimitiveType.BOOLEAN, PrimitiveType.BOOLEAN)
 		);
-		
+
+		TypeVariable S = new TypeVariable("S");
+		List<TypeVariable> SetS = Arrays.asList(S); // these get reset after each equiv check
+
+		new FunctionSignatures(Punctuator.ARRAY_INDEXING,
+				new FunctionSignature(1/*new ArrayIndexingCodeGenerator()*/, SetS, new ArrayType(S), PrimitiveType.INTEGER, S)
+		);
 		
 		// First, we use the operator itself (in this case the Punctuator ADD) as the key.
 		// Then, we give that key two signatures: one an (INT x INT -> INT) and the other

@@ -1,8 +1,6 @@
 package parser;
 
-import java.security.Key;
 import java.util.Arrays;
-import java.util.function.UnaryOperator;
 
 import logging.PikaLogger;
 import parseTree.*;
@@ -427,13 +425,24 @@ public class Parser {
 	private boolean startsUnaryExpression(Token token) {
 		return startsBracketedExpression(token) || isUnaryOperator(token);
 	}
+
+	private ParseNode parseArrayIndexExpression() {
+		if(!startsIndexExpression(nowReading)) {
+			return syntaxErrorNode("array index");
+		}
+
+		ParseNode targetableExpression = parseTarget();
+	}
+	private boolean startsIndexExpression(Token token) {
+		return false;
+	}
 	
 	private ParseNode parseBracketedExpression() {
 		if(!startsBracketedExpression(nowReading) && !startsAtomicExpression(nowReading)) {
 			return syntaxErrorNode("bracketedExpression");
 		}
 		
-		if(nowReading.isLextant(Punctuator.OPEN_CAST)) {
+		if(nowReading.isLextant(Punctuator.OPEN_BRACKET)) {
 			return castExpression();
 		}
 		if(nowReading.isLextant(Punctuator.OPEN_PARANTHESES)) {
@@ -442,13 +451,13 @@ public class Parser {
 		return parseAtomicExpression();
 	}
 	private ParseNode castExpression() {
-		expect(Punctuator.OPEN_CAST);
+		expect(Punctuator.OPEN_BRACKET);
 		ParseNode innerExpression = parseExpression();
 		expect(Punctuator.DIVIDE_CAST);
 		
 		Token newType = nowReading;
 		readToken();
-		expect(Punctuator.CLOSE_CAST);
+		expect(Punctuator.CLOSE_BRACKET);
 		
 		return CastExpressionNode.withChildren(newType, innerExpression);
 	}
@@ -460,7 +469,7 @@ public class Parser {
 		return innerExpression;
 	}
 	private boolean startsBracketedExpression(Token token) {
-		return startsAtomicExpression(token) || token.isLextant(Punctuator.OPEN_CAST, Punctuator.OPEN_PARANTHESES);
+		return startsAtomicExpression(token) || token.isLextant(Punctuator.OPEN_BRACKET, Punctuator.OPEN_PARANTHESES);
 	}
 	
 	// atomicExpression -> literal
