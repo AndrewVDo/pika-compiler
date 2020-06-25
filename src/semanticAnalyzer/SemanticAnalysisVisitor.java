@@ -180,8 +180,8 @@ class SemanticAnalysisVisitor extends ParseNodeVisitor.Default {
 			List<FunctionSignature> promotableMatches = signatures.promotableSignatures(paramSignature, i);
 
 			if(promotableMatches.size() > 1) {
-				System.out.println("MORE THAN ONE MATCH");
 				return promotableMatches.get(0);
+				//todo when we implement function sigs with fi -> i, if -> i kinda sigs, we'll implement this
 			}
 			else if(promotableMatches.size() == 1) {
 				return promotableMatches.get(0);
