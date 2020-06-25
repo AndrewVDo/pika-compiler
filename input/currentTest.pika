@@ -1,8 +1,5 @@
 exec {
-    var a := 5.
-    print a, _n_.
-    a := ^g^.
-    print a, _n_.
-    a := 10 + ^b^.
+    var a := 5.1.
+    a := ^a^ + ^b^.
     print a, _n_.
 }

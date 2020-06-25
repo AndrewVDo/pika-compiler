@@ -86,26 +86,31 @@ class SemanticAnalysisVisitor extends ParseNodeVisitor.Default {
 			assignToConstError(node);
 		}
 
+		Type declarationType = identifier.getType();
+		Type expressionType = expression.getType();
+
 		// check to see if type of identifier is same as type of expression
-		if(!identifier.getType().equivalent(expression.getType())) {
-			if(!expression.getType().promotable(identifier.getType())) {
-				typeCheckError(node, Arrays.asList(identifier.getType(), expression.getType()));
+		if(!declarationType.equivalent(expressionType)) {
+			//check to see if promotable
+			if(!expressionType.promotable(identifier.getType())) {
+				typeCheckError(node, Arrays.asList(declarationType, expressionType));
 			}
-			//promotable
 			try {
-				ParseNode innerExpression = node.child(1);
-				Token artificialCast = LextantToken.artificial(innerExpression.getToken(), getCast(identifier.getType()));
-				node.replaceChild(node.child(1), CastExpressionNode.withChildren(artificialCast, innerExpression));
-				visitLeave((CastExpressionNode) node.child(1));
+				promote(node, declarationType, 1);
 			} catch (Exception e) {
-				typeCheckError(node, Arrays.asList(identifier.getType(), expression.getType()));
+				typeCheckError(node, Arrays.asList(declarationType, expressionType));
 			}
 		}
-		
-		Type declerationType = identifier.getType();
-		node.setType(declerationType);
+
+		node.setType(declarationType);
 	}
-	Lextant getCast(Type type) throws Exception {
+	private void promote(ParseNode node, Type identifierType, int child) throws Exception{
+		ParseNode innerExpression = node.child(child);
+		Token artificialCast = LextantToken.artificial(innerExpression.getToken(), getCast(identifierType));
+		node.replaceChild(node.child(child), CastExpressionNode.withChildren(artificialCast, innerExpression));
+		visitLeave((CastExpressionNode) node.child(child));
+	}
+	private Lextant getCast(Type type) throws Exception {
 		if(type == PrimitiveType.INTEGER) {
 			return Keyword.INT;
 		}
@@ -115,7 +120,6 @@ class SemanticAnalysisVisitor extends ParseNodeVisitor.Default {
 //		if(type == PrimitiveType.RATIONAL) {
 //			return Keyword.RATIONAL;
 //		}
-
 		throw new Exception("getCast FAILURE");
 	}
 
@@ -134,6 +138,13 @@ class SemanticAnalysisVisitor extends ParseNodeVisitor.Default {
 		if(signature.accepts(innerType)) {
 			node.setType(signature.resultType());
 			node.setSignature(signature);
+			try {
+				promote(node, signature); //promotes if needed
+			}
+			catch (Exception e) {
+				typeCheckError(node, innerType);
+				node.setType(PrimitiveType.ERROR);
+			}
 		}
 		else {
 			typeCheckError(node, innerType);
@@ -156,13 +167,16 @@ class SemanticAnalysisVisitor extends ParseNodeVisitor.Default {
 		FunctionSignatures signatures = FunctionSignatures.signaturesOf(operator);
 		FunctionSignature signature = signatures.acceptingSignature(childTypes);
 
-		Map<Integer, Type> promotions = new HashMap<Integer, Type>();
-
-		boolean bleh = signature.accepts(childTypes);
 		if(signature.accepts(childTypes)) {
 			node.setType(signature.resultType());
 			node.setSignature(signature);
-			//todo cast values if sig mismatch
+			try {
+				promote(node, signature); //promotes if needed
+			}
+			catch (Exception e) {
+				typeCheckError(node, childTypes);
+				node.setType(PrimitiveType.ERROR);
+			}
 		}
 		else {
 			typeCheckError(node, childTypes);
@@ -172,6 +186,17 @@ class SemanticAnalysisVisitor extends ParseNodeVisitor.Default {
 	private Lextant operatorFor(BinaryOperatorNode node) {
 		LextantToken token = (LextantToken) node.getToken();
 		return token.getLextant();
+	}
+	private void promote(ParseNode node, FunctionSignature signature) throws Exception{
+		Type[] paramList = signature.getParamTypes();
+		for(int i=0; i<paramList.length; i++) {
+			Type childType = node.child(i).getType();
+			Type signatureType = paramList[i];
+
+			if(childType != signatureType) {
+				promote(node, signatureType, i);
+			}
+		}
 	}
 
 	@Override
@@ -195,6 +220,13 @@ class SemanticAnalysisVisitor extends ParseNodeVisitor.Default {
 		if(signature.accepts(innerType)) {
 			node.setType(signature.resultType());
 			node.setSignature(signature);
+			try {
+				promote(node, signature); //promotes if needed
+			}
+			catch (Exception e) {
+				typeCheckError(node, innerType);
+				node.setType(PrimitiveType.ERROR);
+			}
 		}
 		else {
 			castTypeError(node.getType(), innerType.get(0));
