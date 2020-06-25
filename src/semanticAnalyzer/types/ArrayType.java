@@ -1,5 +1,7 @@
 package semanticAnalyzer.types;
 
+import java.util.Arrays;
+
 public class ArrayType implements Type {
     private Type subtype;
 
@@ -35,5 +37,11 @@ public class ArrayType implements Type {
         Type concreteSubtype = subtype.getConcreteType();
 
         return new ArrayType(concreteSubtype);
+    }
+
+    @Override
+    public boolean promotable(Type valueType) {
+        PrimitiveType[] ValidPromotions = promotable.get(subtype);
+        return Arrays.stream(ValidPromotions).anyMatch(valueType::equals);
     }
 }

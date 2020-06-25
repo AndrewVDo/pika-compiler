@@ -1,6 +1,9 @@
 package semanticAnalyzer.types;
 
 
+import java.util.Arrays;
+import java.util.List;
+
 public enum PrimitiveType implements Type {
 	BOOLEAN(1),
 	CHARACTER(1),
@@ -36,5 +39,11 @@ public enum PrimitiveType implements Type {
 	@Override
 	public Type getConcreteType() {
 		return this;
+	}
+
+	@Override
+	public boolean promotable(Type valueType) {
+		PrimitiveType[] ValidPromotions = promotable.get(this);
+		return Arrays.stream(ValidPromotions).anyMatch(valueType::equals);
 	}
 }

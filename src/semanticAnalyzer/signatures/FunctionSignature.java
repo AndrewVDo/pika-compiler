@@ -67,7 +67,7 @@ public class FunctionSignature {
 		
 		for(int i=0; i<paramTypes.length; i++) {
 			if(!assignableTo(paramTypes[i], types.get(i))) {
-				return false;
+				return types.get(i).promotable(paramTypes[i]);
 			}
 		}		
 		return true;

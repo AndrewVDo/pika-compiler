@@ -142,21 +142,6 @@
         PushD        $global-memory-block      
         PushI        0                         
         Add                                    %% a
-        PushI        103                       
-        PushI        127                       
-        BTAnd                                  
-        StoreI                                 
-        PushD        $global-memory-block      
-        PushI        0                         
-        Add                                    %% a
-        LoadI                                  
-        PushD        $print-format-integer     
-        Printf                                 
-        PushD        $print-format-newline     
-        Printf                                 
-        PushD        $global-memory-block      
-        PushI        0                         
-        Add                                    %% a
         PushI        10                        
         PushI        98                        
         Add                                    

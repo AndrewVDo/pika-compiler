@@ -1,10 +1,13 @@
 package semanticAnalyzer;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import lexicalAnalyzer.Keyword;
 import lexicalAnalyzer.Lextant;
+import lexicalAnalyzer.Punctuator;
 import logging.PikaLogger;
 import parseTree.ParseNode;
 import parseTree.ParseNodeVisitor;
@@ -77,18 +80,43 @@ class SemanticAnalysisVisitor extends ParseNodeVisitor.Default {
 	public void visitLeave(AssignmentStatementNode node) {
 		IdentifierNode identifier = (IdentifierNode) node.child(0);
 		ParseNode expression = node.child(1);
-		
-		// check to see if type of identifier is same as type of expression
-		if(!identifier.getType().equals(expression.getType())) {
-			typeCheckError(node, Arrays.asList(identifier.getType(), expression.getType()));
-		}
+
 		// check identifier is not const
 		if(!identifier.getBinding().getIsVar()) {
 			assignToConstError(node);
 		}
+
+		// check to see if type of identifier is same as type of expression
+		if(!identifier.getType().equivalent(expression.getType())) {
+			if(!expression.getType().promotable(identifier.getType())) {
+				typeCheckError(node, Arrays.asList(identifier.getType(), expression.getType()));
+			}
+			//promotable
+			try {
+				ParseNode innerExpression = node.child(1);
+				Token artificialCast = LextantToken.artificial(innerExpression.getToken(), getCast(identifier.getType()));
+				node.replaceChild(node.child(1), CastExpressionNode.withChildren(artificialCast, innerExpression));
+				visitLeave((CastExpressionNode) node.child(1));
+			} catch (Exception e) {
+				typeCheckError(node, Arrays.asList(identifier.getType(), expression.getType()));
+			}
+		}
 		
 		Type declerationType = identifier.getType();
 		node.setType(declerationType);
+	}
+	Lextant getCast(Type type) throws Exception {
+		if(type == PrimitiveType.INTEGER) {
+			return Keyword.INT;
+		}
+		if(type == PrimitiveType.FLOATING) {
+			return Keyword.FLOAT;
+		}
+//		if(type == PrimitiveType.RATIONAL) {
+//			return Keyword.RATIONAL;
+//		}
+
+		throw new Exception("getCast FAILURE");
 	}
 
 	///////////////////////////////////////////////////////////////////////////
@@ -127,10 +155,14 @@ class SemanticAnalysisVisitor extends ParseNodeVisitor.Default {
 		Lextant operator = operatorFor(node);
 		FunctionSignatures signatures = FunctionSignatures.signaturesOf(operator);
 		FunctionSignature signature = signatures.acceptingSignature(childTypes);
-		
+
+		Map<Integer, Type> promotions = new HashMap<Integer, Type>();
+
+		boolean bleh = signature.accepts(childTypes);
 		if(signature.accepts(childTypes)) {
 			node.setType(signature.resultType());
 			node.setSignature(signature);
+			//todo cast values if sig mismatch
 		}
 		else {
 			typeCheckError(node, childTypes);

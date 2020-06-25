@@ -1,0 +1,8 @@
+exec {
+    const fl := 3.1.
+    const array := 5.
+    print array[2].
+    print (array)[2].
+    print array[[fl | int]].
+    print array[array[3]].
+}

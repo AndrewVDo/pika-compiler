@@ -1,5 +1,7 @@
 package semanticAnalyzer.types;
 
+import java.util.Arrays;
+
 public class TypeVariable implements Type{
     private String name;
     private Type typeConstraint;
@@ -53,5 +55,11 @@ public class TypeVariable implements Type{
     @Override
     public Type getConcreteType() {
         return getType().getConcreteType();
+    }
+
+    @Override
+    public boolean promotable(Type valueType) {
+        PrimitiveType[] ValidPromotions = promotable.get(this.getType());
+        return Arrays.stream(ValidPromotions).anyMatch(valueType::equals);
     }
 }
