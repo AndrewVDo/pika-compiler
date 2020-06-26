@@ -124,31 +124,36 @@
         Jump         $$general-runtime-error   
         DLabel       $usable-memory-start      
         DLabel       $global-memory-block      
-        DataZ        0                         
+        DataZ        4                         
         Label        $$main                    
+        PushD        $global-memory-block      
         PushI        0                         
-        BNegate                                
-        BNegate                                
-        JumpTrue     -print-boolean-94-true    
-        PushD        $boolean-false-string     
-        Jump         -print-boolean-94-join    
-        Label        -print-boolean-94-true    
-        PushD        $boolean-true-string      
-        Label        -print-boolean-94-join    
-        PushD        $print-format-boolean     
+        Add                                    %% a
+        PushI        5                         
+        StoreI                                 
+        PushD        $global-memory-block      
+        PushI        0                         
+        Add                                    %% a
+        LoadI                                  
+        PushD        $print-format-integer     
         Printf                                 
         PushD        $print-format-newline     
         Printf                                 
-        PushI        1                         
-        BNegate                                
-        BNegate                                
-        BNegate                                
-        JumpTrue     -print-boolean-95-true    
-        PushD        $boolean-false-string     
-        Jump         -print-boolean-95-join    
-        Label        -print-boolean-95-true    
-        PushD        $boolean-true-string      
-        Label        -print-boolean-95-join    
-        PushD        $print-format-boolean     
+        PushD        $global-memory-block      
+        PushI        0                         
+        Add                                    %% a
+        PushI        10                        
+        PushI        98                        
+        PushI        127                       
+        BTAnd                                  
+        Add                                    
+        StoreI                                 
+        PushD        $global-memory-block      
+        PushI        0                         
+        Add                                    %% a
+        LoadI                                  
+        PushD        $print-format-integer     
+        Printf                                 
+        PushD        $print-format-newline     
         Printf                                 
         Halt                                   

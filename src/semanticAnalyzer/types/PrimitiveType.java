@@ -32,15 +32,13 @@ public enum PrimitiveType implements Type {
 	}
 
 	@Override
-	public boolean equivalent(Type valueType) {
-		return this == valueType;
-	}
-
-	@Override
 	public Type getConcreteType() {
 		return this;
 	}
-
+	@Override
+	public boolean equivalent(Type valueType) {
+		return this == valueType;
+	}
 	@Override
 	public boolean promotable(Type valueType) {
 		PrimitiveType[] validPromotions = promotable.get(this);

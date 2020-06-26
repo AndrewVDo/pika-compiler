@@ -12,26 +12,28 @@ public class TypeVariable implements Type{
     }
 
     private void setType(PrimitiveType type) {
-        typeConstraint = type;
+        this.typeConstraint = type;
     }
-
     public Type getType() {
         return typeConstraint;
     }
 
+    @Override
     public int getSize() {
-        return 0; //does not matter
+        return 0;
     }
-
+    @Override
     public String infoString() {
-        return toString();
+        return "<" + name + ">";
     }
-
+    @Override
+    public Type getConcreteType() {
+        return getType().getConcreteType();
+    }
     @Override
     public boolean equivalent(Type valueType) {
         if(valueType instanceof TypeVariable) {
-            throw new RuntimeException("Runtime error: equivalent attempted on two types containing type variables");
-
+            throw new RuntimeException("equivalent attempted on two types containing type variables");
         }
         if(this.getType() == PrimitiveType.NO_TYPE) {
             setType((PrimitiveType) valueType);
@@ -39,24 +41,9 @@ public class TypeVariable implements Type{
         }
         return this.getType().equivalent(valueType);
     }
-
-    public String pikaNativeString() {
-        return toString();
-    }
-
-    public String toString() {
-        return "<" + name + ">";
-    }
-
     public void reset() {
         setType(PrimitiveType.NO_TYPE);
     }
-
-    @Override
-    public Type getConcreteType() {
-        return getType().getConcreteType();
-    }
-
     @Override
     public boolean promotable(Type valueType) {
         PrimitiveType[] ValidPromotions = promotable.get(this.getType());

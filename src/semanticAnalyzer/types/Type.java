@@ -18,11 +18,9 @@ public interface Type {
 	 * @return string representation of type.
 	 */
 	public String infoString();
-
-	public boolean equivalent(Type valueType);
-
 	public Type getConcreteType();
 
+	public boolean equivalent(Type valueType);
 	public boolean promotable(Type valueType);
 
 	public static Map<PrimitiveType, PrimitiveType[]> promotable =  Map.of(
@@ -53,7 +51,6 @@ public interface Type {
 
 		return PrimitiveType.ERROR;
 	}
-
 	private static boolean lCPHelper(List<Type> types, Type promotionCandidate) {
 		for(Type t : types) {
 			if(!t.promotable(promotionCandidate)) {

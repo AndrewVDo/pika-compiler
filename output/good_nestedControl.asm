@@ -131,47 +131,47 @@
         Add                                    %% tries
         PushI        10                        
         StoreI                                 
-        Label        -while-statement-6572-check-condition 
-        Label        -compare-6567-arg1        
+        Label        -while-statement-107-check-condition 
+        Label        -compare-102-arg1         
         PushD        $global-memory-block      
         PushI        0                         
         Add                                    %% tries
         LoadI                                  
-        Label        -compare-6567-arg2        
+        Label        -compare-102-arg2         
         PushI        0                         
-        Label        -compare-6567-sub         
+        Label        -compare-102-sub          
         Subtract                               
-        JumpPos      -compare-6567-true        
-        Jump         -compare-6567-false       
-        Label        -compare-6567-true        
+        JumpPos      -compare-102-true         
+        Jump         -compare-102-false        
+        Label        -compare-102-true         
         PushI        1                         
-        Jump         -compare-6567-join        
-        Label        -compare-6567-false       
+        Jump         -compare-102-join         
+        Label        -compare-102-false        
         PushI        0                         
-        Jump         -compare-6567-join        
-        Label        -compare-6567-join        
-        JumpFalse    -while-statement-6572-end 
-        Label        -while-statement-6571-check-condition 
-        Label        -compare-6568-arg1        
+        Jump         -compare-102-join         
+        Label        -compare-102-join         
+        JumpFalse    -while-statement-107-end  
+        Label        -while-statement-106-check-condition 
+        Label        -compare-103-arg1         
         PushD        $global-memory-block      
         PushI        0                         
         Add                                    %% tries
         LoadI                                  
-        Label        -compare-6568-arg2        
+        Label        -compare-103-arg2         
         PushI        3                         
-        Label        -compare-6568-sub         
+        Label        -compare-103-sub          
         Subtract                               
-        JumpPos      -compare-6568-true        
-        Jump         -compare-6568-false       
-        Label        -compare-6568-true        
+        JumpPos      -compare-103-true         
+        Jump         -compare-103-false        
+        Label        -compare-103-true         
         PushI        1                         
-        Jump         -compare-6568-join        
-        Label        -compare-6568-false       
+        Jump         -compare-103-join         
+        Label        -compare-103-false        
         PushI        0                         
-        Jump         -compare-6568-join        
-        Label        -compare-6568-join        
-        JumpFalse    -while-statement-6571-else-condition 
-        DLabel       -string-6569-store        
+        Jump         -compare-103-join         
+        Label        -compare-103-join         
+        JumpFalse    -while-statement-106-else-condition 
+        DLabel       -string-104-store         
         DataC        110                       %% "no sweat! "
         DataC        111                       
         DataC        32                        
@@ -183,14 +183,14 @@
         DataC        33                        
         DataC        0                         
         DataC        0                         
-        PushD        -string-6569-store        
+        PushD        -string-104-store         
         PushD        $print-format-string      
         Printf                                 
         PushD        $print-format-newline     
         Printf                                 
-        Jump         -while-statement-6571-end 
-        Label        -while-statement-6571-else-condition 
-        DLabel       -string-6570-store        
+        Jump         -while-statement-106-end  
+        Label        -while-statement-106-else-condition 
+        DLabel       -string-105-store         
         DataC        115                       %% "sweating! "
         DataC        119                       
         DataC        101                       
@@ -202,12 +202,12 @@
         DataC        33                        
         DataC        0                         
         DataC        0                         
-        PushD        -string-6570-store        
+        PushD        -string-105-store         
         PushD        $print-format-string      
         Printf                                 
         PushD        $print-format-newline     
         Printf                                 
-        Label        -while-statement-6571-end 
+        Label        -while-statement-106-end  
         PushD        $global-memory-block      
         PushI        0                         
         Add                                    %% tries
@@ -218,6 +218,6 @@
         PushI        1                         
         Subtract                               
         StoreI                                 
-        Jump         -while-statement-6572-check-condition 
-        Label        -while-statement-6572-end 
+        Jump         -while-statement-107-check-condition 
+        Label        -while-statement-107-end  
         Halt                                   

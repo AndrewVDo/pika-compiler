@@ -8,21 +8,26 @@ public class ArrayType implements Type {
     public ArrayType(Type type) {
         this.subtype = type;
     }
+    public void setSubtype(Type subtype) {
+        this.subtype = subtype;
+    }
+    public Type getSubtype() {
+        return subtype;
+    }
 
     @Override
     public int getSize() {
         return 0;
     }
-
     @Override
     public String infoString() {
-        return "a[" + subtype.toString() + "]";
+        return "a[" + this.getSubtype().infoString() + "]";
     }
-
-    public Type getSubtype() {
-        return subtype;
+    @Override
+    public Type getConcreteType() {
+        Type concreteSubtype = subtype.getConcreteType();
+        return new ArrayType(concreteSubtype);
     }
-
     @Override
     public boolean equivalent(Type valueType) {
         if(valueType instanceof ArrayType) {
@@ -31,14 +36,6 @@ public class ArrayType implements Type {
         }
         return false;
     }
-
-    @Override
-    public Type getConcreteType() {
-        Type concreteSubtype = subtype.getConcreteType();
-
-        return new ArrayType(concreteSubtype);
-    }
-
     @Override
     public boolean promotable(Type valueType) {
         PrimitiveType[] ValidPromotions = promotable.get(subtype);

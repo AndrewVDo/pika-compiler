@@ -1,3 +1,4 @@
 exec {
     var arr := [1, 2, 3, 4, ^a^, 6].
+    var arr2 := [arr].
 }
