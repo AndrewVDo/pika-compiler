@@ -462,14 +462,14 @@ public class Parser {
 		}
 		
 		if(nowReading.isLextant(Punctuator.OPEN_BRACKET)) {
-			return parseBracket();
+			return parseSquareBracket();
 		}
 		else if(nowReading.isLextant(Punctuator.OPEN_PARANTHESES)) {
-			return paranthesesExpression();
+			return parenthesisExpression();
 		}
 		return parseAtomicExpression();
 	}
-	private ParseNode parseBracket() {
+	private ParseNode parseSquareBracket() {
 		expect(Punctuator.OPEN_BRACKET);
 		ParseNode firstExpression = parseExpression();
 
@@ -501,7 +501,7 @@ public class Parser {
 		return CastExpressionNode.withChildren(newType, innerExpression);
 	}
 
-	private ParseNode paranthesesExpression() {
+	private ParseNode parenthesisExpression() {
 		expect(Punctuator.OPEN_PARANTHESES);
 		ParseNode innerExpression = parseExpression();
 		expect(Punctuator.CLOSE_PARANTHESES);

@@ -450,8 +450,8 @@ public class ASMCodeGenerator {
 		}
 
 		public void visitLeave(ArrayNode node) {
-			//newAddressCode(node);
-			//Type type = ((ArrayType) node.getType()).getSubtype();
+			newAddressCode(node);
+
 
 
 		}

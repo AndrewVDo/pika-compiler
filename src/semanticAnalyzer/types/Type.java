@@ -1,8 +1,6 @@
 package semanticAnalyzer.types;
 
 import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public interface Type {
 	/** returns the size of an instance of this type, in bytes.
