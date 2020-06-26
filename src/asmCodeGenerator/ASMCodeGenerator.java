@@ -11,6 +11,7 @@ import lexicalAnalyzer.Lextant;
 import lexicalAnalyzer.Punctuator;
 import parseTree.*;
 import parseTree.nodeTypes.*;
+import semanticAnalyzer.types.ArrayType;
 import semanticAnalyzer.types.PrimitiveType;
 import semanticAnalyzer.types.Type;
 import symbolTable.Binding;
@@ -446,6 +447,13 @@ public class ASMCodeGenerator {
 				assert false : "unimplemented operator in opcodeForOperator";
 			}
 			return null;
+		}
+
+		public void visitLeave(ArrayNode node) {
+			newAddressCode(node);
+			Type type = ((ArrayType) node.getType()).getSubtype();
+
+			code.
 		}
 		
 		

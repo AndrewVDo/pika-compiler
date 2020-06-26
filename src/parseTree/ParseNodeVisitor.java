@@ -41,6 +41,8 @@ public interface ParseNodeVisitor {
 	void visitEnter(ControlFlowNode node);
 	void visitLeave(ControlFlowNode node);
 
+	void visitEnter(ArrayNode node);
+	void visitLeave(ArrayNode node);
 
 	// leaf nodes: visitLeaf only
 	void visit(BooleanConstantNode node);
@@ -130,7 +132,13 @@ public interface ParseNodeVisitor {
 		public void visitLeave(ControlFlowNode node) {
 			defaultVisitLeave(node);
 		}
-		
+		public void visitEnter(ArrayNode node) {
+			defaultVisitEnter(node);
+		}
+		public void visitLeave(ArrayNode node) {
+			defaultVisitLeave(node);
+		}
+
 
 		public void visit(BooleanConstantNode node) {
 			defaultVisitForLeaf(node);

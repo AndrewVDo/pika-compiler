@@ -1,6 +1,8 @@
 package parser;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import logging.PikaLogger;
 import parseTree.*;
@@ -460,16 +462,36 @@ public class Parser {
 		}
 		
 		if(nowReading.isLextant(Punctuator.OPEN_BRACKET)) {
-			return castExpression();
+			return parseBracket();
 		}
-		if(nowReading.isLextant(Punctuator.OPEN_PARANTHESES)) {
+		else if(nowReading.isLextant(Punctuator.OPEN_PARANTHESES)) {
 			return paranthesesExpression();
 		}
 		return parseAtomicExpression();
 	}
-	private ParseNode castExpression() {
+	private ParseNode parseBracket() {
 		expect(Punctuator.OPEN_BRACKET);
-		ParseNode innerExpression = parseExpression();
+		ParseNode firstExpression = parseExpression();
+
+		if(nowReading.isLextant(Punctuator.DIVIDE_CAST)) {
+			return castExpression(firstExpression);
+		}
+
+		Token indexToken = LextantToken.artificial(previouslyRead, Punctuator.ARRAY_INIT);
+
+		List<ParseNode> children = new ArrayList<>();
+		children.add(firstExpression);
+
+		while(startsExpression(nowReading) || nowReading.isLextant(Punctuator.SEPARATOR)) {
+			expect(Punctuator.SEPARATOR);
+			children.add(parseExpression());
+		}
+
+		expect(Punctuator.CLOSE_BRACKET);
+		return ArrayNode.withChildren(indexToken, children);
+	}
+
+	private ParseNode castExpression(ParseNode innerExpression) {
 		expect(Punctuator.DIVIDE_CAST);
 		
 		Token newType = nowReading;
@@ -478,6 +500,7 @@ public class Parser {
 		
 		return CastExpressionNode.withChildren(newType, innerExpression);
 	}
+
 	private ParseNode paranthesesExpression() {
 		expect(Punctuator.OPEN_PARANTHESES);
 		ParseNode innerExpression = parseExpression();

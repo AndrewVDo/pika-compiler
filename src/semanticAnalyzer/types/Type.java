@@ -26,10 +26,40 @@ public interface Type {
 	public boolean promotable(Type valueType);
 
 	public static Map<PrimitiveType, PrimitiveType[]> promotable =  Map.of(
-			PrimitiveType.CHARACTER, new PrimitiveType[]{PrimitiveType.INTEGER, PrimitiveType.FLOATING},
-			PrimitiveType.INTEGER, new PrimitiveType[]{PrimitiveType.FLOATING}
+			PrimitiveType.CHARACTER, new PrimitiveType[]{PrimitiveType.CHARACTER, PrimitiveType.INTEGER, PrimitiveType.FLOATING},
+			PrimitiveType.INTEGER, new PrimitiveType[]{PrimitiveType.INTEGER, PrimitiveType.FLOATING}
 			//PrimitiveType.RATIONAL
 	);
 
-	public static PrimitiveType[] promotionOrder = {PrimitiveType.CHARACTER, PrimitiveType.INTEGER, PrimitiveType.FLOATING};//, PrimitiveType.RATIONAL}
+	public static Type lowestCommonPromotion(List<Type> types) {
+		if(types.size() == 0) {
+			return PrimitiveType.ERROR;
+		}
+		else if(types.size() == 1) {
+			return types.get(0);
+		}
+
+		if(lCPHelper(types, PrimitiveType.INTEGER)) {
+			return PrimitiveType.INTEGER;
+		}
+
+		if(lCPHelper(types, PrimitiveType.FLOATING)) {
+			return PrimitiveType.FLOATING;
+		}
+
+//		if(lCPHelper(types, PrimitiveType.RATIONAL)) {
+//			return PrimitiveType.RATIONAL;
+//		}
+
+		return PrimitiveType.ERROR;
+	}
+
+	private static boolean lCPHelper(List<Type> types, Type promotionCandidate) {
+		for(Type t : types) {
+			if(!t.promotable(promotionCandidate)) {
+				return false;
+			}
+		}
+		return true;
+	}
 }

@@ -1,5 +1,3 @@
 exec {
-	var c := 5.
-	var d := ^a^.
-	var e := c + d.
+    var arr := [1, 2, 3, 4, ^a^, 6].
 }

@@ -1,19 +1,16 @@
 package semanticAnalyzer;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import lexicalAnalyzer.Keyword;
 import lexicalAnalyzer.Lextant;
-import lexicalAnalyzer.Punctuator;
 import logging.PikaLogger;
 import parseTree.ParseNode;
 import parseTree.ParseNodeVisitor;
 import parseTree.nodeTypes.*;
 import semanticAnalyzer.signatures.FunctionSignature;
 import semanticAnalyzer.signatures.FunctionSignatures;
+import semanticAnalyzer.types.ArrayType;
 import semanticAnalyzer.types.PrimitiveType;
 import semanticAnalyzer.types.Type;
 import symbolTable.Binding;
@@ -103,6 +100,44 @@ class SemanticAnalysisVisitor extends ParseNodeVisitor.Default {
 		}
 
 		node.setType(declarationType);
+	}
+
+	@Override
+	public void visitLeave(ArrayNode node) {
+		assert node.nChildren() > 0;
+		List<Type> foundTypes = findArrayTypes(node);
+
+		if(foundTypes.size() == 0) {
+			typeCheckError(node, foundTypes);
+			node.setType(PrimitiveType.ERROR);
+		}
+		else if(foundTypes.size() == 1) {
+			ArrayType arrayType = new ArrayType(foundTypes.get(0));
+			node.setType(arrayType);
+		}
+		else {
+			Type commonType = Type.lowestCommonPromotion(foundTypes);
+			ArrayType arrayType = new ArrayType(commonType);
+			try {
+				promote(node, commonType);
+				node.setType(arrayType);
+			}
+			catch(Exception e) {
+				typeCheckError(node, foundTypes);
+				node.setType(PrimitiveType.ERROR);
+			}
+
+		}
+
+	}
+	private List<Type> findArrayTypes(ParseNode node) {
+		List<Type> foundTypes = new ArrayList<>();
+		for(ParseNode c : node.getChildren()){
+			if(!foundTypes.contains(c.getType())) {
+				foundTypes.add(c.getType());
+			}
+		}
+		return foundTypes;
 	}
 
 
@@ -195,6 +230,14 @@ class SemanticAnalysisVisitor extends ParseNodeVisitor.Default {
 		for(int i=0; i<targetParams.length; i++) {
 			if(targetParams[i] != sourceParams.get(i)) {
 				promote(node, targetParams[i], i);
+				break;
+			}
+		}
+	}
+	private void promote(ParseNode node, Type homogenizedType) throws Exception{ //make all children same type
+		for(int i=0; i<node.nChildren(); i++) {
+			if(node.child(i).getType() != homogenizedType) {
+				promote(node, homogenizedType, i);
 				break;
 			}
 		}
