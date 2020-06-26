@@ -16,7 +16,7 @@ public class ArrayType implements Type {
 
     @Override
     public String infoString() {
-        return null;
+        return "a[" + subtype.toString() + "]";
     }
 
     public Type getSubtype() {
