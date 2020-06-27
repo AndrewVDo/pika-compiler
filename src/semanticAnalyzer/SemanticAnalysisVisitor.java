@@ -206,14 +206,11 @@ class SemanticAnalysisVisitor extends ParseNodeVisitor.Default {
 		}
 
 		FunctionSignature promotableMatch = findPromotableMatch(node, signatures, childTypes);
-		try {
+		if(promotableMatch != null) {
 			promote(node, promotableMatch.getParamTypes(), childTypes);
 			node.setType(promotableMatch.resultType());
 			node.setSignature(promotableMatch);
 			return;
-		}
-		catch (Exception e) {
-			e.printStackTrace();
 		}
 
 		typeCheckError(node, childTypes);
