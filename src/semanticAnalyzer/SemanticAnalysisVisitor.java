@@ -1,6 +1,7 @@
 package semanticAnalyzer;
 
 import java.util.*;
+import java.util.function.Function;
 
 import lexicalAnalyzer.Keyword;
 import lexicalAnalyzer.Lextant;
@@ -165,7 +166,7 @@ class SemanticAnalysisVisitor extends ParseNodeVisitor.Default {
 		Lextant operator = operatorFor(node);
 		FunctionSignatures signatures = FunctionSignatures.signaturesOf(operator);
 
-		FunctionSignature pureMatch = findPureMatch(node, signatures, innerType);
+		FunctionSignature pureMatch = findPureMatch(signatures, innerType);
 		if(pureMatch != null) {
 			node.setType(pureMatch.resultType());
 			node.setSignature(pureMatch);
@@ -198,7 +199,7 @@ class SemanticAnalysisVisitor extends ParseNodeVisitor.Default {
 		Lextant operator = operatorFor(node);
 		FunctionSignatures signatures = FunctionSignatures.signaturesOf(operator);
 
-		FunctionSignature pureMatch = findPureMatch(node, signatures, childTypes);
+		FunctionSignature pureMatch = findPureMatch(signatures, childTypes);
 		if(pureMatch != null) {
 			node.setType(pureMatch.resultType());
 			node.setSignature(pureMatch);
@@ -221,7 +222,7 @@ class SemanticAnalysisVisitor extends ParseNodeVisitor.Default {
 		return token.getLextant();
 	}
 
-	private FunctionSignature findPureMatch(ParseNode node, FunctionSignatures signatures, List<Type> paramSignature) {
+	private FunctionSignature findPureMatch(FunctionSignatures signatures, List<Type> paramSignature) {
 		FunctionSignature pureMatch = signatures.acceptingSignature(paramSignature);
 		if (pureMatch.accepts(paramSignature)) {//level 1
 			return pureMatch;
@@ -232,14 +233,25 @@ class SemanticAnalysisVisitor extends ParseNodeVisitor.Default {
 		for(int i=0; i<node.nChildren(); i++) {//level 2+3
 			List<FunctionSignature> promotableMatches = signatures.promotableSignatures(paramSignature, i);
 
+			if(promotableMatches.size() == 1) {
+				return promotableMatches.get(0);
+			}
+
 			if(promotableMatches.size() > 1) {
-				return promotableMatches.get(0);
-				//todo when we implement function sigs with fi -> i, if -> i kinda sigs, we'll implement this
+				List<Type> possibleParamTypes = new ArrayList<>();
+				for(FunctionSignature f : promotableMatches) {
+					possibleParamTypes.add(f.getParamTypes()[i]);
+				}
+				Type lowestCommonType = Type.lowestCommonPromotion(possibleParamTypes);
+
+				for(FunctionSignature f : promotableMatches) {
+					if(f.getParamTypes()[i] == lowestCommonType) {
+						return f;
+					}
+				}
+				return null;
 			}
-			else if(promotableMatches.size() == 1) {
-				return promotableMatches.get(0);
-			}
-			//move to next operand if there is one
+			//next operand
 		}
 		return null;
 	}
