@@ -121,24 +121,25 @@ class SemanticAnalysisVisitor extends ParseNodeVisitor.Default {
 		if(foundTypes.size() == 0) {
 			typeCheckError(node, foundTypes);
 			node.setType(PrimitiveType.ERROR);
+			return;
 		}
-		else if(foundTypes.size() == 1) {
+
+		if(foundTypes.size() == 1) {
 			ArrayType arrayType = new ArrayType(foundTypes.get(0));
 			node.setType(arrayType);
+			return;
 		}
-		else {
-			Type commonType = Type.lowestCommonPromotion(foundTypes);
-			ArrayType arrayType = new ArrayType(commonType);
-			try {
-				promote(node, commonType);
-				node.setType(arrayType);
-			}
-			catch(Exception e) {
-				typeCheckError(node, foundTypes);
-				node.setType(PrimitiveType.ERROR);
-			}
 
+		Type lowestCommonType = Type.lowestCommonPromotion(foundTypes);
+
+		if(lowestCommonType == PrimitiveType.ERROR) {
+			typeCheckError(node, foundTypes);
+			node.setType(PrimitiveType.ERROR);
 		}
+
+		ArrayType arrayType = new ArrayType(lowestCommonType);
+		promote(node, lowestCommonType);
+		node.setType(arrayType);
 
 	}
 	private List<Type> findArrayTypes(ParseNode node) {
