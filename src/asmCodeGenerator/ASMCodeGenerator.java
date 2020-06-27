@@ -1,6 +1,8 @@
 package asmCodeGenerator;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import asmCodeGenerator.codeStorage.ASMCodeFragment;
@@ -317,11 +319,8 @@ public class ASMCodeGenerator {
 			newValueCode(node);
 			ASMCodeFragment innerCode = removeAddressCode(node.child(0));
 
-			code.add(Label, "here");
 			code.append(innerCode); //[base]
-			code.add(PushI, ArrayRecord.getLengthOffset()); //[base + lengthOffset]
-			code.add(Add); //[lengthAddress]
-			code.add(LoadI); //[record-length]
+			code.append(Record.getHeader(Record.ARRAY_LENGTH_OFFSET));
 
 		}
 
@@ -453,17 +452,21 @@ public class ASMCodeGenerator {
 		}
 
 		public void visitLeave(ArrayNode node) {
-			newAddressCode(node);
+			newValueCode(node);
 
 			Type type = ((ArrayType)node.getType()).getSubtype();
 			int length = node.nChildren();
-			ArrayRecord arrayRecord = new ArrayRecord(type, length);
 
-			code.append(arrayRecord.generateASM());
+			ASMCodeFragment what = code;
 
-			for(int i=0; i<node.nChildren(); i++) {
-				code.append(arrayRecord.setElement(i, removeValueCode(node.child(i))));
-			}
+			//			code.append(Record.createArrayRecord(type.getSize(), length, type.isReference()));
+			ASMCodeFragment initArrayCode = Record.createArrayRecord(type.getSize(), length, false);
+
+			code.append(initArrayCode);
+
+//			for(int i=0 ; i<length; i++) {
+//				Record.setElement(i, removeValueCode(node.child(i)));
+//			}
 
 		}
 
@@ -529,18 +532,6 @@ public class ASMCodeGenerator {
 			code.add(PushD, stringLabel);
 
 		}
-//		private String convertJavaToPikaString(String javaString) {
-//			String pikaString = javaString.substring(1, javaString.length()-1);
-//			pikaString += '\0';
-//
-//			for(int i = 0; i < pikaString.length()-1; i++) {
-//				if(pikaString.charAt(i) == '\\' && pikaString.charAt(i+1) == 'n') {
-//					pikaString = pikaString.substring(0, i) + '\n' + pikaString.substring(i+2, pikaString.length());
-//				}
-//			}
-//
-//			return pikaString;
-//		}
 		
 		public void visit(FloatingConstantNode node) {
 			newValueCode(node);
