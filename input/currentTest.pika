@@ -1,6 +1,9 @@
 exec {
-    var a := 5.
-    print a, _n_.
-    a := 10 + ^b^.
-    print a, _n_.
+    var id := 5.
+    print id, _n_.
+    (id) := 4.
+    print id, _n_.
+    ((id)) := 3.
+    print id, _n_.
+    ((a)) := 5.
 }

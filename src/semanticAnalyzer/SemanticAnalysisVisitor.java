@@ -75,31 +75,41 @@ class SemanticAnalysisVisitor extends ParseNodeVisitor.Default {
 	}
 	@Override
 	public void visitLeave(AssignmentStatementNode node) {
+		assert(node.nChildren() == 2);
+		List types = List.of(node.child(0).getType(), node.child(1).getType());
+
+		if(!(node.child(0) instanceof IdentifierNode)) {
+			typeCheckError(node, types);
+			node.setType(PrimitiveType.ERROR);
+			return;
+		}
+
 		IdentifierNode identifier = (IdentifierNode) node.child(0);
 		ParseNode expression = node.child(1);
 
-		// check identifier is not const
-		if(!identifier.getBinding().getIsVar()) {
-			assignToConstError(node);
-		}
-
-		Type declarationType = identifier.getType();
+		Type identifierType = identifier.getType();
 		Type expressionType = expression.getType();
 
-		// check to see if type of identifier is same as type of expression
-		if(!declarationType.equivalent(expressionType)) {
-			//check to see if promotable
-			if(!expressionType.promotable(identifier.getType())) {
-				typeCheckError(node, Arrays.asList(declarationType, expressionType));
-			}
-			try {
-				promote(node, declarationType, 1);
-			} catch (Exception e) {
-				typeCheckError(node, Arrays.asList(declarationType, expressionType));
-			}
+		checkConst(identifier);
+
+		if(identifierType.equivalent(expressionType)) {
+			node.setType(identifierType);
+			return;
 		}
 
-		node.setType(declarationType);
+		if(expressionType.promotable(identifierType)) {
+			promoteChild(node, identifierType, 1);
+			node.setType(identifierType);
+			return;
+		}
+
+		typeCheckError(node, Arrays.asList(identifierType, expressionType));
+		node.setType(PrimitiveType.ERROR);
+	}
+	private void checkConst(IdentifierNode node) {
+		if(!node.getBinding().getIsVar()) {
+			assignToConstError(node);
+		}
 	}
 
 	@Override
@@ -236,40 +246,40 @@ class SemanticAnalysisVisitor extends ParseNodeVisitor.Default {
 		}
 		return null;
 	}
-	private void promote(ParseNode node, Type[] targetParams, List<Type> sourceParams) throws Exception{ //find mismatch and promote
+	private void promote(ParseNode node, Type[] targetParams, List<Type> sourceParams) { //find mismatch and promote
 		assert(node.nChildren() == targetParams.length);
 		for(int i=0; i<targetParams.length; i++) {
 			if(targetParams[i] != sourceParams.get(i)) {
-				promote(node, targetParams[i], i);
+				promoteChild(node, targetParams[i], i);
 				break;
 			}
 		}
 	}
-	private void promote(ParseNode node, Type homogenizedType) throws Exception{ //make all children same type
+	private void promote(ParseNode node, Type homogenizedType) { //make all children same type
 		for(int i=0; i<node.nChildren(); i++) {
 			if(node.child(i).getType() != homogenizedType) {
-				promote(node, homogenizedType, i);
+				promoteChild(node, homogenizedType, i);
 				break;
 			}
 		}
 	}
-	private void promote(ParseNode node, Type identifierType, int child) throws Exception{ //promote by specific index
+	private void promoteChild(ParseNode node, Type identifierType, int child) { //promote by specific index
 		ParseNode innerExpression = node.child(child);
 		Token artificialCast = LextantToken.artificial(innerExpression.getToken(), getCast(identifierType));
 		node.replaceChild(node.child(child), CastExpressionNode.withChildren(artificialCast, innerExpression));
 		visitLeave((CastExpressionNode) node.child(child));
 	}
-	private Lextant getCast(Type type) throws Exception {
+	private Lextant getCast(Type type) {
 		if(type == PrimitiveType.INTEGER) {
 			return Keyword.INT;
 		}
-		if(type == PrimitiveType.FLOATING) {
+		else if(type == PrimitiveType.FLOATING) {
 			return Keyword.FLOAT;
 		}
-//		if(type == PrimitiveType.RATIONAL) {
+//		else if(type == PrimitiveType.RATIONAL) {
 //			return Keyword.RATIONAL;
 //		}
-		throw new Exception("getCast FAILURE");
+		return Keyword.NULL_KEYWORD;
 	}
 
 	@Override
