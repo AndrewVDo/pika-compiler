@@ -297,15 +297,17 @@ class SemanticAnalysisVisitor extends ParseNodeVisitor.Default {
 		ParseNode base = node.child(0);
 		ParseNode index = node.child(1);
 
-		if(!(base.getType() instanceof ArrayType)) {
-			node.setType(PrimitiveType.ERROR);
-		}
-
 		if(index.getType() != PrimitiveType.INTEGER) {
+			arrayIndexError(node);
 			node.setType(PrimitiveType.ERROR);
 		}
 
-		//todo function sig for indexing
+		if(!(base.getType() instanceof ArrayType)) {
+			arrayIndexError(node);
+			node.setType(PrimitiveType.ERROR);
+		}
+		Type arraySubtype = ((ArrayType) base.getType()).getSubtype();
+		node.setType(arraySubtype);
 	}
 	
 	@Override
@@ -385,7 +387,12 @@ class SemanticAnalysisVisitor extends ParseNodeVisitor.Default {
 	
 	///////////////////////////////////////////////////////////////////////////
 	// error logging/printing
-	
+
+	private void arrayIndexError(ParseNode node) {
+		Token token = node.getToken();
+
+		logError("Indexing incorrect types" + token.getLocation());
+	}
 	private void assignToConstError(ParseNode node) {
 		Token token = node.getToken();
 		
