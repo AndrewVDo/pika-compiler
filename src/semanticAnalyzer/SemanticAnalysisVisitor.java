@@ -135,6 +135,7 @@ class SemanticAnalysisVisitor extends ParseNodeVisitor.Default {
 		if(lowestCommonType == PrimitiveType.ERROR) {
 			typeCheckError(node, foundTypes);
 			node.setType(PrimitiveType.ERROR);
+			return;
 		}
 
 		ArrayType arrayType = new ArrayType(lowestCommonType);
