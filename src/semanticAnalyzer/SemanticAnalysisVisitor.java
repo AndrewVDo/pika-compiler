@@ -158,7 +158,7 @@ class SemanticAnalysisVisitor extends ParseNodeVisitor.Default {
 	// expressions
 	@Override
 	public void visitLeave(UnaryOperatorNode node) {
-		assert node.nChildren() == 1;
+		assert(node.nChildren() == 1);
 		ParseNode innerExpression = node.child(0);
 		List<Type> innerType = Arrays.asList(innerExpression.getType());
 
@@ -173,14 +173,11 @@ class SemanticAnalysisVisitor extends ParseNodeVisitor.Default {
 		}
 
 		FunctionSignature promotableMatch = findPromotableMatch(node, signatures, innerType);
-		try {
+		if(promotableMatch != null) {
 			promote(node, promotableMatch.getParamTypes(), innerType);
 			node.setType(promotableMatch.resultType());
 			node.setSignature(promotableMatch);
 			return;
-		}
-		catch (Exception e) {
-			e.printStackTrace();
 		}
 
 		typeCheckError(node, innerType);
