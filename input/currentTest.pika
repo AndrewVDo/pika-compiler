@@ -1,4 +1,6 @@
 exec {
-    var arr := [1, 2, 3, 4, 5].
-    print length arr.
+    var a := 5.
+    print a, _n_.
+    a := 10 + ^b^.
+    print a, _n_.
 }
