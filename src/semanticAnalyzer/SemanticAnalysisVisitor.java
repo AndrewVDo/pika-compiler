@@ -140,7 +140,7 @@ class SemanticAnalysisVisitor extends ParseNodeVisitor.Default {
 		}
 
 		ArrayType arrayType = new ArrayType(lowestCommonType);
-		promote(node, lowestCommonType);
+		arrayPromote(node, lowestCommonType);
 		node.setType(arrayType);
 
 	}
@@ -175,7 +175,7 @@ class SemanticAnalysisVisitor extends ParseNodeVisitor.Default {
 
 		FunctionSignature promotableMatch = findPromotableMatch(node, signatures, innerType);
 		if(promotableMatch != null) {
-			promote(node, promotableMatch.getParamTypes(), innerType);
+			signaturePromote(node, promotableMatch.getParamTypes(), innerType);
 			node.setType(promotableMatch.resultType());
 			node.setSignature(promotableMatch);
 			return;
@@ -208,7 +208,7 @@ class SemanticAnalysisVisitor extends ParseNodeVisitor.Default {
 
 		FunctionSignature promotableMatch = findPromotableMatch(node, signatures, childTypes);
 		if(promotableMatch != null) {
-			promote(node, promotableMatch.getParamTypes(), childTypes);
+			signaturePromote(node, promotableMatch.getParamTypes(), childTypes);
 			node.setType(promotableMatch.resultType());
 			node.setSignature(promotableMatch);
 			return;
@@ -255,7 +255,7 @@ class SemanticAnalysisVisitor extends ParseNodeVisitor.Default {
 		}
 		return null;
 	}
-	private void promote(ParseNode node, Type[] targetParams, List<Type> sourceParams) { //find mismatch and promote
+	private void signaturePromote(ParseNode node, Type[] targetParams, List<Type> sourceParams) { //find mismatch and promote
 		assert(node.nChildren() == targetParams.length);
 		for(int i=0; i<targetParams.length; i++) {
 			if(targetParams[i] != sourceParams.get(i)) {
@@ -264,7 +264,7 @@ class SemanticAnalysisVisitor extends ParseNodeVisitor.Default {
 			}
 		}
 	}
-	private void promote(ParseNode node, Type homogenizedType) { //make all children same type
+	private void arrayPromote(ParseNode node, Type homogenizedType) { //make all children same type
 		for(int i=0; i<node.nChildren(); i++) {
 			if(node.child(i).getType() != homogenizedType) {
 				promoteChild(node, homogenizedType, i);
