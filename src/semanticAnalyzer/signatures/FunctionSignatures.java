@@ -160,10 +160,14 @@ public class FunctionSignatures extends ArrayList<FunctionSignature> {
 				new FunctionSignature(ASMOpcode.BNegate, PrimitiveType.BOOLEAN, PrimitiveType.BOOLEAN)
 		);
 
-		TypeVariable S = new TypeVariable("any");
+		TypeVariable S = new TypeVariable("no_type");
 		List<TypeVariable> SetS = Arrays.asList(S); // these get reset after each equiv check
 		new FunctionSignatures(Punctuator.ARRAY_INDEXING,
 				new FunctionSignature(1/*new ArrayIndexingCodeGenerator()*/, SetS, new ArrayType(S), PrimitiveType.INTEGER, S)
+		);
+
+		new FunctionSignatures(Keyword.LENGTH,
+				new FunctionSignature(1, SetS, new ArrayType(S), PrimitiveType.INTEGER)
 		);
 
 	}

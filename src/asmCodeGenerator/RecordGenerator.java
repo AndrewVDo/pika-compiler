@@ -2,7 +2,7 @@ package asmCodeGenerator;
 
 import semanticAnalyzer.types.Type;
 
-public class RecordGenerator {
+public abstract class RecordGenerator {
     protected int typeIdentifier;
 
     protected boolean isImmutable;
@@ -16,17 +16,19 @@ public class RecordGenerator {
     protected int generateStatus() {
         int status = 0;
         if(this.isImmutable) {
-            status += 1;
+            status = status | (1 << 0);
         }
         if(this.isReference) {
-            status += 2;
+            status = status | (1 << 1);
         }
         if(this.isDeleted) {
-            status += 4;
+            status = status | (1 << 2);
         }
         if(this.isPermanent) {
-            status += 8;
+            status = status | (1 << 3);
         }
         return status;
     }
+
+    protected abstract int generateHeaderSize();
 }

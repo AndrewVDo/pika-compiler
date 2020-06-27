@@ -1,5 +1,6 @@
 package parser;
 
+import java.security.Key;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -429,7 +430,7 @@ public class Parser {
 		return parseArrayIndexExpression();
 	}
 	private boolean isUnaryOperator(Token token) {
-		return token.isLextant(Punctuator.BOOLEAN_NOT);
+		return token.isLextant(Punctuator.BOOLEAN_NOT, Keyword.LENGTH);
 	}
 	private boolean startsUnaryExpression(Token token) {
 		return startsIndexExpression(token) || isUnaryOperator(token);

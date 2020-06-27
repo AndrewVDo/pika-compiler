@@ -151,23 +151,27 @@ class SemanticAnalysisVisitor extends ParseNodeVisitor.Default {
 
 		Lextant operator = operatorFor(node);
 		FunctionSignatures signatures = FunctionSignatures.signaturesOf(operator);
-		FunctionSignature signature = findMatch(node, signatures, innerType);
 
-		if(signature == null) {
-			typeCheckError(node, innerType);
-			node.setType(PrimitiveType.ERROR);
+		FunctionSignature pureMatch = findPureMatch(node, signatures, innerType);
+		if(pureMatch != null) {
+			node.setType(pureMatch.resultType());
+			node.setSignature(pureMatch);
+			return;
 		}
-		else {
-			node.setType(signature.resultType());
-			node.setSignature(signature);
-			try {
-				promote(node, signature.getParamTypes(), innerType); //promotes if needed
-			}
-			catch (Exception e) {
-				typeCheckError(node, innerType);
-				node.setType(PrimitiveType.ERROR);
-			}
+
+		FunctionSignature promotableMatch = findPromotableMatch(node, signatures, innerType);
+		try {
+			promote(node, promotableMatch.getParamTypes(), innerType);
+			node.setType(pureMatch.resultType());
+			node.setSignature(pureMatch);
+			return;
 		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		typeCheckError(node, innerType);
+		node.setType(PrimitiveType.ERROR);
 	}
 	private Lextant operatorFor(UnaryOperatorNode node) {
 		LextantToken token = (LextantToken) node.getToken();
@@ -183,34 +187,41 @@ class SemanticAnalysisVisitor extends ParseNodeVisitor.Default {
 		
 		Lextant operator = operatorFor(node);
 		FunctionSignatures signatures = FunctionSignatures.signaturesOf(operator);
-		FunctionSignature signature = findMatch(node, signatures, childTypes);
 
-		if(signature == null) {
-			typeCheckError(node, childTypes);
-			node.setType(PrimitiveType.ERROR);
+		FunctionSignature pureMatch = findPureMatch(node, signatures, childTypes);
+		if(pureMatch != null) {
+			node.setType(pureMatch.resultType());
+			node.setSignature(pureMatch);
+			return;
 		}
-		else {
-			node.setType(signature.resultType());
-			node.setSignature(signature);
-			try {
-				promote(node, signature.getParamTypes(), childTypes); //promotes if needed
-			}
-			catch (Exception e) {
-				typeCheckError(node, childTypes);
-				node.setType(PrimitiveType.ERROR);
-			}
+
+		FunctionSignature promotableMatch = findPromotableMatch(node, signatures, childTypes);
+		try {
+			promote(node, promotableMatch.getParamTypes(), childTypes);
+			node.setType(pureMatch.resultType());
+			node.setSignature(pureMatch);
+			return;
 		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		typeCheckError(node, childTypes);
+		node.setType(PrimitiveType.ERROR);
 	}
 	private Lextant operatorFor(BinaryOperatorNode node) {
 		LextantToken token = (LextantToken) node.getToken();
 		return token.getLextant();
 	}
 
-	private FunctionSignature findMatch(ParseNode node, FunctionSignatures signatures, List<Type> paramSignature){
+	private FunctionSignature findPureMatch(ParseNode node, FunctionSignatures signatures, List<Type> paramSignature) {
 		FunctionSignature pureMatch = signatures.acceptingSignature(paramSignature);
-		if(pureMatch.accepts(paramSignature)) {//level 1
+		if (pureMatch.accepts(paramSignature)) {//level 1
 			return pureMatch;
 		}
+		return null;
+	}
+	private FunctionSignature findPromotableMatch(ParseNode node, FunctionSignatures signatures, List<Type> paramSignature) {
 		for(int i=0; i<node.nChildren(); i++) {//level 2+3
 			List<FunctionSignature> promotableMatches = signatures.promotableSignatures(paramSignature, i);
 
@@ -265,8 +276,17 @@ class SemanticAnalysisVisitor extends ParseNodeVisitor.Default {
 	public void visitLeave(ArrayIndexNode node) {
 		assert node.nChildren() == 2;
 		ParseNode base = node.child(0);
-		ParseNode index = node.child(0);
-		//todo semantics for array indexing
+		ParseNode index = node.child(1);
+
+		if(!(base.getType() instanceof ArrayType)) {
+			node.setType(PrimitiveType.ERROR);
+		}
+
+		if(index.getType() != PrimitiveType.INTEGER) {
+			node.setType(PrimitiveType.ERROR);
+		}
+
+		//todo function sig for indexing
 	}
 	
 	@Override

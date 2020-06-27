@@ -6,7 +6,7 @@ public class ArrayType implements Type {
     private Type subtype;
 
     public ArrayType(Type type) {
-        this.subtype = type;
+        this.setSubtype(type);
     }
     public void setSubtype(Type subtype) {
         this.subtype = subtype;
