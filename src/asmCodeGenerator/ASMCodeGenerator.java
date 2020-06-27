@@ -40,7 +40,6 @@ public class ASMCodeGenerator {
 
 		code.append( RunTime.getEnvironment() );
 		code.append( globalVariableBlockASM() );
-		code.append( codeForInitialization() );
 		code.append( programASM() );
 		code.append( MemoryManager.codeForAfterApplication() );
 		
@@ -60,6 +59,7 @@ public class ASMCodeGenerator {
 		ASMCodeFragment code = new ASMCodeFragment(GENERATES_VOID);
 		
 		code.add(    Label, RunTime.MAIN_PROGRAM_LABEL);
+		code.append(MemoryManager.codeForInitialization());
 		code.append( programCode());
 		code.add(    Halt );
 		
@@ -184,21 +184,6 @@ public class ASMCodeGenerator {
 		public void visitLeave(PrintStatementNode node) {
 			newVoidCode(node);
 			new PrintStatementGenerator(code, this).generate(node);	
-		}
-		public void visit(NewlineNode node) {
-			newVoidCode(node);
-			code.add(PushD, RunTime.NEWLINE_PRINT_FORMAT);
-			code.add(Printf);
-		}
-		public void visit(TabNode node) {
-			newVoidCode(node);
-			code.add(PushD, RunTime.TAB_PRINT_FORMAT);
-			code.add(Printf);
-		}
-		public void visit(SpaceNode node) {
-			newVoidCode(node);
-			code.add(PushD, RunTime.SPACE_PRINT_FORMAT);
-			code.add(Printf);
 		}
 		
 
@@ -537,26 +522,25 @@ public class ASMCodeGenerator {
 
 			Labeller labeller = new Labeller("string");
 			String stringLabel = labeller.newLabel("store");
-			String pikaString = convertJavaToPikaString(node.getValue());
-			
+
 			//loader allocates string
 			code.add(DLabel, stringLabel);
-			code.add(DataS, pikaString);
+			code.add(DataS, node.getValue());
 			code.add(PushD, stringLabel);
 
 		}
-		private String convertJavaToPikaString(String javaString) {
-			String pikaString = javaString.substring(1, javaString.length()-1);
-			pikaString += '\0';
-			
-			for(int i = 0; i < pikaString.length()-1; i++) {
-				if(pikaString.charAt(i) == '\\' && pikaString.charAt(i+1) == 'n') {
-					pikaString = pikaString.substring(0, i) + '\n' + pikaString.substring(i+2, pikaString.length());
-				}
-			}
-			
-			return pikaString;
-		}
+//		private String convertJavaToPikaString(String javaString) {
+//			String pikaString = javaString.substring(1, javaString.length()-1);
+//			pikaString += '\0';
+//
+//			for(int i = 0; i < pikaString.length()-1; i++) {
+//				if(pikaString.charAt(i) == '\\' && pikaString.charAt(i+1) == 'n') {
+//					pikaString = pikaString.substring(0, i) + '\n' + pikaString.substring(i+2, pikaString.length());
+//				}
+//			}
+//
+//			return pikaString;
+//		}
 		
 		public void visit(FloatingConstantNode node) {
 			newValueCode(node);

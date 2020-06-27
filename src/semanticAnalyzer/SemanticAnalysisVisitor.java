@@ -341,15 +341,7 @@ class SemanticAnalysisVisitor extends ParseNodeVisitor.Default {
 	public void visit(FloatingConstantNode node) {
 		node.setType(PrimitiveType.FLOATING);
 	}
-	@Override
-	public void visit(NewlineNode node) {
-	}
-	@Override
-	public void visit(TabNode node) {
-	}
-	@Override
-	public void visit(SpaceNode node) {
-	}
+
 	///////////////////////////////////////////////////////////////////////////
 	// IdentifierNodes, with helper methods
 	@Override

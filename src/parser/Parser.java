@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import inputHandler.Locator;
 import logging.PikaLogger;
 import parseTree.*;
 import parseTree.nodeTypes.*;
@@ -221,12 +222,12 @@ public class Parser {
 		}
 		else if(nowReading.isLextant(Keyword.NEWLINE)) {
 			readToken();
-			ParseNode child = new NewlineNode(previouslyRead);
+			ParseNode child = new StringConstantNode(StringToken.make(previouslyRead, Keyword.NEWLINE.getLexeme(), "\n"));
 			parent.appendChild(child);
 		}
 		else if(nowReading.isLextant(Keyword.TAB)) {
 			readToken();
-			ParseNode child = new TabNode(previouslyRead);
+			ParseNode child = new StringConstantNode(StringToken.make(previouslyRead, Keyword.TAB.getLexeme(), "\t"));
 			parent.appendChild(child);
 		}
 		// else we interpret the printExpression as epsilon, and do nothing
@@ -248,7 +249,7 @@ public class Parser {
 		
 		if(nowReading.isLextant(Punctuator.SPACE)) {
 			readToken();
-			ParseNode child = new SpaceNode(previouslyRead);
+			ParseNode child = new StringConstantNode(StringToken.make(previouslyRead, Punctuator.SPACE.getLexeme(), " "));
 			parent.appendChild(child);
 		}
 		else if(nowReading.isLextant(Punctuator.SEPARATOR)) {
@@ -645,8 +646,8 @@ public class Parser {
 		readToken();
 		return errorNode;
 	}
-	private void syntaxError(Token token, String errorDescription) {
-		String message = "" + token.getLocation() + " " + errorDescription;
+	private void syntaxError(Locator locator, String errorDescription) {
+		String message = "" + locator.getLocation() + " " + errorDescription;
 		error(message);
 	}
 	private void error(String message) {
