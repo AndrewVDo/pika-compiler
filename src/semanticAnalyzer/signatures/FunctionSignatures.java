@@ -170,6 +170,11 @@ public class FunctionSignatures extends ArrayList<FunctionSignature> {
 				new FunctionSignature(1, SetS, new ArrayType(S), PrimitiveType.INTEGER)
 		);
 
+		//todo array operations
+		new FunctionSignatures(Punctuator.ARRAY_INDEXING,
+				new FunctionSignature(1, SetS, new ArrayType(S), PrimitiveType.INTEGER, S)
+		);
+
 	}
 
 }

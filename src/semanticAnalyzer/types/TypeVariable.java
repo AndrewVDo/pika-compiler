@@ -30,6 +30,12 @@ public class TypeVariable implements Type{
     public Type getConcreteType() {
         return getType().getConcreteType();
     }
+
+    @Override
+    public boolean isReference() {
+        return getType().isReference();
+    }
+
     @Override
     public boolean equivalent(Type valueType) {
         if(valueType instanceof TypeVariable) {

@@ -461,16 +461,14 @@ public class ASMCodeGenerator {
 				childValueCodes.add(removeValueCode(c));
 			}
 
-//			code.append(Record.createArrayRecord(type.getSize(), length, type.isReference()));
-			//todo make sure we store reference in type
-			code.append(Record.createArrayRecord(type.getSize(), length, false));
+			code.append(Record.createArrayRecord(type.getSize(), length, type.isReference()));
 			code.append(Record.initializeArray(childValueCodes));
 
 		}
 
 		public void visitLeave(ArrayIndexNode node) {
 			assert(node.nChildren() == 2);
-			newValueCode(node);
+			newValueCode(node); //todo should produce address instead of value
 
 			ASMCodeFragment arrayCode = removeValueCode(node.child(0));
 			ASMCodeFragment indexCode = removeValueCode(node.child(1));

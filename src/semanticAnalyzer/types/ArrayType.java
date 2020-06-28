@@ -28,6 +28,15 @@ public class ArrayType implements Type {
         Type concreteSubtype = subtype.getConcreteType();
         return new ArrayType(concreteSubtype);
     }
+
+    @Override
+    public boolean isReference() {
+        if(subtype instanceof ArrayType) {
+            return true;
+        }
+        return subtype.isReference();
+    }
+
     @Override
     public boolean equivalent(Type valueType) {
         if(valueType instanceof ArrayType) {

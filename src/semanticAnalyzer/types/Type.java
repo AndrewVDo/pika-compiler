@@ -18,6 +18,8 @@ public interface Type {
 	public String infoString();
 	public Type getConcreteType();
 
+	public boolean isReference();
+
 	public boolean equivalent(Type valueType);
 	public boolean promotable(Type valueType);
 
