@@ -1,4 +1,4 @@
 exec {
     var arr := [1, 2, 3, 4, 5].
-    var three := arr[2].
+    #var three := arr[2].
 }

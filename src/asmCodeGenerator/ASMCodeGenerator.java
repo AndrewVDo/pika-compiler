@@ -457,16 +457,15 @@ public class ASMCodeGenerator {
 			Type type = ((ArrayType)node.getType()).getSubtype();
 			int length = node.nChildren();
 
-			ASMCodeFragment what = code;
+			List<ASMCodeFragment> childValueCodes = new ArrayList<>();
+			for(ParseNode c : node.getChildren()) {
+				childValueCodes.add(removeValueCode(c));
+			}
 
-			//			code.append(Record.createArrayRecord(type.getSize(), length, type.isReference()));
-			ASMCodeFragment initArrayCode = Record.createArrayRecord(type.getSize(), length, false);
+//			code.append(Record.createArrayRecord(type.getSize(), length, type.isReference()));
 
-			code.append(initArrayCode);
-
-//			for(int i=0 ; i<length; i++) {
-//				Record.setElement(i, removeValueCode(node.child(i)));
-//			}
+			code.append(Record.createArrayRecord(type.getSize(), length, false));
+			code.append(Record.initializeArray(childValueCodes));
 
 		}
 
