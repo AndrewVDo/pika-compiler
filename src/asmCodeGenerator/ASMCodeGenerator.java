@@ -468,7 +468,7 @@ public class ASMCodeGenerator {
 
 		public void visitLeave(ArrayIndexNode node) {
 			assert(node.nChildren() == 2);
-			newValueCode(node); //todo should produce address instead of value
+			newAddressCode(node); //todo should produce address instead of value
 
 			ASMCodeFragment arrayCode = removeValueCode(node.child(0));
 			ASMCodeFragment indexCode = removeValueCode(node.child(1));

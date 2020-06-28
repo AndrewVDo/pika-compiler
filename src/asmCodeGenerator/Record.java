@@ -164,14 +164,14 @@ public class Record {
     public static ASMCodeFragment getElement(ASMCodeFragment indexCode) {
         //for array only
         //todo check index
-        ASMCodeFragment frag = new ASMCodeFragment(ASMCodeFragment.CodeType.GENERATES_VALUE);
+        ASMCodeFragment frag = new ASMCodeFragment(ASMCodeFragment.CodeType.GENERATES_ADDRESS);
         frag.append(getSubtypeSize());                                      // [... base] -> [... base subTypeSize]
         frag.append(indexCode);                                             // [... base subTypeSize index]
         frag.add(Multiply);                                                 // [... base indexOffset]
         frag.add(PushI, ARRAY_HEADER_SIZE);                                 // [... base indexOffset headerOffset]
         frag.add(Add);                                                      // [... base totalOffset]
         frag.add(Add);                                                      // [... indexedAddress]
-        frag.add(LoadI);
+        //frag.add(LoadI);
 
 //        frag.append(getSubtypeSize());                                      // [... indexedAddress subTypeSize]
 //        frag.add(PushI, 8);                                                  // [... indexedAddress subTypeSize 8]
