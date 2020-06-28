@@ -17,7 +17,7 @@ public class ArrayType implements Type {
 
     @Override
     public int getSize() {
-        return 0;
+        return 4;
     }
     @Override
     public String infoString() {
