@@ -193,7 +193,7 @@ public class ASMCodeGenerator {
 			newVoidCode(node);
 			ASMCodeFragment lvalue = removeAddressCode(node.child(0));	
 			ASMCodeFragment rvalue = removeValueCode(node.child(1));
-			
+
 			code.append(lvalue);
 			code.append(rvalue);
 			
@@ -316,12 +316,11 @@ public class ASMCodeGenerator {
 			}
 		}
 		private void visitLengthOperator(UnaryOperatorNode node) {
+			assert(node.nChildren() == 1);
 			newValueCode(node);
-			ASMCodeFragment innerCode = removeAddressCode(node.child(0));
 
-			code.append(innerCode); //[base]
-			code.append(Record.getHeader(Record.ARRAY_LENGTH_OFFSET));
-
+			code.append(removeValueCode(node.child(0)));
+			code.append(Record.getLength());
 		}
 
 		public void visitLeave(BinaryOperatorNode node) {
