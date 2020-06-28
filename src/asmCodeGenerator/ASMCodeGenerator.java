@@ -463,10 +463,21 @@ public class ASMCodeGenerator {
 			}
 
 //			code.append(Record.createArrayRecord(type.getSize(), length, type.isReference()));
-
+			//todo make sure we store reference in type
 			code.append(Record.createArrayRecord(type.getSize(), length, false));
 			code.append(Record.initializeArray(childValueCodes));
 
+		}
+
+		public void visitLeave(ArrayIndexNode node) {
+			assert(node.nChildren() == 2);
+			newValueCode(node);
+
+			ASMCodeFragment arrayCode = removeValueCode(node.child(0));
+			ASMCodeFragment indexCode = removeValueCode(node.child(1));
+
+			code.append(arrayCode);
+			code.append(Record.getElement(indexCode));
 		}
 
 		
