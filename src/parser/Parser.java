@@ -158,7 +158,12 @@ public class Parser {
 			return syntaxErrorNode("assignmentStatement");
 		}
 		
-		ParseNode target = parseTarget();
+		ParseNode target = parseExpression();
+
+		if(!(target instanceof IdentifierNode) && !(target instanceof ArrayIndexNode)) {
+			return syntaxErrorNode("non target lhs");
+		}
+
 		Token assignmentToken = nowReading;
 		expect(Punctuator.ASSIGN);
 		ParseNode expression = parseExpression();
@@ -168,19 +173,9 @@ public class Parser {
 	private boolean startsAssignmentStatement(Token token) {
 		return startsTarget(token);
 	}
-	private ParseNode parseTarget() {
-		if(!startsTarget(nowReading)) {
-			return syntaxErrorNode("target");
-		}
-
-		if(startsBracketedExpression(nowReading)) { //(target)
-			return parseBracketedExpression();
-		}
-		return parseIdentifier();//array index
-	}
 	// target -> identifier
 	private boolean startsTarget(Token token) {
-		return startsIdentifier(token) || startsBracketedExpression(token);//array index
+		return startsIdentifier(token) || startsBracketedExpression(token) || startsIndexExpression(token);
 	}
 	
 	// printStmt -> PRINT printExpressionList .

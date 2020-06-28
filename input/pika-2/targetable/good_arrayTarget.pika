@@ -1,6 +1,5 @@
 exec {
     var arr := [3, 2, 1].
-
     arr[1] := 10.
-    print arr[1], _n_.
+    print arr[0]; arr[1]; arr[2], _n_.
 }

@@ -80,13 +80,13 @@ class SemanticAnalysisVisitor extends ParseNodeVisitor.Default {
 		assert(node.nChildren() == 2);
 		List types = List.of(node.child(0).getType(), node.child(1).getType());
 
-		if(!(node.child(0) instanceof IdentifierNode)) {
+		if(!(node.child(0) instanceof IdentifierNode) && !(node.child(0) instanceof ArrayIndexNode)) {
 			typeCheckError(node, types);
 			node.setType(PrimitiveType.ERROR);
 			return;
 		}
 
-		IdentifierNode identifier = (IdentifierNode) node.child(0);
+		ParseNode identifier = node.child(0);
 		ParseNode expression = node.child(1);
 
 		Type identifierType = identifier.getType();
@@ -108,10 +108,19 @@ class SemanticAnalysisVisitor extends ParseNodeVisitor.Default {
 		typeCheckError(node, Arrays.asList(identifierType, expressionType));
 		node.setType(PrimitiveType.ERROR);
 	}
-	private void checkConst(IdentifierNode node) {
-		if(!node.getBinding().getIsVar()) {
-			assignToConstError(node);
+	private void checkConst(ParseNode node) {
+		if(node instanceof IdentifierNode) {
+			if(!((IdentifierNode)node).getBinding().getIsVar()) {
+				assignToConstError(node);
+				return;
+			}
 		}
+		if(node instanceof ArrayIndexNode) {//todo make strings const but arrys non const
+//			if(!((ArrayIndexNode)node).getBinding().getIsVar()) {
+//				assignToConstError(node);
+//			}
+		}
+
 	}
 
 	@Override
