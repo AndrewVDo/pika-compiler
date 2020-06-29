@@ -1,4 +1,9 @@
 exec {
     var arr := [1, 2, 3, 4, 5].
-    print length arr.
+
+    const arr2 := [3.1, 2.5, ^a^, 2].
+
+    var a := alloc [float] (320).
+
+    print length arr; length arr2; length a, _n_.
 }

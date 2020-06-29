@@ -294,7 +294,6 @@ public class Parser {
 		if(!startsExpression(nowReading)) {
 			return syntaxErrorNode("expression");
 		}
-		Token whatsNow = nowReading;
 		return parseBooleanOrExpression();
 	}
 	private boolean startsExpression(Token token) {

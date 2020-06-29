@@ -1,4 +1,16 @@
 exec {
     var arr := [1, 2, 3, 4, 5].
+    print arr[0]; arr[1]; arr[2]; arr[3]; arr[4], _n_.
     var three := arr[2].
+
+    print arr[0]; arr[1]; arr[2]; arr[3]; arr[4], _n_.
+    print three, _n_.
+
+    arr[2] := 10.
+    print arr[0]; arr[1]; arr[2]; arr[3]; arr[4], _n_.
+    print three, _n_.
+
+    var base := 1.
+    print arr[base- 1]; arr[(base)]; arr[[2.1 | int]]; arr[base+ 2]; arr[(12+ 4)/4], _n_.
+    print three, _n_.
 }

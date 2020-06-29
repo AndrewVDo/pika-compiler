@@ -1,6 +1,8 @@
 package asmCodeGenerator.runtime;
 import static asmCodeGenerator.codeStorage.ASMCodeFragment.CodeType.*;
 import static asmCodeGenerator.codeStorage.ASMOpcode.*;
+
+import asmCodeGenerator.Macros;
 import asmCodeGenerator.codeStorage.ASMCodeFragment;
 public class RunTime {
 	public static final String EAT_LOCATION_ZERO      = "$eat-location-zero";		// helps us distinguish null pointers from real ones.
@@ -23,12 +25,21 @@ public class RunTime {
 	public static final String INTEGER_DIVIDE_BY_ZERO_RUNTIME_ERROR = "$$i-divide-by-zero";
 	public static final String FLOATING_DIVIDE_BY_ZERO_RUNTIME_ERROR = "$$f-divide-by-zero";
 
+	public static final String ARRAY_BASE = "$array-base";
+	public static final String ARRAY_BASE2 = "$array-base-2";
+	public static final String ARRAY_LENGTH = "$array-record-length";
+	public static final String ARRAY_SUBTYPE_SIZE = "$array-record-subtype-size";
+
 	private ASMCodeFragment environmentASM() {
 		ASMCodeFragment result = new ASMCodeFragment(GENERATES_VOID);
 		result.append(jumpToMain());
 		result.append(stringsForPrintf());
 		result.append(runtimeErrors());
 		result.add(DLabel, USABLE_MEMORY_START);
+		Macros.declareI(result, ARRAY_BASE);
+		Macros.declareI(result, ARRAY_BASE2);
+		Macros.declareI(result, ARRAY_LENGTH);
+		Macros.declareI(result, ARRAY_SUBTYPE_SIZE);
 		return result;
 	}
 	

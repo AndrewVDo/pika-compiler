@@ -1,6 +1,9 @@
 package asmCodeGenerator;
 
 import static asmCodeGenerator.codeStorage.ASMOpcode.*;
+import static asmCodeGenerator.runtime.RunTime.ARRAY_BASE;
+import static asmCodeGenerator.runtime.RunTime.ARRAY_BASE2;
+
 import asmCodeGenerator.codeStorage.ASMCodeFragment;
 
 public class Macros {
@@ -42,6 +45,11 @@ public class Macros {
 		frag.add(Add);				// [base+off]
 		frag.add(LoadI);			// [*(base+off)]
 	}
+	public static void readFOffset(ASMCodeFragment frag, int offset) {
+		frag.add(PushI, offset);	// [base offset]
+		frag.add(Add);				// [base+off]
+		frag.add(LoadF);			// [*(base+off)]
+	}
 	/** [... baseLocation] -> [... charValue]
 	 * @param frag ASMCodeFragment to add code to
 	 * @param offset amount to add to the base location before reading
@@ -60,6 +68,12 @@ public class Macros {
 		frag.add(Add);				// [datum base+off]
 		frag.add(Exchange);			// [base+off datum]
 		frag.add(StoreI);			// []
+	}
+	public static void writeFOffset(ASMCodeFragment frag, int offset) {
+		frag.add(PushI, offset);	// [datum base offset]
+		frag.add(Add);				// [datum base+off]
+		frag.add(Exchange);			// [base+off datum]
+		frag.add(StoreF);			// []
 	}
 	
 	/** [... charToWrite baseLocation] -> [...]
@@ -101,5 +115,15 @@ public class Macros {
 		code.add(PushD, stringLabel);
 		code.add(Printf);
 		code.add(PStack);
+	}
+
+	public static void saveArrayBase(ASMCodeFragment code) {
+		Macros.loadIFrom(code, ARRAY_BASE);
+		Macros.storeITo(code, ARRAY_BASE2);
+		Macros.storeITo(code, ARRAY_BASE);
+	}
+	public static void restoreArrayBase(ASMCodeFragment code) {
+		Macros.loadIFrom(code, ARRAY_BASE2);
+		Macros.storeITo(code, ARRAY_BASE);
 	}
 }

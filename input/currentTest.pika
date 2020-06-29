@@ -1,3 +1,7 @@
 exec {
-    var x := alloc [int](5).
+    var arr := [1, 2, 3, 4, 5].
+    arr[2] := 10.
+
+    var base := 1.
+    print arr[base- 1]; arr[(base)]; arr[[2.1 | int]]; arr[base+ 2]; arr[(12+ 4)/4], _n_.
 }

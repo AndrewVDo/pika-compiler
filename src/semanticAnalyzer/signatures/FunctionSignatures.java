@@ -2,12 +2,8 @@ package semanticAnalyzer.signatures;
 
 import java.util.*;
 
+import asmCodeGenerator.*;
 import asmCodeGenerator.codeStorage.ASMOpcode;
-import asmCodeGenerator.IntegerDivideCodeGenerator;
-import asmCodeGenerator.CharToBoolCodeGenerator;
-import asmCodeGenerator.CharToIntCodeGenerator;
-import asmCodeGenerator.FloatingDivideCodeGenerator;
-import asmCodeGenerator.IntToCharCodeGenerator;
 import lexicalAnalyzer.Keyword;
 import lexicalAnalyzer.Punctuator;
 import semanticAnalyzer.types.ArrayType;
@@ -135,6 +131,7 @@ public class FunctionSignatures extends ArrayList<FunctionSignature> {
 		
 		new FunctionSignatures(PrimitiveType.FLOATING,
 				new FunctionSignature(ASMOpcode.ConvertF, PrimitiveType.INTEGER, PrimitiveType.FLOATING),
+				new FunctionSignature(new CharToFloatCodeGenerator(), PrimitiveType.CHARACTER, PrimitiveType.FLOATING),
 				new FunctionSignature(ASMOpcode.Nop, PrimitiveType.FLOATING, PrimitiveType.FLOATING)
 		);
 		
@@ -166,8 +163,7 @@ public class FunctionSignatures extends ArrayList<FunctionSignature> {
 		new FunctionSignatures(Keyword.LENGTH,
 				new FunctionSignature(1, SetS, new ArrayType(S), PrimitiveType.INTEGER)
 		);
-
-		//todo array operations
+		
 		new FunctionSignatures(Punctuator.ARRAY_INDEXING,
 				new FunctionSignature(1, SetS, new ArrayType(S), PrimitiveType.INTEGER, S)
 		);

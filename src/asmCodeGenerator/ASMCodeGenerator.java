@@ -454,7 +454,6 @@ public class ASMCodeGenerator {
 			newValueCode(node);
 			Type type = ((ArrayType)node.getType()).getSubtype();
 
-
 			if(node.nChildren() == 2 && node.child(0) instanceof TypeNode) {
 				ASMCodeFragment lengthCode = removeValueCode(node.child(1));
 				code.append(Record.allocateArrayRecord(type.getSize(), lengthCode, type.isReference()));
@@ -466,21 +465,20 @@ public class ASMCodeGenerator {
 			for(ParseNode c : node.getChildren()) {
 				childValueCodes.add(removeValueCode(c));
 			}
-
 			code.append(Record.createArrayRecord(type.getSize(), length, type.isReference()));
-			code.append(Record.initializeArray(childValueCodes));
-
+			code.append(Record.initializeArray(childValueCodes, type.getSize()));
+			//todo maybe rely on function sigs instead? can't get around generating code without arguments as of now
 		}
 
 		public void visitLeave(ArrayIndexNode node) {
 			assert(node.nChildren() == 2);
-			newAddressCode(node); //todo should produce address instead of value
+			newAddressCode(node);
 
 			ASMCodeFragment arrayCode = removeValueCode(node.child(0));
 			ASMCodeFragment indexCode = removeValueCode(node.child(1));
 
 			code.append(arrayCode);
-			code.append(Record.getElement(indexCode));
+			code.append(Record.getElement(indexCode));//todo function sig
 		}
 
 		

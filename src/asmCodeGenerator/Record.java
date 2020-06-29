@@ -1,12 +1,14 @@
 package asmCodeGenerator;
 
 import asmCodeGenerator.codeStorage.ASMCodeFragment;
+import asmCodeGenerator.codeStorage.ASMOpcode;
 
 import java.util.List;
 
 import static asmCodeGenerator.codeStorage.ASMOpcode.*;
 import static asmCodeGenerator.codeStorage.ASMOpcode.Exchange;
 import static asmCodeGenerator.runtime.MemoryManager.MEM_MANAGER_ALLOCATE;
+import static asmCodeGenerator.runtime.RunTime.*;
 
 public class Record {
     public static int STRING_HEADER_SIZE = 12;
@@ -30,11 +32,18 @@ public class Record {
         int arrayStatus = generateStatus(false, isReference, false, false);
 
         frag.append(lengthCode);
+        Macros.storeITo(frag, ARRAY_LENGTH);
+
         frag.add(PushI, subtypeSize);
+        Macros.storeITo(frag, ARRAY_SUBTYPE_SIZE);
+
+        Macros.loadIFrom(frag, ARRAY_LENGTH);
+        Macros.loadIFrom(frag, ARRAY_SUBTYPE_SIZE);
         frag.add(Multiply);
+
         frag.add(PushI, ARRAY_HEADER_SIZE);
         frag.add(Add);
-        frag.add(Call, MEM_MANAGER_ALLOCATE); // [memblock]
+        frag.add(Call, MEM_MANAGER_ALLOCATE);
 
         frag.append(setHeader(ARRAY_TYPE_IDENTIFIER, ARRAY_TYPE_IDENTIFIER_OFFSET));
         frag.append(setHeader(arrayStatus, ARRAY_STATUS_OFFSET));
@@ -44,7 +53,7 @@ public class Record {
         frag.add(Duplicate);
         frag.add(PushI, ARRAY_LENGTH_OFFSET);
         frag.add(Add);
-        frag.append(lengthCode);
+        Macros.loadIFrom(frag, ARRAY_LENGTH);
         frag.add(StoreI);
 
         //todo set to 0
@@ -183,16 +192,23 @@ public class Record {
 //        return frag;
 //    }
 
-    public static ASMCodeFragment getElement(ASMCodeFragment indexCode) {
+    public static ASMCodeFragment getElement(ASMCodeFragment indexCode) {//todo function sig
         //for array only
         //todo check index
+
         ASMCodeFragment frag = new ASMCodeFragment(ASMCodeFragment.CodeType.GENERATES_ADDRESS);
-        frag.append(getSubtypeSize());                                      // [... base] -> [... base subTypeSize]
-        frag.append(indexCode);                                             // [... base subTypeSize index]
-        frag.add(Multiply);                                                 // [... base indexOffset]
-        frag.add(PushI, ARRAY_HEADER_SIZE);                                 // [... base indexOffset headerOffset]
-        frag.add(Add);                                                      // [... base totalOffset]
+
+        Macros.saveArrayBase(frag);
+        Macros.loadIFrom(frag, ARRAY_BASE);                                 // [... base]
+
+        frag.append(getSubtypeSize());                                      // [... subTypeSize]
+        frag.append(indexCode);                                             // [... subTypeSize index]
+        frag.add(Multiply);                                                 // [... indexOffset]
+        frag.add(PushI, ARRAY_HEADER_SIZE);                                 // [... indexOffset headerOffset]
+        frag.add(Add);                                                      // [... totalOffset]
         frag.add(Add);                                                      // [... indexedAddress]
+
+        Macros.restoreArrayBase(frag);
 
         return frag;
     }
@@ -215,16 +231,26 @@ public class Record {
         return status;
     }
 
-    public static ASMCodeFragment initializeArray(List<ASMCodeFragment> valueCode) {
+    public static ASMCodeFragment initializeArray(List<ASMCodeFragment> valueCode, int subtypeSize) {
         ASMCodeFragment frag = new ASMCodeFragment(ASMCodeFragment.CodeType.GENERATES_VOID);
+        Macros.saveArrayBase(frag);
+        Macros.loadIFrom(frag, ARRAY_BASE);
+
+        frag.append(getSubtypeSize());
+        Macros.storeITo(frag, ARRAY_SUBTYPE_SIZE);
 
         for(int i=0; i<valueCode.size(); i++) {
             frag.add(Duplicate);                                                // [... base] -> [... base base]
             frag.append(valueCode.get(i));                                      // [base, base] -> [base, base, datum]
             frag.add(Exchange);                                                 // [base, base, datum] -> [base, datum, base]
-            Macros.writeIOffset(frag, ARRAY_HEADER_SIZE + 4 * i);         // [base] todo other sizes
+
+            int offset = ARRAY_HEADER_SIZE + subtypeSize * i;
+            if(subtypeSize == 8) Macros.writeFOffset(frag, offset);
+            else if(subtypeSize == 4) Macros.writeIOffset(frag, offset);
+            else Macros.writeIOffset(frag, offset);
         }
 
+        Macros.restoreArrayBase(frag);
         return frag;
     }
 }

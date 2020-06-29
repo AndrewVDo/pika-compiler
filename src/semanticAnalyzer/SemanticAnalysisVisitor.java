@@ -284,7 +284,6 @@ class SemanticAnalysisVisitor extends ParseNodeVisitor.Default {
 		for(int i=0; i<node.nChildren(); i++) {
 			if(node.child(i).getType() != homogenizedType) {
 				promoteChild(node, homogenizedType, i);
-				break;
 			}
 		}
 	}

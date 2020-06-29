@@ -25,7 +25,8 @@ public interface Type {
 
 	public static Map<PrimitiveType, PrimitiveType[]> promotable =  Map.of(
 			PrimitiveType.CHARACTER, new PrimitiveType[]{PrimitiveType.CHARACTER, PrimitiveType.INTEGER, PrimitiveType.FLOATING},
-			PrimitiveType.INTEGER, new PrimitiveType[]{PrimitiveType.INTEGER, PrimitiveType.FLOATING}
+			PrimitiveType.INTEGER, new PrimitiveType[]{PrimitiveType.INTEGER, PrimitiveType.FLOATING},
+			PrimitiveType.FLOATING, new PrimitiveType[]{PrimitiveType.FLOATING}
 			//PrimitiveType.RATIONAL
 	);
 
@@ -35,6 +36,10 @@ public interface Type {
 		}
 		else if(types.size() == 1) {
 			return types.get(0);
+		}
+
+		if(lCPHelper(types, PrimitiveType.CHARACTER)) {
+			return PrimitiveType.CHARACTER;
 		}
 
 		if(lCPHelper(types, PrimitiveType.INTEGER)) {
