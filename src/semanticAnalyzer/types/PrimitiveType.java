@@ -25,6 +25,7 @@ public enum PrimitiveType implements Type {
 	private PrimitiveType(int size, String infoString, boolean isReference) {
 		this.sizeInBytes = size;
 		this.infoString = infoString;
+		this.isReference = isReference;
 	}
 	public int getSize() {
 		return sizeInBytes;

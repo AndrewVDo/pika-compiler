@@ -31,10 +31,7 @@ public class ArrayType implements Type {
 
     @Override
     public boolean isReference() {
-        if(subtype instanceof ArrayType) {
-            return true;
-        }
-        return subtype.isReference();
+        return true;
     }
 
     @Override
