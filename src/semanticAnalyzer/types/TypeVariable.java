@@ -11,7 +11,7 @@ public class TypeVariable implements Type{
         this.typeConstraint = PrimitiveType.NO_TYPE;
     }
 
-    private void setType(PrimitiveType type) {
+    public void setType(PrimitiveType type) {
         this.typeConstraint = type;
     }
     public Type getType() {

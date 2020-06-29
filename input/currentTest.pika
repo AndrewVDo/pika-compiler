@@ -1,6 +1,5 @@
 exec {
-    var arr := [3, 2, 1].
+    #var x := alloc [int] (5).
 
-    arr[1] := 10.
-    print arr[1], _n_.
+    var x := [ 5.3 | int ].
 }

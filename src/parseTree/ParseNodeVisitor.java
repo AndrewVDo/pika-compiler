@@ -52,9 +52,10 @@ public interface ParseNodeVisitor {
 	void visit(IntegerConstantNode node);
 	void visit(StringConstantNode node);
 	void visit(FloatingConstantNode node);
+    void visit(TypeNode typeNode);
 
-	
-	public static class Default implements ParseNodeVisitor
+
+    public static class Default implements ParseNodeVisitor
 	{
 		public void defaultVisit(ParseNode node) {	}
 		public void defaultVisitEnter(ParseNode node) {
@@ -158,6 +159,7 @@ public interface ParseNodeVisitor {
 		public void visit(FloatingConstantNode node) {
 			defaultVisitForLeaf(node);
 		}
+		public void visit(TypeNode node) { defaultVisitForLeaf(node); }
 
 	}
 }

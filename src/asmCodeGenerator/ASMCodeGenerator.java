@@ -481,10 +481,10 @@ public class ASMCodeGenerator {
 		
 		public void visitLeave(CastExpressionNode node) {
 			newValueCode(node);
-			ASMCodeFragment innerExpression = removeValueCode(node.child(0));
-			Type oldType = node.child(0).getType();
-			Type newType = node.getType();
-			
+			ASMCodeFragment innerExpression = removeValueCode(node.child(1));
+			Type newType = node.getSignature().resultType();
+			Type oldType = node.child(1).getType();
+
 			code.append(innerExpression);
 			
 			Object variant = node.getSignature().getVariant();

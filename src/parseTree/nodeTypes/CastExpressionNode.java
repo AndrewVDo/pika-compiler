@@ -8,48 +8,25 @@ import tokens.LextantToken;
 import tokens.Token;
 
 public class CastExpressionNode extends ParseNode {
-	private FunctionSignature signature = FunctionSignature.nullInstance();
-
 	public CastExpressionNode(Token token) {
 		super(token);
 		assert(token instanceof LextantToken);
 	}
 
-	public CastExpressionNode(ParseNode node) {
-		super(node);
-	}
-	
-	
-	////////////////////////////////////////////////////////////
-	// attributes
-	
-	public Lextant getCastType() {
-		return lextantToken().getLextant();
-	}
-	public LextantToken lextantToken() {
-		return (LextantToken)token;
-	}	
-	
-	
-	////////////////////////////////////////////////////////////
-	// convenience factory
-	
-	public static CastExpressionNode withChildren(Token token, ParseNode innerExpression) {
+	public static CastExpressionNode withChildren(Token token, ParseNode type, ParseNode innerExpression) {
 		CastExpressionNode node = new CastExpressionNode(token);
+		node.appendChild(type);
 		node.appendChild(innerExpression);
 		return node;
 	}
-	
-	
-	///////////////////////////////////////////////////////////
-	// boilerplate for visitors
-			
+
 	public void accept(ParseNodeVisitor visitor) {
 		visitor.visitEnter(this);
 		visitChildren(visitor);
 		visitor.visitLeave(this);
 	}
-	
+
+	private FunctionSignature signature = FunctionSignature.nullInstance();
 	public final FunctionSignature getSignature() {
 		return signature;
 	}

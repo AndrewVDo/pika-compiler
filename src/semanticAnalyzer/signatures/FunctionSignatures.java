@@ -122,29 +122,29 @@ public class FunctionSignatures extends ArrayList<FunctionSignature> {
 			}
 		}
 		
-		new FunctionSignatures(Keyword.INT,
+		new FunctionSignatures(PrimitiveType.INTEGER,
 				new FunctionSignature(new CharToIntCodeGenerator(), PrimitiveType.CHARACTER, PrimitiveType.INTEGER),
 				new FunctionSignature(ASMOpcode.ConvertI, PrimitiveType.FLOATING, PrimitiveType.INTEGER),
 				new FunctionSignature(ASMOpcode.Nop, PrimitiveType.INTEGER, PrimitiveType.INTEGER)
 		);
 		
-		new FunctionSignatures(Keyword.CHAR,
+		new FunctionSignatures(PrimitiveType.CHARACTER,
 				new FunctionSignature(new IntToCharCodeGenerator(), PrimitiveType.INTEGER, PrimitiveType.CHARACTER),
 				new FunctionSignature(ASMOpcode.Nop, PrimitiveType.CHARACTER, PrimitiveType.CHARACTER)
 		);
 		
-		new FunctionSignatures(Keyword.FLOAT,
+		new FunctionSignatures(PrimitiveType.FLOATING,
 				new FunctionSignature(ASMOpcode.ConvertF, PrimitiveType.INTEGER, PrimitiveType.FLOATING),
 				new FunctionSignature(ASMOpcode.Nop, PrimitiveType.FLOATING, PrimitiveType.FLOATING)
 		);
 		
-		new FunctionSignatures(Keyword.BOOL,
+		new FunctionSignatures(PrimitiveType.BOOLEAN,
 				new FunctionSignature(new CharToBoolCodeGenerator(), PrimitiveType.CHARACTER, PrimitiveType.BOOLEAN),
 				new FunctionSignature(new CharToBoolCodeGenerator(), PrimitiveType.INTEGER, PrimitiveType.BOOLEAN),
 				new FunctionSignature(ASMOpcode.Nop, PrimitiveType.BOOLEAN, PrimitiveType.BOOLEAN)
 		);
 
-		new FunctionSignatures(Keyword.STRING,
+		new FunctionSignatures(PrimitiveType.STRING,
 				new FunctionSignature(ASMOpcode.Nop, PrimitiveType.STRING, PrimitiveType.STRING)
 		);
 

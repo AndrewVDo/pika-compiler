@@ -284,7 +284,7 @@ class SemanticAnalysisVisitor extends ParseNodeVisitor.Default {
 	private void promoteChild(ParseNode node, Type identifierType, int child) { //promote by specific index
 		ParseNode innerExpression = node.child(child);
 		Token artificialCast = LextantToken.artificial(innerExpression.getToken(), getCast(identifierType));
-		node.replaceChild(node.child(child), CastExpressionNode.withChildren(artificialCast, innerExpression));
+		//node.replaceChild(node.child(child), CastExpressionNode.withChildren(artificialCast, innerExpression)); todo
 		visitLeave((CastExpressionNode) node.child(child));
 	}
 	private Lextant getCast(Type type) {
@@ -321,12 +321,13 @@ class SemanticAnalysisVisitor extends ParseNodeVisitor.Default {
 	
 	@Override
 	public void visitLeave(CastExpressionNode node) {
-		assert node.nChildren() == 1;
-		ParseNode innerExpression = node.child(0);
+		assert node.nChildren() == 2;
+		ParseNode typeExpression = node.child(0);
+		ParseNode innerExpression = node.child(1);
+
 		List<Type> innerType = Arrays.asList(innerExpression.getType());
 		
-		Lextant newType = newTypeFor(node);
-		FunctionSignatures signatures = FunctionSignatures.signaturesOf(newType);
+		FunctionSignatures signatures = FunctionSignatures.signaturesOf(typeExpression.getType());
 		FunctionSignature signature = signatures.acceptingSignature(innerType);
 		
 		if(signature.accepts(innerType)) {
@@ -338,10 +339,6 @@ class SemanticAnalysisVisitor extends ParseNodeVisitor.Default {
 			node.setType(PrimitiveType.ERROR);
 		}
 		assert(true);
-	}
-	private Lextant newTypeFor(CastExpressionNode node) {
-		LextantToken token = (LextantToken) node.getToken();
-		return token.getLextant();
 	}
 
 
