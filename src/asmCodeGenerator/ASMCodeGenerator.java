@@ -452,10 +452,16 @@ public class ASMCodeGenerator {
 
 		public void visitLeave(ArrayNode node) {
 			newValueCode(node);
-
 			Type type = ((ArrayType)node.getType()).getSubtype();
-			int length = node.nChildren();
 
+
+			if(node.nChildren() == 2 && node.child(0) instanceof TypeNode) {
+				ASMCodeFragment lengthCode = removeValueCode(node.child(1));
+				code.append(Record.allocateArrayRecord(type.getSize(), lengthCode, type.isReference()));
+				return;
+			}
+
+			int length = node.nChildren();
 			List<ASMCodeFragment> childValueCodes = new ArrayList<>();
 			for(ParseNode c : node.getChildren()) {
 				childValueCodes.add(removeValueCode(c));

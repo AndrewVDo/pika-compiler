@@ -125,7 +125,12 @@ class SemanticAnalysisVisitor extends ParseNodeVisitor.Default {
 
 	@Override
 	public void visitLeave(ArrayNode node) {
-		assert node.nChildren() > 0;
+		assert(node.nChildren() > 0);
+		if(node.nChildren() == 2 && node.child(0) instanceof TypeNode) {
+			visitAlloc(node);
+			return;
+		}
+
 		List<Type> foundTypes = findArrayTypes(node);
 
 		if(foundTypes.size() == 0) {
@@ -161,6 +166,11 @@ class SemanticAnalysisVisitor extends ParseNodeVisitor.Default {
 			}
 		}
 		return foundTypes;
+	}
+	private void visitAlloc(ParseNode node) { //todo better refactor
+		TypeNode typeNode = (TypeNode) node.child(0);
+		ArrayType arrayType = new ArrayType(typeNode.getType());
+		node.setType(arrayType);
 	}
 
 
@@ -283,22 +293,10 @@ class SemanticAnalysisVisitor extends ParseNodeVisitor.Default {
 	}
 	private void promoteChild(ParseNode node, Type identifierType, int child) { //promote by specific index
 		ParseNode innerExpression = node.child(child);
-		Token artificialCast = LextantToken.artificial(innerExpression.getToken(), getCast(identifierType));
-		//node.replaceChild(node.child(child), CastExpressionNode.withChildren(artificialCast, innerExpression)); todo
+		node.replaceChild(node.child(child), CastExpressionNode.withChildren(identifierType, innerExpression));
 		visitLeave((CastExpressionNode) node.child(child));
 	}
-	private Lextant getCast(Type type) {
-		if(type == PrimitiveType.INTEGER) {
-			return Keyword.INT;
-		}
-		else if(type == PrimitiveType.FLOATING) {
-			return Keyword.FLOAT;
-		}
-//		else if(type == PrimitiveType.RATIONAL) {
-//			return Keyword.RATIONAL;
-//		}
-		return Keyword.NULL_KEYWORD;
-	}
+
 
 	@Override
 	public void visitLeave(ArrayIndexNode node) {

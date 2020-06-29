@@ -29,6 +29,32 @@ public class Record {
     public static int STRING_TYPE_IDENTIFIER = 6;
     public static int ARRAY_TYPE_IDENTIFIER = 7;
 
+    public static ASMCodeFragment allocateArrayRecord(int subtypeSize, ASMCodeFragment lengthCode, boolean isReference) {
+        ASMCodeFragment frag = new ASMCodeFragment(ASMCodeFragment.CodeType.GENERATES_VALUE);
+
+        int arrayStatus = generateStatus(false, isReference, false, false);
+
+        frag.append(lengthCode);
+        frag.add(PushI, subtypeSize);
+        frag.add(Multiply);
+        frag.add(PushI, ARRAY_HEADER_SIZE);
+        frag.add(Add);
+        frag.add(Call, MEM_MANAGER_ALLOCATE); // [memblock]
+
+        frag.append(setHeader(ARRAY_TYPE_IDENTIFIER, ARRAY_TYPE_IDENTIFIER_OFFSET));
+        frag.append(setHeader(arrayStatus, ARRAY_STATUS_OFFSET));
+        frag.append(setHeader(subtypeSize, ARRAY_SUBTYPE_SIZE_OFFSET));
+        //frag.append(setHeader(length, ARRAY_LENGTH_OFFSET));
+        frag.add(Duplicate);
+        frag.add(PushI, ARRAY_LENGTH_OFFSET);
+        frag.add(Add);
+        frag.append(lengthCode);
+        frag.add(StoreI);
+
+        //todo set to 0
+        return frag;
+    }
+
     public static ASMCodeFragment createArrayRecord(int subtypeSize, int length, boolean isReference) {
         ASMCodeFragment frag = new ASMCodeFragment(ASMCodeFragment.CodeType.GENERATES_VALUE);
 

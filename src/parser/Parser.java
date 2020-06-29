@@ -466,6 +466,7 @@ public class Parser {
 			return syntaxErrorNode("allocExpression");
 		}
 		Token allocToken = nowReading;
+		readToken();
 
 		expect(Punctuator.OPEN_BRACKET);
 		ParseNode type = parseType();
@@ -475,7 +476,7 @@ public class Parser {
 		ParseNode length = parseExpression();
 		expect(Punctuator.CLOSE_PARANTHESES);
 
-		return ArrayNode.withChildren(allocToken, type, length);
+		return ArrayNode.with(allocToken, type, length);
 	}
 	private ParseNode parseType() {
 		if(!startsType(nowReading)) {
