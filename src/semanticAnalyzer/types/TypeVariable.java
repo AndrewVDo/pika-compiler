@@ -10,6 +10,18 @@ public class TypeVariable implements Type{
         this.name = name;
         this.typeConstraint = PrimitiveType.NO_TYPE;
     }
+    public TypeVariable(Type type) {
+        this.name = type.infoString();
+        if(type instanceof TypeVariable) {//todo maybe use concrete type?
+            this.setType((PrimitiveType) ((TypeVariable) type).getType());
+        }
+        else if(type instanceof PrimitiveType){
+            this.setType((PrimitiveType) type);
+        }
+        else {
+            this.setType(PrimitiveType.ERROR);
+        }
+    }
 
     public void setType(PrimitiveType type) {
         this.typeConstraint = type;

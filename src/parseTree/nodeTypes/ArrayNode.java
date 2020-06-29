@@ -39,11 +39,11 @@ public class ArrayNode extends ParseNode {
     }
 
 
-//    private FunctionSignature signature = FunctionSignature.nullInstance();
-//    public final FunctionSignature getSignature() {
-//        return signature;
-//    }
-//    public final void setSignature(FunctionSignature signature) {
-//        this.signature = signature;
-//    }
+    private FunctionSignature signature = FunctionSignature.nullInstance();
+    public final FunctionSignature getSignature() {
+        return signature;
+    }
+    public final void setSignature(FunctionSignature signature) {
+        this.signature = signature;
+    }
 }

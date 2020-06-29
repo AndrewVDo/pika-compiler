@@ -9,11 +9,6 @@ import static asmCodeGenerator.codeStorage.ASMOpcode.Exchange;
 import static asmCodeGenerator.runtime.MemoryManager.MEM_MANAGER_ALLOCATE;
 
 public class Record {
-    public static int TYPE_IDENTIFIER_SIZE = 4;
-    public static int STATUS_SIZE = 4;
-    public static int SUBTYPE_SIZE = 4;
-    public static int LENGTH_SIZE = 4;
-
     public static int STRING_HEADER_SIZE = 12;
     public static int ARRAY_HEADER_SIZE = 16;
 
@@ -44,7 +39,8 @@ public class Record {
         frag.append(setHeader(ARRAY_TYPE_IDENTIFIER, ARRAY_TYPE_IDENTIFIER_OFFSET));
         frag.append(setHeader(arrayStatus, ARRAY_STATUS_OFFSET));
         frag.append(setHeader(subtypeSize, ARRAY_SUBTYPE_SIZE_OFFSET));
-        //frag.append(setHeader(length, ARRAY_LENGTH_OFFSET));
+
+        //set length
         frag.add(Duplicate);
         frag.add(PushI, ARRAY_LENGTH_OFFSET);
         frag.add(Add);
@@ -197,22 +193,6 @@ public class Record {
         frag.add(PushI, ARRAY_HEADER_SIZE);                                 // [... base indexOffset headerOffset]
         frag.add(Add);                                                      // [... base totalOffset]
         frag.add(Add);                                                      // [... indexedAddress]
-        //frag.add(LoadI);
-
-//        frag.append(getSubtypeSize());                                      // [... indexedAddress subTypeSize]
-//        frag.add(PushI, 8);                                                  // [... indexedAddress subTypeSize 8]
-//        frag.add(Subtract);                                                 // [... indexedAddress NOT(subType == 8)]
-//        frag.add(BNegate);                                                   // [... indexedAddress (subType == 8)]
-//
-//        frag.append(getSubtypeSize());                                      // [... indexedAddress subTypeSize]
-//        frag.add(PushI, 4);                                                     // [... indexedAddress subTypeSize 4]
-//        frag.add(Subtract);                                                 // [... indexedAddress NOT(subType == 4)]
-//        frag.add(BNegate);                                                   // [... indexedAddress (subType == 4)]
-//
-//        frag.append(getSubtypeSize());                                      // [... indexedAddress subTypeSize]
-//        frag.add(PushI, 1);                                                   // [... indexedAddress subTypeSize 1]
-//        frag.add(Subtract);                                                 // [... indexedAddress NOT(subType == 1)]
-//        frag.add(BNegate);                                                   // [... indexedAddress (subType == 1)]
 
         return frag;
     }
@@ -242,7 +222,7 @@ public class Record {
             frag.add(Duplicate);                                                // [... base] -> [... base base]
             frag.append(valueCode.get(i));                                      // [base, base] -> [base, base, datum]
             frag.add(Exchange);                                                 // [base, base, datum] -> [base, datum, base]
-            Macros.writeIOffset(frag, ARRAY_HEADER_SIZE + 4 * i);         // [base]
+            Macros.writeIOffset(frag, ARRAY_HEADER_SIZE + 4 * i);         // [base] todo other sizes
         }
 
         return frag;

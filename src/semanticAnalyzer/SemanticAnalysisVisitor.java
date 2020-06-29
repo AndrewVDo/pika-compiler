@@ -1,10 +1,12 @@
 package semanticAnalyzer;
 
+import java.security.Key;
 import java.util.*;
 import java.util.function.Function;
 
 import lexicalAnalyzer.Keyword;
 import lexicalAnalyzer.Lextant;
+import lexicalAnalyzer.Punctuator;
 import logging.PikaLogger;
 import parseTree.ParseNode;
 import parseTree.ParseNodeVisitor;
@@ -14,6 +16,7 @@ import semanticAnalyzer.signatures.FunctionSignatures;
 import semanticAnalyzer.types.ArrayType;
 import semanticAnalyzer.types.PrimitiveType;
 import semanticAnalyzer.types.Type;
+import semanticAnalyzer.types.TypeVariable;
 import symbolTable.Binding;
 import symbolTable.Scope;
 import tokens.LextantToken;
@@ -126,37 +129,36 @@ class SemanticAnalysisVisitor extends ParseNodeVisitor.Default {
 	@Override
 	public void visitLeave(ArrayNode node) {
 		assert(node.nChildren() > 0);
+
+		List<Type> types;
+
 		if(node.nChildren() == 2 && node.child(0) instanceof TypeNode) {
-			visitAlloc(node);
-			return;
+			ParseNode typeNode = node.child(0);
+			ParseNode lengthNode = node.child(1);
+			types = List.of(typeNode.getType(), lengthNode.getType());
 		}
+		else {
+			Type subType = arrayInitFindType(node);
+			ArrayType arrayType = new ArrayType(subType);
+			arrayPromote(node, subType);
+			types = List.of(subType);
+		}//todo clone
 
+		FunctionSignatures signatures = FunctionSignatures.signaturesOf(Punctuator.ARRAY_INIT);
+		FunctionSignature signature = signatures.acceptingSignature(types);
+		node.setSignature(signature);
+		node.setType(signature.resultType());
+	}
+	private Type arrayInitFindType(ParseNode node) {
 		List<Type> foundTypes = findArrayTypes(node);
-
 		if(foundTypes.size() == 0) {
 			typeCheckError(node, foundTypes);
-			node.setType(PrimitiveType.ERROR);
-			return;
+			return PrimitiveType.ERROR;
 		}
-
-		if(foundTypes.size() == 1) {
-			ArrayType arrayType = new ArrayType(foundTypes.get(0));
-			node.setType(arrayType);
-			return;
+		else if(foundTypes.size() == 1) {
+			return foundTypes.get(0);
 		}
-
-		Type lowestCommonType = Type.lowestCommonPromotion(foundTypes);
-
-		if(lowestCommonType == PrimitiveType.ERROR) {
-			typeCheckError(node, foundTypes);
-			node.setType(PrimitiveType.ERROR);
-			return;
-		}
-
-		ArrayType arrayType = new ArrayType(lowestCommonType);
-		arrayPromote(node, lowestCommonType);
-		node.setType(arrayType);
-
+		return Type.lowestCommonPromotion(foundTypes);
 	}
 	private List<Type> findArrayTypes(ParseNode node) {
 		List<Type> foundTypes = new ArrayList<>();
@@ -166,11 +168,6 @@ class SemanticAnalysisVisitor extends ParseNodeVisitor.Default {
 			}
 		}
 		return foundTypes;
-	}
-	private void visitAlloc(ParseNode node) { //todo better refactor
-		TypeNode typeNode = (TypeNode) node.child(0);
-		ArrayType arrayType = new ArrayType(typeNode.getType());
-		node.setType(arrayType);
 	}
 
 

@@ -162,9 +162,6 @@ public class FunctionSignatures extends ArrayList<FunctionSignature> {
 
 		TypeVariable S = new TypeVariable("no_type");
 		List<TypeVariable> SetS = Arrays.asList(S); // these get reset after each equiv check
-		new FunctionSignatures(Punctuator.ARRAY_INDEXING,
-				new FunctionSignature(1/*new ArrayIndexingCodeGenerator()*/, SetS, new ArrayType(S), PrimitiveType.INTEGER, S)
-		);
 
 		new FunctionSignatures(Keyword.LENGTH,
 				new FunctionSignature(1, SetS, new ArrayType(S), PrimitiveType.INTEGER)
@@ -174,6 +171,14 @@ public class FunctionSignatures extends ArrayList<FunctionSignature> {
 		new FunctionSignatures(Punctuator.ARRAY_INDEXING,
 				new FunctionSignature(1, SetS, new ArrayType(S), PrimitiveType.INTEGER, S)
 		);
+
+		new FunctionSignatures(Punctuator.ARRAY_INIT,
+				new FunctionSignature(1, SetS, S, new ArrayType(S)),
+				new FunctionSignature(1, SetS, S, PrimitiveType.INTEGER, new ArrayType(S)),
+				new FunctionSignature(1, SetS, new ArrayType(S), new ArrayType(S))
+		);
+
+
 
 	}
 
