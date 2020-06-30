@@ -130,24 +130,18 @@ class SemanticAnalysisVisitor extends ParseNodeVisitor.Default {
 	public void visitLeave(ArrayNode node) {
 		assert(node.nChildren() > 0);
 
-		List<Type> types;
-
 		if(node.nChildren() == 2 && node.child(0) instanceof TypeNode) {
 			ParseNode typeNode = node.child(0);
-			ParseNode lengthNode = node.child(1);
-			types = List.of(typeNode.getType(), lengthNode.getType());
+			node.setType(new ArrayType(typeNode.getType()));
+			return;
 		}
-		else {
-			Type subType = arrayInitFindType(node);
-			ArrayType arrayType = new ArrayType(subType);
-			arrayPromote(node, subType);
-			types = List.of(subType);
-		}//todo clone
 
-		FunctionSignatures signatures = FunctionSignatures.signaturesOf(Punctuator.ARRAY_INIT);
-		FunctionSignature signature = signatures.acceptingSignature(types);
-		node.setSignature(signature);
-		node.setType(signature.resultType());
+		Type subType = arrayInitFindType(node);
+		if(!(subType instanceof ArrayType)) {
+			arrayPromote(node, subType);
+		}
+		node.setType(new ArrayType(subType));
+
 	}
 	private Type arrayInitFindType(ParseNode node) {
 		List<Type> foundTypes = findArrayTypes(node);
@@ -282,7 +276,8 @@ class SemanticAnalysisVisitor extends ParseNodeVisitor.Default {
 	}
 	private void arrayPromote(ParseNode node, Type homogenizedType) { //make all children same type
 		for(int i=0; i<node.nChildren(); i++) {
-			if(node.child(i).getType() != homogenizedType) {
+			Type type = node.child(i).getType();
+			if(!type.equivalent(homogenizedType) && !(type instanceof ArrayType)) {
 				promoteChild(node, homogenizedType, i);
 			}
 		}
@@ -308,6 +303,7 @@ class SemanticAnalysisVisitor extends ParseNodeVisitor.Default {
 		if(!(base.getType() instanceof ArrayType)) {
 			arrayIndexError(node);
 			node.setType(PrimitiveType.ERROR);
+			return;
 		}
 		Type arraySubtype = ((ArrayType) base.getType()).getSubtype();
 		node.setType(arraySubtype);
