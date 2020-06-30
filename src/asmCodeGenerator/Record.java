@@ -92,6 +92,12 @@ public class Record {
         String endLabel = l.newLabel("end");
         String loopBegin = l.newLabel("loop-begin");
         String loopEnd = l.newLabel("loop-end");
+        String notFloat = l.newLabel("not-float");
+        String notInt = l.newLabel("not-int");
+        String endIf = l.newLabel("end-if");
+        String notFloat2 = l.newLabel("not-float2");
+        String notInt2 = l.newLabel("not-int2");
+        String endIf2 = l.newLabel("end-if2");
 
         ASMCodeFragment frag = new ASMCodeFragment(ASMCodeFragment.CodeType.GENERATES_VALUE);
         Macros.saveArrayBase(frag);                             //[... prevBase]
@@ -110,19 +116,14 @@ public class Record {
         frag.add(Call, MEM_MANAGER_ALLOCATE);                   //[... prevBase newBase]
         Macros.storeITo(frag, ARRAY_CLONE);                     //[... prevBase]
 
-        Macros.loadIFrom(frag, ARRAY_CLONE);
         frag.append(setCloneHeader(ARRAY_TYPE_IDENTIFIER_OFFSET));
         frag.append(setCloneHeader(ARRAY_STATUS_OFFSET));
         frag.append(setCloneHeader(ARRAY_SUBTYPE_SIZE_OFFSET));
         frag.append(setCloneHeader(ARRAY_LENGTH_OFFSET));
 
-        frag.add(PushI, 0);                              //[... prevBase 0]
-        Macros.storeITo(frag, CLONE_INDEX);                     //[...prevBase]
-
-
-
-
-
+        frag.append(setCloneData(loopBegin, loopEnd, notFloat, notInt, endIf, notFloat2, notInt2, endIf2));
+        Macros.loadIFrom(frag, ARRAY_CLONE);
+        Macros.resultCodeRestoreArrayBase(frag);
 
         return frag;
     }
@@ -132,6 +133,83 @@ public class Record {
         frag.append(getHeader(offset));                     // [... cloneBase headerInfo]
         frag.add(Exchange);                                 // [... headerInfo cloneBase]
         Macros.writeIOffset(frag, offset);                  // [...]
+        return frag;
+    }
+    private static ASMCodeFragment setCloneData(String loopBegin, String loopEnd, String notFloat, String notInt, String endIf, String notFloat2, String notInt2, String endIf2) {
+        ASMCodeFragment frag = new ASMCodeFragment(ASMCodeFragment.CodeType.GENERATES_VOID);
+        frag.add(PushI, 0);                              //[... 0]
+        Macros.storeITo(frag, CLONE_INDEX);                     //[...]
+
+
+        frag.add(Label, loopBegin);
+        Macros.loadIFrom(frag, CLONE_INDEX);
+        Macros.loadIFrom(frag, ARRAY_LENGTH);
+        frag.add(Subtract);                                     //[... length-i]
+        frag.add(JumpFalse, loopEnd);
+
+            Macros.loadIFrom(frag, ARRAY_BASE);
+            frag.add(PushI, ARRAY_HEADER_SIZE);
+            Macros.loadIFrom(frag, CLONE_INDEX);
+            Macros.loadIFrom(frag, ARRAY_SUBTYPE_SIZE);
+            frag.add(Multiply);
+            frag.add(Add);
+            frag.add(Add);                                      //[... originalIndex]
+
+
+            frag.add(PushI, 8);
+            Macros.loadIFrom(frag, ARRAY_SUBTYPE_SIZE);
+            frag.add(Subtract);
+            frag.add(JumpPos, notFloat);
+            frag.add(LoadF);                                    //... Mem[originalIndex]
+            frag.add(Jump, endIf);
+
+            frag.add(Label, notFloat);
+            frag.add(PushI, 4);
+            Macros.loadIFrom(frag, ARRAY_SUBTYPE_SIZE);
+            frag.add(Subtract);
+            frag.add(JumpPos, notInt);
+            frag.add(LoadI);                                    //... Mem[originalIndex]
+            frag.add(Jump, endIf);
+
+            frag.add(Label, notInt);
+            frag.add(LoadC);                                    //... Mem[originalIndex]
+
+            frag.add(Label, endIf);
+
+            Macros.loadIFrom(frag, ARRAY_CLONE);
+            frag.add(PushI, ARRAY_HEADER_SIZE);
+            Macros.loadIFrom(frag, CLONE_INDEX);
+            Macros.loadIFrom(frag, ARRAY_SUBTYPE_SIZE);
+            frag.add(Multiply);
+            frag.add(Add);
+            frag.add(Add);                                      //[... Mem[originalIndex] cloneIndex]
+            frag.add(Exchange);
+
+            frag.add(PushI, 8);
+            Macros.loadIFrom(frag, ARRAY_SUBTYPE_SIZE);
+            frag.add(Subtract);
+            frag.add(JumpPos, notFloat2);
+            frag.add(StoreF);
+            frag.add(Jump, endIf2);
+
+            frag.add(Label, notFloat2);
+            frag.add(PushI, 4);
+            Macros.loadIFrom(frag, ARRAY_SUBTYPE_SIZE);
+            frag.add(Subtract);
+            frag.add(JumpPos, notInt2);
+            frag.add(StoreI);
+            frag.add(Jump, endIf2);
+
+            frag.add(Label, notInt2);
+            frag.add(StoreC);
+
+            frag.add(Label, endIf2);
+
+            Macros.incrementInteger(frag, CLONE_INDEX);
+
+        frag.add(Jump, loopBegin);
+        frag.add(Label, loopEnd);
+
         return frag;
     }
     public static ASMCodeFragment createStringRecord(int length) {//todo update for new stack principle
