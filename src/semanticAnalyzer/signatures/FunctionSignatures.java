@@ -163,6 +163,9 @@ public class FunctionSignatures extends ArrayList<FunctionSignature> {
 		new FunctionSignatures(Keyword.LENGTH,
 				new FunctionSignature(1, SetS, new ArrayType(S), PrimitiveType.INTEGER)
 		);
+		new FunctionSignatures(Keyword.CLONE,
+				new FunctionSignature(1, SetS, new ArrayType(S), new ArrayType(S))
+		);
 		
 		new FunctionSignatures(Punctuator.ARRAY_INDEXING,
 				new FunctionSignature(1, SetS, new ArrayType(S), PrimitiveType.INTEGER, S)

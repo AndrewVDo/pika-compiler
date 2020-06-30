@@ -23,7 +23,8 @@ public enum Keyword implements Lextant {
 	ELSE("else"),
 	WHILE("while"),
 	LENGTH("length"),
-	ALLOC("alloc");
+	ALLOC("alloc"),
+	CLONE("clone");
 
 	private String lexeme;
 	private Token prototype;

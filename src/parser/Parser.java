@@ -421,7 +421,7 @@ public class Parser {
 		return parseArrayIndexExpression();
 	}
 	private boolean isUnaryOperator(Token token) {
-		return token.isLextant(Punctuator.BOOLEAN_NOT, Keyword.LENGTH);
+		return token.isLextant(Punctuator.BOOLEAN_NOT, Keyword.LENGTH, Keyword.CLONE);
 	}
 	private boolean startsUnaryExpression(Token token) {
 		return startsIndexExpression(token) || isUnaryOperator(token);

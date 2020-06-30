@@ -298,6 +298,9 @@ public class ASMCodeGenerator {
 			else if(operator == Keyword.LENGTH) {
 				visitLengthOperator(node);
 			}
+			else if(operator == Keyword.CLONE) {
+				visitCloneOperator(node);
+			}
 		}
 
 		private void visitBooleanNotOperator(UnaryOperatorNode node) {
@@ -321,6 +324,13 @@ public class ASMCodeGenerator {
 
 			code.append(removeValueCode(node.child(0)));
 			code.append(Record.getLength());
+		}
+		private void visitCloneOperator(UnaryOperatorNode node) {
+			assert(node.nChildren() == 1);
+			newValueCode(node);
+
+			code.append(removeValueCode(node.child(0)));
+			code.append(Record.cloneRecord());
 		}
 
 		public void visitLeave(BinaryOperatorNode node) {
@@ -465,9 +475,7 @@ public class ASMCodeGenerator {
 			for(ParseNode c : node.getChildren()) {
 				childValueCodes.add(removeValueCode(c));
 			}
-			code.append(Record.createArrayRecord(type.getSize(), length, type.isReference()));
-			code.append(Record.initializeArray(childValueCodes, type.getSize()));
-			//todo maybe rely on function sigs instead? can't get around generating code without arguments as of now
+			code.append(Record.createArrayRecord(type.getSize(), length, type.isReference(), childValueCodes));
 		}
 
 		public void visitLeave(ArrayIndexNode node) {

@@ -2,7 +2,6 @@ package asmCodeGenerator;
 
 import static asmCodeGenerator.codeStorage.ASMOpcode.*;
 import static asmCodeGenerator.runtime.RunTime.ARRAY_BASE;
-import static asmCodeGenerator.runtime.RunTime.ARRAY_BASE2;
 
 import asmCodeGenerator.codeStorage.ASMCodeFragment;
 
@@ -118,12 +117,15 @@ public class Macros {
 	}
 
 	public static void saveArrayBase(ASMCodeFragment code) {
-		Macros.loadIFrom(code, ARRAY_BASE);
-		Macros.storeITo(code, ARRAY_BASE2);
-		Macros.storeITo(code, ARRAY_BASE);
+		Macros.loadIFrom(code, ARRAY_BASE); //[... nextArray prevArray]
+		code.add(Exchange);					//[... prevArray nextArray]
+		Macros.storeITo(code, ARRAY_BASE);	//[... prevArray]
 	}
-	public static void restoreArrayBase(ASMCodeFragment code) {
-		Macros.loadIFrom(code, ARRAY_BASE2);
-		Macros.storeITo(code, ARRAY_BASE);
+	public static void nullCodeRestoreArrayBase(ASMCodeFragment code) {
+		Macros.storeITo(code, ARRAY_BASE);	//[... prevArray] -> [...]
+	}
+	public static void resultCodeRestoreArrayBase(ASMCodeFragment code) {
+		code.add(Exchange);					//[... prevArray result] -> [... result prevArray]
+		Macros.storeITo(code, ARRAY_BASE);	//[... result]
 	}
 }

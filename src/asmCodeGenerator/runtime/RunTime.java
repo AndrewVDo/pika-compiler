@@ -24,11 +24,15 @@ public class RunTime {
 	public static final String GENERAL_RUNTIME_ERROR = "$$general-runtime-error";
 	public static final String INTEGER_DIVIDE_BY_ZERO_RUNTIME_ERROR = "$$i-divide-by-zero";
 	public static final String FLOATING_DIVIDE_BY_ZERO_RUNTIME_ERROR = "$$f-divide-by-zero";
+	public static final String ALLOC_NEGATIVE_SIZE_RUNTIME_ERROR = "$$alloc-negative-size";
+	public static final String INDEX_RUNTIME_ERROR = "$$index";
 
 	public static final String ARRAY_BASE = "$array-base";
-	public static final String ARRAY_BASE2 = "$array-base-2";
 	public static final String ARRAY_LENGTH = "$array-record-length";
 	public static final String ARRAY_SUBTYPE_SIZE = "$array-record-subtype-size";
+	public static final String ARRAY_CLONE = "$array-clone-base";
+	public static final String ARRAY_SIZE = "$array-record-size";
+	public static final String CLONE_INDEX = "$array-clone-index";
 
 	private ASMCodeFragment environmentASM() {
 		ASMCodeFragment result = new ASMCodeFragment(GENERATES_VOID);
@@ -37,9 +41,11 @@ public class RunTime {
 		result.append(runtimeErrors());
 		result.add(DLabel, USABLE_MEMORY_START);
 		Macros.declareI(result, ARRAY_BASE);
-		Macros.declareI(result, ARRAY_BASE2);
 		Macros.declareI(result, ARRAY_LENGTH);
 		Macros.declareI(result, ARRAY_SUBTYPE_SIZE);
+		Macros.declareI(result, ARRAY_CLONE);
+		Macros.declareI(result, ARRAY_SIZE);
+		Macros.declareI(result, CLONE_INDEX);
 		return result;
 	}
 	
@@ -83,6 +89,8 @@ public class RunTime {
 		generalRuntimeError(frag);
 		integerDivideByZeroError(frag);
 		floatingDivideByZeroError(frag);
+		allocNegativeSizeError(frag);
+		indexError(frag);
 		
 		return frag;
 	}
@@ -116,6 +124,26 @@ public class RunTime {
 		
 		frag.add(Label, FLOATING_DIVIDE_BY_ZERO_RUNTIME_ERROR);
 		frag.add(PushD, floatDivideByZeroMessage);
+		frag.add(Jump, GENERAL_RUNTIME_ERROR);
+	}
+	private void allocNegativeSizeError(ASMCodeFragment frag) {
+		String allocNegativeSize = "$errors-alloc-negative-size";
+
+		frag.add(DLabel, allocNegativeSize);
+		frag.add(DataS, "alloc negative size");
+
+		frag.add(Label, ALLOC_NEGATIVE_SIZE_RUNTIME_ERROR);
+		frag.add(PushD, allocNegativeSize);
+		frag.add(Jump, GENERAL_RUNTIME_ERROR);
+	}
+	private void indexError(ASMCodeFragment frag) {
+		String msg = "$errors-index";
+
+		frag.add(DLabel, msg);
+		frag.add(DataS, "out of bounds index");
+
+		frag.add(Label, INDEX_RUNTIME_ERROR);
+		frag.add(PushD, msg);
 		frag.add(Jump, GENERAL_RUNTIME_ERROR);
 	}
 	public static ASMCodeFragment getEnvironment() {
