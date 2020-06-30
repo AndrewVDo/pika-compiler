@@ -1,5 +1,5 @@
 exec {
-    var x := [1, 2, 3].
+    const x := [1, 2, 3].
     var y := x.
 
     print x[0]; x[1]; x[2], _n_.

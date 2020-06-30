@@ -1,17 +1,15 @@
 package asmCodeGenerator;
 
-import static asmCodeGenerator.codeStorage.ASMOpcode.Jump;
-import static asmCodeGenerator.codeStorage.ASMOpcode.JumpTrue;
-import static asmCodeGenerator.codeStorage.ASMOpcode.Label;
-import static asmCodeGenerator.codeStorage.ASMOpcode.Printf;
-import static asmCodeGenerator.codeStorage.ASMOpcode.PushD;
 import parseTree.ParseNode;
 import parseTree.nodeTypes.PrintStatementNode;
+import semanticAnalyzer.types.ArrayType;
 import semanticAnalyzer.types.PrimitiveType;
 import semanticAnalyzer.types.Type;
 import asmCodeGenerator.ASMCodeGenerator.CodeVisitor;
 import asmCodeGenerator.codeStorage.ASMCodeFragment;
 import asmCodeGenerator.runtime.RunTime;
+
+import static asmCodeGenerator.codeStorage.ASMOpcode.*;
 
 public class PrintStatementGenerator {
 	ASMCodeFragment code;
@@ -31,12 +29,22 @@ public class PrintStatementGenerator {
 	}
 
 	private void appendPrintCode(ParseNode node) {
+		if(node.getType() instanceof ArrayType) {
+			printArray(node);
+			return;
+		}
+
 		String format = printFormat(node.getType());
 
 		code.append(visitor.removeValueCode(node));
 		convertToStringIfBoolean(node);
 		code.add(PushD, format);
 		code.add(Printf);
+	}
+	private void printArray(ParseNode node) {
+		String format = printFormat(((ArrayType)node.getType()).getSubtype());
+		code.append(visitor.removeValueCode(node)); //[base]
+		code.append(Record.printCode(format));
 	}
 	private void convertToStringIfBoolean(ParseNode node) {
 		if(node.getType() != PrimitiveType.BOOLEAN) {

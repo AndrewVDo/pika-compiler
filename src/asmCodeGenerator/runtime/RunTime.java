@@ -16,6 +16,9 @@ public class RunTime {
 	public static final String SPACE_PRINT_FORMAT     = "$print-format-space";
 	public static final String BOOLEAN_TRUE_STRING    = "$boolean-true-string";
 	public static final String BOOLEAN_FALSE_STRING   = "$boolean-false-string";
+	public static final String OPEN_BRACKET_STRING    = "$open-bracket-string";
+	public static final String CLOSE_BRACKET_STRING   = "$close-bracket-string";
+	public static final String ARRAY_SEPERATION_STRING   = "$array-seperate-string";
 
 	public static final String GLOBAL_MEMORY_BLOCK    = "$global-memory-block";
 	public static final String USABLE_MEMORY_START    = "$usable-memory-start";
@@ -32,7 +35,7 @@ public class RunTime {
 	public static final String ARRAY_SUBTYPE_SIZE = "$array-record-subtype-size";
 	public static final String ARRAY_CLONE = "$array-clone-base";
 	public static final String ARRAY_SIZE = "$array-record-size";
-	public static final String CLONE_INDEX = "$array-clone-index";
+	public static final String INDEX = "$array-clone-index";
 
 	private ASMCodeFragment environmentASM() {
 		ASMCodeFragment result = new ASMCodeFragment(GENERATES_VOID);
@@ -45,7 +48,7 @@ public class RunTime {
 		Macros.declareI(result, ARRAY_SUBTYPE_SIZE);
 		Macros.declareI(result, ARRAY_CLONE);
 		Macros.declareI(result, ARRAY_SIZE);
-		Macros.declareI(result, CLONE_INDEX);
+		Macros.declareI(result, INDEX);
 		return result;
 	}
 	
@@ -79,6 +82,12 @@ public class RunTime {
 		frag.add(DataS, "true");
 		frag.add(DLabel, BOOLEAN_FALSE_STRING);
 		frag.add(DataS, "false");
+		frag.add(DLabel, OPEN_BRACKET_STRING);
+		frag.add(DataS, "[");
+		frag.add(DLabel, CLOSE_BRACKET_STRING);
+		frag.add(DataS, "]");
+		frag.add(DLabel, ARRAY_SEPERATION_STRING);
+		frag.add(DataS, ", ");
 		
 		return frag;
 	}

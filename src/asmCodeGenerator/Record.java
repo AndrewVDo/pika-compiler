@@ -1,6 +1,7 @@
 package asmCodeGenerator;
 
 import asmCodeGenerator.codeStorage.ASMCodeFragment;
+import asmCodeGenerator.runtime.RunTime;
 
 import java.util.List;
 
@@ -29,7 +30,6 @@ public class Record {
         int arrayStatus = generateStatus(false, isReference, false, false);
 
         ASMCodeFragment frag = new ASMCodeFragment(ASMCodeFragment.CodeType.GENERATES_VALUE);
-        //Macros.saveArrayBase(frag);                                                             //[... prevBase]
 
         frag.append(lengthCode);                                                                //[... prevBase length]
         Macros.storeITo(frag, ARRAY_LENGTH);                                                    //[... prevBase]
@@ -47,8 +47,7 @@ public class Record {
         frag.add(PushI, ARRAY_HEADER_SIZE);                                                     //[... prevBase contentsSize headerSize
         frag.add(Add);                                                                          //[... prevBase totalSize]
         frag.add(Call, MEM_MANAGER_ALLOCATE);                                                   //[... prevBase newBase]
-        //Macros.storeITo(frag, ARRAY_BASE);                                                      //[... prevBase]
-        Macros.saveArrayBase(frag);
+        Macros.saveArrayBase(frag);                                                             //[... prevBase]
 
         frag.append(setHeader(ARRAY_TYPE_IDENTIFIER, ARRAY_TYPE_IDENTIFIER_OFFSET));
         frag.append(setHeader(arrayStatus, ARRAY_STATUS_OFFSET));
@@ -68,12 +67,10 @@ public class Record {
         int arrayStatus = generateStatus(false, isReference, false, false);
 
         ASMCodeFragment frag = new ASMCodeFragment(ASMCodeFragment.CodeType.GENERATES_VALUE);
-        //Macros.saveArrayBase(frag);                                                             //[... prevBase]
 
         frag.add(PushI, length * subtypeSize + ARRAY_HEADER_SIZE);                      //[... prevBase allocateSize]
         frag.add(Call, MEM_MANAGER_ALLOCATE);                                                   //[... prevBase newBase]
-        //Macros.storeITo(frag, ARRAY_BASE);                                                      //[... prevBase]
-        Macros.saveArrayBase(frag);
+        Macros.saveArrayBase(frag);                                                             //[... prevBase]
 
         frag.append(setHeader(ARRAY_TYPE_IDENTIFIER, ARRAY_TYPE_IDENTIFIER_OFFSET));            //[... prevBase]
         frag.append(setHeader(arrayStatus, ARRAY_STATUS_OFFSET));                               //[... prevBase]
@@ -87,18 +84,6 @@ public class Record {
     }
 
     public static ASMCodeFragment cloneRecord() {
-        Labeller l = new Labeller("clone-record");
-        String stringLabel = l.newLabel("string-header");
-        String endLabel = l.newLabel("end");
-        String loopBegin = l.newLabel("loop-begin");
-        String loopEnd = l.newLabel("loop-end");
-        String notFloat = l.newLabel("not-float");
-        String notInt = l.newLabel("not-int");
-        String endIf = l.newLabel("end-if");
-        String notFloat2 = l.newLabel("not-float2");
-        String notInt2 = l.newLabel("not-int2");
-        String endIf2 = l.newLabel("end-if2");
-
         ASMCodeFragment frag = new ASMCodeFragment(ASMCodeFragment.CodeType.GENERATES_VALUE);
         Macros.saveArrayBase(frag);                             //[... prevBase]
 
@@ -121,7 +106,7 @@ public class Record {
         frag.append(setCloneHeader(ARRAY_SUBTYPE_SIZE_OFFSET));
         frag.append(setCloneHeader(ARRAY_LENGTH_OFFSET));
 
-        frag.append(setCloneData(loopBegin, loopEnd, notFloat, notInt, endIf, notFloat2, notInt2, endIf2));
+        frag.append(setCloneData());
         Macros.loadIFrom(frag, ARRAY_CLONE);
         Macros.resultCodeRestoreArrayBase(frag);
 
@@ -135,21 +120,31 @@ public class Record {
         Macros.writeIOffset(frag, offset);                  // [...]
         return frag;
     }
-    private static ASMCodeFragment setCloneData(String loopBegin, String loopEnd, String notFloat, String notInt, String endIf, String notFloat2, String notInt2, String endIf2) {
+    private static ASMCodeFragment setCloneData() {
+        Labeller l = new Labeller("clone-record");
+        String loopBegin = l.newLabel("loop-begin");
+        String loopEnd = l.newLabel("loop-end");
+        String notFloat = l.newLabel("not-float");
+        String notInt = l.newLabel("not-int");
+        String endIf = l.newLabel("end-if");
+        String notFloat2 = l.newLabel("not-float2");
+        String notInt2 = l.newLabel("not-int2");
+        String endIf2 = l.newLabel("end-if2");
+
         ASMCodeFragment frag = new ASMCodeFragment(ASMCodeFragment.CodeType.GENERATES_VOID);
         frag.add(PushI, 0);                              //[... 0]
-        Macros.storeITo(frag, CLONE_INDEX);                     //[...]
+        Macros.storeITo(frag, INDEX);                     //[...]
 
 
         frag.add(Label, loopBegin);
-        Macros.loadIFrom(frag, CLONE_INDEX);
+        Macros.loadIFrom(frag, INDEX);
         Macros.loadIFrom(frag, ARRAY_LENGTH);
         frag.add(Subtract);                                     //[... length-i]
         frag.add(JumpFalse, loopEnd);
 
             Macros.loadIFrom(frag, ARRAY_BASE);
             frag.add(PushI, ARRAY_HEADER_SIZE);
-            Macros.loadIFrom(frag, CLONE_INDEX);
+            Macros.loadIFrom(frag, INDEX);
             Macros.loadIFrom(frag, ARRAY_SUBTYPE_SIZE);
             frag.add(Multiply);
             frag.add(Add);
@@ -178,7 +173,7 @@ public class Record {
 
             Macros.loadIFrom(frag, ARRAY_CLONE);
             frag.add(PushI, ARRAY_HEADER_SIZE);
-            Macros.loadIFrom(frag, CLONE_INDEX);
+            Macros.loadIFrom(frag, INDEX);
             Macros.loadIFrom(frag, ARRAY_SUBTYPE_SIZE);
             frag.add(Multiply);
             frag.add(Add);
@@ -205,13 +200,97 @@ public class Record {
 
             frag.add(Label, endIf2);
 
-            Macros.incrementInteger(frag, CLONE_INDEX);
+            Macros.incrementInteger(frag, INDEX);
 
         frag.add(Jump, loopBegin);
         frag.add(Label, loopEnd);
 
         return frag;
     }
+    public static ASMCodeFragment printCode(String format) {
+        Labeller l = new Labeller("clone-record");
+        String loopBegin = l.newLabel("loop-begin");
+        String loopEnd = l.newLabel("loop-end");
+        String notFloat = l.newLabel("not-float");
+        String notInt = l.newLabel("not-int");
+        String endIf = l.newLabel("end-if");
+        String dontSeperate = l.newLabel("dont-seperate");
+
+        ASMCodeFragment frag = new ASMCodeFragment(ASMCodeFragment.CodeType.GENERATES_VOID);
+        Macros.saveArrayBase(frag);
+
+        frag.append(getHeader(ARRAY_LENGTH_OFFSET));
+        Macros.storeITo(frag, ARRAY_LENGTH);
+        frag.append(getHeader(ARRAY_SUBTYPE_SIZE_OFFSET));
+        Macros.storeITo(frag, ARRAY_SUBTYPE_SIZE);
+
+        frag.add(PushD, OPEN_BRACKET_STRING);
+        frag.add(PushD, STRING_PRINT_FORMAT);
+        frag.add(Printf);
+
+        frag.add(PushI, 0);                        //[... 0]
+        Macros.storeITo(frag, INDEX);                     //[...]
+
+        frag.add(Label, loopBegin);
+        Macros.loadIFrom(frag, INDEX);
+        Macros.loadIFrom(frag, ARRAY_LENGTH);
+        frag.add(Subtract);                                     //[... length-i]
+        frag.add(JumpFalse, loopEnd);
+
+            Macros.loadIFrom(frag, ARRAY_BASE);
+            frag.add(PushI, ARRAY_HEADER_SIZE);
+            Macros.loadIFrom(frag, INDEX);
+            Macros.loadIFrom(frag, ARRAY_SUBTYPE_SIZE);
+            frag.add(Multiply);
+            frag.add(Add);
+            frag.add(Add);                                      //[... originalIndex]
+
+            frag.add(PushI, 8);
+            Macros.loadIFrom(frag, ARRAY_SUBTYPE_SIZE);
+            frag.add(Subtract);
+            frag.add(JumpPos, notFloat);
+            frag.add(LoadF);                                    //... Mem[originalIndex]
+            frag.add(Jump, endIf);
+
+            frag.add(Label, notFloat);
+            frag.add(PushI, 4);
+            Macros.loadIFrom(frag, ARRAY_SUBTYPE_SIZE);
+            frag.add(Subtract);
+            frag.add(JumpPos, notInt);
+            frag.add(LoadI);                                    //... Mem[originalIndex]
+            frag.add(Jump, endIf);
+
+            frag.add(Label, notInt);
+            frag.add(LoadC);                                    //... Mem[originalIndex]
+
+            frag.add(Label, endIf);
+
+            frag.add(PushD, format);
+            frag.add(Printf);
+
+            Macros.incrementInteger(frag, INDEX);
+
+            Macros.loadIFrom(frag, INDEX);
+            Macros.loadIFrom(frag, ARRAY_LENGTH);
+            frag.add(Subtract);
+            frag.add(JumpFalse, dontSeperate);
+            frag.add(PushD, ARRAY_SEPERATION_STRING);
+            frag.add(PushD, STRING_PRINT_FORMAT);
+            frag.add(Printf);
+            frag.add(Label, dontSeperate);
+
+        frag.add(Jump, loopBegin);
+        frag.add(Label, loopEnd);
+
+        frag.add(PushD, CLOSE_BRACKET_STRING);
+        frag.add(PushD, STRING_PRINT_FORMAT);
+        frag.add(Printf);
+
+        Macros.nullCodeRestoreArrayBase(frag);
+
+        return frag;
+    }
+
     public static ASMCodeFragment createStringRecord(int length) {//todo update for new stack principle
         ASMCodeFragment frag = new ASMCodeFragment(ASMCodeFragment.CodeType.GENERATES_VALUE);
 
