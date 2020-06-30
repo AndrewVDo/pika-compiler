@@ -1,7 +1,9 @@
 package asmCodeGenerator.runtime;
+import static asmCodeGenerator.Record.ARRAY_HEADER_SIZE;
 import static asmCodeGenerator.codeStorage.ASMCodeFragment.CodeType.*;
 import static asmCodeGenerator.codeStorage.ASMOpcode.*;
 
+import asmCodeGenerator.Labeller;
 import asmCodeGenerator.Macros;
 import asmCodeGenerator.codeStorage.ASMCodeFragment;
 public class RunTime {
@@ -36,6 +38,9 @@ public class RunTime {
 	public static final String ARRAY_CLONE = "$array-clone-base";
 	public static final String ARRAY_SIZE = "$array-record-size";
 	public static final String INDEX = "$array-clone-index";
+	public static final String PRINT_ARRAY_FUNCTION = "$print-array-function";
+	public static final String PRINT_BASE = "$print-base";
+	public static final String PRINT_ARRAY_FORMAT = "$array-print-template";
 
 	private ASMCodeFragment environmentASM() {
 		ASMCodeFragment result = new ASMCodeFragment(GENERATES_VOID);
@@ -49,6 +54,7 @@ public class RunTime {
 		Macros.declareI(result, ARRAY_CLONE);
 		Macros.declareI(result, ARRAY_SIZE);
 		Macros.declareI(result, INDEX);
+		Macros.declareI(result, PRINT_ARRAY_FORMAT);
 		return result;
 	}
 	
@@ -154,6 +160,9 @@ public class RunTime {
 		frag.add(Label, INDEX_RUNTIME_ERROR);
 		frag.add(PushD, msg);
 		frag.add(Jump, GENERAL_RUNTIME_ERROR);
+	}
+	private void printArray(ASMCodeFragment frag) {
+		frag.append(Record.printCode)
 	}
 	public static ASMCodeFragment getEnvironment() {
 		RunTime rt = new RunTime();
