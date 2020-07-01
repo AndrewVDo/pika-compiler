@@ -30,9 +30,17 @@ public class Macros {
 		frag.add(Exchange);
 		frag.add(StoreI);
 	}
+	public static void declareC(ASMCodeFragment frag, String variableName) {
+		frag.add(DLabel, variableName);
+		frag.add(DataZ, 1);
+	}
 	public static void declareI(ASMCodeFragment frag, String variableName) {
 		frag.add(DLabel, variableName);
 		frag.add(DataZ, 4);
+	}
+	public static void declareF(ASMCodeFragment frag, String variableName) {
+		frag.add(DLabel, variableName);
+		frag.add(DataZ, 8);
 	}
 	
 	/** [... baseLocation] -> [... intValue]

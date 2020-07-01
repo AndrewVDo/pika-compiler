@@ -330,7 +330,7 @@ public class ASMCodeGenerator {
 			newValueCode(node);
 
 			code.append(removeValueCode(node.child(0)));
-			code.append(Record.cloneRecord());
+			code.add(Call, Record.RECORD_CLONE_FUNCTION);
 		}
 
 		public void visitLeave(BinaryOperatorNode node) {
