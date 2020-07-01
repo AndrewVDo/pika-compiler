@@ -1,9 +1,8 @@
 package asmCodeGenerator.runtime;
-import static asmCodeGenerator.Record.ARRAY_HEADER_SIZE;
+import static asmCodeGenerator.Record.*;
 import static asmCodeGenerator.codeStorage.ASMCodeFragment.CodeType.*;
 import static asmCodeGenerator.codeStorage.ASMOpcode.*;
 
-import asmCodeGenerator.Labeller;
 import asmCodeGenerator.Macros;
 import asmCodeGenerator.codeStorage.ASMCodeFragment;
 public class RunTime {
@@ -31,30 +30,18 @@ public class RunTime {
 	public static final String FLOATING_DIVIDE_BY_ZERO_RUNTIME_ERROR = "$$f-divide-by-zero";
 	public static final String ALLOC_NEGATIVE_SIZE_RUNTIME_ERROR = "$$alloc-negative-size";
 	public static final String INDEX_RUNTIME_ERROR = "$$index";
+	public static final String NULL_PTR_RUNTIME_ERROR = "$$null-ptr";
+	public static final String DELETED_RECORD_RUNTIME_ERROR = "$$deleted-record";
+	public static final String IMMUTABLE_RECORD_RUNTIME_ERROR = "$$deleted-record";
 
-	public static final String ARRAY_BASE = "$array-base";
-	public static final String ARRAY_LENGTH = "$array-record-length";
-	public static final String ARRAY_SUBTYPE_SIZE = "$array-record-subtype-size";
-	public static final String ARRAY_CLONE = "$array-clone-base";
-	public static final String ARRAY_SIZE = "$array-record-size";
-	public static final String INDEX = "$array-clone-index";
-	public static final String PRINT_ARRAY_FUNCTION = "$print-array-function";
-	public static final String PRINT_BASE = "$print-base";
-	public static final String PRINT_ARRAY_FORMAT = "$array-print-template";
 
 	private ASMCodeFragment environmentASM() {
 		ASMCodeFragment result = new ASMCodeFragment(GENERATES_VOID);
 		result.append(jumpToMain());
 		result.append(stringsForPrintf());
 		result.append(runtimeErrors());
+		recordFunctions(result);
 		result.add(DLabel, USABLE_MEMORY_START);
-		Macros.declareI(result, ARRAY_BASE);
-		Macros.declareI(result, ARRAY_LENGTH);
-		Macros.declareI(result, ARRAY_SUBTYPE_SIZE);
-		Macros.declareI(result, ARRAY_CLONE);
-		Macros.declareI(result, ARRAY_SIZE);
-		Macros.declareI(result, INDEX);
-		Macros.declareI(result, PRINT_ARRAY_FORMAT);
 		return result;
 	}
 	
@@ -161,11 +148,50 @@ public class RunTime {
 		frag.add(PushD, msg);
 		frag.add(Jump, GENERAL_RUNTIME_ERROR);
 	}
-	private void printArray(ASMCodeFragment frag) {
-		frag.append(Record.printCode)
+	private void nullPtrError(ASMCodeFragment frag) {
+		String msg = "$errors-null-ptr";
+
+		frag.add(DLabel, msg);
+		frag.add(DataS, "null ptr");
+
+		frag.add(Label, NULL_PTR_RUNTIME_ERROR);
+		frag.add(PushD, msg);
+		frag.add(Jump, NULL_PTR_RUNTIME_ERROR);
+	}
+	private void deletedRecordError(ASMCodeFragment frag) {
+		String msg = "$errors-deleted-record";
+
+		frag.add(DLabel, msg);
+		frag.add(DataS, "deleted record");
+
+		frag.add(Label, DELETED_RECORD_RUNTIME_ERROR);
+		frag.add(PushD, msg);
+		frag.add(Jump, DELETED_RECORD_RUNTIME_ERROR);
+	}
+	private void immutableRecordError(ASMCodeFragment frag) {
+		String msg = "$errors-immutable-record";
+
+		frag.add(DLabel, msg);
+		frag.add(DataS, "immutable record");
+
+		frag.add(Label, IMMUTABLE_RECORD_RUNTIME_ERROR);
+		frag.add(PushD, msg);
+		frag.add(Jump, IMMUTABLE_RECORD_RUNTIME_ERROR);
 	}
 	public static ASMCodeFragment getEnvironment() {
 		RunTime rt = new RunTime();
 		return rt.environmentASM();
+	}
+	private void recordFunctions(ASMCodeFragment frag) {
+		runtimeGetHeaderInfo(frag);
+		runtimeGetTypeId(frag);
+		runtimeGetStatus(frag);
+		runtimeStatusCheckers(frag);
+		runtimeGetSubtypeSize(frag);
+		runtimeGetLength(frag);
+		runtimeGetElement(frag);
+		runtimeSetElement(frag);
+		runtimeAllocateRecord(frag);
+		runtimeCloneRecord(frag);
 	}
 }

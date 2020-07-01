@@ -2,125 +2,72 @@ package asmCodeGenerator;
 
 import asmCodeGenerator.codeStorage.ASMCodeFragment;
 
-import java.util.List;
-
 import static asmCodeGenerator.codeStorage.ASMOpcode.*;
 import static asmCodeGenerator.codeStorage.ASMOpcode.Exchange;
 import static asmCodeGenerator.runtime.MemoryManager.MEM_MANAGER_ALLOCATE;
 import static asmCodeGenerator.runtime.RunTime.*;
 
 public class Record {
-    public final static int STRING_HEADER_SIZE = 12;
-    public final static int ARRAY_HEADER_SIZE = 16;
+    public final static int RECORD_HEADER_SIZE = 16;
 
-    public final static int ARRAY_TYPE_IDENTIFIER_OFFSET = 0;
-    public final static int ARRAY_STATUS_OFFSET = 4;
-    public final static int ARRAY_SUBTYPE_SIZE_OFFSET = 8;
-    public final static int ARRAY_LENGTH_OFFSET = 12;
-
-    public final static int STRING_TYPE_IDENTIFIER_OFFSET = 0;
-    public final static int STRING_STATUS_OFFSET = 4;
-    public final static int STRING_LENGTH_OFFSET = 8;
+    public final static int RECORD_TYPE_IDENTIFIER_OFFSET = 0;
+    public final static int RECORD_STATUS_OFFSET = 4;
+    public final static int RECORD_SUBTYPE_SIZE_OFFSET = 8;
+    public final static int RECORD_LENGTH_OFFSET = 12;
 
     public final static int STRING_TYPE_IDENTIFIER = 6;
     public final static int ARRAY_TYPE_IDENTIFIER = 7;
 
-    public static ASMCodeFragment allocateArrayRecord(int subtypeSize, ASMCodeFragment lengthCode, boolean isReference) {
-        int arrayStatus = generateStatus(false, isReference, false, false);
-
-        ASMCodeFragment frag = new ASMCodeFragment(ASMCodeFragment.CodeType.GENERATES_VALUE);
-
-            frag.append(lengthCode);
-            frag.add(PushI, subtypeSize);
-            frag.add(PushI, arrayStatus);
-            frag.add(PushI, ARRAY_TYPE_IDENTIFIER);     //[... length subtypeSize status typeid]
-            frag.add(Call, RECORD_ALLOCATE_FUNCTION);   //[... record]
-
-            return frag;
-    }
-
-    public static ASMCodeFragment createArrayRecord(int subtypeSize, int length, boolean isReference, List<ASMCodeFragment> childValueCodes) {
-        int arrayStatus = generateStatus(false, isReference, false, false);
-
-        ASMCodeFragment frag = new ASMCodeFragment(ASMCodeFragment.CodeType.GENERATES_VALUE);
-
-            frag.add(PushI, length);
-            frag.add(PushI, subtypeSize);
-            frag.add(PushI, arrayStatus);
-            frag.add(PushI, ARRAY_TYPE_IDENTIFIER);     //[... length subtypeSize status typeid]
-            frag.add(Call, RECORD_ALLOCATE_FUNCTION);   //[... record]
-
-            for(int i=0; i<childValueCodes.size(); i++) {
-                frag.add(Duplicate);                    //[... record record]
-                frag.append(childValueCodes.get(i));    //[... record record element]
-                frag.add(Exchange);                     //[... record element record]
-                frag.add(PushI);                        //[... record element record index]
-                frag.add(Call, RECORD_SET_ELEMENT);     //[... record]
-            }
-
-        return frag;
-    }
-
-
-
+    //todo get rid of these
     public static ASMCodeFragment printCode(String format) { //calls runtime print function
         ASMCodeFragment frag = new ASMCodeFragment(ASMCodeFragment.CodeType.GENERATES_VOID);
 
-        Macros.loadIFrom(frag, PRINT_BASE); //save base arg
-        frag.add(Exchange);
-        Macros.storeITo(frag, PRINT_BASE); //store base arg
-        Macros.loadIFrom(frag, PRINT_ARRAY_LENGTH); //save arguments
-        Macros.loadIFrom(frag, PRINT_ARRAY_SUBTYPE_SIZE);
-        Macros.loadIFrom(frag, PRINT_INDEX);
-        Macros.loadIFrom(frag, PRINT_ARRAY_FORMAT);
-
-        frag.append(getHeader(ARRAY_LENGTH_OFFSET));
-        Macros.storeITo(frag, PRINT_ARRAY_LENGTH);
-        frag.append(getHeader(ARRAY_SUBTYPE_SIZE_OFFSET));
-        Macros.storeITo(frag, PRINT_ARRAY_SUBTYPE_SIZE);
-        frag.add(PushI, 0);
-        Macros.storeITo(frag, PRINT_INDEX);             //all old arguments saved, new arguments in location
-        frag.add(PushD, format);
-        Macros.storeITo(frag, PRINT_ARRAY_FORMAT);
-
-        //[... oldBase oldLength oldSubsize oldIndex oldPrintFormat]
-        frag.add(Call, PRINT_ARRAY_FUNCTION); //does not alter stack
-
-        Macros.storeITo(frag, PRINT_ARRAY_FORMAT); //restore from stack
-        Macros.storeITo(frag, PRINT_INDEX);
-        Macros.storeITo(frag, PRINT_ARRAY_SUBTYPE_SIZE);
-        Macros.storeITo(frag, PRINT_ARRAY_LENGTH);
-        Macros.storeITo(frag, PRINT_BASE);
+//        Macros.loadIFrom(frag, PRINT_BASE); //save base arg
+//        frag.add(Exchange);
+//        Macros.storeITo(frag, PRINT_BASE); //store base arg
+//        Macros.loadIFrom(frag, PRINT_ARRAY_LENGTH); //save arguments
+//        Macros.loadIFrom(frag, PRINT_ARRAY_SUBTYPE_SIZE);
+//        Macros.loadIFrom(frag, PRINT_INDEX);
+//        Macros.loadIFrom(frag, PRINT_ARRAY_FORMAT);
+//
+//        frag.append(getHeader(RECORD_LENGTH_OFFSET));
+//        Macros.storeITo(frag, PRINT_ARRAY_LENGTH);
+//        frag.append(getHeader(RECORD_SUBTYPE_SIZE_OFFSET));
+//        Macros.storeITo(frag, PRINT_ARRAY_SUBTYPE_SIZE);
+//        frag.add(PushI, 0);
+//        Macros.storeITo(frag, PRINT_INDEX);             //all old arguments saved, new arguments in location
+//        frag.add(PushD, format);
+//        Macros.storeITo(frag, PRINT_ARRAY_FORMAT);
+//
+//        //[... oldBase oldLength oldSubsize oldIndex oldPrintFormat]
+//        frag.add(Call, PRINT_ARRAY_FUNCTION); //does not alter stack
+//
+//        Macros.storeITo(frag, PRINT_ARRAY_FORMAT); //restore from stack
+//        Macros.storeITo(frag, PRINT_INDEX);
+//        Macros.storeITo(frag, PRINT_ARRAY_SUBTYPE_SIZE);
+//        Macros.storeITo(frag, PRINT_ARRAY_LENGTH);
+//        Macros.storeITo(frag, PRINT_BASE);
 
         return frag;
     }
-
     public static ASMCodeFragment createStringRecord(int length) {//todo update for new stack principle
         ASMCodeFragment frag = new ASMCodeFragment(ASMCodeFragment.CodeType.GENERATES_VALUE);
 
-        int stringStatus = generateStatus(true, false, false, true);
-
-        frag.add(PushI, length * 1 + STRING_HEADER_SIZE);
-        frag.add(Call, MEM_MANAGER_ALLOCATE); // [memblock]
-
-        frag.append(setHeader(STRING_TYPE_IDENTIFIER, STRING_TYPE_IDENTIFIER_OFFSET));
-        frag.append(setHeader(stringStatus, STRING_STATUS_OFFSET));
-        frag.append(setHeader(length, STRING_LENGTH_OFFSET));
+//        int stringStatus = generateStatus(true, false, false, true);
+//
+//        frag.add(PushI, length * 1 + STRING_HEADER_SIZE);
+//        frag.add(Call, MEM_MANAGER_ALLOCATE); // [memblock]
+//
+//        frag.append(setHeader(STRING_TYPE_IDENTIFIER, STRING_TYPE_IDENTIFIER_OFFSET));
+//        frag.append(setHeader(stringStatus, STRING_STATUS_OFFSET));
+//        frag.append(setHeader(length, STRING_LENGTH_OFFSET));
 
         return frag;
     }
 
 
-    public static ASMCodeFragment getElement(ASMCodeFragment indexCode) {
-        ASMCodeFragment frag = new ASMCodeFragment(ASMCodeFragment.CodeType.GENERATES_ADDRESS);
-                                                // [... BASE]
-            frag.append(indexCode);             //[... BASE INDEX]
-            frag.add(Call, RECORD_GET_ELEMENT); //[... INDEXED_ADDRESS]
-        return frag;
-    }
 
-
-    private static int generateStatus(boolean isImmutable, boolean isReference, boolean isDeleted, boolean isPermanent) {
+    public static final int generateStatus(boolean isImmutable, boolean isReference, boolean isDeleted, boolean isPermanent) {
         int status = 0;
         if(isImmutable) {
             status = status | (1 << 0);
@@ -136,8 +83,6 @@ public class Record {
         }
         return status;
     }
-
-
     private static void checkNullPtrCode(ASMCodeFragment frag) {
         frag.add(Duplicate);
         frag.add(JumpFalse, NULL_PTR_RUNTIME_ERROR);
@@ -165,7 +110,7 @@ public class Record {
                 Macros.storeITo(frag, RECORD_GET_TYPE_ID + "-caller");
 
                 checkNullPtrCode(frag);
-                frag.add(PushI, ARRAY_TYPE_IDENTIFIER_OFFSET);                         //[... BASE_ADDRESS OFFSET]
+                frag.add(PushI, RECORD_TYPE_IDENTIFIER_OFFSET);                         //[... BASE_ADDRESS OFFSET]
                 frag.add(Call, RECORD_GET_HEADER_INFO_FUNCTION);    //[... INFO]
 
             Macros.loadIFrom(frag, RECORD_GET_TYPE_ID + "-caller");
@@ -178,7 +123,7 @@ public class Record {
                 Macros.storeITo(frag, RECORD_GET_STATUS + "-caller");
 
                 checkNullPtrCode(frag);
-                frag.add(PushI, ARRAY_STATUS_OFFSET);                         //[... BASE_ADDRESS OFFSET]
+                frag.add(PushI, RECORD_STATUS_OFFSET);                         //[... BASE_ADDRESS OFFSET]
                 frag.add(Call, RECORD_GET_HEADER_INFO_FUNCTION);    //[... INFO]
 
             Macros.loadIFrom(frag, RECORD_GET_STATUS + "-caller");
@@ -240,7 +185,7 @@ public class Record {
                 Macros.storeITo(frag, RECORD_GET_SUBTYPE_SIZE + "-caller");
 
                 checkNullPtrCode(frag);
-                frag.add(PushI, ARRAY_SUBTYPE_SIZE_OFFSET);         //[... BASE_ADDRESS OFFSET]
+                frag.add(PushI, RECORD_SUBTYPE_SIZE_OFFSET);         //[... BASE_ADDRESS OFFSET]
                 frag.add(Call, RECORD_GET_HEADER_INFO_FUNCTION);    //[... INFO]
 //                frag.add(Duplicate);                                //[... BASE_ADDRESS BASE_ADDRESS]
 //                frag.add(Call, RECORD_GET_TYPE_ID);                 //[... BASE_ADDRESS TYPE_ID]
@@ -265,7 +210,7 @@ public class Record {
                 Macros.storeITo(frag, RECORD_GET_LENGTH + "-caller");
 
                 checkNullPtrCode(frag);
-                frag.add(PushI, ARRAY_LENGTH_OFFSET);               //[... BASE_ADDRESS OFFSET]
+                frag.add(PushI, RECORD_LENGTH_OFFSET);               //[... BASE_ADDRESS OFFSET]
                 frag.add(Call, RECORD_GET_HEADER_INFO_FUNCTION);    //[... INFO]
 //                frag.add(Duplicate);                                //[... BASE_ADDRESS BASE_ADDRESS]
 //                frag.add(Call, RECORD_GET_TYPE_ID);         //[... BASE_ADDRESS TYPE_ID]
@@ -298,7 +243,7 @@ public class Record {
             //check deleted
             Macros.loadIFrom(frag, RECORD_GET_ELEMENT + "-base-var");
             frag.add(Call, RECORD_CHECK_DELETED);
-            frag.add(JumpTrue, DELETED_RUNTIME_ERROR);
+            frag.add(JumpTrue, DELETED_RECORD_RUNTIME_ERROR);
 
             Macros.loadIFrom(frag, RECORD_GET_ELEMENT + "-base-var");
             frag.add(Call, RECORD_GET_SUBTYPE_SIZE);
@@ -321,18 +266,19 @@ public class Record {
             frag.add(JumpPos, INDEX_RUNTIME_ERROR);
 
             //get header size
-            Macros.loadIFrom(frag, RECORD_GET_ELEMENT + "-base-var");
-            frag.add(Call, RECORD_GET_TYPE_ID);
-            frag.add(PushI, ARRAY_TYPE_IDENTIFIER);
-            frag.add(Subtract);
-            frag.add(JumpTrue, RECORD_GET_ELEMENT + "-not-array");
-                frag.add(PushI, ARRAY_LENGTH_OFFSET);
-            frag.add(Jump, RECORD_GET_ELEMENT + "-endif");
-            frag.add(Label, RECORD_GET_ELEMENT + "-not-array");
-                frag.add(PushI, STRING_LENGTH_OFFSET);
-            frag.add(Label, RECORD_GET_ELEMENT + "-endif");
+//            Macros.loadIFrom(frag, RECORD_GET_ELEMENT + "-base-var");
+//            frag.add(Call, RECORD_GET_TYPE_ID);
+//            frag.add(PushI, ARRAY_TYPE_IDENTIFIER);
+//            frag.add(Subtract);
+//            frag.add(JumpTrue, RECORD_GET_ELEMENT + "-not-array");
+//                frag.add(PushI, ARRAY_LENGTH_OFFSET);
+//            frag.add(Jump, RECORD_GET_ELEMENT + "-endif");
+//            frag.add(Label, RECORD_GET_ELEMENT + "-not-array");
+//                frag.add(PushI, STRING_LENGTH_OFFSET);
+//            frag.add(Label, RECORD_GET_ELEMENT + "-endif");
 
             //get other vars
+            frag.add(PushI, RECORD_LENGTH_OFFSET);
             Macros.loadIFrom(frag, RECORD_GET_ELEMENT + "-index-var");
             Macros.loadIFrom(frag, RECORD_GET_ELEMENT + "-subtype-var");
 
@@ -365,7 +311,7 @@ public class Record {
             //check immutable
             Macros.loadIFrom(frag, RECORD_SET_ELEMENT + "-base-var");
             frag.add(Call, RECORD_CHECK_IMMUTABLE);
-            frag.add(JumpPos, IMMUTABLE_RUNTIME_ERROR);
+            frag.add(JumpPos, IMMUTABLE_RECORD_RUNTIME_ERROR);
             //is deleted checked by getElement
 
             //get proper index address
@@ -384,7 +330,7 @@ public class Record {
 
             frag.add(Label, RECORD_SET_ELEMENT + "-not-float");
             frag.add(PushI, 4);
-            Macros.loadIFrom(frag, ARRAY_SUBTYPE_SIZE);
+            Macros.loadIFrom(frag, RECORD_SET_ELEMENT + "-subtype-var");
             frag.add(Subtract);
             frag.add(JumpPos, RECORD_SET_ELEMENT + "-not-int");
             frag.add(StoreI);
@@ -425,22 +371,22 @@ public class Record {
             //set typeid
             Macros.loadIFrom(frag, RECORD_ALLOCATE_FUNCTION + "-header-var");
             Macros.loadIFrom(frag, RECORD_ALLOCATE_FUNCTION + "-base-res");
-            Macros.writeIOffset(frag, ARRAY_TYPE_IDENTIFIER_OFFSET);
+            Macros.writeIOffset(frag, RECORD_TYPE_IDENTIFIER_OFFSET);
 
             //set status
             Macros.loadIFrom(frag, RECORD_ALLOCATE_FUNCTION + "-status-var");
             Macros.loadIFrom(frag, RECORD_ALLOCATE_FUNCTION + "-base-res");
-            Macros.writeIOffset(frag, ARRAY_STATUS_OFFSET);
+            Macros.writeIOffset(frag, RECORD_STATUS_OFFSET);
 
             //set subtype size
             Macros.loadIFrom(frag, RECORD_ALLOCATE_FUNCTION + "-subtype-var");
             Macros.loadIFrom(frag, RECORD_ALLOCATE_FUNCTION + "-base-res");
-            Macros.writeIOffset(frag, ARRAY_SUBTYPE_SIZE_OFFSET);
+            Macros.writeIOffset(frag, RECORD_SUBTYPE_SIZE_OFFSET);
 
             //set length size
             Macros.loadIFrom(frag, RECORD_ALLOCATE_FUNCTION + "-length-var");
             Macros.loadIFrom(frag, RECORD_ALLOCATE_FUNCTION + "-base-res");
-            Macros.writeIOffset(frag, ARRAY_LENGTH_OFFSET);
+            Macros.writeIOffset(frag, RECORD_LENGTH_OFFSET);
 
         Macros.loadIFrom(frag, RECORD_ALLOCATE_FUNCTION + "-base-res");
         Macros.loadIFrom(frag, RECORD_ALLOCATE_FUNCTION + "-caller");
@@ -527,4 +473,5 @@ public class Record {
         Macros.loadIFrom(frag, RECORD_CLONE_FUNCTION + "-clone-res");
         Macros.loadIFrom(frag, RECORD_CLONE_FUNCTION + "-caller");
     }
+    //todo printer function
 }

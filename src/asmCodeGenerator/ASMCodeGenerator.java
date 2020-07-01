@@ -323,7 +323,7 @@ public class ASMCodeGenerator {
 			newValueCode(node);
 
 			code.append(removeValueCode(node.child(0)));
-			code.append(Record.getLength());
+			code.add(Call, Record.RECORD_GET_LENGTH);
 		}
 		private void visitCloneOperator(UnaryOperatorNode node) {
 			assert(node.nChildren() == 1);
@@ -466,16 +466,27 @@ public class ASMCodeGenerator {
 
 			if(node.nChildren() == 2 && node.child(0) instanceof TypeNode) {
 				ASMCodeFragment lengthCode = removeValueCode(node.child(1));
-				code.append(Record.allocateArrayRecord(type.getSize(), lengthCode, type.isReference()));
+				code.append(lengthCode);
+				code.add(PushI, type.getSize());
+				code.add(PushI, Record.generateStatus(false, type.isReference(), false, false));
+				code.add(PushI, Record.ARRAY_TYPE_IDENTIFIER);     					//[... length subtypeSize status typeid]
+				code.add(Call, Record.RECORD_ALLOCATE_FUNCTION);   					//[... record]
 				return;
 			}
 
-			int length = node.nChildren();
-			List<ASMCodeFragment> childValueCodes = new ArrayList<>();
-			for(ParseNode c : node.getChildren()) {
-				childValueCodes.add(removeValueCode(c));
+			code.add(PushI, node.nChildren());
+			code.add(PushI, type.getSize());
+			code.add(PushI, Record.generateStatus(false, type.isReference(), false, false));
+			code.add(PushI, Record.ARRAY_TYPE_IDENTIFIER);     						//[... length subtypeSize status typeid]
+			code.add(Call, Record.RECORD_ALLOCATE_FUNCTION);   						//[... record]
+
+			for(int i=0; i<node.nChildren(); i++) {
+				code.add(Duplicate);                    		//[... record record]
+				code.append(removeValueCode(node.child(i)));    //[... record record element]
+				code.add(Exchange);                     		//[... record element record]
+				code.add(PushI, i);                        		//[... record element record index]
+				code.add(Call, Record.RECORD_SET_ELEMENT);     	//[... record]
 			}
-			code.append(Record.createArrayRecord(type.getSize(), length, type.isReference(), childValueCodes));
 		}
 
 		public void visitLeave(ArrayIndexNode node) {
@@ -486,7 +497,8 @@ public class ASMCodeGenerator {
 			ASMCodeFragment indexCode = removeValueCode(node.child(1));
 
 			code.append(arrayCode);
-			code.append(Record.getElement(indexCode));//todo function sig
+			code.append(indexCode);             		//[... BASE INDEX]
+			code.add(Call, Record.RECORD_GET_ELEMENT); 	//[... INDEXED_ADDRESS]
 		}
 
 		
