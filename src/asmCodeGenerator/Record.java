@@ -429,7 +429,7 @@ public class Record {
                 frag.add(Label, RECORD_CLONE_FUNCTION + "-end-if"); //[... element]
                 Macros.loadIFrom(frag, RECORD_CLONE_FUNCTION + "-clone-res");
                 Macros.loadIFrom(frag, RECORD_CLONE_FUNCTION + "-loop-index");
-                frag.add(Call, RECORD_SET_ELEMENT); //todo immutable bypass
+                frag.add(Call, RECORD_SET_ELEMENT);
 
             Macros.incrementInteger(frag, RECORD_CLONE_FUNCTION + "-loop-index");
             frag.add(Jump, RECORD_CLONE_FUNCTION + "-loop-begin");

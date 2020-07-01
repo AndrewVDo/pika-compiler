@@ -93,8 +93,6 @@ class SemanticAnalysisVisitor extends ParseNodeVisitor.Default {
 		Type identifierType = identifier.getType();
 		Type expressionType = expression.getType();
 
-		checkConst(identifier);
-
 		if(identifierType.equivalent(expressionType)) {
 			node.setType(identifierType);
 			return;
@@ -108,20 +106,6 @@ class SemanticAnalysisVisitor extends ParseNodeVisitor.Default {
 
 		typeCheckError(node, Arrays.asList(identifierType, expressionType));
 		node.setType(PrimitiveType.ERROR);
-	}
-	private void checkConst(ParseNode node) {
-		if(node instanceof IdentifierNode) {
-			if(!((IdentifierNode)node).getBinding().getIsVar()) {
-				assignToConstError(node);
-				return;
-			}
-		}
-		if(node instanceof ArrayIndexNode) {//todo make strings const but arrys non const
-//			if(!((ArrayIndexNode)node).getBinding().getIsVar()) {
-//				assignToConstError(node);
-//			}
-		}
-
 	}
 
 	@Override
