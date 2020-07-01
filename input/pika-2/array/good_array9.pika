@@ -1,0 +1,11 @@
+exec {
+    var x:= [1, 2, 3].
+    var y:= clone x.
+
+    print x == y, _n_.
+
+    y := x.
+
+    print x == y, _n_.
+
+}

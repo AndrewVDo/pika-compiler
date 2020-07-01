@@ -77,8 +77,9 @@ public class FunctionSignatures extends ArrayList<FunctionSignature> {
 	// Put the signatures for operators in the following static block.
 	
 	static {
-		// here's one example to get you started with FunctionSignatures: the signatures for addition.		
-		// for this to work, you should statically import PrimitiveType.*
+		TypeVariable S = new TypeVariable("no_type");
+		List<TypeVariable> SetS = Arrays.asList(S); // these get reset after each equiv check
+		ArrayType SA = new ArrayType(S);
 
 		new FunctionSignatures(Punctuator.ADD,
 		    new FunctionSignature(ASMOpcode.Add, PrimitiveType.INTEGER, PrimitiveType.INTEGER, PrimitiveType.INTEGER),
@@ -108,9 +109,10 @@ public class FunctionSignatures extends ArrayList<FunctionSignature> {
 			FunctionSignature SigC = new FunctionSignature(1, PrimitiveType.CHARACTER, PrimitiveType.CHARACTER, PrimitiveType.BOOLEAN);
 			FunctionSignature SigB = new FunctionSignature(1, PrimitiveType.BOOLEAN, PrimitiveType.BOOLEAN, PrimitiveType.BOOLEAN);
 			FunctionSignature SigS = new FunctionSignature(1, PrimitiveType.STRING, PrimitiveType.STRING, PrimitiveType.BOOLEAN);
+			FunctionSignature SigA = new FunctionSignature(1, SA, SA, PrimitiveType.BOOLEAN);
 			
 			if(comparison == Punctuator.EQUAL || comparison == Punctuator.NOTEQUAL) {
-				new FunctionSignatures(comparison, SigI, SigF, SigC, SigB, SigS);
+				new FunctionSignatures(comparison, SigI, SigF, SigC, SigB, SigS, SigA);
 			}
 			else {
 				new FunctionSignatures(comparison, SigI, SigF, SigC);
@@ -156,24 +158,23 @@ public class FunctionSignatures extends ArrayList<FunctionSignature> {
 				new FunctionSignature(ASMOpcode.BNegate, PrimitiveType.BOOLEAN, PrimitiveType.BOOLEAN)
 		);
 
-		TypeVariable S = new TypeVariable("no_type");
-		List<TypeVariable> SetS = Arrays.asList(S); // these get reset after each equiv check
+
 
 		new FunctionSignatures(Keyword.LENGTH,
-				new FunctionSignature(1, SetS, new ArrayType(S), PrimitiveType.INTEGER)
+				new FunctionSignature(1, SetS, SA, PrimitiveType.INTEGER)
 		);
 		new FunctionSignatures(Keyword.CLONE,
-				new FunctionSignature(1, SetS, new ArrayType(S), new ArrayType(S))
+				new FunctionSignature(1, SetS, SA, SA)
 		);
 		
 		new FunctionSignatures(Punctuator.ARRAY_INDEXING,
-				new FunctionSignature(1, SetS, new ArrayType(S), PrimitiveType.INTEGER, S)
+				new FunctionSignature(1, SetS, SA, PrimitiveType.INTEGER, S)
 		);
 
 		new FunctionSignatures(Punctuator.ARRAY_INIT,
-				new FunctionSignature(1, SetS, S, new ArrayType(S)),
-				new FunctionSignature(1, SetS, S, PrimitiveType.INTEGER, new ArrayType(S)),
-				new FunctionSignature(1, SetS, new ArrayType(S), new ArrayType(S))
+				new FunctionSignature(1, SetS, S, SA),
+				new FunctionSignature(1, SetS, S, PrimitiveType.INTEGER, SA),
+				new FunctionSignature(1, SetS, SA, SA)
 		);
 
 

@@ -6,6 +6,7 @@ import asmCodeGenerator.codeStorage.ASMOpcode;
 import lexicalAnalyzer.Lextant;
 import lexicalAnalyzer.Punctuator;
 import parseTree.ParseNode;
+import semanticAnalyzer.types.ArrayType;
 import semanticAnalyzer.types.PrimitiveType;
 import semanticAnalyzer.types.Type;
 
@@ -15,7 +16,7 @@ public class ComparisonCodeGenerator {
 	static public ASMCodeFragment generate(ParseNode node, Lextant operator, String trueLabel, String falseLabel) {
 		ASMCodeFragment fragment = new ASMCodeFragment(CodeType.GENERATES_VALUE);
 		
-		assert(node.child(0).getType() == node.child(1).getType());
+		//assert(node.child(0).getType() == node.child(1).getType());
 		Type type = node.child(0).getType();
 		
 		if(type == PrimitiveType.BOOLEAN) {
@@ -44,7 +45,7 @@ public class ComparisonCodeGenerator {
 		ASMOpcode jumpneg = Nop;
 		ASMOpcode jumpzero = Nop;
 		
-		if(type == PrimitiveType.INTEGER) {
+		if(type == PrimitiveType.INTEGER || type instanceof ArrayType) {
 			subtract = Subtract;
 			jumppos = JumpPos;
 			jumpneg = JumpNeg;
