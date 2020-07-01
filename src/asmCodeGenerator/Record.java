@@ -122,7 +122,6 @@ public class Record {
             frag.add(Label, RECORD_GET_STATUS);
                 Macros.storeITo(frag, RECORD_GET_STATUS + "-caller");
 
-                checkNullPtrCode(frag);
                 frag.add(PushI, RECORD_STATUS_OFFSET);                         //[... BASE_ADDRESS OFFSET]
                 frag.add(Call, RECORD_GET_HEADER_INFO_FUNCTION);    //[... INFO]
 
@@ -278,7 +277,7 @@ public class Record {
 //            frag.add(Label, RECORD_GET_ELEMENT + "-endif");
 
             //get other vars
-            frag.add(PushI, RECORD_LENGTH_OFFSET);
+            frag.add(PushI, RECORD_HEADER_SIZE);
             Macros.loadIFrom(frag, RECORD_GET_ELEMENT + "-index-var");
             Macros.loadIFrom(frag, RECORD_GET_ELEMENT + "-subtype-var");
 
@@ -302,10 +301,11 @@ public class Record {
         frag.add(Label, RECORD_SET_ELEMENT);                        //[... ELEMENT BASE INDEX]
             Macros.storeITo(frag, RECORD_SET_ELEMENT + "-caller");
             Macros.storeITo(frag, RECORD_SET_ELEMENT + "-index-var");
+            checkNullPtrCode(frag);
             Macros.storeITo(frag, RECORD_SET_ELEMENT + "-base-var"); //[... ELEMENT]
 
             Macros.loadIFrom(frag, RECORD_SET_ELEMENT + "-base-var");
-            frag.add(Call, RECORD_GET_LENGTH);
+            frag.add(Call, RECORD_GET_SUBTYPE_SIZE);
             Macros.storeITo(frag, RECORD_SET_ELEMENT + "-subtype-var");
 
             //check immutable
@@ -322,7 +322,7 @@ public class Record {
 
             //find proper store command
             frag.add(PushI, 8);
-            Macros.loadIFrom(frag, RECORD_SET_ELEMENT);
+            Macros.loadIFrom(frag, RECORD_SET_ELEMENT + "-subtype-var");
             frag.add(Subtract);
             frag.add(JumpPos, RECORD_SET_ELEMENT + "-not-float");
             frag.add(StoreF);
@@ -334,7 +334,7 @@ public class Record {
             frag.add(Subtract);
             frag.add(JumpPos, RECORD_SET_ELEMENT + "-not-int");
             frag.add(StoreI);
-            frag.add(Jump, RECORD_SET_ELEMENT + "-endif");
+            frag.add(Jump, RECORD_SET_ELEMENT + "-end-if");
 
             frag.add(Label, RECORD_SET_ELEMENT + "-not-int");
             frag.add(StoreC);
@@ -364,7 +364,11 @@ public class Record {
                 frag.add(JumpNeg, ALLOC_NEGATIVE_SIZE_RUNTIME_ERROR);
             Macros.storeITo(frag, RECORD_ALLOCATE_FUNCTION + "-length-var");
 
+            frag.add(PushI, RECORD_HEADER_SIZE);
             Macros.loadIFrom(frag, RECORD_ALLOCATE_FUNCTION + "-length-var");
+            Macros.loadIFrom(frag, RECORD_ALLOCATE_FUNCTION + "-subtype-var");
+            frag.add(Multiply);
+            frag.add(Add);
             frag.add(Call, MEM_MANAGER_ALLOCATE);
             Macros.storeITo(frag, RECORD_ALLOCATE_FUNCTION + "-base-res");
 
@@ -398,20 +402,23 @@ public class Record {
         Macros.declareI(frag, RECORD_CLONE_FUNCTION + "-base-var");
         Macros.declareI(frag, RECORD_CLONE_FUNCTION + "-clone-res");
         Macros.declareI(frag, RECORD_CLONE_FUNCTION + "-loop-index");
+        Macros.declareI(frag, RECORD_CLONE_FUNCTION + "-length-var");
+        Macros.declareI(frag, RECORD_CLONE_FUNCTION + "-subtype-var");
         frag.add(Label, RECORD_CLONE_FUNCTION);
+            Macros.storeITo(frag, RECORD_CLONE_FUNCTION + "-caller");
             checkNullPtrCode(frag);
             Macros.storeITo(frag, RECORD_CLONE_FUNCTION + "-base-var");
 
             //add header info to stack
             Macros.loadIFrom(frag, RECORD_CLONE_FUNCTION + "-base-var");
+            frag.add(Call, RECORD_GET_LENGTH);                      //[... length]
             frag.add(Duplicate);
             Macros.storeITo(frag, RECORD_CLONE_FUNCTION + "-length-var");
-            frag.add(Call, RECORD_GET_LENGTH);                      //[... length]
 
             Macros.loadIFrom(frag, RECORD_CLONE_FUNCTION + "-base-var");
+            frag.add(Call, RECORD_GET_SUBTYPE_SIZE);                //[... length subtypeSize]
             frag.add(Duplicate);
             Macros.storeITo(frag, RECORD_CLONE_FUNCTION + "-subtype-var");
-            frag.add(Call, RECORD_GET_SUBTYPE_SIZE);                //[... length subtypeSize]
 
             Macros.loadIFrom(frag, RECORD_CLONE_FUNCTION + "-base-var");
             frag.add(Call, RECORD_GET_STATUS);                      //[... length subtypeSize status]
@@ -425,7 +432,7 @@ public class Record {
 
             //set data
             frag.add(PushI, 0);
-            Macros.storeITo(frag, RECORD_CLONE_FUNCTION + "-clone-index");
+            Macros.storeITo(frag, RECORD_CLONE_FUNCTION + "-loop-index");
 
             //loop conditional
             frag.add(Label, RECORD_CLONE_FUNCTION + "-loop-begin");
@@ -453,7 +460,7 @@ public class Record {
                     Macros.loadIFrom(frag, RECORD_CLONE_FUNCTION + "-subtype-var");
                     frag.add(Subtract);
                     frag.add(JumpPos, RECORD_CLONE_FUNCTION + "-not-int");
-                    frag.add(LoadF);
+                    frag.add(LoadI);
                     frag.add(Jump, RECORD_CLONE_FUNCTION + "-end-if");
 
                     //load char
@@ -472,6 +479,7 @@ public class Record {
 
         Macros.loadIFrom(frag, RECORD_CLONE_FUNCTION + "-clone-res");
         Macros.loadIFrom(frag, RECORD_CLONE_FUNCTION + "-caller");
+        frag.add(Return);
     }
     //todo printer function
 }

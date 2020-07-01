@@ -32,7 +32,7 @@ public class RunTime {
 	public static final String INDEX_RUNTIME_ERROR = "$$index";
 	public static final String NULL_PTR_RUNTIME_ERROR = "$$null-ptr";
 	public static final String DELETED_RECORD_RUNTIME_ERROR = "$$deleted-record";
-	public static final String IMMUTABLE_RECORD_RUNTIME_ERROR = "$$deleted-record";
+	public static final String IMMUTABLE_RECORD_RUNTIME_ERROR = "$$immutable-record";
 
 
 	private ASMCodeFragment environmentASM() {
@@ -93,6 +93,9 @@ public class RunTime {
 		floatingDivideByZeroError(frag);
 		allocNegativeSizeError(frag);
 		indexError(frag);
+		nullPtrError(frag);
+		deletedRecordError(frag);
+		immutableRecordError(frag);
 		
 		return frag;
 	}
@@ -156,7 +159,7 @@ public class RunTime {
 
 		frag.add(Label, NULL_PTR_RUNTIME_ERROR);
 		frag.add(PushD, msg);
-		frag.add(Jump, NULL_PTR_RUNTIME_ERROR);
+		frag.add(Jump, GENERAL_RUNTIME_ERROR);
 	}
 	private void deletedRecordError(ASMCodeFragment frag) {
 		String msg = "$errors-deleted-record";
@@ -166,7 +169,7 @@ public class RunTime {
 
 		frag.add(Label, DELETED_RECORD_RUNTIME_ERROR);
 		frag.add(PushD, msg);
-		frag.add(Jump, DELETED_RECORD_RUNTIME_ERROR);
+		frag.add(Jump, GENERAL_RUNTIME_ERROR);
 	}
 	private void immutableRecordError(ASMCodeFragment frag) {
 		String msg = "$errors-immutable-record";
@@ -176,7 +179,7 @@ public class RunTime {
 
 		frag.add(Label, IMMUTABLE_RECORD_RUNTIME_ERROR);
 		frag.add(PushD, msg);
-		frag.add(Jump, IMMUTABLE_RECORD_RUNTIME_ERROR);
+		frag.add(Jump, GENERAL_RUNTIME_ERROR);
 	}
 	public static ASMCodeFragment getEnvironment() {
 		RunTime rt = new RunTime();
