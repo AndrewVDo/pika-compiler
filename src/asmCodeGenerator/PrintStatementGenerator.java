@@ -12,7 +12,7 @@ import semanticAnalyzer.types.Type;
 import static asmCodeGenerator.Record.RECORD_HEADER_SIZE;
 import static asmCodeGenerator.Record.RECORD_PRINT_FUNCTION;
 import static asmCodeGenerator.codeStorage.ASMOpcode.*;
-import static asmCodeGenerator.runtime.RunTime.RECORD_PRINT_FORMAT;
+import static asmCodeGenerator.runtime.RunTime.*;
 
 public class PrintStatementGenerator {
 	ASMCodeFragment code;
@@ -49,6 +49,14 @@ public class PrintStatementGenerator {
 		String format = printFormat(((ArrayType)node.getType()).getSubtype());
 		code.add(PushD, format);
 		Macros.storeITo(code, RECORD_PRINT_FORMAT);
+
+			if(format.equals(RunTime.BOOLEAN_PRINT_FORMAT)) {
+				code.add(PushI, 1);
+			} else {
+				code.add(PushI, 0);
+			}
+			Macros.storeITo(code, RECORD_PRINT_BOOL_FLAG);
+
 		code.append(visitor.removeValueCode(node)); //[base]
 		code.add(Call, RECORD_PRINT_FUNCTION);
 	}

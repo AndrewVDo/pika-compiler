@@ -36,6 +36,7 @@ public class RunTime {
 	public static final String IMMUTABLE_RECORD_RUNTIME_ERROR = "$$immutable-record";
 
 	public static final String RECORD_PRINT_FORMAT = "$record-print-format";
+	public static final String RECORD_PRINT_BOOL_FLAG = "$record-print-bool";
 
 
 	private ASMCodeFragment environmentASM() {
@@ -45,6 +46,7 @@ public class RunTime {
 		result.append(runtimeErrors());
 		recordFunctions(result);
 		Macros.declareI(result, RECORD_PRINT_FORMAT);
+		Macros.declareI(result, RECORD_PRINT_BOOL_FLAG);
 		result.add(DLabel, USABLE_MEMORY_START);
 		return result;
 	}
@@ -205,5 +207,6 @@ public class RunTime {
 		runtimePrintFunction(frag);
 		runtimeInitElement(frag);
 		runtimePrintString(frag);
+		runtimePrintBool(frag);
 	}
 }

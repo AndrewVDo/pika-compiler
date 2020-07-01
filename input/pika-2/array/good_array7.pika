@@ -1,0 +1,6 @@
+exec {
+    var book := [[_true_, _false_], [_true_], alloc[bool](5), [_false_, _true_]].
+    print book, _n_.
+    var ss := [[^a^, ^b^], alloc[char](3), [^c^]].
+    print ss, _n_.
+}

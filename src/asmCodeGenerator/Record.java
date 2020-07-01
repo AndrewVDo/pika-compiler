@@ -1,6 +1,7 @@
 package asmCodeGenerator;
 
 import asmCodeGenerator.codeStorage.ASMCodeFragment;
+import asmCodeGenerator.runtime.RunTime;
 
 import static asmCodeGenerator.codeStorage.ASMOpcode.*;
 import static asmCodeGenerator.runtime.MemoryManager.MEM_MANAGER_ALLOCATE;
@@ -540,8 +541,15 @@ public class Record {
                     frag.add(Label, RECORD_PRINT_FUNCTION + "-not-int");
                     frag.add(LoadC);
 
+                        Macros.loadIFrom(frag, RECORD_PRINT_BOOL_FLAG);
+                        frag.add(JumpFalse, RECORD_PRINT_FUNCTION + "-end-if");
+                        frag.add(Call, RECORD_PRINT_BOOL);
+                        frag.add(Jump, RECORD_PRINT_FUNCTION + "-skip-pf");
+
+
                     frag.add(Label, RECORD_PRINT_FUNCTION + "-end-if");
                     Macros.loadIFrom(frag, RECORD_PRINT_FORMAT);
+                    frag.add(Label, RECORD_PRINT_FUNCTION + "-skip-pf");
                     frag.add(Printf);
 
                     frag.add(Label, RECORD_PRINT_FUNCTION + "-print-ref-reentry");
@@ -580,6 +588,22 @@ public class Record {
             frag.add(Printf);
 
         Macros.loadIFrom(frag, RECORD_PRINT_STRING + "-caller");
+        frag.add(Return);
+    }
+    public static final String RECORD_PRINT_BOOL = "$record-print-bool-fn";
+    public static final void runtimePrintBool(ASMCodeFragment frag) {
+        Macros.declareI(frag, RECORD_PRINT_BOOL + "-caller");
+        frag.add(Label, RECORD_PRINT_BOOL);
+        Macros.storeITo(frag, RECORD_PRINT_BOOL + "-caller");
+
+            frag.add(JumpTrue, RECORD_PRINT_BOOL + "-true");
+            frag.add(PushD, RunTime.BOOLEAN_FALSE_STRING);
+            frag.add(Jump, RECORD_PRINT_BOOL + "-end");
+            frag.add(Label, RECORD_PRINT_BOOL + "-true");
+            frag.add(PushD, RunTime.BOOLEAN_TRUE_STRING);
+            frag.add(Label, RECORD_PRINT_BOOL + "-end");
+
+        Macros.loadIFrom(frag, RECORD_PRINT_BOOL + "-caller");
         frag.add(Return);
     }
 }
