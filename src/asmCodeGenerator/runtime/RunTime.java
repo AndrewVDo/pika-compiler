@@ -68,6 +68,8 @@ public class RunTime {
 		frag.add(DLabel, CHARACTER_PRINT_FORMAT);
 		frag.add(DataS, "%c");
 		frag.add(DLabel, STRING_PRINT_FORMAT);
+		frag.add(PushI, RECORD_HEADER_SIZE);
+		frag.add(Add);
 		frag.add(DataS, "%s");
 		frag.add(DLabel, NEWLINE_PRINT_FORMAT);
 		frag.add(DataS, "\n");
@@ -201,5 +203,7 @@ public class RunTime {
 		runtimeAllocateRecord(frag);
 		runtimeCloneRecord(frag);
 		runtimePrintFunction(frag);
+		runtimeInitElement(frag);
+		runtimePrintString(frag);
 	}
 }

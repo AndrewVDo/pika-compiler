@@ -167,11 +167,6 @@ public class Record {
             checkNullPtrCode(frag);
             Macros.storeITo(frag, RECORD_GET_ELEMENT + "-base-var");
 
-            //check deleted
-            Macros.loadIFrom(frag, RECORD_GET_ELEMENT + "-base-var");
-            frag.add(Call, RECORD_CHECK_DELETED);
-            frag.add(JumpTrue, DELETED_RECORD_RUNTIME_ERROR);
-
             Macros.loadIFrom(frag, RECORD_GET_ELEMENT + "-base-var");
             frag.add(Call, RECORD_GET_SUBTYPE_SIZE);
             Macros.storeITo(frag, RECORD_GET_ELEMENT + "-subtype-var");
@@ -191,18 +186,6 @@ public class Record {
             frag.add(Duplicate);
             frag.add(JumpFalse, INDEX_RUNTIME_ERROR);
             frag.add(JumpPos, INDEX_RUNTIME_ERROR);
-
-            //get header size
-//            Macros.loadIFrom(frag, RECORD_GET_ELEMENT + "-base-var");
-//            frag.add(Call, RECORD_GET_TYPE_ID);
-//            frag.add(PushI, ARRAY_TYPE_IDENTIFIER);
-//            frag.add(Subtract);
-//            frag.add(JumpTrue, RECORD_GET_ELEMENT + "-not-array");
-//                frag.add(PushI, ARRAY_LENGTH_OFFSET);
-//            frag.add(Jump, RECORD_GET_ELEMENT + "-endif");
-//            frag.add(Label, RECORD_GET_ELEMENT + "-not-array");
-//                frag.add(PushI, STRING_LENGTH_OFFSET);
-//            frag.add(Label, RECORD_GET_ELEMENT + "-endif");
 
             //get other vars
             frag.add(PushI, RECORD_HEADER_SIZE);
@@ -270,6 +253,52 @@ public class Record {
             frag.add(Label, RECORD_SET_ELEMENT + "-end-if");
 
         Macros.loadIFrom(frag, RECORD_SET_ELEMENT + "-caller");
+        frag.add(Return);
+    }
+    public static final String RECORD_INIT_ELEMENT = "$record-init-element-fn";
+    public static final void runtimeInitElement(ASMCodeFragment frag) {
+        Macros.declareI(frag, RECORD_INIT_ELEMENT + "-caller");
+        Macros.declareI(frag, RECORD_INIT_ELEMENT + "-base-var");
+        Macros.declareI(frag, RECORD_INIT_ELEMENT + "-index-var");
+        Macros.declareI(frag, RECORD_INIT_ELEMENT + "-subtype-var");
+        frag.add(Label, RECORD_INIT_ELEMENT);                        //[... ELEMENT BASE INDEX]
+        Macros.storeITo(frag, RECORD_INIT_ELEMENT + "-caller");
+        Macros.storeITo(frag, RECORD_INIT_ELEMENT + "-index-var");
+
+        checkNullPtrCode(frag);
+        Macros.storeITo(frag, RECORD_INIT_ELEMENT + "-base-var"); //[... ELEMENT]
+
+        Macros.loadIFrom(frag, RECORD_INIT_ELEMENT + "-base-var");
+        frag.add(Call, RECORD_GET_SUBTYPE_SIZE);
+        Macros.storeITo(frag, RECORD_INIT_ELEMENT + "-subtype-var");
+        //get proper index address
+        Macros.loadIFrom(frag, RECORD_INIT_ELEMENT + "-base-var");
+        Macros.loadIFrom(frag, RECORD_INIT_ELEMENT + "-index-var");
+        frag.add(Call, RECORD_GET_ELEMENT);
+        frag.add(Exchange);                             //[... address element]
+
+        //find proper store command
+        frag.add(PushI, 8);
+        Macros.loadIFrom(frag, RECORD_INIT_ELEMENT + "-subtype-var");
+        frag.add(Subtract);
+        frag.add(JumpPos, RECORD_INIT_ELEMENT + "-not-float");
+        frag.add(StoreF);
+        frag.add(Jump, RECORD_INIT_ELEMENT + "-end-if");
+
+        frag.add(Label, RECORD_INIT_ELEMENT + "-not-float");
+        frag.add(PushI, 4);
+        Macros.loadIFrom(frag, RECORD_INIT_ELEMENT + "-subtype-var");
+        frag.add(Subtract);
+        frag.add(JumpPos, RECORD_INIT_ELEMENT + "-not-int");
+        frag.add(StoreI);
+        frag.add(Jump, RECORD_INIT_ELEMENT + "-end-if");
+
+        frag.add(Label, RECORD_INIT_ELEMENT + "-not-int");
+        frag.add(StoreC);
+
+        frag.add(Label, RECORD_INIT_ELEMENT + "-end-if");
+
+        Macros.loadIFrom(frag, RECORD_INIT_ELEMENT + "-caller");
         frag.add(Return);
     }
 
@@ -422,6 +451,17 @@ public class Record {
             checkNullPtrCode(frag);
             Macros.storeITo(frag, RECORD_PRINT_FUNCTION + "-base-var");
 
+                    Macros.loadIFrom(frag, RECORD_PRINT_FUNCTION + "-base-var");
+                    frag.add(Call, RECORD_GET_TYPE_ID);
+                    frag.add(PushI, STRING_TYPE_IDENTIFIER);
+                    frag.add(Subtract);
+                    frag.add(JumpTrue, RECORD_PRINT_FUNCTION + "-not-string");
+                        Macros.loadIFrom(frag, RECORD_PRINT_FUNCTION + "-base-var");
+                        frag.add(Call, RECORD_PRINT_STRING);
+                        Macros.loadIFrom(frag, RECORD_PRINT_FUNCTION + "-caller");
+                        frag.add(Return);
+                    frag.add(Label, RECORD_PRINT_FUNCTION + "-not-string");
+
             Macros.loadIFrom(frag, RECORD_PRINT_FUNCTION + "-base-var");
             frag.add(Call, RECORD_GET_LENGTH);
             Macros.storeITo(frag, RECORD_PRINT_FUNCTION + "-length-var");
@@ -526,5 +566,20 @@ public class Record {
 
             Macros.loadIFrom(frag, RECORD_PRINT_FUNCTION + "-caller");
             frag.add(Return);
+    }
+
+    public static final String RECORD_PRINT_STRING = "$record-print-string-fn";
+    public static final void runtimePrintString(ASMCodeFragment frag) {
+        Macros.declareI(frag, RECORD_PRINT_STRING + "-caller");
+        frag.add(Label, RECORD_PRINT_STRING);
+            Macros.storeITo(frag, RECORD_PRINT_STRING + "-caller");
+
+            frag.add(PushI, RECORD_HEADER_SIZE);
+            frag.add(Add);
+            Macros.loadIFrom(frag, RECORD_PRINT_FORMAT);
+            frag.add(Printf);
+
+        Macros.loadIFrom(frag, RECORD_PRINT_STRING + "-caller");
+        frag.add(Return);
     }
 }

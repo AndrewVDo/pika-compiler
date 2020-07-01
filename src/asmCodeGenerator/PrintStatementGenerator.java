@@ -9,6 +9,7 @@ import semanticAnalyzer.types.ArrayType;
 import semanticAnalyzer.types.PrimitiveType;
 import semanticAnalyzer.types.Type;
 
+import static asmCodeGenerator.Record.RECORD_HEADER_SIZE;
 import static asmCodeGenerator.Record.RECORD_PRINT_FUNCTION;
 import static asmCodeGenerator.codeStorage.ASMOpcode.*;
 import static asmCodeGenerator.runtime.RunTime.RECORD_PRINT_FORMAT;
@@ -40,6 +41,7 @@ public class PrintStatementGenerator {
 
 		code.append(visitor.removeValueCode(node));
 		convertToStringIfBoolean(node);
+		stringPrintOffset(node);
 		code.add(PushD, format);
 		code.add(Printf);
 	}
@@ -65,6 +67,14 @@ public class PrintStatementGenerator {
 		code.add(Label, trueLabel);
 		code.add(PushD, RunTime.BOOLEAN_TRUE_STRING);
 		code.add(Label, endLabel);
+	}
+	private void stringPrintOffset(ParseNode node) {
+		if(node.getType() != PrimitiveType.STRING) {
+			return;
+		}
+
+		code.add(PushI, RECORD_HEADER_SIZE);
+		code.add(Add);
 	}
 
 

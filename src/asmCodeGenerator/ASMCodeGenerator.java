@@ -483,7 +483,7 @@ public class ASMCodeGenerator {
 				code.append(removeValueCode(node.child(i)));    //[... record record element]
 				code.add(Exchange);                     		//[... record element record]
 				code.add(PushI, i);                        		//[... record element record index]
-				code.add(Call, Record.RECORD_SET_ELEMENT);     	//[... record]
+				code.add(Call, Record.RECORD_INIT_ELEMENT);     	//[... record]
 			}
 		}
 
@@ -552,14 +552,21 @@ public class ASMCodeGenerator {
 		public void visit(StringConstantNode node) {
 			newValueCode(node);
 
-			Labeller labeller = new Labeller("string");
-			String stringLabel = labeller.newLabel("store");
+			String stringValue = node.getValue();
+			code.add(PushI, stringValue.length() + 1);
+			code.add(PushI, 1);
+			code.add(PushI, Record.generateStatus(true, false, false, true));
+			code.add(PushI, Record.STRING_TYPE_IDENTIFIER);     						//[... length subtypeSize status typeid]
+			code.add(Call, Record.RECORD_ALLOCATE_FUNCTION);   						//[... record]
 
-			//loader allocates string
-			code.add(DLabel, stringLabel);
-			code.add(DataS, node.getValue());
-			code.add(PushD, stringLabel);
-
+			for(int i=0; i<=stringValue.length(); i++) {
+				code.add(Duplicate);                    		//[... record record]
+				if(i<stringValue.length())code.add(PushI, (int) stringValue.charAt(i));    		//[... record record element]
+				else code.add(PushI, 0);
+				code.add(Exchange);                     		//[... record element record]
+				code.add(PushI, i);                        		//[... record element record index]
+				code.add(Call, Record.RECORD_INIT_ELEMENT);     	//[... record]
+			}
 		}
 		
 		public void visit(FloatingConstantNode node) {
