@@ -1,0 +1,18 @@
+exec {
+    var arr := [127, 255, 511, 1023, 2055].
+    print arr[0]; arr[1]; arr[2]; arr[3]; arr[4], _n_.
+
+    var arr2 := [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].
+    print arr[0]; arr[1]; arr[2]; arr[3]; arr[4], _n_.
+    print arr2[0]; arr2[1]; arr2[2]; arr2[3]; arr2[4]; arr2[5]; arr2[6]; arr2[7]; arr2[8]; arr2[9], _n_.
+
+    var arr3 := 5.
+    var arr4 := 2.5.
+
+    var arr5 := alloc[float](10).
+    print arr5[0]; arr5[1]; arr5[2]; arr5[3]; arr5[4]; arr5[5]; arr5[6]; arr5[7]; arr5[8]; arr5[9], _n_.
+    arr5[0] := 0.
+    arr5[9] := ^c^.
+    arr5[4] := 5.1.
+    print arr5[0]; arr5[1]; arr5[2]; arr5[3]; arr5[4]; arr5[5]; arr5[6]; arr5[7]; arr5[8]; arr5[9], _n_.
+}

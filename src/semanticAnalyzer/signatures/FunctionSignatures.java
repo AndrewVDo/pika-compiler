@@ -1,23 +1,15 @@
 package semanticAnalyzer.signatures;
 
-import java.security.Key;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.function.Function;
-
+import asmCodeGenerator.*;
 import asmCodeGenerator.codeStorage.ASMOpcode;
-import asmCodeGenerator.IntegerDivideCodeGenerator;
-import asmCodeGenerator.CharToBoolCodeGenerator;
-import asmCodeGenerator.CharToIntCodeGenerator;
-import asmCodeGenerator.FloatingDivideCodeGenerator;
-import asmCodeGenerator.IntToCharCodeGenerator;
 import lexicalAnalyzer.Keyword;
 import lexicalAnalyzer.Punctuator;
-import semanticAnalyzer.types.Type;
-
+import semanticAnalyzer.types.ArrayType;
 import semanticAnalyzer.types.PrimitiveType;
+import semanticAnalyzer.types.Type;
+import semanticAnalyzer.types.TypeVariable;
+
+import java.util.*;
 
 
 public class FunctionSignatures extends ArrayList<FunctionSignature> {
@@ -52,6 +44,15 @@ public class FunctionSignatures extends ArrayList<FunctionSignature> {
 	public boolean accepts(List<Type> types) {
 		return !acceptingSignature(types).isNull();
 	}
+	public List<FunctionSignature> promotableSignatures(List<Type> types, int promoteParam) {
+		List<FunctionSignature> matches = new ArrayList<>();
+		for(FunctionSignature functionSignature: this) {
+			if(functionSignature.promotable(types, promoteParam)) {
+				matches.add(functionSignature);
+			}
+		}
+		return matches;
+	}
 
 	
 	/////////////////////////////////////////////////////////////////////////////////
@@ -76,8 +77,9 @@ public class FunctionSignatures extends ArrayList<FunctionSignature> {
 	// Put the signatures for operators in the following static block.
 	
 	static {
-		// here's one example to get you started with FunctionSignatures: the signatures for addition.		
-		// for this to work, you should statically import PrimitiveType.*
+		TypeVariable S = new TypeVariable("no_type");
+		List<TypeVariable> SetS = Arrays.asList(S); // these get reset after each equiv check
+		ArrayType SA = new ArrayType(S);
 
 		new FunctionSignatures(Punctuator.ADD,
 		    new FunctionSignature(ASMOpcode.Add, PrimitiveType.INTEGER, PrimitiveType.INTEGER, PrimitiveType.INTEGER),
@@ -107,38 +109,40 @@ public class FunctionSignatures extends ArrayList<FunctionSignature> {
 			FunctionSignature SigC = new FunctionSignature(1, PrimitiveType.CHARACTER, PrimitiveType.CHARACTER, PrimitiveType.BOOLEAN);
 			FunctionSignature SigB = new FunctionSignature(1, PrimitiveType.BOOLEAN, PrimitiveType.BOOLEAN, PrimitiveType.BOOLEAN);
 			FunctionSignature SigS = new FunctionSignature(1, PrimitiveType.STRING, PrimitiveType.STRING, PrimitiveType.BOOLEAN);
+			FunctionSignature SigA = new FunctionSignature(1, SA, SA, PrimitiveType.BOOLEAN);
 			
 			if(comparison == Punctuator.EQUAL || comparison == Punctuator.NOTEQUAL) {
-				new FunctionSignatures(comparison, SigI, SigF, SigC, SigB, SigS);
+				new FunctionSignatures(comparison, SigI, SigF, SigC, SigB, SigS, SigA);
 			}
 			else {
 				new FunctionSignatures(comparison, SigI, SigF, SigC);
 			}
 		}
 		
-		new FunctionSignatures(Keyword.INT,
+		new FunctionSignatures(PrimitiveType.INTEGER,
 				new FunctionSignature(new CharToIntCodeGenerator(), PrimitiveType.CHARACTER, PrimitiveType.INTEGER),
 				new FunctionSignature(ASMOpcode.ConvertI, PrimitiveType.FLOATING, PrimitiveType.INTEGER),
 				new FunctionSignature(ASMOpcode.Nop, PrimitiveType.INTEGER, PrimitiveType.INTEGER)
 		);
 		
-		new FunctionSignatures(Keyword.CHAR,
+		new FunctionSignatures(PrimitiveType.CHARACTER,
 				new FunctionSignature(new IntToCharCodeGenerator(), PrimitiveType.INTEGER, PrimitiveType.CHARACTER),
 				new FunctionSignature(ASMOpcode.Nop, PrimitiveType.CHARACTER, PrimitiveType.CHARACTER)
 		);
 		
-		new FunctionSignatures(Keyword.FLOAT,
+		new FunctionSignatures(PrimitiveType.FLOATING,
 				new FunctionSignature(ASMOpcode.ConvertF, PrimitiveType.INTEGER, PrimitiveType.FLOATING),
+				new FunctionSignature(new CharToFloatCodeGenerator(), PrimitiveType.CHARACTER, PrimitiveType.FLOATING),
 				new FunctionSignature(ASMOpcode.Nop, PrimitiveType.FLOATING, PrimitiveType.FLOATING)
 		);
 		
-		new FunctionSignatures(Keyword.BOOL,
+		new FunctionSignatures(PrimitiveType.BOOLEAN,
 				new FunctionSignature(new CharToBoolCodeGenerator(), PrimitiveType.CHARACTER, PrimitiveType.BOOLEAN),
 				new FunctionSignature(new CharToBoolCodeGenerator(), PrimitiveType.INTEGER, PrimitiveType.BOOLEAN),
 				new FunctionSignature(ASMOpcode.Nop, PrimitiveType.BOOLEAN, PrimitiveType.BOOLEAN)
 		);
 
-		new FunctionSignatures(Keyword.STRING,
+		new FunctionSignatures(PrimitiveType.STRING,
 				new FunctionSignature(ASMOpcode.Nop, PrimitiveType.STRING, PrimitiveType.STRING)
 		);
 
@@ -153,26 +157,27 @@ public class FunctionSignatures extends ArrayList<FunctionSignature> {
 		new FunctionSignatures(Punctuator.BOOLEAN_NOT,
 				new FunctionSignature(ASMOpcode.BNegate, PrimitiveType.BOOLEAN, PrimitiveType.BOOLEAN)
 		);
+
+
+
+		new FunctionSignatures(Keyword.LENGTH,
+				new FunctionSignature(1, SetS, SA, PrimitiveType.INTEGER)
+		);
+		new FunctionSignatures(Keyword.CLONE,
+				new FunctionSignature(1, SetS, SA, SA)
+		);
 		
-		
-		// First, we use the operator itself (in this case the Punctuator ADD) as the key.
-		// Then, we give that key two signatures: one an (INT x INT -> INT) and the other
-		// a (FLOAT x FLOAT -> FLOAT).  Each signature has a "whichVariant" parameter where
-		// I'm placing the instruction (ASMOpcode) that needs to be executed.
-		//
-		// I'll follow the convention that if a signature has an ASMOpcode for its whichVariant,
-		// then to generate code for the operation, one only needs to generate the code for
-		// the operands (in order) and then add to that the Opcode.  For instance, the code for
-		// floating addition should look like:
-		//
-		//		(generate argument 1)	: may be many instructions
-		//		(generate argument 2)   : ditto
-		//		FAdd					: just one instruction
-		//
-		// If the code that an operator should generate is more complicated than this, then
-		// I will not use an ASMOpcode for the whichVariant.  In these cases I typically use
-		// a small object with one method (the "Command" design pattern) that generates the
-		// required code.
+		new FunctionSignatures(Punctuator.ARRAY_INDEXING,
+				new FunctionSignature(1, SetS, SA, PrimitiveType.INTEGER, S)
+		);
+
+		new FunctionSignatures(Punctuator.ARRAY_INIT,
+				new FunctionSignature(1, SetS, S, SA),
+				new FunctionSignature(1, SetS, S, PrimitiveType.INTEGER, SA),
+				new FunctionSignature(1, SetS, SA, SA)
+		);
+
+
 
 	}
 

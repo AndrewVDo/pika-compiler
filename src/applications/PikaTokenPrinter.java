@@ -1,13 +1,12 @@
 package applications;
 
-import java.io.FileNotFoundException;
-import java.io.PrintStream;
-
+import lexicalAnalyzer.LexicalAnalyzer;
+import lexicalAnalyzer.Scanner;
 import tokens.Token;
 import tokens.Tokens;
 
-import lexicalAnalyzer.LexicalAnalyzer;
-import lexicalAnalyzer.Scanner;
+import java.io.FileNotFoundException;
+import java.io.PrintStream;
 
 public class PikaTokenPrinter extends PikaApplication {
 	/** Prints tokens from a Pika file.

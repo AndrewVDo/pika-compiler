@@ -1,13 +1,11 @@
 package asmCodeGenerator;
 
-import static asmCodeGenerator.codeStorage.ASMOpcode.FDivide;
-import static asmCodeGenerator.codeStorage.ASMOpcode.Duplicate;
-import static asmCodeGenerator.codeStorage.ASMOpcode.JumpFZero;
-
 import asmCodeGenerator.codeStorage.ASMCodeFragment;
 import asmCodeGenerator.codeStorage.ASMCodeFragment.CodeType;
 import asmCodeGenerator.runtime.RunTime;
 import parseTree.ParseNode;
+
+import static asmCodeGenerator.codeStorage.ASMOpcode.*;
 
 
 

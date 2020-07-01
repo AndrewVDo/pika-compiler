@@ -2,10 +2,9 @@ package inputHandler.tests;
 
 import inputHandler.LineBasedReader;
 import junit.framework.TestCase;
+import org.junit.Test;
 
 import static inputHandler.tests.FixtureDefinitions.*;
-
-import org.junit.Test;
 
 
 public class TestLineBasedIteratorImp extends TestCase {

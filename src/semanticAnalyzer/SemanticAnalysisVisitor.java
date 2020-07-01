@@ -1,8 +1,5 @@
 package semanticAnalyzer;
 
-import java.util.Arrays;
-import java.util.List;
-
 import lexicalAnalyzer.Keyword;
 import lexicalAnalyzer.Lextant;
 import logging.PikaLogger;
@@ -11,12 +8,17 @@ import parseTree.ParseNodeVisitor;
 import parseTree.nodeTypes.*;
 import semanticAnalyzer.signatures.FunctionSignature;
 import semanticAnalyzer.signatures.FunctionSignatures;
+import semanticAnalyzer.types.ArrayType;
 import semanticAnalyzer.types.PrimitiveType;
 import semanticAnalyzer.types.Type;
 import symbolTable.Binding;
 import symbolTable.Scope;
 import tokens.LextantToken;
 import tokens.Token;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 class SemanticAnalysisVisitor extends ParseNodeVisitor.Default {
 	@Override
@@ -63,6 +65,7 @@ class SemanticAnalysisVisitor extends ParseNodeVisitor.Default {
 	}
 	@Override
 	public void visitLeave(DeclarationNode node) {
+		assert(node.nChildren() == 2);
 		IdentifierNode identifier = (IdentifierNode) node.child(0);
 		ParseNode initializer = node.child(1);
 		
@@ -75,42 +78,140 @@ class SemanticAnalysisVisitor extends ParseNodeVisitor.Default {
 	}
 	@Override
 	public void visitLeave(AssignmentStatementNode node) {
-		IdentifierNode identifier = (IdentifierNode) node.child(0);
+		assert(node.nChildren() == 2);
+		List types = List.of(node.child(0).getType(), node.child(1).getType());
+
+		if(!(node.child(0) instanceof IdentifierNode) && !(node.child(0) instanceof ArrayIndexNode)) {
+			typeCheckError(node, types);
+			node.setType(PrimitiveType.ERROR);
+			return;
+		}
+
+		ParseNode identifier = node.child(0);
 		ParseNode expression = node.child(1);
-		
-		// check to see if type of identifier is same as type of expression
-		if(!identifier.getType().equals(expression.getType())) {
-			typeCheckError(node, Arrays.asList(identifier.getType(), expression.getType()));
+
+		Type identifierType = identifier.getType();
+		Type expressionType = expression.getType();
+
+		if(identifierType.equivalent(expressionType)) {
+			node.setType(identifierType);
+			return;
 		}
-		// check identifier is not const
-		if(!identifier.getBinding().getIsVar()) {
-			assignToConstError(node);
+
+		if(expressionType.promotable(identifierType)) {
+			promoteChild(node, identifierType, 1);
+			node.setType(identifierType);
+			return;
 		}
-		
-		Type declerationType = identifier.getType();
-		node.setType(declerationType);
+
+		typeCheckError(node, Arrays.asList(identifierType, expressionType));
+		node.setType(PrimitiveType.ERROR);
 	}
+
+	@Override
+	public void visitLeave(DeallocNode node) {
+		assert(node.nChildren() == 1);
+		Type childType = node.child(0).getType();
+		if(!(childType instanceof ArrayType) && childType != PrimitiveType.STRING) {
+			typeCheckError(node, List.of(childType));
+			node.setType(PrimitiveType.ERROR);
+		}
+		node.setType(PrimitiveType.NO_TYPE);
+	}
+
+	@Override
+	public void visitLeave(ArrayNode node) {
+		assert(node.nChildren() > 0);
+
+		if(node.nChildren() == 2 && node.child(0) instanceof TypeNode) {
+			ParseNode typeNode = node.child(0);
+			node.setType(new ArrayType(typeNode.getType()));
+			return;
+		}
+
+		Type subType = nestedArrayFun(node);
+		node.setType(new ArrayType(subType));
+
+	}
+	private Type nestedArrayFun(ParseNode node) {
+		List<Type> foundTypes = findArrayTypes(node);
+		int at = 0;
+		int pt = 0;
+		for(Type t : foundTypes) {
+			if(t instanceof ArrayType) at++;
+			else pt++;
+		}
+		if(pt > 0 && at > 0) {
+			typeCheckError(node, foundTypes);
+			return PrimitiveType.ERROR;
+		}
+		else if(pt == 0 && at > 0) {
+			for(int i=0; i<foundTypes.size(); i++) {
+				for(int j=i; j<foundTypes.size(); j++) {
+					if(!foundTypes.get(i).equivalent(foundTypes.get(j))) {
+						typeCheckError(node, foundTypes);
+						return PrimitiveType.ERROR;
+					}
+				}
+			}
+			return foundTypes.get(0);
+		}
+		return arrayInitFindType(node);
+	}
+	private Type arrayInitFindType(ParseNode node) {
+		List<Type> foundTypes = findArrayTypes(node);
+		if(foundTypes.size() == 0) {
+			typeCheckError(node, foundTypes);
+			return PrimitiveType.ERROR;
+		}
+		else if(foundTypes.size() == 1) {
+			arrayPromote(node, foundTypes.get(0));
+			return foundTypes.get(0);
+		}
+
+		Type subType = Type.lowestCommonPromotion(foundTypes);
+		arrayPromote(node, foundTypes.get(0));
+		return subType;
+	}
+	private List<Type> findArrayTypes(ParseNode node) {
+		List<Type> foundTypes = new ArrayList<>();
+		for(ParseNode c : node.getChildren()){
+			if(!foundTypes.contains(c.getType())) {
+				foundTypes.add(c.getType());
+			}
+		}
+		return foundTypes;
+	}
+
 
 	///////////////////////////////////////////////////////////////////////////
 	// expressions
 	@Override
 	public void visitLeave(UnaryOperatorNode node) {
-		assert node.nChildren() == 1;
+		assert(node.nChildren() == 1);
 		ParseNode innerExpression = node.child(0);
 		List<Type> innerType = Arrays.asList(innerExpression.getType());
 
 		Lextant operator = operatorFor(node);
 		FunctionSignatures signatures = FunctionSignatures.signaturesOf(operator);
-		FunctionSignature signature = signatures.acceptingSignature(innerType);
 
-		if(signature.accepts(innerType)) {
-			node.setType(signature.resultType());
-			node.setSignature(signature);
+		FunctionSignature pureMatch = findPureMatch(signatures, innerType);
+		if(pureMatch != null) {
+			node.setType(pureMatch.resultType());
+			node.setSignature(pureMatch);
+			return;
 		}
-		else {
-			typeCheckError(node, innerType);
-			node.setType(PrimitiveType.ERROR);
+
+		FunctionSignature promotableMatch = findPromotableMatch(node, signatures, innerType);
+		if(promotableMatch != null) {
+			signaturePromote(node, promotableMatch.getParamTypes(), innerType);
+			node.setType(promotableMatch.resultType());
+			node.setSignature(promotableMatch);
+			return;
 		}
+
+		typeCheckError(node, innerType);
+		node.setType(PrimitiveType.ERROR);
 	}
 	private Lextant operatorFor(UnaryOperatorNode node) {
 		LextantToken token = (LextantToken) node.getToken();
@@ -126,30 +227,116 @@ class SemanticAnalysisVisitor extends ParseNodeVisitor.Default {
 		
 		Lextant operator = operatorFor(node);
 		FunctionSignatures signatures = FunctionSignatures.signaturesOf(operator);
-		FunctionSignature signature = signatures.acceptingSignature(childTypes);
-		
-		if(signature.accepts(childTypes)) {
-			node.setType(signature.resultType());
-			node.setSignature(signature);
+
+		FunctionSignature pureMatch = findPureMatch(signatures, childTypes);
+		if(pureMatch != null) {
+			node.setType(pureMatch.resultType());
+			node.setSignature(pureMatch);
+			return;
 		}
-		else {
-			typeCheckError(node, childTypes);
-			node.setType(PrimitiveType.ERROR);
+
+		FunctionSignature promotableMatch = findPromotableMatch(node, signatures, childTypes);
+		if(promotableMatch != null) {
+			signaturePromote(node, promotableMatch.getParamTypes(), childTypes);
+			node.setType(promotableMatch.resultType());
+			node.setSignature(promotableMatch);
+			return;
 		}
+
+		typeCheckError(node, childTypes);
+		node.setType(PrimitiveType.ERROR);
 	}
 	private Lextant operatorFor(BinaryOperatorNode node) {
 		LextantToken token = (LextantToken) node.getToken();
 		return token.getLextant();
 	}
+
+	private FunctionSignature findPureMatch(FunctionSignatures signatures, List<Type> paramSignature) {
+		FunctionSignature pureMatch = signatures.acceptingSignature(paramSignature);
+		if (pureMatch.accepts(paramSignature)) {//level 1
+			return pureMatch;
+		}
+		return null;
+	}
+	private FunctionSignature findPromotableMatch(ParseNode node, FunctionSignatures signatures, List<Type> paramSignature) {
+		for(int i=0; i<node.nChildren(); i++) {//level 2+3
+			List<FunctionSignature> promotableMatches = signatures.promotableSignatures(paramSignature, i);
+
+			if(promotableMatches.size() == 1) {
+				return promotableMatches.get(0);
+			}
+
+			if(promotableMatches.size() > 1) {
+				List<Type> possibleParamTypes = new ArrayList<>();
+				for(FunctionSignature f : promotableMatches) {
+					possibleParamTypes.add(f.getParamTypes()[i]);
+				}
+				Type lowestCommonType = Type.lowestCommonPromotion(possibleParamTypes);
+
+				for(FunctionSignature f : promotableMatches) {
+					if(f.getParamTypes()[i] == lowestCommonType) {
+						return f;
+					}
+				}
+				return null;
+			}
+			//next operand
+		}
+		return null;
+	}
+	private void signaturePromote(ParseNode node, Type[] targetParams, List<Type> sourceParams) { //find mismatch and promote
+		assert(node.nChildren() == targetParams.length);
+		for(int i=0; i<targetParams.length; i++) {
+			if(targetParams[i] != sourceParams.get(i)) {
+				promoteChild(node, targetParams[i], i);
+				break;
+			}
+		}
+	}
+	private void arrayPromote(ParseNode node, Type homogenizedType) { //make all children same type
+		for(int i=0; i<node.nChildren(); i++) {
+			Type type = node.child(i).getType();
+			if(!type.equivalent(homogenizedType) && !(type instanceof ArrayType)) {
+				promoteChild(node, homogenizedType, i);
+			}
+		}
+	}
+	private void promoteChild(ParseNode node, Type identifierType, int child) { //promote by specific index
+		ParseNode innerExpression = node.child(child);
+		node.replaceChild(node.child(child), CastExpressionNode.withChildren(identifierType, innerExpression));
+		visitLeave((CastExpressionNode) node.child(child));
+	}
+
+
+	@Override
+	public void visitLeave(ArrayIndexNode node) {
+		assert node.nChildren() == 2;
+		ParseNode base = node.child(0);
+		ParseNode index = node.child(1);
+
+		if(index.getType() != PrimitiveType.INTEGER) {
+			arrayIndexError(node);
+			node.setType(PrimitiveType.ERROR);
+		}
+
+		if(!(base.getType() instanceof ArrayType)) {
+			arrayIndexError(node);
+			node.setType(PrimitiveType.ERROR);
+			return;
+		}
+		Type arraySubtype = ((ArrayType) base.getType()).getSubtype();
+		node.setType(arraySubtype);
+	}
 	
 	@Override
 	public void visitLeave(CastExpressionNode node) {
-		assert node.nChildren() == 1;
-		ParseNode innerExpression = node.child(0);
+		assert node.nChildren() == 2;
+		ParseNode typeExpression = node.child(0);
+		ParseNode innerExpression = node.child(1);
+
 		List<Type> innerType = Arrays.asList(innerExpression.getType());
 		
-		Lextant newType = newTypeFor(node);
-		FunctionSignatures signatures = FunctionSignatures.signaturesOf(newType);
+		FunctionSignatures signatures = FunctionSignatures.signaturesOf(typeExpression.getType());
 		FunctionSignature signature = signatures.acceptingSignature(innerType);
 		
 		if(signature.accepts(innerType)) {
@@ -161,10 +348,6 @@ class SemanticAnalysisVisitor extends ParseNodeVisitor.Default {
 			node.setType(PrimitiveType.ERROR);
 		}
 		assert(true);
-	}
-	private Lextant newTypeFor(CastExpressionNode node) {
-		LextantToken token = (LextantToken) node.getToken();
-		return token.getLextant();
 	}
 
 
@@ -194,15 +377,7 @@ class SemanticAnalysisVisitor extends ParseNodeVisitor.Default {
 	public void visit(FloatingConstantNode node) {
 		node.setType(PrimitiveType.FLOATING);
 	}
-	@Override
-	public void visit(NewlineNode node) {
-	}
-	@Override
-	public void visit(TabNode node) {
-	}
-	@Override
-	public void visit(SpaceNode node) {
-	}
+
 	///////////////////////////////////////////////////////////////////////////
 	// IdentifierNodes, with helper methods
 	@Override
@@ -227,7 +402,12 @@ class SemanticAnalysisVisitor extends ParseNodeVisitor.Default {
 	
 	///////////////////////////////////////////////////////////////////////////
 	// error logging/printing
-	
+
+	private void arrayIndexError(ParseNode node) {
+		Token token = node.getToken();
+
+		logError("Indexing incorrect types" + token.getLocation());
+	}
 	private void assignToConstError(ParseNode node) {
 		Token token = node.getToken();
 		

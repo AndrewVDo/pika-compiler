@@ -8,7 +8,8 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.stream.Stream;
 
-import static applications.tests.CompilerTest.TestFinder.*;
+import static applications.tests.CompilerTest.TestFinder.ERR_TEST;
+import static applications.tests.CompilerTest.TestFinder.findTestsByPrefix;
 
 public class ErrTest extends NoExitTestFixture {
 

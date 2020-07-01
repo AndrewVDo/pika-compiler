@@ -1,13 +1,11 @@
 package inputHandler.tests;
 
 import inputHandler.InputHandler;
+import junit.framework.TestCase;
+import org.junit.Test;
 
 import java.io.FileNotFoundException;
 import java.util.Iterator;
-
-import org.junit.Test;
-
-import junit.framework.TestCase;
 
 import static inputHandler.tests.FixtureDefinitions.*;
 

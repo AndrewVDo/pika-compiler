@@ -1,10 +1,6 @@
 package applications;
 
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.PrintStream;
-
 import asmCodeGenerator.ASMCodeGenerator;
 import asmCodeGenerator.codeStorage.ASMCodeFragment;
 import lexicalAnalyzer.LexicalAnalyzer;
@@ -13,6 +9,10 @@ import parseTree.ParseNode;
 import parser.Parser;
 import semanticAnalyzer.SemanticAnalyzer;
 import tokens.Tokens;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintStream;
 
 public class PikaCodeGenerator extends PikaApplication {
 	/** Compiles a Pika file.

@@ -1,20 +1,25 @@
 package asmCodeGenerator;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import asmCodeGenerator.codeStorage.ASMCodeFragment;
 import asmCodeGenerator.codeStorage.ASMOpcode;
+import asmCodeGenerator.runtime.MemoryManager;
 import asmCodeGenerator.runtime.RunTime;
 import lexicalAnalyzer.Keyword;
 import lexicalAnalyzer.Lextant;
 import lexicalAnalyzer.Punctuator;
-import parseTree.*;
+import parseTree.ParseNode;
+import parseTree.ParseNodeVisitor;
 import parseTree.nodeTypes.*;
+import semanticAnalyzer.types.ArrayType;
 import semanticAnalyzer.types.PrimitiveType;
 import semanticAnalyzer.types.Type;
 import symbolTable.Binding;
 import symbolTable.Scope;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import static asmCodeGenerator.Record.RECORD_DEALLOCATE;
 import static asmCodeGenerator.codeStorage.ASMCodeFragment.CodeType.*;
 import static asmCodeGenerator.codeStorage.ASMOpcode.*;
 
@@ -33,11 +38,11 @@ public class ASMCodeGenerator {
 	
 	public ASMCodeFragment makeASM() {
 		ASMCodeFragment code = new ASMCodeFragment(GENERATES_VOID);
-		
+
 		code.append( RunTime.getEnvironment() );
 		code.append( globalVariableBlockASM() );
 		code.append( programASM() );
-//		code.append( MemoryManager.codeForAfterApplication() );
+		code.append( MemoryManager.codeForAfterApplication() );
 		
 		return code;
 	}
@@ -55,6 +60,7 @@ public class ASMCodeGenerator {
 		ASMCodeFragment code = new ASMCodeFragment(GENERATES_VOID);
 		
 		code.add(    Label, RunTime.MAIN_PROGRAM_LABEL);
+		code.append(MemoryManager.codeForInitialization());
 		code.append( programCode());
 		code.add(    Halt );
 		
@@ -139,7 +145,7 @@ public class ASMCodeGenerator {
 			else if(node.getType() == PrimitiveType.CHARACTER) {
 				code.add(LoadC);
 			}
-			else if(node.getType() == PrimitiveType.STRING) {
+			else if(node.getType() == PrimitiveType.STRING || node.getType() instanceof ArrayType) {
 				code.add(LoadI);
 			}
 			else {
@@ -180,28 +186,13 @@ public class ASMCodeGenerator {
 			newVoidCode(node);
 			new PrintStatementGenerator(code, this).generate(node);	
 		}
-		public void visit(NewlineNode node) {
-			newVoidCode(node);
-			code.add(PushD, RunTime.NEWLINE_PRINT_FORMAT);
-			code.add(Printf);
-		}
-		public void visit(TabNode node) {
-			newVoidCode(node);
-			code.add(PushD, RunTime.TAB_PRINT_FORMAT);
-			code.add(Printf);
-		}
-		public void visit(SpaceNode node) {
-			newVoidCode(node);
-			code.add(PushD, RunTime.SPACE_PRINT_FORMAT);
-			code.add(Printf);
-		}
 		
 
 		public void visitLeave(DeclarationNode node) {
 			newVoidCode(node);
 			ASMCodeFragment lvalue = removeAddressCode(node.child(0));	
 			ASMCodeFragment rvalue = removeValueCode(node.child(1));
-			
+
 			code.append(lvalue);
 			code.append(rvalue);
 			
@@ -221,7 +212,7 @@ public class ASMCodeGenerator {
 			if(type == PrimitiveType.CHARACTER) {
 				return StoreC;
 			}
-			if(type == PrimitiveType.STRING) {
+			if(type == PrimitiveType.STRING || type instanceof ArrayType) {
 				return StoreI;
 			}
 			assert false: "Type " + type + " unimplemented in opcodeForStore()";
@@ -238,6 +229,13 @@ public class ASMCodeGenerator {
 			
 			Type type = node.getType();
 			code.add(opcodeForStore(type));
+		}
+
+		public void visitLeave(DeallocNode node) {
+			newVoidCode(node);
+			ASMCodeFragment valueCode = removeValueCode(node.child(0));
+			code.append(valueCode);
+			code.add(Call, RECORD_DEALLOCATE);
 		}
 
 		public void visitLeave(ControlFlowNode node) {
@@ -301,11 +299,17 @@ public class ASMCodeGenerator {
 			Lextant operator = node.getOperator();
 
 			if(operator == Punctuator.BOOLEAN_NOT) {
-				visitNormalUnaryOperator(node);
+				visitBooleanNotOperator(node);
+			}
+			else if(operator == Keyword.LENGTH) {
+				visitLengthOperator(node);
+			}
+			else if(operator == Keyword.CLONE) {
+				visitCloneOperator(node);
 			}
 		}
 
-		private void visitNormalUnaryOperator(UnaryOperatorNode node) {
+		private void visitBooleanNotOperator(UnaryOperatorNode node) {
 			newValueCode(node);
 			ASMCodeFragment innerCode = removeValueCode(node.child(0));
 
@@ -319,6 +323,20 @@ public class ASMCodeGenerator {
 			else {
 				throw new Error("Compiler error: unary operation failed");
 			}
+		}
+		private void visitLengthOperator(UnaryOperatorNode node) {
+			assert(node.nChildren() == 1);
+			newValueCode(node);
+
+			code.append(removeValueCode(node.child(0)));
+			code.add(Call, Record.RECORD_GET_LENGTH);
+		}
+		private void visitCloneOperator(UnaryOperatorNode node) {
+			assert(node.nChildren() == 1);
+			newValueCode(node);
+
+			code.append(removeValueCode(node.child(0)));
+			code.add(Call, Record.RECORD_CLONE_FUNCTION);
 		}
 
 		public void visitLeave(BinaryOperatorNode node) {
@@ -447,14 +465,56 @@ public class ASMCodeGenerator {
 			}
 			return null;
 		}
+
+		public void visitLeave(ArrayNode node) {
+			newValueCode(node);
+			Type type = ((ArrayType)node.getType()).getSubtype();
+
+			if(node.nChildren() == 2 && node.child(0) instanceof TypeNode) {
+				ASMCodeFragment lengthCode = removeValueCode(node.child(1));
+				code.append(lengthCode);
+				code.add(PushI, type.getSize());
+				code.add(PushI, Record.generateStatus(false, type.isReference(), false, false));
+				code.add(PushI, Record.ARRAY_TYPE_IDENTIFIER);     					//[... length subtypeSize status typeid]
+				code.add(Call, Record.RECORD_ALLOCATE_FUNCTION);   					//[... record]
+				return;
+			}
+
+			code.add(PushI, node.nChildren());
+			code.add(PushI, type.getSize());
+			code.add(PushI, Record.generateStatus(false, type.isReference(), false, false));
+			code.add(PushI, Record.ARRAY_TYPE_IDENTIFIER);     						//[... length subtypeSize status typeid]
+			code.add(Call, Record.RECORD_ALLOCATE_FUNCTION);   						//[... record]
+
+			for(int i=0; i<node.nChildren(); i++) {
+				code.add(Duplicate);                    		//[... record record]
+				code.append(removeValueCode(node.child(i)));    //[... record record element]
+				code.add(Exchange);                     		//[... record element record]
+				code.add(PushI, i);                        		//[... record element record index]
+				code.add(Call, Record.RECORD_INIT_ELEMENT);     	//[... record]
+			}
+		}
+
+		public void visitLeave(ArrayIndexNode node) {
+			assert(node.nChildren() == 2);
+			newAddressCode(node);
+
+			ASMCodeFragment arrayCode = removeValueCode(node.child(0));
+			ASMCodeFragment indexCode = removeValueCode(node.child(1));
+
+			code.append(arrayCode);
+			code.append(indexCode);             		//[... BASE INDEX]
+			code.add(Call, Record.RECORD_GET_ELEMENT); 	//[... INDEXED_ADDRESS]
+		}
+
 		
 		
 		public void visitLeave(CastExpressionNode node) {
 			newValueCode(node);
-			ASMCodeFragment innerExpression = removeValueCode(node.child(0));
-			Type oldType = node.child(0).getType();
-			Type newType = node.getType();
-			
+			ASMCodeFragment innerExpression = removeValueCode(node.child(1));
+			Type newType = node.getSignature().resultType();
+			Type oldType = node.child(1).getType();
+
 			code.append(innerExpression);
 			
 			Object variant = node.getSignature().getVariant();
@@ -500,27 +560,21 @@ public class ASMCodeGenerator {
 		public void visit(StringConstantNode node) {
 			newValueCode(node);
 
-			Labeller labeller = new Labeller("string");
-			String stringLabel = labeller.newLabel("store");
-			String pikaString = convertJavaToPikaString(node.getValue());
-			
-			//loader allocates string
-			code.add(DLabel, stringLabel);
-			code.add(DataS, pikaString);
-			code.add(PushD, stringLabel);
+			String stringValue = node.getValue();
+			code.add(PushI, stringValue.length() + 1);
+			code.add(PushI, 1);
+			code.add(PushI, Record.generateStatus(true, false, false, true));
+			code.add(PushI, Record.STRING_TYPE_IDENTIFIER);     						//[... length subtypeSize status typeid]
+			code.add(Call, Record.RECORD_ALLOCATE_FUNCTION);   						//[... record]
 
-		}
-		private String convertJavaToPikaString(String javaString) {
-			String pikaString = javaString.substring(1, javaString.length()-1);
-			pikaString += '\0';
-			
-			for(int i = 0; i < pikaString.length()-1; i++) {
-				if(pikaString.charAt(i) == '\\' && pikaString.charAt(i+1) == 'n') {
-					pikaString = pikaString.substring(0, i) + '\n' + pikaString.substring(i+2, pikaString.length());
-				}
+			for(int i=0; i<=stringValue.length(); i++) {
+				code.add(Duplicate);                    		//[... record record]
+				if(i<stringValue.length())code.add(PushI, (int) stringValue.charAt(i));    		//[... record record element]
+				else code.add(PushI, 0);
+				code.add(Exchange);                     		//[... record element record]
+				code.add(PushI, i);                        		//[... record element record index]
+				code.add(Call, Record.RECORD_INIT_ELEMENT);     	//[... record]
 			}
-			
-			return pikaString;
 		}
 		
 		public void visit(FloatingConstantNode node) {

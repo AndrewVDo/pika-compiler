@@ -2,8 +2,6 @@ package parseTree;
 
 import parseTree.nodeTypes.*;
 
-import java.util.function.UnaryOperator;
-
 // Visitor pattern with pre- and post-order visits
 public interface ParseNodeVisitor {
 	
@@ -22,6 +20,9 @@ public interface ParseNodeVisitor {
 
 	void visitEnter(DeclarationNode node);
 	void visitLeave(DeclarationNode node);
+
+	void visitEnter(ArrayIndexNode node);
+	void visitLeave(ArrayIndexNode node);
 	
 	void visitEnter(CastExpressionNode node);
 	void visitLeave(CastExpressionNode node);
@@ -38,6 +39,11 @@ public interface ParseNodeVisitor {
 	void visitEnter(ControlFlowNode node);
 	void visitLeave(ControlFlowNode node);
 
+	void visitEnter(DeallocNode node);
+	void visitLeave(DeallocNode node);
+
+	void visitEnter(ArrayNode node);
+	void visitLeave(ArrayNode node);
 
 	// leaf nodes: visitLeaf only
 	void visit(BooleanConstantNode node);
@@ -47,12 +53,10 @@ public interface ParseNodeVisitor {
 	void visit(IntegerConstantNode node);
 	void visit(StringConstantNode node);
 	void visit(FloatingConstantNode node);
-	void visit(NewlineNode node);
-	void visit(TabNode node);
-	void visit(SpaceNode node);
+    void visit(TypeNode typeNode);
 
-	
-	public static class Default implements ParseNodeVisitor
+
+    public static class Default implements ParseNodeVisitor
 	{
 		public void defaultVisit(ParseNode node) {	}
 		public void defaultVisitEnter(ParseNode node) {
@@ -78,7 +82,13 @@ public interface ParseNodeVisitor {
 		}
 		public void visitLeave(DeclarationNode node) {
 			defaultVisitLeave(node);
-		}					
+		}
+		public void visitEnter(ArrayIndexNode node) {
+			defaultVisitEnter(node);
+		}
+		public void visitLeave(ArrayIndexNode node) {
+			defaultVisitLeave(node);
+		}
 		public void visitEnter(CastExpressionNode node) {
 			defaultVisitEnter(node);
 		}
@@ -121,7 +131,19 @@ public interface ParseNodeVisitor {
 		public void visitLeave(ControlFlowNode node) {
 			defaultVisitLeave(node);
 		}
-		
+		public void visitEnter(DeallocNode node) {
+			defaultVisitEnter(node);
+		}
+		public void visitLeave(DeallocNode node) {
+			defaultVisitLeave(node);
+		}
+		public void visitEnter(ArrayNode node) {
+			defaultVisitEnter(node);
+		}
+		public void visitLeave(ArrayNode node) {
+			defaultVisitLeave(node);
+		}
+
 
 		public void visit(BooleanConstantNode node) {
 			defaultVisitForLeaf(node);
@@ -144,14 +166,7 @@ public interface ParseNodeVisitor {
 		public void visit(FloatingConstantNode node) {
 			defaultVisitForLeaf(node);
 		}
-		public void visit(NewlineNode node) {
-			defaultVisitForLeaf(node);
-		}	
-		public void visit(TabNode node) {
-			defaultVisitForLeaf(node);
-		}
-		public void visit(SpaceNode node) {
-			defaultVisitForLeaf(node);
-		}
+		public void visit(TypeNode node) { defaultVisitForLeaf(node); }
+
 	}
 }

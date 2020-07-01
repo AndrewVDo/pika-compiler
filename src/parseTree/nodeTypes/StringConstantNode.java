@@ -2,7 +2,6 @@ package parseTree.nodeTypes;
 
 import parseTree.ParseNode;
 import parseTree.ParseNodeVisitor;
-import tokens.IntegerToken;
 import tokens.StringToken;
 import tokens.Token;
 
@@ -24,7 +23,7 @@ public class StringConstantNode extends ParseNode {
 
 	public StringToken stringToken() {
 		return (StringToken)token;
-	}	
+	}
 
 ///////////////////////////////////////////////////////////
 // accept a visitor

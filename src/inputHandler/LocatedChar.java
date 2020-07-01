@@ -4,7 +4,7 @@ package inputHandler;
  *  Contains delegates to select character operations.
  *
  */
-public class LocatedChar {
+public class LocatedChar implements Locator {
 	Character character;
 	TextLocation location;
 	

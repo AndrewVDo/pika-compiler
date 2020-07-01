@@ -1,19 +1,17 @@
 package applications.tests;
 
-import static applications.tests.FixtureDefinitions.SEMANTIC_INPUT_FILENAME;
-import static applications.tests.FixtureDefinitions.SEMANTIC_EXPECTED_FILENAME;
+import applications.PikaSemanticChecker;
+import org.junit.Test;
+import parseTree.ParseTreePrinter;
+import parseTree.ParseTreePrinter.Level;
+import tests.FileFixturesTestCase;
+import tokens.Tokens;
 
 import java.io.FileNotFoundException;
 import java.io.PrintStream;
 
-import org.junit.Test;
-
-import parseTree.ParseTreePrinter;
-import parseTree.ParseTreePrinter.Level;
-
-import tests.FileFixturesTestCase;
-import tokens.Tokens;
-import applications.PikaSemanticChecker;
+import static applications.tests.FixtureDefinitions.SEMANTIC_EXPECTED_FILENAME;
+import static applications.tests.FixtureDefinitions.SEMANTIC_INPUT_FILENAME;
 
 public class TestSemanticChecker extends FileFixturesTestCase {
 

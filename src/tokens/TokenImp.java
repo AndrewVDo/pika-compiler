@@ -1,7 +1,7 @@
 package tokens;
 
-import lexicalAnalyzer.Lextant;
 import inputHandler.TextLocation;
+import lexicalAnalyzer.Lextant;
 
 public abstract class TokenImp implements Token {
 	private TextLocation location;

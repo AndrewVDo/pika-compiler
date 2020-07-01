@@ -1,7 +1,5 @@
 package applications.tests.CompilerTest;
 
-import tests.FileFixturesTestCase;
-
 import java.security.Permission;
 
 public class NoExitTestFixture extends CompilerTestFixture {

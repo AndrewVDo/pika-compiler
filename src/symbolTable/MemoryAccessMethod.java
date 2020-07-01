@@ -1,6 +1,7 @@
 package symbolTable;
 
 import asmCodeGenerator.codeStorage.ASMCodeFragment;
+
 import static asmCodeGenerator.codeStorage.ASMOpcode.*;
 
 public enum MemoryAccessMethod {

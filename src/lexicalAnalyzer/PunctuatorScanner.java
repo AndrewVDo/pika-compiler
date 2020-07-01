@@ -1,12 +1,12 @@
 package lexicalAnalyzer;
 
-import static lexicalAnalyzer.PunctuatorScanningAids.punctuatorSetForPrefix;
 import inputHandler.LocatedChar;
 import inputHandler.PushbackCharStream;
+import tokens.Token;
 
 import java.util.Set;
 
-import tokens.Token;
+import static lexicalAnalyzer.PunctuatorScanningAids.punctuatorSetForPrefix;
 
 /** Algorithm object to scan to find a punctuator.  Invoke only on a character that can start a punctuator lexeme.
  * <p>

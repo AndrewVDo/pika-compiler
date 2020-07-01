@@ -1,8 +1,8 @@
 package parseTree.nodeTypes;
 
+import lexicalAnalyzer.Lextant;
 import parseTree.ParseNode;
 import parseTree.ParseNodeVisitor;
-import lexicalAnalyzer.Lextant;
 import tokens.LextantToken;
 import tokens.Token;
 
@@ -12,25 +12,13 @@ public class AssignmentStatementNode extends ParseNode {
 		super(token);
 	}
 
-	public AssignmentStatementNode(ParseNode node) {
-		super(node);
-	}
-	
-	
-	////////////////////////////////////////////////////////////
-	// attributes
-	
 	public Lextant getDeclarationType() {
 		return lextantToken().getLextant();
 	}
 	public LextantToken lextantToken() {
 		return (LextantToken)token;
 	}	
-	
-	
-	////////////////////////////////////////////////////////////
-	// convenience factory
-	
+
 	public static AssignmentStatementNode withChildren(Token token, ParseNode declaredName, ParseNode initializer) {
 		AssignmentStatementNode node = new AssignmentStatementNode(token);
 		node.appendChild(declaredName);
@@ -38,10 +26,6 @@ public class AssignmentStatementNode extends ParseNode {
 		return node;
 	}
 	
-	
-	///////////////////////////////////////////////////////////
-	// boilerplate for visitors
-			
 	public void accept(ParseNodeVisitor visitor) {
 		visitor.visitEnter(this);
 		visitChildren(visitor);

@@ -1,0 +1,6 @@
+exec {
+    var x := "string boi".
+    dealloc x.
+    print x.
+
+}

@@ -21,7 +21,11 @@ public enum Keyword implements Lextant {
 	FLOAT("float"),
 	IF("if"),
 	ELSE("else"),
-	WHILE("while");
+	WHILE("while"),
+	LENGTH("length"),
+	ALLOC("alloc"),
+	DEALLOC("dealloc"),
+	CLONE("clone");
 
 	private String lexeme;
 	private Token prototype;

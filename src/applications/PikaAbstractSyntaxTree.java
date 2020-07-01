@@ -1,15 +1,14 @@
 package applications;
 
-import java.io.FileNotFoundException;
-import java.io.PrintStream;
-
+import lexicalAnalyzer.LexicalAnalyzer;
+import lexicalAnalyzer.Scanner;
 import parseTree.ParseNode;
 import parseTree.ParseTreePrinter;
 import parser.Parser;
-
-import lexicalAnalyzer.LexicalAnalyzer;
-import lexicalAnalyzer.Scanner;
 import tokens.Tokens;
+
+import java.io.FileNotFoundException;
+import java.io.PrintStream;
 
 public class PikaAbstractSyntaxTree extends PikaApplication {
 	/** Prints abstract syntax tree of a Pika file.

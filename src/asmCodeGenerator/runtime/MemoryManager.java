@@ -1,10 +1,11 @@
 package asmCodeGenerator.runtime;
 
-import static asmCodeGenerator.Macros.*;
-import static asmCodeGenerator.codeStorage.ASMCodeFragment.CodeType.*;
-import static asmCodeGenerator.codeStorage.ASMOpcode.*;
 import asmCodeGenerator.Labeller;
 import asmCodeGenerator.codeStorage.ASMCodeFragment;
+
+import static asmCodeGenerator.Macros.*;
+import static asmCodeGenerator.codeStorage.ASMCodeFragment.CodeType.GENERATES_VOID;
+import static asmCodeGenerator.codeStorage.ASMOpcode.*;
 
 public class MemoryManager {
 	// Debug Mode. DEBUGGING Adds debug code and executes insertDebugMain when the program is initialized.

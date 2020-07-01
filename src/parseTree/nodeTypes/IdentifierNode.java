@@ -1,8 +1,8 @@
 package parseTree.nodeTypes;
 
+import logging.PikaLogger;
 import parseTree.ParseNode;
 import parseTree.ParseNodeVisitor;
-import logging.PikaLogger;
 import symbolTable.Binding;
 import symbolTable.Scope;
 import tokens.IdentifierToken;

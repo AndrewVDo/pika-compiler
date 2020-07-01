@@ -1,7 +1,7 @@
 package tokens;
 
-import lexicalAnalyzer.Lextant;
 import inputHandler.TextLocation;
+import lexicalAnalyzer.Lextant;
 
 public final class LextantToken extends TokenImp {
 
@@ -11,8 +11,16 @@ public final class LextantToken extends TokenImp {
 		super(location, lexeme);
 		this.lextant = lextant;
 	}
-	
-	public Lextant getLextant() {
+
+    public static LextantToken artificial(Token locatorToken, Lextant lextant) {
+		String lexeme = lextant.getLexeme();
+		if(lexeme.equals("")) {
+			lexeme = lextant.toString();
+		}
+		return new LextantToken(locatorToken.getLocation(), lexeme, lextant);
+    }
+
+    public Lextant getLextant() {
 		return lextant;
 	}
 	public boolean isLextant(Lextant ...lextants) {

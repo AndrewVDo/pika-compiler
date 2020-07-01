@@ -1,0 +1,5 @@
+exec {
+    arr := [3, 2, 1].
+    arr := 10.
+    print arr[1], _n_.
+}

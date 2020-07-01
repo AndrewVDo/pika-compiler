@@ -1,0 +1,4 @@
+exec {
+    var book := ["they", "went", "to", "the", "market"].
+    print book, _n_.
+}

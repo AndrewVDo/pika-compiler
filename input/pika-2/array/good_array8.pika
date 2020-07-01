@@ -1,0 +1,11 @@
+exec {
+    const width := 4.
+    const height := 7.
+    const matrix := alloc [[float]](width).
+    var x := 0.
+    while(x < width) {
+        matrix[x] := alloc [float](height).
+        x := x + 1.
+    }
+    print matrix.
+}

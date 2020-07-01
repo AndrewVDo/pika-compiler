@@ -1,18 +1,14 @@
 package applications.tests.CompilerTest;
 
 import applications.PikaApplication;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.provider.Arguments;
 
 import java.io.File;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
-
-import static applications.tests.CompilerTest.CompilerTestFixture.PIKA_ONE;
 
 public class TestFinder {
     private static final List<String> DIR_EXEMPT = List.of("expected", "output");

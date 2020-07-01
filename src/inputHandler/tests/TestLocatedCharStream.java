@@ -1,19 +1,18 @@
 package inputHandler.tests;
 
-import static inputHandler.tests.FixtureDefinitions.*;
-
 import inputHandler.InputHandler;
 import inputHandler.LocatedChar;
 import inputHandler.LocatedCharStream;
+import org.junit.Test;
+import tests.FileFixturesTestCase;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
 
-import org.junit.Test;
-
-import tests.FileFixturesTestCase;
+import static inputHandler.tests.FixtureDefinitions.SIMPLE_FIXTURE_FILENAME;
+import static inputHandler.tests.FixtureDefinitions.SIMPLE_LCHAR_FILENAME;
 
 public class TestLocatedCharStream extends FileFixturesTestCase {
 

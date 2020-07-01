@@ -6,7 +6,7 @@ import java.util.List;
 
 
 
-public class LocatedCharString {
+public class LocatedCharString implements Locator{
 	private static final int STARTING_SIZE = 6;
 	
 	// string and locatedChars are kept in lockstep: they both carry the same characters.
@@ -43,5 +43,10 @@ public class LocatedCharString {
 	// conversions
 	public String asString() {
 		return string;
+	}
+
+	@Override
+	public TextLocation getLocation() {
+		return startingLocation;
 	}
 }

@@ -1,0 +1,6 @@
+exec {
+    var a := 5.
+    print a, _n_.
+    a := ^g^.
+    print a, _n_.
+}

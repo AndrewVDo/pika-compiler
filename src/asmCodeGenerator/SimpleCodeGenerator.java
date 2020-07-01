@@ -1,7 +1,9 @@
 package asmCodeGenerator;
 
+import asmCodeGenerator.codeStorage.ASMCodeFragment;
 import parseTree.ParseNode;
-import asmCodeGenerator.codeStorage.ASMCodeFragment;;
+
+;
 
 public interface SimpleCodeGenerator {
 	public ASMCodeFragment generate(ParseNode Node);

@@ -1,10 +1,6 @@
 package applications.tests.CompilerTest;
 
 import applications.PikaCompiler;
-
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.Arguments;
-import org.junit.jupiter.params.provider.MethodSource;
 import tests.FileFixturesTestCase;
 
 import java.io.FileNotFoundException;

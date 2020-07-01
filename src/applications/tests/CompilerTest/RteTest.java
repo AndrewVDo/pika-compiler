@@ -8,7 +8,8 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.stream.Stream;
 
-import static applications.tests.CompilerTest.TestFinder.*;
+import static applications.tests.CompilerTest.TestFinder.RTE_TEST;
+import static applications.tests.CompilerTest.TestFinder.findTestsByPrefix;
 
 public class RteTest extends CompilerTestFixture {
 
@@ -16,7 +17,7 @@ public class RteTest extends CompilerTestFixture {
     public void testDummy() {}
 
     @ParameterizedTest(name = "Run {index}: inputName={0}, outputName={1}, expectedName={2}")
-    @MethodSource("findTestFiles")
+    @MethodSource("findMilestoneOneFiles")
     public void testMilestoneOneRte(String inputName, String outputName, String expectedName) throws Exception {
         PikaCompiler.compile(inputName);
         String programOutput = runEmulator(outputName);
@@ -25,8 +26,22 @@ public class RteTest extends CompilerTestFixture {
         assertTrue(findRunTimeError);
     }
 
-    public static Stream<Arguments> findTestFiles() throws Exception {
+    public static Stream<Arguments> findMilestoneOneFiles() throws Exception {
         return findTestsByPrefix(PIKA_ONE, RTE_TEST);
+    }
+
+    @ParameterizedTest(name = "Run {index}: inputName={0}, outputName={1}, expectedName={2}")
+    @MethodSource("findMilestoneTwoFiles")
+    public void testMilestoneTwoRte(String inputName, String outputName, String expectedName) throws Exception {
+        PikaCompiler.compile(inputName);
+        String programOutput = runEmulator(outputName);
+        boolean findRunTimeError = programOutput.contains("Runtime error");
+
+        assertTrue(findRunTimeError);
+    }
+
+    public static Stream<Arguments> findMilestoneTwoFiles() throws Exception {
+        return findTestsByPrefix(PIKA_TWO, RTE_TEST);
     }
 
 }

@@ -1,10 +1,10 @@
 package lexicalAnalyzer;
 
+import inputHandler.LocatedChar;
+import inputHandler.LocatedCharString;
 import tokens.LextantToken;
 import tokens.NullToken;
 import tokens.Token;
-import inputHandler.LocatedChar;
-import inputHandler.LocatedCharString;
 
 public class PartiallyScannedPunctuator extends LocatedCharString {
 

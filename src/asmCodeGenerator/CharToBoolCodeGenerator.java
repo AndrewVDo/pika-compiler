@@ -1,11 +1,11 @@
 package asmCodeGenerator;
 
-import static asmCodeGenerator.codeStorage.ASMOpcode.And;
-import static asmCodeGenerator.codeStorage.ASMOpcode.PushI;
-
 import asmCodeGenerator.codeStorage.ASMCodeFragment;
 import asmCodeGenerator.codeStorage.ASMCodeFragment.CodeType;
 import parseTree.ParseNode;
+
+import static asmCodeGenerator.codeStorage.ASMOpcode.And;
+import static asmCodeGenerator.codeStorage.ASMOpcode.PushI;
 
 
 

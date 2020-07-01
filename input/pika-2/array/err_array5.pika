@@ -1,0 +1,4 @@
+exec {
+    var book := 2.
+    length book.
+}

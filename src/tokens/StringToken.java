@@ -16,10 +16,18 @@ public class StringToken extends TokenImp {
 	}
 	
 	public static StringToken make(TextLocation location, String lexeme) {
-		StringToken result = new StringToken(location, lexeme);
-		assert(lexeme.charAt(0) == '"' && lexeme.charAt(lexeme.length()-1) == '"');
-		result.setValue(lexeme);
-		return result;
+		StringToken stringToken = new StringToken(location, lexeme);
+
+		stringToken.setValue(lexeme);
+		return stringToken;
+	}
+
+	public static StringToken make(Token token, String lexeme, String value) {
+		TextLocation location = token.getLocation();
+		StringToken stringToken = new StringToken(location, lexeme);
+
+		stringToken.setValue(value);
+		return stringToken;
 	}
 	
 	@Override

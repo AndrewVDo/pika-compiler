@@ -5,29 +5,18 @@ import asmCodeGenerator.codeStorage.ASMCodeFragment.CodeType;
 import asmCodeGenerator.codeStorage.ASMOpcode;
 import lexicalAnalyzer.Lextant;
 import lexicalAnalyzer.Punctuator;
-
-import static asmCodeGenerator.codeStorage.ASMOpcode.Subtract;
-import static asmCodeGenerator.codeStorage.ASMOpcode.FSubtract;
-import static asmCodeGenerator.codeStorage.ASMOpcode.JumpPos;
-import static asmCodeGenerator.codeStorage.ASMOpcode.JumpFPos;
-import static asmCodeGenerator.codeStorage.ASMOpcode.JumpNeg;
-import static asmCodeGenerator.codeStorage.ASMOpcode.JumpFNeg;
-import static asmCodeGenerator.codeStorage.ASMOpcode.JumpFalse;
-import static asmCodeGenerator.codeStorage.ASMOpcode.JumpFZero;
-import static asmCodeGenerator.codeStorage.ASMOpcode.Jump;
-import static asmCodeGenerator.codeStorage.ASMOpcode.Nop;
-import static asmCodeGenerator.codeStorage.ASMOpcode.BEqual;
-import static asmCodeGenerator.codeStorage.ASMOpcode.JumpTrue;
-
 import parseTree.ParseNode;
+import semanticAnalyzer.types.ArrayType;
 import semanticAnalyzer.types.PrimitiveType;
 import semanticAnalyzer.types.Type;
+
+import static asmCodeGenerator.codeStorage.ASMOpcode.*;
 
 public class ComparisonCodeGenerator {
 	static public ASMCodeFragment generate(ParseNode node, Lextant operator, String trueLabel, String falseLabel) {
 		ASMCodeFragment fragment = new ASMCodeFragment(CodeType.GENERATES_VALUE);
 		
-		assert(node.child(0).getType() == node.child(1).getType());
+		//assert(node.child(0).getType() == node.child(1).getType());
 		Type type = node.child(0).getType();
 		
 		if(type == PrimitiveType.BOOLEAN) {
@@ -56,7 +45,7 @@ public class ComparisonCodeGenerator {
 		ASMOpcode jumpneg = Nop;
 		ASMOpcode jumpzero = Nop;
 		
-		if(type == PrimitiveType.INTEGER) {
+		if(type == PrimitiveType.INTEGER || type instanceof ArrayType) {
 			subtract = Subtract;
 			jumppos = JumpPos;
 			jumpneg = JumpNeg;

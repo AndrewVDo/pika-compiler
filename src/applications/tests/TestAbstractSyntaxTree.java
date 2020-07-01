@@ -1,19 +1,15 @@
 package applications.tests;
 
-import static applications.tests.FixtureDefinitions.AST_INPUT_FILENAME;
-import static applications.tests.FixtureDefinitions.AST_EXPECTED_FULL_FILENAME;
-import static applications.tests.FixtureDefinitions.AST_EXPECTED_TOKEN_ONLY_FILENAME;
+import applications.PikaAbstractSyntaxTree;
+import org.junit.Test;
+import parseTree.ParseTreePrinter;
+import parseTree.ParseTreePrinter.Level;
+import tests.FileFixturesTestCase;
 
 import java.io.FileNotFoundException;
 import java.io.PrintStream;
 
-import org.junit.Test;
-
-import parseTree.ParseTreePrinter;
-import parseTree.ParseTreePrinter.Level;
-
-import tests.FileFixturesTestCase;
-import applications.PikaAbstractSyntaxTree;
+import static applications.tests.FixtureDefinitions.*;
 
 public class TestAbstractSyntaxTree extends FileFixturesTestCase {
 

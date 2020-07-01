@@ -1,22 +1,10 @@
 package lexicalAnalyzer;
 
+import inputHandler.*;
 import logging.PikaLogger;
+import tokens.*;
 
-import inputHandler.InputHandler;
-import inputHandler.LocatedChar;
-import inputHandler.LocatedCharStream;
-import inputHandler.PushbackCharStream;
-import inputHandler.TextLocation;
-import tokens.CharacterToken;
-import tokens.FloatToken;
-import tokens.IdentifierToken;
-import tokens.LextantToken;
-import tokens.NullToken;
-import tokens.StringToken;
-import tokens.IntegerToken;
-import tokens.Token;
-
-import static lexicalAnalyzer.PunctuatorScanningAids.*;
+import static lexicalAnalyzer.PunctuatorScanningAids.isPunctuatorStartingCharacter;
 
 public class LexicalAnalyzer extends ScannerImp implements Scanner {
 	public static LexicalAnalyzer make(String filename) {
@@ -92,9 +80,12 @@ public class LexicalAnalyzer extends ScannerImp implements Scanner {
 		return CharacterToken.make(character.getLocation(), buffer.toString());
 	}
 	
-	private Token scanString(LocatedChar ch) {
+	private Token scanString(LocatedChar first) {
+		if(!first.isStringStart()) {
+			lexicalError(first);
+			return NullToken.make(first.getLocation());
+		}
 		StringBuffer buffer = new StringBuffer();
-		buffer.append(ch.getCharacter());
 		LocatedChar next = input.next();
 		while(next.getCharacter() != '\n' && next.getCharacter() != '\"') {
 			buffer.append(next.getCharacter());
@@ -104,11 +95,10 @@ public class LexicalAnalyzer extends ScannerImp implements Scanner {
 		//no ending " found
 		if(next.getCharacter() != '\"') {
 			lexicalError(next);
-			return NullToken.make(ch.getLocation());
+			return NullToken.make(next.getLocation());
 		}
 		
-		buffer.append(ch.getCharacter());
-		return StringToken.make(ch.getLocation(), buffer.toString());
+		return StringToken.make(first.getLocation(), buffer.toString());
 	}
 
 	private void scanComment(LocatedChar ch) {
