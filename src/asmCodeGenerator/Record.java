@@ -606,4 +606,15 @@ public class Record {
         Macros.loadIFrom(frag, RECORD_PRINT_BOOL + "-caller");
         frag.add(Return);
     }
+    public static final String RECORD_DEALLOCATE = "$record-deallocate-fn";
+    public static final void runtimeDeallocate(ASMCodeFragment frag) {
+        Macros.declareI(frag, RECORD_DEALLOCATE + "-caller");
+        frag.add(Label, RECORD_DEALLOCATE);
+            Macros.storeITo(frag, RECORD_DEALLOCATE + "-caller");
+
+            //todo
+
+        Macros.loadIFrom(frag, RECORD_PRINT_BOOL + "-caller");
+        frag.add(Return);
+    }
 }

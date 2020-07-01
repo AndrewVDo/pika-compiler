@@ -10,6 +10,7 @@ import parseTree.ParseNode;
 import parseTree.nodeTypes.*;
 import tokens.*;
 
+import java.security.Key;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -105,7 +106,18 @@ public class Parser {
 		if(startsControlFlowStatement(nowReading)) {
 			return parseControlFlowStatement();
 		}
+		if(startsDeallocStatement(nowReading)) {
+			return parseDeallocStatement();
+		}
 		return syntaxErrorNode("statement");
+	}
+
+	private ParseNode parseDeallocStatement() {
+		expect(Keyword.DEALLOC);
+		//todo
+	}
+	private boolean startsDeallocStatement(Token nowReading) {
+		return nowReading.isLextant(Keyword.DEALLOC);
 	}
 
 	private ParseNode parseControlFlowStatement() {

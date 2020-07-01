@@ -24,6 +24,7 @@ public enum Keyword implements Lextant {
 	WHILE("while"),
 	LENGTH("length"),
 	ALLOC("alloc"),
+	DEALLOC("dealloc"),
 	CLONE("clone");
 
 	private String lexeme;
