@@ -134,12 +134,34 @@ class SemanticAnalysisVisitor extends ParseNodeVisitor.Default {
 			return;
 		}
 
-		Type subType = arrayInitFindType(node);
-		if(!(subType instanceof ArrayType)) {
-			arrayPromote(node, subType);
-		}
+		Type subType = nestedArrayFun(node);
 		node.setType(new ArrayType(subType));
 
+	}
+	private Type nestedArrayFun(ParseNode node) {
+		List<Type> foundTypes = findArrayTypes(node);
+		int at = 0;
+		int pt = 0;
+		for(Type t : foundTypes) {
+			if(t instanceof ArrayType) at++;
+			else pt++;
+		}
+		if(pt > 0 && at > 0) {
+			typeCheckError(node, foundTypes);
+			return PrimitiveType.ERROR;
+		}
+		else if(pt == 0 && at > 0) {
+			for(int i=0; i<foundTypes.size(); i++) {
+				for(int j=i; j<foundTypes.size(); j++) {
+					if(!foundTypes.get(i).equivalent(foundTypes.get(j))) {
+						typeCheckError(node, foundTypes);
+						return PrimitiveType.ERROR;
+					}
+				}
+			}
+			return foundTypes.get(0);
+		}
+		return arrayInitFindType(node);
 	}
 	private Type arrayInitFindType(ParseNode node) {
 		List<Type> foundTypes = findArrayTypes(node);
@@ -148,9 +170,13 @@ class SemanticAnalysisVisitor extends ParseNodeVisitor.Default {
 			return PrimitiveType.ERROR;
 		}
 		else if(foundTypes.size() == 1) {
+			arrayPromote(node, foundTypes.get(0));
 			return foundTypes.get(0);
 		}
-		return Type.lowestCommonPromotion(foundTypes);
+
+		Type subType = Type.lowestCommonPromotion(foundTypes);
+		arrayPromote(node, foundTypes.get(0));
+		return subType;
 	}
 	private List<Type> findArrayTypes(ParseNode node) {
 		List<Type> foundTypes = new ArrayList<>();

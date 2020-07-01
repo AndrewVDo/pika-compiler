@@ -69,7 +69,9 @@ public class PrintStatementGenerator {
 
 
 	private static String printFormat(Type type) {
-		assert type instanceof PrimitiveType;
+		if(type instanceof ArrayType) {
+			type = ((ArrayType) type).getSubtype();
+		}
 		
 		switch((PrimitiveType)type) {
 		case INTEGER:	return RunTime.INTEGER_PRINT_FORMAT;

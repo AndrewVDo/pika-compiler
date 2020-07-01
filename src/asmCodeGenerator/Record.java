@@ -432,7 +432,7 @@ public class Record {
 
             Macros.loadIFrom(frag, RECORD_PRINT_FUNCTION + "-base-var");
             frag.add(Call, RECORD_CHECK_REFERENCE);
-            Macros.storeITo(frag, RECORD_PRINT_FUNCTION + "isref-var");
+            Macros.storeITo(frag, RECORD_PRINT_FUNCTION + "-isref-var");
 
                 frag.add(PushD, OPEN_BRACKET_STRING);
                 frag.add(PushD, STRING_PRINT_FORMAT);
@@ -454,6 +454,7 @@ public class Record {
                     Macros.loadIFrom(frag, RECORD_PRINT_FUNCTION + "-isref-var");
                     frag.add(JumpFalse, RECORD_PRINT_FUNCTION + "-not-ref");
                     //save arguments
+                    frag.add(LoadI);
                     Macros.loadIFrom(frag, RECORD_PRINT_FUNCTION + "-caller");
                         frag.add(Exchange);
                     Macros.loadIFrom(frag, RECORD_PRINT_FUNCTION + "-base-var");
