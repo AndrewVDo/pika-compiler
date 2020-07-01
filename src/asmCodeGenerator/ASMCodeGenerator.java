@@ -21,8 +21,6 @@ import symbolTable.Binding;
 import symbolTable.Scope;
 import static asmCodeGenerator.codeStorage.ASMCodeFragment.CodeType.*;
 import static asmCodeGenerator.codeStorage.ASMOpcode.*;
-import static asmCodeGenerator.runtime.MemoryManager.MEM_MANAGER_ALLOCATE;
-import static asmCodeGenerator.runtime.MemoryManager.codeForInitialization;
 
 // do not call the code generator if any errors have occurred during analysis.
 public class ASMCodeGenerator {
