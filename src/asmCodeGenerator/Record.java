@@ -478,6 +478,7 @@ public class Record {
                     frag.add(Jump, RECORD_PRINT_FUNCTION + "-print-ref-reentry");
                 //is val?
                     //load float/rational
+                    frag.add(Label, RECORD_PRINT_FUNCTION + "-not-ref");
                     frag.add(PushI, 8);
                     Macros.loadIFrom(frag, RECORD_PRINT_FUNCTION + "-subtype-var");
                     frag.add(Subtract);
@@ -491,7 +492,7 @@ public class Record {
                     Macros.loadIFrom(frag, RECORD_PRINT_FUNCTION + "-subtype-var");
                     frag.add(Subtract);
                     frag.add(JumpPos, RECORD_PRINT_FUNCTION + "-not-int");
-                    frag.add(Call, RECORD_GET_ELEMENT);
+                    frag.add(LoadI);
                     frag.add(Jump, RECORD_PRINT_FUNCTION + "-end-if");
 
                     //load char
@@ -522,6 +523,7 @@ public class Record {
                     frag.add(PushD, STRING_PRINT_FORMAT);
                     frag.add(Printf);
 
+            Macros.loadIFrom(frag, RECORD_PRINT_FUNCTION + "-caller");
             frag.add(Return);
     }
 }
