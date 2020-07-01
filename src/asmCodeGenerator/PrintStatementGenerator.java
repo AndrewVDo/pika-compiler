@@ -46,7 +46,12 @@ public class PrintStatementGenerator {
 		code.add(Printf);
 	}
 	private void printArray(ParseNode node) {
-		String format = printFormat(((ArrayType)node.getType()).getSubtype());
+		Type type = ((ArrayType)node.getType()).getSubtype();
+		while(type instanceof ArrayType) {
+			type = ((ArrayType)type).getSubtype();
+		}
+
+		String format = printFormat(type);
 		code.add(PushD, format);
 		Macros.storeITo(code, RECORD_PRINT_FORMAT);
 
