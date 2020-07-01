@@ -3,6 +3,6 @@ exec {
     var y := x[2].
     print x, _n_.
     print y, _n_.
-    dealloc y.
-    print x, _n_.
+    dealloc x.
+    print y, _n_.
 }

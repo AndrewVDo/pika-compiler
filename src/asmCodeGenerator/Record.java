@@ -613,6 +613,9 @@ public class Record {
     public static final void runtimeDeallocate(ASMCodeFragment frag) {
         Macros.declareI(frag, RECORD_DEALLOCATE + "-caller");
         Macros.declareI(frag, RECORD_DEALLOCATE + "-base-var");
+        Macros.declareI(frag, RECORD_DEALLOCATE + "-isref-var");
+        Macros.declareI(frag, RECORD_DEALLOCATE + "-loop-index");
+        Macros.declareI(frag, RECORD_DEALLOCATE + "-length-var");
         frag.add(Label, RECORD_DEALLOCATE);
             Macros.storeITo(frag, RECORD_DEALLOCATE + "-caller");
             Macros.storeITo(frag, RECORD_DEALLOCATE + "-base-var");
@@ -631,7 +634,64 @@ public class Record {
             frag.add(Call, RECORD_CHECK_PERMANENT);
             frag.add(JumpTrue, RECORD_DEALLOCATE + "-quiet-return");
 
-            //set status to deleted
+            //get length
+            Macros.loadIFrom(frag, RECORD_DEALLOCATE + "-base-var");
+            frag.add(Call, RECORD_GET_LENGTH);
+            Macros.storeITo(frag, RECORD_DEALLOCATE + "-length-var");
+
+
+        //if reference
+        Macros.loadIFrom(frag, RECORD_DEALLOCATE + "-base-var");
+        frag.add(Call, RECORD_CHECK_REFERENCE);
+        Macros.storeITo(frag, RECORD_DEALLOCATE + "-isref-var");
+
+        Macros.loadIFrom(frag, RECORD_DEALLOCATE + "-isref-var");
+        frag.add(JumpFalse, RECORD_DEALLOCATE + "-not-ref");
+
+        //loop
+                frag.add(PushI, 0);
+                Macros.storeITo(frag, RECORD_DEALLOCATE + "-loop-index");
+
+                frag.add(Label, RECORD_DEALLOCATE + "-loop-begin");
+                Macros.loadIFrom(frag, RECORD_DEALLOCATE + "-loop-index");
+                Macros.loadIFrom(frag, RECORD_DEALLOCATE + "-length-var");
+                frag.add(Subtract);                                     //[... length-i]
+                frag.add(JumpFalse, RECORD_DEALLOCATE + "-loop-end");
+
+                Macros.loadIFrom(frag, RECORD_DEALLOCATE + "-base-var");
+                Macros.loadIFrom(frag, RECORD_DEALLOCATE + "-loop-index");
+                frag.add(Call, RECORD_GET_ELEMENT);
+                frag.add(LoadI);
+
+                //save vars
+                Macros.loadIFrom(frag, RECORD_DEALLOCATE + "-caller");
+                frag.add(Exchange);
+                Macros.loadIFrom(frag, RECORD_DEALLOCATE + "-base-var");
+                frag.add(Exchange);
+                Macros.loadIFrom(frag, RECORD_DEALLOCATE + "-isref-var");
+                frag.add(Exchange);
+                Macros.loadIFrom(frag, RECORD_DEALLOCATE + "-loop-index");
+                frag.add(Exchange);
+                Macros.loadIFrom(frag, RECORD_DEALLOCATE + "-length-var");
+                frag.add(Exchange);
+                //recurse
+                frag.add(Call, RECORD_DEALLOCATE);
+                //restore
+                Macros.storeITo(frag, RECORD_DEALLOCATE + "-length-var");
+                Macros.storeITo(frag, RECORD_DEALLOCATE + "-loop-index");
+                Macros.storeITo(frag, RECORD_DEALLOCATE + "-isref-var");
+                Macros.storeITo(frag, RECORD_DEALLOCATE + "-base-var");
+                Macros.storeITo(frag, RECORD_DEALLOCATE + "-caller");
+
+                Macros.incrementInteger(frag, RECORD_DEALLOCATE + "-loop-index");
+
+                frag.add(Jump, RECORD_DEALLOCATE + "-loop-begin");
+                frag.add(Label, RECORD_DEALLOCATE + "-loop-end");
+        //loop
+
+        frag.add(Label, RECORD_DEALLOCATE + "-not-ref");
+
+        //set status to deleted
             Macros.loadIFrom(frag, RECORD_DEALLOCATE + "-base-var");
             frag.add(Call, RECORD_GET_STATUS);
             frag.add(PushI, 4);

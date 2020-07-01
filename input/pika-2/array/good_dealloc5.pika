@@ -1,0 +1,7 @@
+exec {
+    var x := ["string boi", "spring boi"].
+    var y := x[1].
+    dealloc x.
+    print y.
+
+}
