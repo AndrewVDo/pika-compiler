@@ -1,10 +1,10 @@
 package parseTree.nodeTypes;
 
 import lexicalAnalyzer.Keyword;
+import lexicalAnalyzer.Lextant;
 import parseTree.ParseNode;
 import parseTree.ParseNodeVisitor;
 import semanticAnalyzer.signatures.FunctionSignature;
-import lexicalAnalyzer.Lextant;
 import semanticAnalyzer.types.PrimitiveType;
 import semanticAnalyzer.types.Type;
 import tokens.LextantToken;

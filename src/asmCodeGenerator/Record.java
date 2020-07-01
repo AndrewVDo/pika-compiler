@@ -3,7 +3,6 @@ package asmCodeGenerator;
 import asmCodeGenerator.codeStorage.ASMCodeFragment;
 
 import static asmCodeGenerator.codeStorage.ASMOpcode.*;
-import static asmCodeGenerator.codeStorage.ASMOpcode.Exchange;
 import static asmCodeGenerator.runtime.MemoryManager.MEM_MANAGER_ALLOCATE;
 import static asmCodeGenerator.runtime.RunTime.*;
 
@@ -410,5 +409,119 @@ public class Record {
         Macros.loadIFrom(frag, RECORD_CLONE_FUNCTION + "-caller");
         frag.add(Return);
     }
-    //todo printer function
+    public static final String RECORD_PRINT_FUNCTION = "$record-print-fn";
+    public static final void runtimePrintFunction(ASMCodeFragment frag) {
+        Macros.declareI(frag, RECORD_PRINT_FUNCTION + "-caller");
+        Macros.declareI(frag, RECORD_PRINT_FUNCTION + "-base-var");
+        Macros.declareI(frag, RECORD_PRINT_FUNCTION + "-length-var");
+        Macros.declareI(frag, RECORD_PRINT_FUNCTION + "-subtype-var");
+        Macros.declareI(frag, RECORD_PRINT_FUNCTION + "-isref-var");
+        Macros.declareI(frag, RECORD_PRINT_FUNCTION + "-loop-index");
+        frag.add(Label, RECORD_PRINT_FUNCTION);
+            Macros.storeITo(frag, RECORD_PRINT_FUNCTION + "-caller");
+            checkNullPtrCode(frag);
+            Macros.storeITo(frag, RECORD_PRINT_FUNCTION + "-base-var");
+
+            Macros.loadIFrom(frag, RECORD_PRINT_FUNCTION + "-base-var");
+            frag.add(Call, RECORD_GET_LENGTH);
+            Macros.storeITo(frag, RECORD_PRINT_FUNCTION + "-length-var");
+
+            Macros.loadIFrom(frag, RECORD_PRINT_FUNCTION + "-base-var");
+            frag.add(Call, RECORD_GET_SUBTYPE_SIZE);
+            Macros.storeITo(frag, RECORD_PRINT_FUNCTION + "-subtype-var");
+
+            Macros.loadIFrom(frag, RECORD_PRINT_FUNCTION + "-base-var");
+            frag.add(Call, RECORD_CHECK_REFERENCE);
+            Macros.storeITo(frag, RECORD_PRINT_FUNCTION + "isref-var");
+
+                frag.add(PushD, OPEN_BRACKET_STRING);
+                frag.add(PushD, STRING_PRINT_FORMAT);
+                frag.add(Printf);
+
+            frag.add(PushI, 0);
+            Macros.storeITo(frag, RECORD_PRINT_FUNCTION + "-loop-index");
+
+            frag.add(Label, RECORD_PRINT_FUNCTION + "-loop-begin");
+            Macros.loadIFrom(frag, RECORD_PRINT_FUNCTION + "-loop-index");
+            Macros.loadIFrom(frag, RECORD_PRINT_FUNCTION + "-length-var");
+            frag.add(Subtract);                                     //[... length-i]
+            frag.add(JumpFalse, RECORD_PRINT_FUNCTION + "-loop-end");
+
+                Macros.loadIFrom(frag, RECORD_PRINT_FUNCTION + "-base-var");
+                Macros.loadIFrom(frag, RECORD_PRINT_FUNCTION + "-loop-index");
+                frag.add(Call, RECORD_GET_ELEMENT);
+                //is ref?
+                    Macros.loadIFrom(frag, RECORD_PRINT_FUNCTION + "-isref-var");
+                    frag.add(JumpFalse, RECORD_PRINT_FUNCTION + "-not-ref");
+                    //save arguments
+                    Macros.loadIFrom(frag, RECORD_PRINT_FUNCTION + "-caller");
+                        frag.add(Exchange);
+                    Macros.loadIFrom(frag, RECORD_PRINT_FUNCTION + "-base-var");
+                        frag.add(Exchange);
+                    Macros.loadIFrom(frag, RECORD_PRINT_FUNCTION + "-length-var");
+                        frag.add(Exchange);
+                    Macros.loadIFrom(frag, RECORD_PRINT_FUNCTION + "-subtype-var");
+                        frag.add(Exchange);
+                    Macros.loadIFrom(frag, RECORD_PRINT_FUNCTION + "-isref-var");
+                        frag.add(Exchange);
+                    Macros.loadIFrom(frag, RECORD_PRINT_FUNCTION + "-loop-index");
+                        frag.add(Exchange);
+                    //RECURSE
+                    frag.add(Call, RECORD_PRINT_FUNCTION);
+                    //RESTORE
+                    Macros.storeITo(frag, RECORD_PRINT_FUNCTION + "-loop-index");
+                    Macros.storeITo(frag, RECORD_PRINT_FUNCTION + "-isref-var");
+                    Macros.storeITo(frag, RECORD_PRINT_FUNCTION + "-subtype-var");
+                    Macros.storeITo(frag, RECORD_PRINT_FUNCTION + "-length-var");
+                    Macros.storeITo(frag, RECORD_PRINT_FUNCTION + "-base-var");
+                    Macros.storeITo(frag, RECORD_PRINT_FUNCTION + "-caller");
+                    frag.add(Jump, RECORD_PRINT_FUNCTION + "-print-ref-reentry");
+                //is val?
+                    //load float/rational
+                    frag.add(PushI, 8);
+                    Macros.loadIFrom(frag, RECORD_PRINT_FUNCTION + "-subtype-var");
+                    frag.add(Subtract);
+                    frag.add(JumpPos, RECORD_PRINT_FUNCTION + "-not-float");
+                    frag.add(LoadF);
+                    frag.add(Jump, RECORD_PRINT_FUNCTION + "-end-if");
+
+                    //load int
+                    frag.add(Label, RECORD_PRINT_FUNCTION + "-not-float");
+                    frag.add(PushI, 4);
+                    Macros.loadIFrom(frag, RECORD_PRINT_FUNCTION + "-subtype-var");
+                    frag.add(Subtract);
+                    frag.add(JumpPos, RECORD_PRINT_FUNCTION + "-not-int");
+                    frag.add(Call, RECORD_GET_ELEMENT);
+                    frag.add(Jump, RECORD_PRINT_FUNCTION + "-end-if");
+
+                    //load char
+                    frag.add(Label, RECORD_PRINT_FUNCTION + "-not-int");
+                    frag.add(LoadC);
+
+                    frag.add(Label, RECORD_PRINT_FUNCTION + "-end-if");
+                    Macros.loadIFrom(frag, RECORD_PRINT_FORMAT);
+                    frag.add(Printf);
+
+                    frag.add(Label, RECORD_PRINT_FUNCTION + "-print-ref-reentry");
+                    Macros.incrementInteger(frag, RECORD_PRINT_FUNCTION + "-loop-index");
+
+                    //element seperator
+                    Macros.loadIFrom(frag, RECORD_PRINT_FUNCTION + "-loop-index");
+                    Macros.loadIFrom(frag, RECORD_PRINT_FUNCTION + "-length-var");
+                    frag.add(Subtract);
+                    frag.add(JumpFalse, RECORD_PRINT_FUNCTION + "-dont-separate");
+                    frag.add(PushD, ARRAY_SEPARATION_STRING);
+                    frag.add(PushD, STRING_PRINT_FORMAT);
+                    frag.add(Printf);
+                    frag.add(Label, RECORD_PRINT_FUNCTION + "-dont-separate");
+
+                    frag.add(Jump, RECORD_PRINT_FUNCTION + "-loop-begin");
+                    frag.add(Label, RECORD_PRINT_FUNCTION + "-loop-end");
+
+                    frag.add(PushD, CLOSE_BRACKET_STRING);
+                    frag.add(PushD, STRING_PRINT_FORMAT);
+                    frag.add(Printf);
+
+            frag.add(Return);
+    }
 }

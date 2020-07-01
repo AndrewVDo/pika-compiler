@@ -1,7 +1,6 @@
 package tokens;
 
 import inputHandler.TextLocation;
-import parseTree.ParseNode;
 
 public class StringToken extends TokenImp {
 	protected String value;

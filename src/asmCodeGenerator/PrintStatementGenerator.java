@@ -1,15 +1,17 @@
 package asmCodeGenerator;
 
+import asmCodeGenerator.ASMCodeGenerator.CodeVisitor;
+import asmCodeGenerator.codeStorage.ASMCodeFragment;
+import asmCodeGenerator.runtime.RunTime;
 import parseTree.ParseNode;
 import parseTree.nodeTypes.PrintStatementNode;
 import semanticAnalyzer.types.ArrayType;
 import semanticAnalyzer.types.PrimitiveType;
 import semanticAnalyzer.types.Type;
-import asmCodeGenerator.ASMCodeGenerator.CodeVisitor;
-import asmCodeGenerator.codeStorage.ASMCodeFragment;
-import asmCodeGenerator.runtime.RunTime;
 
+import static asmCodeGenerator.Record.RECORD_PRINT_FUNCTION;
 import static asmCodeGenerator.codeStorage.ASMOpcode.*;
+import static asmCodeGenerator.runtime.RunTime.RECORD_PRINT_FORMAT;
 
 public class PrintStatementGenerator {
 	ASMCodeFragment code;
@@ -43,8 +45,10 @@ public class PrintStatementGenerator {
 	}
 	private void printArray(ParseNode node) {
 		String format = printFormat(((ArrayType)node.getType()).getSubtype());
+		Macros.loadIFrom(code, format);
+		Macros.storeITo(code, RECORD_PRINT_FORMAT);
 		code.append(visitor.removeValueCode(node)); //[base]
-		code.append(Record.printCode(format));
+		code.add(Call, RECORD_PRINT_FUNCTION);
 	}
 	private void convertToStringIfBoolean(ParseNode node) {
 		if(node.getType() != PrimitiveType.BOOLEAN) {

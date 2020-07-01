@@ -3,7 +3,6 @@ package parseTree.nodeTypes;
 import lexicalAnalyzer.Lextant;
 import parseTree.ParseNode;
 import parseTree.ParseNodeVisitor;
-import semanticAnalyzer.signatures.FunctionSignature;
 import tokens.LextantToken;
 import tokens.Token;
 

@@ -1,14 +1,11 @@
 package parseTree.nodeTypes;
 
 import lexicalAnalyzer.Keyword;
-import lexicalAnalyzer.Punctuator;
 import parseTree.ParseNode;
 import parseTree.ParseNodeVisitor;
 import semanticAnalyzer.types.ArrayType;
 import semanticAnalyzer.types.PrimitiveType;
 import semanticAnalyzer.types.Type;
-import semanticAnalyzer.types.TypeVariable;
-import tokens.IntegerToken;
 import tokens.LextantToken;
 import tokens.Token;
 

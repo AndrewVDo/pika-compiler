@@ -1,6 +1,6 @@
 package semanticAnalyzer;
 
-import parseTree.*;
+import parseTree.ParseNode;
 
 
 public class SemanticAnalyzer {

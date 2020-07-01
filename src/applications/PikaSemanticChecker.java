@@ -1,8 +1,5 @@
 package applications;
 
-import java.io.FileNotFoundException;
-import java.io.PrintStream;
-
 import lexicalAnalyzer.LexicalAnalyzer;
 import lexicalAnalyzer.Scanner;
 import parseTree.ParseNode;
@@ -10,6 +7,9 @@ import parseTree.ParseTreePrinter;
 import parser.Parser;
 import semanticAnalyzer.SemanticAnalyzer;
 import tokens.Tokens;
+
+import java.io.FileNotFoundException;
+import java.io.PrintStream;
 
 public class PikaSemanticChecker extends PikaApplication {
 	/** Checks semantics of a Pika file.

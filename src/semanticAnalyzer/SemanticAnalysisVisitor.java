@@ -1,12 +1,7 @@
 package semanticAnalyzer;
 
-import java.security.Key;
-import java.util.*;
-import java.util.function.Function;
-
 import lexicalAnalyzer.Keyword;
 import lexicalAnalyzer.Lextant;
-import lexicalAnalyzer.Punctuator;
 import logging.PikaLogger;
 import parseTree.ParseNode;
 import parseTree.ParseNodeVisitor;
@@ -16,11 +11,14 @@ import semanticAnalyzer.signatures.FunctionSignatures;
 import semanticAnalyzer.types.ArrayType;
 import semanticAnalyzer.types.PrimitiveType;
 import semanticAnalyzer.types.Type;
-import semanticAnalyzer.types.TypeVariable;
 import symbolTable.Binding;
 import symbolTable.Scope;
 import tokens.LextantToken;
 import tokens.Token;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 class SemanticAnalysisVisitor extends ParseNodeVisitor.Default {
 	@Override

@@ -1,13 +1,13 @@
 package semanticAnalyzer.signatures;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import semanticAnalyzer.types.PrimitiveType;
-import semanticAnalyzer.types.Type;
 import lexicalAnalyzer.Lextant;
 import lexicalAnalyzer.Punctuator;
+import semanticAnalyzer.types.PrimitiveType;
+import semanticAnalyzer.types.Type;
 import semanticAnalyzer.types.TypeVariable;
+
+import java.util.ArrayList;
+import java.util.List;
 
 //immutable
 public class FunctionSignature {

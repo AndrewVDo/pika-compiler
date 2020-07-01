@@ -2,7 +2,6 @@ package semanticAnalyzer.types;
 
 
 import java.util.Arrays;
-import java.util.List;
 
 public enum PrimitiveType implements Type {
 	BOOLEAN(1, false),

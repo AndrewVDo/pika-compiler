@@ -1,8 +1,8 @@
 package tokens;
 
 import inputHandler.Locator;
-import lexicalAnalyzer.Lextant;
 import inputHandler.TextLocation;
+import lexicalAnalyzer.Lextant;
 
 public interface Token extends Locator {
 	public String getLexeme();

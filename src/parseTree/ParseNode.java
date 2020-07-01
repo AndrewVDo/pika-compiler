@@ -1,8 +1,5 @@
 package parseTree;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import inputHandler.Locator;
 import inputHandler.TextLocation;
 import semanticAnalyzer.types.PrimitiveType;
@@ -11,6 +8,9 @@ import symbolTable.Binding;
 import symbolTable.Scope;
 import symbolTable.SymbolTable;
 import tokens.Token;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ParseNode implements Locator {
 	public static final ParseNode NO_PARENT = null;

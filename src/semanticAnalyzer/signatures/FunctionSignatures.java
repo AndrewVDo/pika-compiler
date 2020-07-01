@@ -1,16 +1,15 @@
 package semanticAnalyzer.signatures;
 
-import java.util.*;
-
 import asmCodeGenerator.*;
 import asmCodeGenerator.codeStorage.ASMOpcode;
 import lexicalAnalyzer.Keyword;
 import lexicalAnalyzer.Punctuator;
 import semanticAnalyzer.types.ArrayType;
-import semanticAnalyzer.types.Type;
-
 import semanticAnalyzer.types.PrimitiveType;
+import semanticAnalyzer.types.Type;
 import semanticAnalyzer.types.TypeVariable;
+
+import java.util.*;
 
 
 public class FunctionSignatures extends ArrayList<FunctionSignature> {

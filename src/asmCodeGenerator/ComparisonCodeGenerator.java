@@ -5,23 +5,11 @@ import asmCodeGenerator.codeStorage.ASMCodeFragment.CodeType;
 import asmCodeGenerator.codeStorage.ASMOpcode;
 import lexicalAnalyzer.Lextant;
 import lexicalAnalyzer.Punctuator;
-
-import static asmCodeGenerator.codeStorage.ASMOpcode.Subtract;
-import static asmCodeGenerator.codeStorage.ASMOpcode.FSubtract;
-import static asmCodeGenerator.codeStorage.ASMOpcode.JumpPos;
-import static asmCodeGenerator.codeStorage.ASMOpcode.JumpFPos;
-import static asmCodeGenerator.codeStorage.ASMOpcode.JumpNeg;
-import static asmCodeGenerator.codeStorage.ASMOpcode.JumpFNeg;
-import static asmCodeGenerator.codeStorage.ASMOpcode.JumpFalse;
-import static asmCodeGenerator.codeStorage.ASMOpcode.JumpFZero;
-import static asmCodeGenerator.codeStorage.ASMOpcode.Jump;
-import static asmCodeGenerator.codeStorage.ASMOpcode.Nop;
-import static asmCodeGenerator.codeStorage.ASMOpcode.BEqual;
-import static asmCodeGenerator.codeStorage.ASMOpcode.JumpTrue;
-
 import parseTree.ParseNode;
 import semanticAnalyzer.types.PrimitiveType;
 import semanticAnalyzer.types.Type;
+
+import static asmCodeGenerator.codeStorage.ASMOpcode.*;
 
 public class ComparisonCodeGenerator {
 	static public ASMCodeFragment generate(ParseNode node, Lextant operator, String trueLabel, String falseLabel) {

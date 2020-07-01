@@ -1,8 +1,8 @@
 package parseTree.nodeTypes;
 
+import lexicalAnalyzer.Keyword;
 import parseTree.ParseNode;
 import parseTree.ParseNodeVisitor;
-import lexicalAnalyzer.Keyword;
 import tokens.Token;
 
 public class PrintStatementNode extends ParseNode {

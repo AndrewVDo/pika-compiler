@@ -11,7 +11,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.stream.Stream;
 
-import static applications.tests.CompilerTest.TestFinder.*;
+import static applications.tests.CompilerTest.TestFinder.GOOD_TEST;
+import static applications.tests.CompilerTest.TestFinder.findTestsByPrefix;
 
 public class GoodTest extends CompilerTestFixture{
 

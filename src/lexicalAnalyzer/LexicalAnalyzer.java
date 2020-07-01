@@ -1,22 +1,10 @@
 package lexicalAnalyzer;
 
+import inputHandler.*;
 import logging.PikaLogger;
+import tokens.*;
 
-import inputHandler.InputHandler;
-import inputHandler.LocatedChar;
-import inputHandler.LocatedCharStream;
-import inputHandler.PushbackCharStream;
-import inputHandler.TextLocation;
-import tokens.CharacterToken;
-import tokens.FloatToken;
-import tokens.IdentifierToken;
-import tokens.LextantToken;
-import tokens.NullToken;
-import tokens.StringToken;
-import tokens.IntegerToken;
-import tokens.Token;
-
-import static lexicalAnalyzer.PunctuatorScanningAids.*;
+import static lexicalAnalyzer.PunctuatorScanningAids.isPunctuatorStartingCharacter;
 
 public class LexicalAnalyzer extends ScannerImp implements Scanner {
 	public static LexicalAnalyzer make(String filename) {

@@ -1,6 +1,7 @@
 package semanticAnalyzer.types;
 
-import java.util.*;
+import java.util.List;
+import java.util.Map;
 
 public interface Type {
 	/** returns the size of an instance of this type, in bytes.

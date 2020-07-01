@@ -1,19 +1,14 @@
 package applications.tests;
 
-import static applications.tests.FixtureDefinitions.TOKEN_PRINTER_EXPECTED_FILENAME;
-import static applications.tests.FixtureDefinitions.TOKEN_PRINTER_INPUT_FILENAME;
-
-import static applications.tests.FixtureDefinitions.MILESTONE_1_TESTS_INPUT;
-import static applications.tests.FixtureDefinitions.MILESTONE_1_TESTS_EXPECTED;
+import applications.PikaTokenPrinter;
+import org.junit.Test;
+import tests.FileFixturesTestCase;
+import tokens.Tokens;
 
 import java.io.FileNotFoundException;
 import java.io.PrintStream;
 
-import org.junit.Test;
-
-import tests.FileFixturesTestCase;
-import tokens.Tokens;
-import applications.PikaTokenPrinter;
+import static applications.tests.FixtureDefinitions.*;
 
 public class TestTokenPrinter extends FileFixturesTestCase {
 

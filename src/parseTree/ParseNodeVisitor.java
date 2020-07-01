@@ -2,8 +2,6 @@ package parseTree;
 
 import parseTree.nodeTypes.*;
 
-import java.util.function.UnaryOperator;
-
 // Visitor pattern with pre- and post-order visits
 public interface ParseNodeVisitor {
 	

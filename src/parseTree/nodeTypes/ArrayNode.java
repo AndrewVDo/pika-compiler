@@ -1,10 +1,8 @@
 package parseTree.nodeTypes;
 
-import lexicalAnalyzer.Keyword;
 import parseTree.ParseNode;
 import parseTree.ParseNodeVisitor;
 import semanticAnalyzer.signatures.FunctionSignature;
-import tokens.LextantToken;
 import tokens.Token;
 
 import java.util.List;

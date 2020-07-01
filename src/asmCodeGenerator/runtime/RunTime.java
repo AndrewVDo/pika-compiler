@@ -1,10 +1,11 @@
 package asmCodeGenerator.runtime;
-import static asmCodeGenerator.Record.*;
-import static asmCodeGenerator.codeStorage.ASMCodeFragment.CodeType.*;
-import static asmCodeGenerator.codeStorage.ASMOpcode.*;
 
 import asmCodeGenerator.Macros;
 import asmCodeGenerator.codeStorage.ASMCodeFragment;
+
+import static asmCodeGenerator.Record.*;
+import static asmCodeGenerator.codeStorage.ASMCodeFragment.CodeType.GENERATES_VOID;
+import static asmCodeGenerator.codeStorage.ASMOpcode.*;
 public class RunTime {
 	public static final String EAT_LOCATION_ZERO      = "$eat-location-zero";		// helps us distinguish null pointers from real ones.
 	public static final String INTEGER_PRINT_FORMAT   = "$print-format-integer";
@@ -19,7 +20,7 @@ public class RunTime {
 	public static final String BOOLEAN_FALSE_STRING   = "$boolean-false-string";
 	public static final String OPEN_BRACKET_STRING    = "$open-bracket-string";
 	public static final String CLOSE_BRACKET_STRING   = "$close-bracket-string";
-	public static final String ARRAY_SEPERATION_STRING   = "$array-seperate-string";
+	public static final String ARRAY_SEPARATION_STRING = "$array-seperate-string";
 
 	public static final String GLOBAL_MEMORY_BLOCK    = "$global-memory-block";
 	public static final String USABLE_MEMORY_START    = "$usable-memory-start";
@@ -34,6 +35,8 @@ public class RunTime {
 	public static final String DELETED_RECORD_RUNTIME_ERROR = "$$deleted-record";
 	public static final String IMMUTABLE_RECORD_RUNTIME_ERROR = "$$immutable-record";
 
+	public static final String RECORD_PRINT_FORMAT = "$record-print-format";
+
 
 	private ASMCodeFragment environmentASM() {
 		ASMCodeFragment result = new ASMCodeFragment(GENERATES_VOID);
@@ -41,6 +44,7 @@ public class RunTime {
 		result.append(stringsForPrintf());
 		result.append(runtimeErrors());
 		recordFunctions(result);
+		Macros.declareI(result, RECORD_PRINT_FORMAT);
 		result.add(DLabel, USABLE_MEMORY_START);
 		return result;
 	}
@@ -79,7 +83,7 @@ public class RunTime {
 		frag.add(DataS, "[");
 		frag.add(DLabel, CLOSE_BRACKET_STRING);
 		frag.add(DataS, "]");
-		frag.add(DLabel, ARRAY_SEPERATION_STRING);
+		frag.add(DLabel, ARRAY_SEPARATION_STRING);
 		frag.add(DataS, ", ");
 		
 		return frag;
@@ -196,5 +200,6 @@ public class RunTime {
 		runtimeSetElement(frag);
 		runtimeAllocateRecord(frag);
 		runtimeCloneRecord(frag);
+		runtimePrintFunction(frag);
 	}
 }

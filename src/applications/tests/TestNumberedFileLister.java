@@ -1,15 +1,14 @@
 package applications.tests;
 
-import static applications.tests.FixtureDefinitions.NUMBERED_FILE_EXPECTED_FILENAME;
-import static applications.tests.FixtureDefinitions.NUMBERED_FILE_INPUT_FILENAME;
+import applications.NumberedFileLister;
+import org.junit.Test;
+import tests.FileFixturesTestCase;
 
 import java.io.FileNotFoundException;
 import java.io.PrintStream;
 
-import org.junit.Test;
-
-import tests.FileFixturesTestCase;
-import applications.NumberedFileLister;
+import static applications.tests.FixtureDefinitions.NUMBERED_FILE_EXPECTED_FILENAME;
+import static applications.tests.FixtureDefinitions.NUMBERED_FILE_INPUT_FILENAME;
 
 public class TestNumberedFileLister extends FileFixturesTestCase {
 

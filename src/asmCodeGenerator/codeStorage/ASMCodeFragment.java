@@ -1,11 +1,10 @@
 package asmCodeGenerator.codeStorage;
 
 import inputHandler.InputHandler;
+import logging.PikaLogger;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import logging.PikaLogger;
 
 public class ASMCodeFragment {
 	private List<ASMCodeChunk> chunks;

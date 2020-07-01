@@ -1,13 +1,12 @@
 package symbolTable;
 
+import logging.PikaLogger;
+import tokens.Token;
+
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
-
-import logging.PikaLogger;
-
-import tokens.Token;
 
 public class SymbolTable {
 	private Map<String, Binding> table;

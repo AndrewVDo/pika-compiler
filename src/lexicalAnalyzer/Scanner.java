@@ -1,7 +1,8 @@
 package lexicalAnalyzer;
 
-import java.util.Iterator;
 import tokens.Token;
+
+import java.util.Iterator;
 
 public interface Scanner extends Iterator<Token> {
 
