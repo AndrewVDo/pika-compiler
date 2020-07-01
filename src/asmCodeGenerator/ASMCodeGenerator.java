@@ -148,6 +148,9 @@ public class ASMCodeGenerator {
 			else if(node.getType() == PrimitiveType.STRING || node.getType() instanceof ArrayType) {
 				code.add(LoadI);
 			}
+			else if(node.getType() == PrimitiveType.RATIONAL) {
+				code.add(Nop);
+			}
 			else {
 				assert false : "node " + node;
 			}
@@ -203,7 +206,7 @@ public class ASMCodeGenerator {
 			if(type == PrimitiveType.INTEGER) {
 				return StoreI;
 			}
-			if(type == PrimitiveType.FLOATING) {
+			if(type == PrimitiveType.FLOATING || type == PrimitiveType.RATIONAL) {
 				return StoreF;
 			}
 			if(type == PrimitiveType.BOOLEAN) {
@@ -435,7 +438,7 @@ public class ASMCodeGenerator {
 			
 			code.append(arg1);
 			code.append(arg2);
-			
+
 			Object variant = node.getSignature().getVariant();
 			if(variant instanceof ASMOpcode) {
 				ASMOpcode opcode = (ASMOpcode)variant;

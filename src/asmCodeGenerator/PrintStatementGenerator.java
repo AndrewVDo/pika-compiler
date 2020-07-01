@@ -4,11 +4,13 @@ import asmCodeGenerator.ASMCodeGenerator.CodeVisitor;
 import asmCodeGenerator.codeStorage.ASMCodeFragment;
 import asmCodeGenerator.runtime.RunTime;
 import parseTree.ParseNode;
+import parseTree.nodeTypes.IdentifierNode;
 import parseTree.nodeTypes.PrintStatementNode;
 import semanticAnalyzer.types.ArrayType;
 import semanticAnalyzer.types.PrimitiveType;
 import semanticAnalyzer.types.Type;
 
+import static asmCodeGenerator.RationalGenerator.RATIONAL_PRINT;
 import static asmCodeGenerator.Record.RECORD_HEADER_SIZE;
 import static asmCodeGenerator.Record.RECORD_PRINT_FUNCTION;
 import static asmCodeGenerator.codeStorage.ASMOpcode.*;
@@ -34,6 +36,19 @@ public class PrintStatementGenerator {
 	private void appendPrintCode(ParseNode node) {
 		if(node.getType() instanceof ArrayType) {
 			printArray(node);
+			return;
+		}
+		if(node.getType() == PrimitiveType.RATIONAL) {
+			if(node instanceof IdentifierNode) {
+				code.append(visitor.removeValueCode(node));
+				code.add(Call, RATIONAL_PRINT);
+			}
+			else {
+				code.append(visitor.removeValueCode(node));
+				code.add(Pop);
+				code.add(PushD, RATIONAL_TEMP);
+				code.add(Call, RATIONAL_PRINT);
+			}
 			return;
 		}
 
@@ -95,6 +110,7 @@ public class PrintStatementGenerator {
 		if(type instanceof ArrayType) {
 			type = ((ArrayType) type).getSubtype();
 		}
+
 		
 		switch((PrimitiveType)type) {
 		case INTEGER:	return RunTime.INTEGER_PRINT_FORMAT;

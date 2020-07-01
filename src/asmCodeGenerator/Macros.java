@@ -24,6 +24,10 @@ public class Macros {
 		frag.add(PushD, location);
 		frag.add(LoadI);
 	}
+	public static void loadFFrom(ASMCodeFragment frag, String location) {
+		frag.add(PushD, location);
+		frag.add(LoadF);
+	}
 	public static void storeITo(ASMCodeFragment frag, String location) {
 		frag.add(PushD, location);
 		frag.add(Exchange);
@@ -32,6 +36,10 @@ public class Macros {
 	public static void declareI(ASMCodeFragment frag, String variableName) {
 		frag.add(DLabel, variableName);
 		frag.add(DataZ, 4);
+	}
+	public static void declareF(ASMCodeFragment frag, String variableName) {
+		frag.add(DLabel, variableName);
+		frag.add(DataZ, 8);
 	}
 	
 	/** [... baseLocation] -> [... intValue]

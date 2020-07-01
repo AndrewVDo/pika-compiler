@@ -3,6 +3,7 @@ package asmCodeGenerator.runtime;
 import asmCodeGenerator.Macros;
 import asmCodeGenerator.codeStorage.ASMCodeFragment;
 
+import static asmCodeGenerator.RationalGenerator.runtimeRationalPrint;
 import static asmCodeGenerator.Record.*;
 import static asmCodeGenerator.codeStorage.ASMCodeFragment.CodeType.GENERATES_VOID;
 import static asmCodeGenerator.codeStorage.ASMOpcode.*;
@@ -38,6 +39,8 @@ public class RunTime {
 	public static final String RECORD_PRINT_FORMAT = "$record-print-format";
 	public static final String RECORD_PRINT_BOOL_FLAG = "$record-print-bool";
 
+	public static final String RATIONAL_TEMP = "$rational-temp";
+
 
 	private ASMCodeFragment environmentASM() {
 		ASMCodeFragment result = new ASMCodeFragment(GENERATES_VOID);
@@ -45,8 +48,10 @@ public class RunTime {
 		result.append(stringsForPrintf());
 		result.append(runtimeErrors());
 		recordFunctions(result);
+		rationalFunctions(result);
 		Macros.declareI(result, RECORD_PRINT_FORMAT);
 		Macros.declareI(result, RECORD_PRINT_BOOL_FLAG);
+		Macros.declareF(result, RATIONAL_TEMP);
 		result.add(DLabel, USABLE_MEMORY_START);
 		return result;
 	}
@@ -209,5 +214,8 @@ public class RunTime {
 		runtimePrintString(frag);
 		runtimePrintBool(frag);
 		runtimeDeallocate(frag);
+	}
+	private void rationalFunctions(ASMCodeFragment frag) {
+		runtimeRationalPrint(frag);
 	}
 }

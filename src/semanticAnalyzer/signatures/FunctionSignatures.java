@@ -177,6 +177,16 @@ public class FunctionSignatures extends ArrayList<FunctionSignature> {
 				new FunctionSignature(1, SetS, SA, SA)
 		);
 
+		new FunctionSignatures(Punctuator.RAT_OP1,
+				new FunctionSignature(new RationalGenerator(), PrimitiveType.INTEGER, PrimitiveType.INTEGER, PrimitiveType.RATIONAL)
+		);
+		new FunctionSignatures(Punctuator.RAT_OP2,
+				new FunctionSignature(new RationalGenerator(), PrimitiveType.INTEGER, PrimitiveType.INTEGER, PrimitiveType.RATIONAL)
+		);
+		new FunctionSignatures(Punctuator.RAT_OP3,
+				new FunctionSignature(new RationalGenerator(), PrimitiveType.INTEGER, PrimitiveType.INTEGER, PrimitiveType.RATIONAL)
+		);
+
 
 
 	}

@@ -412,7 +412,7 @@ public class Parser {
 		}
 		
 		ParseNode left = parseUnaryExpression();
-		while(nowReading.isLextant(Punctuator.MULTIPLY, Punctuator.DIVIDE)) {
+		while(nowReading.isLextant(Punctuator.MULTIPLY, Punctuator.DIVIDE, Punctuator.RAT_OP1, Punctuator.RAT_OP2, Punctuator.RAT_OP3)) {
 			Token multiplicativeToken = nowReading;
 			readToken();
 			ParseNode right = parseUnaryExpression();
