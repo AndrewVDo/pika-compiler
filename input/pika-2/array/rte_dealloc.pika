@@ -2,5 +2,5 @@ exec {
     var x := [1, 2, 3, 4, 5].
     print x.
     dealloc x.
-    dealloc x.
+    print x.
 }

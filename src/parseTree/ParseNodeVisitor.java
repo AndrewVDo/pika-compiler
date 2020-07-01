@@ -39,6 +39,9 @@ public interface ParseNodeVisitor {
 	void visitEnter(ControlFlowNode node);
 	void visitLeave(ControlFlowNode node);
 
+	void visitEnter(DeallocNode node);
+	void visitLeave(DeallocNode node);
+
 	void visitEnter(ArrayNode node);
 	void visitLeave(ArrayNode node);
 
@@ -126,6 +129,12 @@ public interface ParseNodeVisitor {
 			defaultVisitEnter(node);
 		}
 		public void visitLeave(ControlFlowNode node) {
+			defaultVisitLeave(node);
+		}
+		public void visitEnter(DeallocNode node) {
+			defaultVisitEnter(node);
+		}
+		public void visitLeave(DeallocNode node) {
 			defaultVisitLeave(node);
 		}
 		public void visitEnter(ArrayNode node) {

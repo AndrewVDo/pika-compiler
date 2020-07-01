@@ -113,8 +113,14 @@ public class Parser {
 	}
 
 	private ParseNode parseDeallocStatement() {
-		expect(Keyword.DEALLOC);
-		//todo
+		if(!startsDeallocStatement(nowReading)) {
+			return syntaxErrorNode("dealloc statement");
+		}
+		Token token = nowReading;
+		readToken();
+		ParseNode array = parseExpression();
+		expect(Punctuator.TERMINATOR);
+		return DeallocNode.withChildren(token, array);
 	}
 	private boolean startsDeallocStatement(Token nowReading) {
 		return nowReading.isLextant(Keyword.DEALLOC);
@@ -160,7 +166,8 @@ public class Parser {
 			   startsBlockStatement(token) ||	
 			   startsAssignmentStatement(token) ||
 			   startsDeclaration(token) ||
-				startsControlFlowStatement(token);
+				startsControlFlowStatement(token) ||
+				startsDeallocStatement(token);
 	}
 	
 	// assignment -> target := expression .

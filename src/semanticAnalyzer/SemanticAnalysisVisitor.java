@@ -109,6 +109,17 @@ class SemanticAnalysisVisitor extends ParseNodeVisitor.Default {
 	}
 
 	@Override
+	public void visitLeave(DeallocNode node) {
+		assert(node.nChildren() == 1);
+		Type childType = node.child(0).getType();
+		if(!(childType instanceof ArrayType) && childType != PrimitiveType.STRING) {
+			typeCheckError(node, List.of(childType));
+			node.setType(PrimitiveType.ERROR);
+		}
+		node.setType(PrimitiveType.NO_TYPE);
+	}
+
+	@Override
 	public void visitLeave(ArrayNode node) {
 		assert(node.nChildren() > 0);
 

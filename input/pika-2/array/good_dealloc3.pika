@@ -1,0 +1,9 @@
+exec {
+    var x := [1, 2, 3, 4, 5].
+    var y := alloc [float] (10).
+    var z := clone x.
+    var a := x.
+    dealloc x.
+
+    print z, _n_, y, _n_.
+}

@@ -3,8 +3,11 @@ package asmCodeGenerator;
 import asmCodeGenerator.codeStorage.ASMCodeFragment;
 import asmCodeGenerator.runtime.RunTime;
 
+import javax.crypto.Mac;
+
 import static asmCodeGenerator.codeStorage.ASMOpcode.*;
 import static asmCodeGenerator.runtime.MemoryManager.MEM_MANAGER_ALLOCATE;
+import static asmCodeGenerator.runtime.MemoryManager.MEM_MANAGER_DEALLOCATE;
 import static asmCodeGenerator.runtime.RunTime.*;
 
 public class Record {
@@ -609,12 +612,40 @@ public class Record {
     public static final String RECORD_DEALLOCATE = "$record-deallocate-fn";
     public static final void runtimeDeallocate(ASMCodeFragment frag) {
         Macros.declareI(frag, RECORD_DEALLOCATE + "-caller");
+        Macros.declareI(frag, RECORD_DEALLOCATE + "-base-var");
         frag.add(Label, RECORD_DEALLOCATE);
             Macros.storeITo(frag, RECORD_DEALLOCATE + "-caller");
+            Macros.storeITo(frag, RECORD_DEALLOCATE + "-base-var");
 
-            //todo
+            //check null
+            Macros.loadIFrom(frag, RECORD_DEALLOCATE + "-base-var");
+            frag.add(JumpFalse, NULL_PTR_RUNTIME_ERROR);
 
-        Macros.loadIFrom(frag, RECORD_PRINT_BOOL + "-caller");
+            //check deleted
+            Macros.loadIFrom(frag, RECORD_DEALLOCATE + "-base-var");
+            frag.add(Call, RECORD_CHECK_DELETED);
+            frag.add(JumpTrue, RECORD_DEALLOCATE + "-quiet-return");
+
+            //check permanent
+            Macros.loadIFrom(frag, RECORD_DEALLOCATE + "-base-var");
+            frag.add(Call, RECORD_CHECK_PERMANENT);
+            frag.add(JumpTrue, RECORD_DEALLOCATE + "-quiet-return");
+
+            //set status to deleted
+            Macros.loadIFrom(frag, RECORD_DEALLOCATE + "-base-var");
+            frag.add(Call, RECORD_GET_STATUS);
+            frag.add(PushI, 4);
+            frag.add(BTOr);
+            Macros.loadIFrom(frag, RECORD_DEALLOCATE + "-base-var");
+            Macros.writeIOffset(frag, RECORD_STATUS_OFFSET);
+
+            //deallocate
+            Macros.loadIFrom(frag, RECORD_DEALLOCATE + "-base-var");
+            frag.add(Call, MEM_MANAGER_DEALLOCATE);
+
+
+            frag.add(Label, RECORD_DEALLOCATE + "-quiet-return");
+        Macros.loadIFrom(frag, RECORD_DEALLOCATE + "-caller");
         frag.add(Return);
     }
 }

@@ -6,9 +6,9 @@ import parseTree.ParseNodeVisitor;
 import tokens.LextantToken;
 import tokens.Token;
 
-public class AssignmentStatementNode extends ParseNode {
+public class DeallocNode extends ParseNode {
 
-	public AssignmentStatementNode(Token token) {
+	public DeallocNode(Token token) {
 		super(token);
 	}
 
@@ -19,10 +19,9 @@ public class AssignmentStatementNode extends ParseNode {
 		return (LextantToken)token;
 	}	
 
-	public static AssignmentStatementNode withChildren(Token token, ParseNode declaredName, ParseNode initializer) {
-		AssignmentStatementNode node = new AssignmentStatementNode(token);
-		node.appendChild(declaredName);
-		node.appendChild(initializer);
+	public static DeallocNode withChildren(Token token, ParseNode arrayNode) {
+		DeallocNode node = new DeallocNode(token);
+		node.appendChild(arrayNode);
 		return node;
 	}
 	

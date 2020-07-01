@@ -208,5 +208,6 @@ public class RunTime {
 		runtimeInitElement(frag);
 		runtimePrintString(frag);
 		runtimePrintBool(frag);
+		runtimeDeallocate(frag);
 	}
 }

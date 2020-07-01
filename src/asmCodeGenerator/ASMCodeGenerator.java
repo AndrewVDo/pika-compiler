@@ -19,6 +19,7 @@ import symbolTable.Scope;
 import java.util.HashMap;
 import java.util.Map;
 
+import static asmCodeGenerator.Record.RECORD_DEALLOCATE;
 import static asmCodeGenerator.codeStorage.ASMCodeFragment.CodeType.*;
 import static asmCodeGenerator.codeStorage.ASMOpcode.*;
 
@@ -228,6 +229,13 @@ public class ASMCodeGenerator {
 			
 			Type type = node.getType();
 			code.add(opcodeForStore(type));
+		}
+
+		public void visitLeave(DeallocNode node) {
+			newVoidCode(node);
+			ASMCodeFragment valueCode = removeValueCode(node.child(0));
+			code.append(valueCode);
+			code.add(Call, RECORD_DEALLOCATE);
 		}
 
 		public void visitLeave(ControlFlowNode node) {
