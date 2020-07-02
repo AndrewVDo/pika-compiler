@@ -39,7 +39,6 @@ public interface Type {
 			return types.get(0);
 		}
 
-		//todo multi array type?
 		TypeVariable tv = new TypeVariable("no_type");
 		if(lCPHelper(types, new ArrayType(tv))) {
 			return new ArrayType(tv);

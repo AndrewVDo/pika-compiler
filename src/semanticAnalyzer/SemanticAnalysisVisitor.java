@@ -170,7 +170,7 @@ class SemanticAnalysisVisitor extends ParseNodeVisitor.Default {
 		}
 
 		Type subType = Type.lowestCommonPromotion(foundTypes);
-		arrayPromote(node, foundTypes.get(0));
+		arrayPromote(node, subType);
 		return subType;
 	}
 	private List<Type> findArrayTypes(ParseNode node) {
