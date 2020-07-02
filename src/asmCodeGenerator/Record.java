@@ -5,6 +5,7 @@ import asmCodeGenerator.runtime.RunTime;
 
 import javax.crypto.Mac;
 
+import static asmCodeGenerator.RationalGenerator.RATIONAL_PRINT;
 import static asmCodeGenerator.codeStorage.ASMOpcode.*;
 import static asmCodeGenerator.runtime.MemoryManager.MEM_MANAGER_ALLOCATE;
 import static asmCodeGenerator.runtime.MemoryManager.MEM_MANAGER_DEALLOCATE;
@@ -529,6 +530,13 @@ public class Record {
                     frag.add(Subtract);
                     frag.add(JumpPos, RECORD_PRINT_FUNCTION + "-not-float");
                     frag.add(LoadF);
+
+                        //rational
+                        Macros.loadIFrom(frag, RECORD_PRINT_RAT_FLAG);
+                        frag.add(JumpFalse, RECORD_PRINT_FUNCTION + "-end-if");
+                        frag.add(Call, RATIONAL_PRINT);
+                        frag.add(Jump, RECORD_PRINT_FUNCTION + "-print-ref-reentry");
+
                     frag.add(Jump, RECORD_PRINT_FUNCTION + "-end-if");
 
                     //load int

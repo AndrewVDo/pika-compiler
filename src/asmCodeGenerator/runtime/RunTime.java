@@ -17,6 +17,7 @@ public class RunTime {
 	public static final String INTEGER_PRINT_FORMAT   = "$print-format-integer";
 	public static final String FLOATING_PRINT_FORMAT  = "$print-format-floating";
 	public static final String BOOLEAN_PRINT_FORMAT   = "$print-format-boolean";
+	public static final String RATIONAL_PRINT_FORMAT  = "$print-format-rational";
 	public static final String CHARACTER_PRINT_FORMAT = "$print-format-character";
 	public static final String STRING_PRINT_FORMAT	  = "$print-format-string";
 	public static final String NEWLINE_PRINT_FORMAT   = "$print-format-newline";
@@ -43,6 +44,8 @@ public class RunTime {
 
 	public static final String RECORD_PRINT_FORMAT = "$record-print-format";
 	public static final String RECORD_PRINT_BOOL_FLAG = "$record-print-bool";
+	public static final String RECORD_PRINT_RAT_FLAG = "$record-print-rat";
+
 
 	public static final String RATIONAL_TEMP = "$rational-temp";
 
@@ -56,6 +59,7 @@ public class RunTime {
 		rationalFunctions(result);
 		Macros.declareI(result, RECORD_PRINT_FORMAT);
 		Macros.declareI(result, RECORD_PRINT_BOOL_FLAG);
+		Macros.declareI(result, RECORD_PRINT_RAT_FLAG);
 		Macros.declareF(result, RATIONAL_TEMP);
 		result.add(DLabel, USABLE_MEMORY_START);
 		return result;
@@ -71,6 +75,8 @@ public class RunTime {
 		ASMCodeFragment frag = new ASMCodeFragment(GENERATES_VOID);
 		frag.add(DLabel, EAT_LOCATION_ZERO);
 		frag.add(DataZ, 8);
+		frag.add(DLabel, RATIONAL_PRINT_FORMAT); //dummy
+		frag.add(DataS, "%d");
 		frag.add(DLabel, INTEGER_PRINT_FORMAT);
 		frag.add(DataS, "%d");
 		frag.add(DLabel, FLOATING_PRINT_FORMAT);

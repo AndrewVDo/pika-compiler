@@ -68,6 +68,12 @@ public class PrintStatementGenerator {
 				code.add(PushI, 0);
 			}
 			Macros.storeITo(code, RECORD_PRINT_BOOL_FLAG);
+			if(format.equals(RunTime.RATIONAL_PRINT_FORMAT)) {
+				code.add(PushI, 1);
+			} else {
+				code.add(PushI, 0);
+			}
+			Macros.storeITo(code, RECORD_PRINT_RAT_FLAG);
 
 		code.append(visitor.removeValueCode(node)); //[base]
 		code.add(Call, RECORD_PRINT_FUNCTION);
@@ -110,6 +116,7 @@ public class PrintStatementGenerator {
 		case BOOLEAN:	return RunTime.BOOLEAN_PRINT_FORMAT;
 		case CHARACTER: return RunTime.CHARACTER_PRINT_FORMAT;
 		case STRING: return RunTime.STRING_PRINT_FORMAT;
+		case RATIONAL: return RunTime.RATIONAL_PRINT_FORMAT;
 		default:		
 			assert false : "Type " + type + " unimplemented in PrintStatementGenerator.printFormat()";
 			return "";
