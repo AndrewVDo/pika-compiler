@@ -1,10 +1,7 @@
 package semanticAnalyzer.signatures;
 
 import asmCodeGenerator.*;
-import asmCodeGenerator.RationalMath.RationalAdd;
-import asmCodeGenerator.RationalMath.RationalDivide;
-import asmCodeGenerator.RationalMath.RationalMultiply;
-import asmCodeGenerator.RationalMath.RationalSubtract;
+import asmCodeGenerator.RationalMath.*;
 import asmCodeGenerator.codeStorage.ASMOpcode;
 import lexicalAnalyzer.Keyword;
 import lexicalAnalyzer.Punctuator;
@@ -131,7 +128,8 @@ public class FunctionSignatures extends ArrayList<FunctionSignature> {
 		new FunctionSignatures(PrimitiveType.INTEGER,
 				new FunctionSignature(new CharToIntCodeGenerator(), PrimitiveType.CHARACTER, PrimitiveType.INTEGER),
 				new FunctionSignature(ASMOpcode.ConvertI, PrimitiveType.FLOATING, PrimitiveType.INTEGER),
-				new FunctionSignature(ASMOpcode.Nop, PrimitiveType.INTEGER, PrimitiveType.INTEGER)
+				new FunctionSignature(ASMOpcode.Nop, PrimitiveType.INTEGER, PrimitiveType.INTEGER),
+				new FunctionSignature(new RatToInt(), PrimitiveType.RATIONAL, PrimitiveType.INTEGER)
 		);
 		
 		new FunctionSignatures(PrimitiveType.CHARACTER,
@@ -142,13 +140,18 @@ public class FunctionSignatures extends ArrayList<FunctionSignature> {
 		new FunctionSignatures(PrimitiveType.FLOATING,
 				new FunctionSignature(ASMOpcode.ConvertF, PrimitiveType.INTEGER, PrimitiveType.FLOATING),
 				new FunctionSignature(new CharToFloatCodeGenerator(), PrimitiveType.CHARACTER, PrimitiveType.FLOATING),
-				new FunctionSignature(ASMOpcode.Nop, PrimitiveType.FLOATING, PrimitiveType.FLOATING)
+				new FunctionSignature(ASMOpcode.Nop, PrimitiveType.FLOATING, PrimitiveType.FLOATING),
+				new FunctionSignature(new RatToFloat(), PrimitiveType.RATIONAL, PrimitiveType.FLOATING)
 		);
 		
 		new FunctionSignatures(PrimitiveType.BOOLEAN,
 				new FunctionSignature(new CharToBoolCodeGenerator(), PrimitiveType.CHARACTER, PrimitiveType.BOOLEAN),
 				new FunctionSignature(new CharToBoolCodeGenerator(), PrimitiveType.INTEGER, PrimitiveType.BOOLEAN),
 				new FunctionSignature(ASMOpcode.Nop, PrimitiveType.BOOLEAN, PrimitiveType.BOOLEAN)
+		);
+
+		new FunctionSignatures(PrimitiveType.RATIONAL,
+				new FunctionSignature(ASMOpcode.Nop, PrimitiveType.RATIONAL, PrimitiveType.RATIONAL)
 		);
 
 		new FunctionSignatures(PrimitiveType.STRING,

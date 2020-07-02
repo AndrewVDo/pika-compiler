@@ -1,0 +1,12 @@
+exec {
+    var x := 3 // 2.
+
+    var a := [ x | rat ].
+    print a, _n_.
+
+    var b := [ x | float ].
+    print b, _n_.
+
+    var c := [ x | int ].
+    print c, _n_.
+}

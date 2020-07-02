@@ -519,7 +519,7 @@ public class Parser {
 		return TypeNode.with(type, arrayDepth);
 	}
 	private boolean startsType(Token token) {
-		return token.isLextant(Keyword.FLOAT, Keyword.INT, Keyword.CHAR, Keyword.BOOL, Keyword.STRING, Punctuator.OPEN_BRACKET);
+		return token.isLextant(Keyword.FLOAT, Keyword.INT, Keyword.CHAR, Keyword.BOOL, Keyword.STRING, Punctuator.OPEN_BRACKET, Keyword.RAT);
 	}
 	
 	private ParseNode parseBracketedExpression() {

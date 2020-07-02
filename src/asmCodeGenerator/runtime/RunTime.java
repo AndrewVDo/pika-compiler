@@ -5,6 +5,8 @@ import asmCodeGenerator.codeStorage.ASMCodeFragment;
 
 import static asmCodeGenerator.RationalGenerator.runtimeRationalGCD;
 import static asmCodeGenerator.RationalGenerator.runtimeRationalPrint;
+import static asmCodeGenerator.RationalMath.RatToFloat.runtimeRatToFloat;
+import static asmCodeGenerator.RationalMath.RatToInt.runtimeRatToInt;
 import static asmCodeGenerator.RationalMath.RationalAdd.runtimeRatAdd;
 import static asmCodeGenerator.RationalMath.RationalDivide.runtimeRatDiv;
 import static asmCodeGenerator.RationalMath.RationalMultiply.runtimeRatMult;
@@ -233,5 +235,7 @@ public class RunTime {
 		runtimeRatSub(frag);
 		runtimeRatMult(frag);
 		runtimeRatDiv(frag);
+		runtimeRatToFloat(frag);
+		runtimeRatToInt(frag);
 	}
 }

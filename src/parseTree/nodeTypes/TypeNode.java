@@ -34,6 +34,7 @@ public class TypeNode extends ParseNode {
 		if(token.isLextant(Keyword.CHAR)) return PrimitiveType.CHARACTER;
 		if(token.isLextant(Keyword.BOOL)) return PrimitiveType.BOOLEAN;
 		if(token.isLextant(Keyword.STRING)) return PrimitiveType.STRING;
+		if(token.isLextant(Keyword.RAT)) return PrimitiveType.RATIONAL;
 		return PrimitiveType.ERROR;
 	}
 

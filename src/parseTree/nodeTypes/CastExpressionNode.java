@@ -36,9 +36,9 @@ public class CastExpressionNode extends ParseNode {
 		else if(type == PrimitiveType.FLOATING) {
 			return Keyword.FLOAT;
 		}
-//		else if(type == PrimitiveType.RATIONAL) {
-//			return Keyword.RATIONAL;
-//		}
+		else if(type == PrimitiveType.RATIONAL) {
+			return Keyword.RAT;
+		}
 		return Keyword.NULL_KEYWORD;
 	}
 
