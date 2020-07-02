@@ -151,6 +151,8 @@ public class FunctionSignatures extends ArrayList<FunctionSignature> {
 		);
 
 		new FunctionSignatures(PrimitiveType.RATIONAL,
+				new FunctionSignature(new IntToRat(), PrimitiveType.INTEGER, PrimitiveType.RATIONAL),
+				new FunctionSignature(new CharToRat(), PrimitiveType.CHARACTER, PrimitiveType.RATIONAL),
 				new FunctionSignature(ASMOpcode.Nop, PrimitiveType.RATIONAL, PrimitiveType.RATIONAL)
 		);
 
@@ -192,11 +194,13 @@ public class FunctionSignatures extends ArrayList<FunctionSignature> {
 		new FunctionSignatures(Punctuator.RAT_OP1,
 				new FunctionSignature(new RationalGenerator(), PrimitiveType.INTEGER, PrimitiveType.INTEGER, PrimitiveType.RATIONAL)
 		);
-		new FunctionSignatures(Punctuator.RAT_OP2,
-				new FunctionSignature(new RationalGenerator(), PrimitiveType.INTEGER, PrimitiveType.INTEGER, PrimitiveType.RATIONAL)
+		new FunctionSignatures(Punctuator.EXPRESS_OVER,
+				new FunctionSignature(new RatExpressOver(), PrimitiveType.RATIONAL, PrimitiveType.INTEGER, PrimitiveType.INTEGER),
+				new FunctionSignature(new FloatExpressOver(), PrimitiveType.FLOATING, PrimitiveType.INTEGER, PrimitiveType.INTEGER)
 		);
-		new FunctionSignatures(Punctuator.RAT_OP3,
-				new FunctionSignature(new RationalGenerator(), PrimitiveType.INTEGER, PrimitiveType.INTEGER, PrimitiveType.RATIONAL)
+		new FunctionSignatures(Punctuator.RATIONALIZE,
+				new FunctionSignature(new RatRationalize(), PrimitiveType.RATIONAL, PrimitiveType.INTEGER, PrimitiveType.RATIONAL),
+				new FunctionSignature(new FloatRationalize(), PrimitiveType.FLOATING, PrimitiveType.INTEGER, PrimitiveType.RATIONAL)
 		);
 
 

@@ -2,6 +2,7 @@ package asmCodeGenerator.RationalMath;
 
 import asmCodeGenerator.Macros;
 import asmCodeGenerator.codeStorage.ASMCodeFragment;
+import asmCodeGenerator.runtime.RunTime;
 import parseTree.ParseNode;
 
 import static asmCodeGenerator.codeStorage.ASMOpcode.*;
@@ -26,6 +27,8 @@ public class RationalDivide extends RationalUtility {
         Macros.writeIOffset(frag, 0);
         Macros.loadIFrom(frag, RAT_DIV + "-b");
         Macros.loadIFrom(frag, RAT_DIV + "-c");
+            frag.add(Duplicate);
+            frag.add(JumpFalse, RunTime.INTEGER_DIVIDE_BY_ZERO_RUNTIME_ERROR);
         frag.add(Multiply);
         frag.add(PushD, RAT_DIV + "-res");
         Macros.writeIOffset(frag, 4);

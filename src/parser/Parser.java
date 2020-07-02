@@ -10,7 +10,6 @@ import parseTree.ParseNode;
 import parseTree.nodeTypes.*;
 import tokens.*;
 
-import java.security.Key;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -412,7 +411,7 @@ public class Parser {
 		}
 		
 		ParseNode left = parseUnaryExpression();
-		while(nowReading.isLextant(Punctuator.MULTIPLY, Punctuator.DIVIDE, Punctuator.RAT_OP1, Punctuator.RAT_OP2, Punctuator.RAT_OP3)) {
+		while(nowReading.isLextant(Punctuator.MULTIPLY, Punctuator.DIVIDE, Punctuator.RAT_OP1, Punctuator.EXPRESS_OVER, Punctuator.RATIONALIZE)) {
 			Token multiplicativeToken = nowReading;
 			readToken();
 			ParseNode right = parseUnaryExpression();

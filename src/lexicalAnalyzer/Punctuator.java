@@ -40,8 +40,8 @@ public enum Punctuator implements Lextant {
 	ARRAY_INIT(""),
 
 	RAT_OP1("//"),
-	RAT_OP2("///"),
-	RAT_OP3("////")
+	EXPRESS_OVER("///"),
+	RATIONALIZE("////")
 	;
 
 	private String lexeme;

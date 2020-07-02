@@ -9,4 +9,23 @@ exec {
 
     var c := [ x | int ].
     print c, _n_.
+
+    var i := 3.
+    var d := [ i | rat ].
+    print d, _n_.
+
+    var e := [ ^c^ | rat ].
+    print e, _n_.
+
+    var f := (35//6) /// 5.
+    print f, _n_.
+
+    var g := 5.8333333 /// 5.
+    print g, _n_.
+
+    var h := 5.8333333 //// 5.
+    print h, _n_.
+
+    var j := (5//4) //// 5.
+    print j, _n_.
 }

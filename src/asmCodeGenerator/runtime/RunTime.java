@@ -5,6 +5,10 @@ import asmCodeGenerator.codeStorage.ASMCodeFragment;
 
 import static asmCodeGenerator.RationalGenerator.runtimeRationalGCD;
 import static asmCodeGenerator.RationalGenerator.runtimeRationalPrint;
+import static asmCodeGenerator.RationalMath.FloatExpressOver.runtimeFloatExpressOver;
+import static asmCodeGenerator.RationalMath.FloatRationalize.runtimeFloatRationalize;
+import static asmCodeGenerator.RationalMath.RatExpressOver.runtimeRatExpressOver;
+import static asmCodeGenerator.RationalMath.RatRationalize.runtimeRatRationalize;
 import static asmCodeGenerator.RationalMath.RatToFloat.runtimeRatToFloat;
 import static asmCodeGenerator.RationalMath.RatToInt.runtimeRatToInt;
 import static asmCodeGenerator.RationalMath.RationalAdd.runtimeRatAdd;
@@ -237,5 +241,9 @@ public class RunTime {
 		runtimeRatDiv(frag);
 		runtimeRatToFloat(frag);
 		runtimeRatToInt(frag);
+		runtimeRatExpressOver(frag);
+		runtimeFloatExpressOver(frag);
+		runtimeFloatRationalize(frag);
+		runtimeRatRationalize(frag);
 	}
 }
