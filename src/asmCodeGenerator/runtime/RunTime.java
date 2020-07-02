@@ -3,6 +3,7 @@ package asmCodeGenerator.runtime;
 import asmCodeGenerator.Macros;
 import asmCodeGenerator.codeStorage.ASMCodeFragment;
 
+import static asmCodeGenerator.RationalGenerator.runtimeRationalGCD;
 import static asmCodeGenerator.RationalGenerator.runtimeRationalPrint;
 import static asmCodeGenerator.Record.*;
 import static asmCodeGenerator.codeStorage.ASMCodeFragment.CodeType.GENERATES_VOID;
@@ -217,5 +218,6 @@ public class RunTime {
 	}
 	private void rationalFunctions(ASMCodeFragment frag) {
 		runtimeRationalPrint(frag);
+		runtimeRationalGCD(frag);
 	}
 }

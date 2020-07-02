@@ -3,8 +3,6 @@ package asmCodeGenerator;
 import asmCodeGenerator.codeStorage.ASMCodeFragment;
 import parseTree.ParseNode;
 
-import java.awt.*;
-
 import static asmCodeGenerator.codeStorage.ASMOpcode.*;
 import static asmCodeGenerator.runtime.RunTime.*;
 
@@ -14,18 +12,43 @@ public class RationalGenerator implements SimpleCodeGenerator {
         ASMCodeFragment frag = new ASMCodeFragment(ASMCodeFragment.CodeType.GENERATES_VALUE);
         //[... numerator denominator]
 
+        frag.add(Duplicate);
+        frag.add(JumpFalse, INTEGER_DIVIDE_BY_ZERO_RUNTIME_ERROR);
+
         frag.add(PushD, RATIONAL_TEMP);
-        Macros.writeIOffset(frag, 4);;
+        Macros.writeIOffset(frag, 4);
 
         frag.add(PushD, RATIONAL_TEMP);
         Macros.writeIOffset(frag, 0);
+
+            //gcd argument loading
+            frag.add(PushD, RATIONAL_TEMP);
+            Macros.readIOffset(frag, 0);
+            frag.add(PushD, RATIONAL_TEMP);
+            Macros.readIOffset(frag, 4);
+            frag.add(Call, RATIONAL_GCD);
+            //[... gcd]
+            frag.add(Duplicate);
+                frag.add(PushD, RATIONAL_TEMP); //divide den with gcd & save
+                Macros.readIOffset(frag, 4);
+                frag.add(Exchange);
+                frag.add(Divide);
+                frag.add(PushD, RATIONAL_TEMP);
+                Macros.writeIOffset(frag, 4);
+            frag.add(PushD, RATIONAL_TEMP); //divide num with gcd & save
+                Macros.readIOffset(frag, 0);
+                frag.add(Exchange);
+                frag.add(Divide);
+                frag.add(PushD, RATIONAL_TEMP);
+                Macros.writeIOffset(frag, 0);
+
 
         Macros.loadFFrom(frag, RATIONAL_TEMP);
         //[... rationalTemp]
         return frag;
     }
 
-    private static final void funcInitHelper(ASMCodeFragment frag, String functionName) {
+    private static final void printInitHelper(ASMCodeFragment frag, String functionName) {
         Macros.declareI(frag, functionName + "-caller");
         Macros.declareI(frag, functionName + "-address");
         frag.add(Label, functionName);
@@ -33,6 +56,7 @@ public class RationalGenerator implements SimpleCodeGenerator {
             Macros.storeITo(frag, functionName + "-address");
     }
     private static final void funcReturnCaller(ASMCodeFragment frag, String functionName) {
+        frag.add(Label, functionName + "-return");
         Macros.loadIFrom(frag, functionName + "-caller");
         frag.add(Return);
     }
@@ -117,7 +141,7 @@ public class RationalGenerator implements SimpleCodeGenerator {
         frag.add(DataS, "_");
         frag.add(DLabel, RATIONAL_DIVIDER);
         frag.add(DataS, "/");
-        funcInitHelper(frag, RATIONAL_PRINT);
+        printInitHelper(frag, RATIONAL_PRINT);
             isNegativeHelper(frag, RATIONAL_PRINT);
             frag.add(JumpFalse, RATIONAL_PRINT + "not-neg");
                 frag.add(PushD, NEGATIVE_STRING);
@@ -129,6 +153,8 @@ public class RationalGenerator implements SimpleCodeGenerator {
                 wholeHelper(frag, RATIONAL_PRINT);
                 frag.add(PushD, INTEGER_PRINT_FORMAT);
                 frag.add(Printf);
+                numeratorExtractHelper(frag, RATIONAL_PRINT);
+                    frag.add(JumpFalse, RATIONAL_PRINT + "-return");
             frag.add(Label, RATIONAL_PRINT + "not-whole");
             frag.add(PushD, RATIONAL_PREFIX);
             frag.add(PushD, STRING_PRINT_FORMAT);
@@ -144,5 +170,53 @@ public class RationalGenerator implements SimpleCodeGenerator {
             frag.add(Printf);
 
         funcReturnCaller(frag, RATIONAL_PRINT);
+    }
+
+    private static final void gcdInitHelper(ASMCodeFragment frag, String functionName) {
+        Macros.declareI(frag, functionName + "-caller");
+        Macros.declareI(frag, functionName + "-num");
+        Macros.declareI(frag, functionName + "-den");
+        Macros.declareI(frag, functionName + "-res");
+        frag.add(Label, functionName);
+            Macros.storeITo(frag, functionName + "-caller");
+            Macros.storeITo(frag, functionName + "-den");
+            Macros.storeITo(frag, functionName + "-num");
+    }
+    private static final void gcdReturnHelper(ASMCodeFragment frag, String functionName) {
+        frag.add(Label, functionName + "-return");
+        Macros.loadIFrom(frag, functionName + "-caller");
+        frag.add(Return);
+    }
+    private static final void gcdGetNum(ASMCodeFragment frag, String functionName) {
+        Macros.loadIFrom(frag, functionName + "-num");
+    }
+    private static final void gcdGetDen(ASMCodeFragment frag, String functionName) {
+        Macros.loadIFrom(frag, functionName + "-den");
+    }
+    public static final String RATIONAL_GCD = "$rational-gcd";
+    public static final void runtimeRationalGCD(ASMCodeFragment frag) {
+        gcdInitHelper(frag, RATIONAL_GCD); //[... num den (return)]
+            //base cases
+            gcdGetNum(frag, RATIONAL_GCD);
+                frag.add(JumpTrue, RATIONAL_GCD + "-not-zero1");
+                    gcdGetDen(frag, RATIONAL_GCD);
+                    frag.add(Jump, RATIONAL_GCD + "-return");
+                frag.add(Label, RATIONAL_GCD + "-not-zero1");
+            gcdGetDen(frag, RATIONAL_GCD);
+                frag.add(JumpTrue, RATIONAL_GCD + "-not-zero2");
+                    gcdGetNum(frag, RATIONAL_GCD);
+                    frag.add(Jump, RATIONAL_GCD + "-return");
+                frag.add(Label, RATIONAL_GCD + "-not-zero2");
+            //recurse
+            Macros.loadIFrom(frag, RATIONAL_GCD + "-caller"); //save caller, num & den not need to be saved, res only emitted by base case
+            gcdGetDen(frag, RATIONAL_GCD); //num for next call
+            gcdGetNum(frag, RATIONAL_GCD);
+                gcdGetDen(frag, RATIONAL_GCD);
+                frag.add(Remainder); //den for next call
+            frag.add(Call, RATIONAL_GCD);
+                //restore
+                frag.add(Exchange); //res is first on stack, exchanged with the saved caller
+                Macros.storeITo(frag, RATIONAL_GCD + "-caller");
+        gcdReturnHelper(frag, RATIONAL_GCD);
     }
 }
