@@ -25,10 +25,10 @@ public interface Type {
 	public boolean promotable(Type valueType);
 
 	public static Map<PrimitiveType, PrimitiveType[]> promotable =  Map.of(
-			PrimitiveType.CHARACTER, new PrimitiveType[]{PrimitiveType.CHARACTER, PrimitiveType.INTEGER, PrimitiveType.FLOATING},
-			PrimitiveType.INTEGER, new PrimitiveType[]{PrimitiveType.INTEGER, PrimitiveType.FLOATING},
-			PrimitiveType.FLOATING, new PrimitiveType[]{PrimitiveType.FLOATING}
-			//PrimitiveType.RATIONAL
+			PrimitiveType.CHARACTER, new PrimitiveType[]{PrimitiveType.CHARACTER, PrimitiveType.INTEGER, PrimitiveType.FLOATING, PrimitiveType.RATIONAL},
+			PrimitiveType.INTEGER, new PrimitiveType[]{PrimitiveType.INTEGER, PrimitiveType.FLOATING, PrimitiveType.RATIONAL},
+			PrimitiveType.FLOATING, new PrimitiveType[]{PrimitiveType.FLOATING},
+			PrimitiveType.RATIONAL, new PrimitiveType[]{PrimitiveType.RATIONAL}
 	);
 
 	public static Type lowestCommonPromotion(List<Type> types) {
@@ -57,9 +57,9 @@ public interface Type {
 			return PrimitiveType.FLOATING;
 		}
 
-//		if(lCPHelper(types, PrimitiveType.RATIONAL)) {
-//			return PrimitiveType.RATIONAL;
-//		}
+		if(lCPHelper(types, PrimitiveType.RATIONAL)) {
+			return PrimitiveType.RATIONAL;
+		}
 
 		return PrimitiveType.ERROR;
 	}

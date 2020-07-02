@@ -10,7 +10,10 @@ import semanticAnalyzer.types.ArrayType;
 import semanticAnalyzer.types.PrimitiveType;
 import semanticAnalyzer.types.Type;
 
+import static asmCodeGenerator.RationalGenerator.RATIONAL_GCD;
+import static asmCodeGenerator.RationalMath.RationalSubtract.RAT_SUB;
 import static asmCodeGenerator.codeStorage.ASMOpcode.*;
+import static asmCodeGenerator.runtime.RunTime.RATIONAL_TEMP;
 
 public class ComparisonCodeGenerator {
 	static public ASMCodeFragment generate(ParseNode node, Lextant operator, String trueLabel, String falseLabel) {
@@ -69,8 +72,32 @@ public class ComparisonCodeGenerator {
 			jumpneg = JumpNeg;
 			jumpzero = JumpFalse;
 		}
-		
-		fragment.add(subtract);
+		else if(type == PrimitiveType.RATIONAL) {
+			jumppos = JumpPos;
+			jumpneg = JumpNeg;
+			jumpzero = JumpFalse;
+		}
+
+		if(type == PrimitiveType.RATIONAL) {
+			Labeller l = new Labeller("rat-comp");
+			String functionName = l.newLabel("fn");
+
+			fragment.add(Call, RAT_SUB);
+			//[... ratNum]
+			Macros.storeFTo(fragment, RATIONAL_TEMP);
+
+			fragment.add(PushD, RATIONAL_TEMP);
+			Macros.readIOffset(fragment, 0);
+			//[... num]
+			fragment.add(PushD, RATIONAL_TEMP);
+			Macros.readIOffset(fragment, 4);
+			fragment.add(JumpPos, functionName + "not-neg");
+			fragment.add(Negate);
+			fragment.add(Label, functionName + "not-neg");
+		}
+		else {
+			fragment.add(subtract);
+		}
 		
 		if(operator == Punctuator.GREATER) {
 			fragment.add(jumppos, trueLabel);
