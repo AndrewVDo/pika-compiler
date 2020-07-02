@@ -1,4 +1,8 @@
 exec {
-    var x := 3 // 9.
-    print 2 // 4 + 1 // 8; x + 1 // 8, _n_.
+    #var x := 3 // 9.
+    #print 2 // 4 + 1 // 8; x + 1 // 8, _n_.
+
+    var x := 3//9.
+    var y := x + x.
+    print y.
 }
