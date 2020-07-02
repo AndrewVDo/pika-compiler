@@ -33,6 +33,11 @@ public class Macros {
 		frag.add(Exchange);
 		frag.add(StoreI);
 	}
+	public static void storeFTo(ASMCodeFragment frag, String location) {
+		frag.add(PushD, location);
+		frag.add(Exchange);
+		frag.add(StoreF);
+	}
 	public static void declareI(ASMCodeFragment frag, String variableName) {
 		frag.add(DLabel, variableName);
 		frag.add(DataZ, 4);

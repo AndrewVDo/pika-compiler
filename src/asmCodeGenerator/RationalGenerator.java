@@ -50,10 +50,10 @@ public class RationalGenerator implements SimpleCodeGenerator {
 
     private static final void printInitHelper(ASMCodeFragment frag, String functionName) {
         Macros.declareI(frag, functionName + "-caller");
-        Macros.declareI(frag, functionName + "-address");
+        Macros.declareF(frag, functionName + "-value");
         frag.add(Label, functionName);
             Macros.storeITo(frag, functionName + "-caller");
-            Macros.storeITo(frag, functionName + "-address");
+            Macros.storeFTo(frag, functionName + "-value");
     }
     private static final void funcReturnCaller(ASMCodeFragment frag, String functionName) {
         frag.add(Label, functionName + "-return");
@@ -61,11 +61,11 @@ public class RationalGenerator implements SimpleCodeGenerator {
         frag.add(Return);
     }
     private static final void getNumeratorHelper(ASMCodeFragment frag, String functionName) {
-        Macros.loadIFrom(frag, functionName + "-address");
+        frag.add(PushD, functionName + "-value");
         Macros.readIOffset(frag, 0);
     }
     private static final void getDenominatorHelper(ASMCodeFragment frag, String functionName) {
-        Macros.loadIFrom(frag, functionName + "-address");
+        frag.add(PushD, functionName + "-value");
         Macros.readIOffset(frag, 4);
     }
     private static final void getNumeratorAbsoluteHelper(ASMCodeFragment frag, String functionName) {

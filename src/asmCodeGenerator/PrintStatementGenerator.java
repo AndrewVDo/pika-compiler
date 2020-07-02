@@ -39,16 +39,8 @@ public class PrintStatementGenerator {
 			return;
 		}
 		if(node.getType() == PrimitiveType.RATIONAL) {
-			if(node instanceof IdentifierNode) {
-				code.append(visitor.removeValueCode(node));
-				code.add(Call, RATIONAL_PRINT);
-			}
-			else {
-				code.append(visitor.removeValueCode(node));
-				code.add(Pop);
-				code.add(PushD, RATIONAL_TEMP);
-				code.add(Call, RATIONAL_PRINT);
-			}
+			code.append(visitor.removeValueCode(node));
+			code.add(Call, RATIONAL_PRINT);
 			return;
 		}
 

@@ -136,7 +136,7 @@ public class ASMCodeGenerator {
 			if(node.getType() == PrimitiveType.INTEGER) {
 				code.add(LoadI);
 			}
-			else if(node.getType() == PrimitiveType.FLOATING) {
+			else if(node.getType() == PrimitiveType.FLOATING || node.getType() == PrimitiveType.RATIONAL) {
 				code.add(LoadF);
 			}
 			else if(node.getType() == PrimitiveType.BOOLEAN) {
@@ -147,9 +147,6 @@ public class ASMCodeGenerator {
 			}
 			else if(node.getType() == PrimitiveType.STRING || node.getType() instanceof ArrayType) {
 				code.add(LoadI);
-			}
-			else if(node.getType() == PrimitiveType.RATIONAL) {
-				code.add(Nop);
 			}
 			else {
 				assert false : "node " + node;
