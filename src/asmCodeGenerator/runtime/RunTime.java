@@ -6,6 +6,9 @@ import asmCodeGenerator.codeStorage.ASMCodeFragment;
 import static asmCodeGenerator.RationalGenerator.runtimeRationalGCD;
 import static asmCodeGenerator.RationalGenerator.runtimeRationalPrint;
 import static asmCodeGenerator.RationalMath.RationalAdd.runtimeRatAdd;
+import static asmCodeGenerator.RationalMath.RationalDivide.runtimeRatDiv;
+import static asmCodeGenerator.RationalMath.RationalMultiply.runtimeRatMult;
+import static asmCodeGenerator.RationalMath.RationalSubtract.runtimeRatSub;
 import static asmCodeGenerator.Record.*;
 import static asmCodeGenerator.codeStorage.ASMCodeFragment.CodeType.GENERATES_VOID;
 import static asmCodeGenerator.codeStorage.ASMOpcode.*;
@@ -221,5 +224,8 @@ public class RunTime {
 		runtimeRationalPrint(frag);
 		runtimeRationalGCD(frag);
 		runtimeRatAdd(frag);
+		runtimeRatSub(frag);
+		runtimeRatMult(frag);
+		runtimeRatDiv(frag);
 	}
 }
