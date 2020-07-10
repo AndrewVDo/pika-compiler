@@ -1,18 +1,18 @@
 
 SEVERE: attempted assignment to a const left-hand side at (..\pika0point2\input\pika-2TA\array\err_array_semantics1.pika line 6, character 6)
 program has errors.  no executable created.
-","","ASM file generated 'output\ada62\array\err_array_semantics1.asm'.","FAIL","0.0"
+","","ASM file generated 'output\ada62\array\err_array_semantics1.asm'.","FAIL","0.0" ***FIXED***
 
 SEVERE: attempted assignment to a const left-hand side at (..\pika0point2\input\pika-2TA\array\err_empty_targetability1.pika line 4, character 6)
 program has errors.  no executable created.
-","","ASM file generated 'output\ada62\array\err_empty_targetability1.asm'.","FAIL","0.0"
+","","ASM file generated 'output\ada62\array\err_empty_targetability1.asm'.","FAIL","0.0" ***FIXED***
 
 "ada62","err_empty_typecheck1.pika","array","Jul 03, 2020 5:54:15 PM logging.PikaLogger log
 SEVERE: operator alloc not defined for types [TYPE(ARRAY[INTEGER]), FLOATING] at (..\pika0point2\input\pika-2TA\array\err_empty_typecheck1.pika line 2, character 13)
 Jul 03, 2020 5:54:15 PM logging.PikaLogger log
 SEVERE: operator length not defined for types [NO_TYPE] at (..\pika0point2\input\pika-2TA\array\err_empty_typecheck1.pika line 3, character 7)
 program has errors.  no executable created.
-","","ASM file generated 'output\ada62\array\err_empty_typecheck1.asm'.","FAIL","0.0"
+","","ASM file generated 'output\ada62\array\err_empty_typecheck1.asm'.","FAIL","0.0" ***FIXED***
 
 "ada62","err_equals_array_typecheck3.pika","array","Jul 03, 2020 5:54:16 PM logging.PikaLogger log
 SEVERE: operator == not defined for types [ARRAY[BOOLEAN], ARRAY[INTEGER]] at (..\pika0point2\input\pika-2TA\array\err_equals_array_typecheck3.pika line 2, character 28)

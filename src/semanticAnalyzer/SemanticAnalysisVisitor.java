@@ -132,6 +132,12 @@ class SemanticAnalysisVisitor extends ParseNodeVisitor.Default {
 	public void visitLeave(ArrayNode node) {
 		assert(node.nChildren() > 0);
 
+		if(node.nChildren() == 2 && node.child(1).getType() != PrimitiveType.INTEGER) {
+			allocNonIntError(node);
+			node.setType(PrimitiveType.ERROR);
+			return;
+		}
+
 		if(node.nChildren() == 2 && node.child(0) instanceof TypeNode) {
 			ParseNode typeNode = node.child(0);
 			node.setType(new ArrayType(typeNode.getType()));
@@ -421,6 +427,11 @@ class SemanticAnalysisVisitor extends ParseNodeVisitor.Default {
 		Token token = node.getToken();
 		
 		logError("attempt to assign to const-declared variable at " + token.getLocation());	
+	}
+	private void allocNonIntError(ParseNode node) {
+		Token token = node.getToken();
+
+		logError("attempt to allocate array with non int size at " + token.getLocation());
 	}
 
 	private void typeCheckError(ParseNode node, List<Type> operandTypes) {
