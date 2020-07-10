@@ -1,0 +1,6 @@
+exec {
+	const barb := alloc[int](4).
+	print ^o^, ^k^, _n_.
+	barb := alloc[int](8).
+	print barb, _n_.
+}

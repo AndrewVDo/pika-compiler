@@ -1,0 +1,4 @@
+exec {
+	const farm := alloc[char](5).
+	print farm[-3], _n_.
+}

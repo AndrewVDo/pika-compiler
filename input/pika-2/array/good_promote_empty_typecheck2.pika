@@ -1,0 +1,4 @@
+exec {
+	var farm := alloc[int](^a^).
+	print length farm, _n_.
+}

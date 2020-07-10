@@ -1,0 +1,225 @@
+
+SEVERE: attempted assignment to a const left-hand side at (..\pika0point2\input\pika-2TA\array\err_array_semantics1.pika line 6, character 6)
+program has errors.  no executable created.
+","","ASM file generated 'output\ada62\array\err_array_semantics1.asm'.","FAIL","0.0"
+
+SEVERE: attempted assignment to a const left-hand side at (..\pika0point2\input\pika-2TA\array\err_empty_targetability1.pika line 4, character 6)
+program has errors.  no executable created.
+","","ASM file generated 'output\ada62\array\err_empty_targetability1.asm'.","FAIL","0.0"
+
+"ada62","err_empty_typecheck1.pika","array","Jul 03, 2020 5:54:15 PM logging.PikaLogger log
+SEVERE: operator alloc not defined for types [TYPE(ARRAY[INTEGER]), FLOATING] at (..\pika0point2\input\pika-2TA\array\err_empty_typecheck1.pika line 2, character 13)
+Jul 03, 2020 5:54:15 PM logging.PikaLogger log
+SEVERE: operator length not defined for types [NO_TYPE] at (..\pika0point2\input\pika-2TA\array\err_empty_typecheck1.pika line 3, character 7)
+program has errors.  no executable created.
+","","ASM file generated 'output\ada62\array\err_empty_typecheck1.asm'.","FAIL","0.0"
+
+"ada62","err_equals_array_typecheck3.pika","array","Jul 03, 2020 5:54:16 PM logging.PikaLogger log
+SEVERE: operator == not defined for types [ARRAY[BOOLEAN], ARRAY[INTEGER]] at (..\pika0point2\input\pika-2TA\array\err_equals_array_typecheck3.pika line 2, character 28)
+program has errors.  no executable created.
+","","Unrecoverable compiler error or ASMEmu exception.","FAIL","0.0"
+
+"ada62","err_equals_array_typecheck4.pika","array","Jul 03, 2020 5:54:16 PM logging.PikaLogger log
+SEVERE: operator == not defined for types [ARRAY[INTEGER], ARRAY[ARRAY[INTEGER]]] at (..\pika0point2\input\pika-2TA\array\err_equals_array_typecheck4.pika line 2, character 17)
+program has errors.  no executable created.
+","","Unrecoverable compiler error or ASMEmu exception.","FAIL","0.0"
+
+"ada62","err_not_equals_array_typecheck3.pika","array","Jul 03, 2020 5:54:19 PM logging.PikaLogger log
+SEVERE: operator != not defined for types [ARRAY[BOOLEAN], ARRAY[INTEGER]] at (..\pika0point2\input\pika-2TA\array\err_not_equals_array_typecheck3.pika line 2, character 28)
+program has errors.  no executable created.
+","","Unrecoverable compiler error or ASMEmu exception.","FAIL","0.0"
+
+"ada62","err_not_equals_array_typecheck4.pika","array","Jul 03, 2020 5:54:19 PM logging.PikaLogger log
+SEVERE: operator != not defined for types [ARRAY[INTEGER], ARRAY[ARRAY[INTEGER]]] at (..\pika0point2\input\pika-2TA\array\err_not_equals_array_typecheck4.pika line 2, character 17)
+program has errors.  no executable created.
+","","Unrecoverable compiler error or ASMEmu exception.","FAIL","0.0"
+
+"ada62","good_arrayCreation4.pika","array","[[a, b, c], [l, m, n, o, p], [z]]
+[[a, b, c], [l, m, n, o, p], [z]]
+","","Unrecoverable compiler error or ASMEmu exception.","FAIL","0.0"
+"ada62","good_arrayCreation5.pika","array","[a, b, c]
+[l, m, n, o, p]
+[z]
+
+[a, b, c]
+[l, m, n, o, p]
+[z]
+
+","","Unrecoverable compiler error or ASMEmu exception.","FAIL","0.0"
+
+"ada62","good_arrayCreation6.pika","array","[[(, )], [l, m, n, o, p], [z]]
+[[a, b, c], [l, m, n, o, p], [z]]
+","","Unrecoverable compiler error or ASMEmu exception.","FAIL","0.0"
+
+"ada62","good_cast_to_array1.pika","array","[2, 3, 5]
+","","ASM file not generated 'output\ada62\array\good_cast_to_array1.asm'.","FAIL","0.0"
+
+"ada62","good_equals_array_typecheck2.pika","array","false
+","","Unrecoverable compiler error or ASMEmu exception.","FAIL","0.0"
+
+"ada62","good_equals_array_typecheck3.pika","array","false
+","","Unrecoverable compiler error or ASMEmu exception.","FAIL","0.0"
+
+"ada62","good_length3.pika","array","2
+","","Unrecoverable compiler error or ASMEmu exception.","FAIL","0.0"
+
+"ada62","good_not_equals_array_typecheck2.pika","array","true
+","","Unrecoverable compiler error or ASMEmu exception.","FAIL","0.0"
+
+"ada62","good_not_equals_array_typecheck3.pika","array","true
+","","Unrecoverable compiler error or ASMEmu exception.","FAIL","0.0"
+
+"ada62","good_result_equals_array_array_character.pika","array","false
+true
+false
+false
+","","Unrecoverable compiler error or ASMEmu exception.","FAIL","0.0"
+
+"ada62","good_result_not_equals_array_array_character.pika","array","false
+false
+true
+true
+","","Unrecoverable compiler error or ASMEmu exception.","FAIL","0.0"
+
+"ada62","rte_indexing13.pika","array","Runtime error: array index out of bounds
+","","ASM file not generated 'output\ada62\array\rte_indexing13.asm'.","FAIL","0.0"
+
+"ada62","good_multi_array_creation2.pika","miscellaneous","11 21 31 41 51 
+12 22 32 42 52 
+13 23 33 43 53 
+14 24 34 44 54 
+15 25 35 45 55 
+16 26 36 46 56 
+17 27 37 47 57 
+18 28 38 48 58 
+","","Unrecoverable compiler error or ASMEmu exception.","FAIL","0.0"
+
+"ada62","err_ifelse2.pika","nonarray","Jul 03, 2020 5:55:03 PM logging.PikaLogger log
+SEVERE: condition of a while or if statement must be boolean, at (..\pika0point2\input\pika-2TA\nonarray\err_ifelse2.pika line 3, character 1)
+program has errors.  no executable created.
+","","ASM file generated 'output\ada62\nonarray\err_ifelse2.asm'.","FAIL","0.0"
+
+"ada62","err_ifelse3.pika","nonarray","Jul 03, 2020 5:55:04 PM logging.PikaLogger log
+SEVERE: condition of a while or if statement must be boolean, at (..\pika0point2\input\pika-2TA\nonarray\err_ifelse3.pika line 3, character 1)
+program has errors.  no executable created.
+","","ASM file generated 'output\ada62\nonarray\err_ifelse3.asm'.","FAIL","0.0"
+
+"ada62","err_ifelse4.pika","nonarray","Jul 03, 2020 5:55:04 PM logging.PikaLogger log
+SEVERE: condition of a while or if statement must be boolean, at (..\pika0point2\input\pika-2TA\nonarray\err_ifelse4.pika line 3, character 1)
+program has errors.  no executable created.
+","","ASM file generated 'output\ada62\nonarray\err_ifelse4.asm'.","FAIL","0.0"
+
+"ada62","err_ifelse5.pika","nonarray","Jul 03, 2020 5:55:04 PM logging.PikaLogger log
+SEVERE: condition of a while or if statement must be boolean, at (..\pika0point2\input\pika-2TA\nonarray\err_ifelse5.pika line 3, character 1)
+program has errors.  no executable created.
+","","ASM file generated 'output\ada62\nonarray\err_ifelse5.asm'.","FAIL","0.0"
+
+"ada62","err_scoping1.pika","nonarray","Jul 03, 2020 5:55:05 PM logging.PikaLogger log
+SEVERE: attempted assignment to a const left-hand side at (..\pika0point2\input\pika-2TA\nonarray\err_scoping1.pika line 5, character 12)
+program has errors.  no executable created.
+","","ASM file generated 'output\ada62\nonarray\err_scoping1.asm'.","FAIL","0.0"
+
+"ada62","err_scoping2.pika","nonarray","Jul 03, 2020 5:55:06 PM logging.PikaLogger log
+SEVERE: attempted assignment to a const left-hand side at (..\pika0point2\input\pika-2TA\nonarray\err_scoping2.pika line 7, character 12)
+program has errors.  no executable created.
+","","ASM file generated 'output\ada62\nonarray\err_scoping2.asm'.","FAIL","0.0"
+
+"ada62","err_target1.pika","nonarray","Jul 03, 2020 5:55:07 PM logging.PikaLogger log
+SEVERE: attempted assignment to a const left-hand side at (..\pika0point2\input\pika-2TA\nonarray\err_target1.pika line 4, character 5)
+program has errors.  no executable created.
+","","ASM file generated 'output\ada62\nonarray\err_target1.asm'.","FAIL","0.0"
+
+"ada62","err_while2.pika","nonarray","Jul 03, 2020 5:55:08 PM logging.PikaLogger log
+SEVERE: condition of a while or if statement must be boolean, at (..\pika0point2\input\pika-2TA\nonarray\err_while2.pika line 3, character 1)
+program has errors.  no executable created.
+","","ASM file generated 'output\ada62\nonarray\err_while2.asm'.","FAIL","0.0"
+
+"ada62","err_while3.pika","nonarray","Jul 03, 2020 5:55:08 PM logging.PikaLogger log
+SEVERE: condition of a while or if statement must be boolean, at (..\pika0point2\input\pika-2TA\nonarray\err_while3.pika line 3, character 1)
+program has errors.  no executable created.
+","","ASM file generated 'output\ada62\nonarray\err_while3.asm'.","FAIL","0.0"
+
+"ada62","err_while4.pika","nonarray","Jul 03, 2020 5:55:08 PM logging.PikaLogger log
+SEVERE: condition of a while or if statement must be boolean, at (..\pika0point2\input\pika-2TA\nonarray\err_while4.pika line 3, character 1)
+program has errors.  no executable created.
+","","ASM file generated 'output\ada62\nonarray\err_while4.asm'.","FAIL","0.0"
+
+"ada62","err_while5.pika","nonarray","Jul 03, 2020 5:55:09 PM logging.PikaLogger log
+SEVERE: condition of a while or if statement must be boolean, at (..\pika0point2\input\pika-2TA\nonarray\err_while5.pika line 3, character 1)
+program has errors.  no executable created.
+","","ASM file generated 'output\ada62\nonarray\err_while5.asm'.","FAIL","0.0"
+
+"ada62","good_and_short_circuit.pika","nonarray","good
+","Runtime error: integer divide by zero
+","Invalid ASM result.","FAIL","0.0"
+
+"ada62","good_release3.pika","nonarray","iteration 1 done.
+iteration 2 done.
+iteration 3 done.
+iteration 4 done.
+iteration 5 done.
+iteration 6 done.
+iteration 7 done.
+iteration 8 done.
+iteration 9 done.
+iteration 10 done.
+","","Unrecoverable compiler error or ASMEmu exception.","FAIL","0.0"
+
+"ada62","good_release4.pika","nonarray","iteration 1 done.
+iteration 2 done.
+iteration 3 done.
+iteration 4 done.
+iteration 5 done.
+iteration 6 done.
+iteration 7 done.
+iteration 8 done.
+iteration 9 done.
+iteration 10 done.
+","","Unrecoverable compiler error or ASMEmu exception.","FAIL","0.0"
+
+"ada62","good_promotion16.pika","promotion","true
+","","ASM file not generated 'output\ada62\promotion\good_promotion16.asm'.","FAIL","0.0"
+
+"ada62","good_char_cast_to_rat2.pika","rational","0 0
+","-_0/1 0
+","Invalid ASM result.","FAIL","0.0"
+
+"ada62","good_divide4.pika","rational","0 0
+","-_0/1 0
+","Invalid ASM result.","FAIL","0.0"
+
+"ada62","good_float_cast_to_rat1.pika","rational","3_31233001/223092870
+","","ASM file not generated 'output\ada62\rational\good_float_cast_to_rat1.asm'.","FAIL","0.0"
+
+"ada62","good_float_cast_to_rat2.pika","rational","7_686083/2897310 0
+","","ASM file not generated 'output\ada62\rational\good_float_cast_to_rat2.asm'.","FAIL","0.0"
+
+"ada62","good_float_cast_to_rat3.pika","rational","0 0
+","-_0/1 0
+","Invalid ASM result.","FAIL","0.0"
+
+"ada62","good_int_cast_to_rat2.pika","rational","0 0
+","-_0/1 0
+","Invalid ASM result.","FAIL","0.0"
+
+"ada62","good_multiply4.pika","rational","0 0
+","-_0/1 0
+","Invalid ASM result.","FAIL","0.0"
+
+"ada62","good_print10.pika","rational","0
+","-_0/1
+","Invalid ASM result.","FAIL","0.0"
+
+"ada62","good_print11.pika","rational","0
+","-_0/1
+","Invalid ASM result.","FAIL","0.0"
+
+"ada62","good_rationalize3.pika","rational","0 0 0
+","-_0/1 -_0/1 0
+","Invalid ASM result.","FAIL","0.0"
+
+"ada62","good_rat_cast_to_int3.pika","rational","6 0
+","","Unrecoverable compiler error or ASMEmu exception.","FAIL","0.0"
+
+"ada62","good_rat_cast_to_int4.pika","rational","0 0
+","","Unrecoverable compiler error or ASMEmu exception.","FAIL","0.0"

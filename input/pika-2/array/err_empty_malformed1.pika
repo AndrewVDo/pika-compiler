@@ -1,0 +1,4 @@
+exec {
+	var barb := alloc[int].
+	print barb, _n_.
+}
