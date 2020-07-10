@@ -38,7 +38,8 @@ program has errors.  no executable created.
 
 "ada62","good_arrayCreation4.pika","array","[[a, b, c], [l, m, n, o, p], [z]]
 [[a, b, c], [l, m, n, o, p], [z]]
-","","Unrecoverable compiler error or ASMEmu exception.","FAIL","0.0"
+","","Unrecoverable compiler error or ASMEmu exception.","FAIL","0.0" ***FIXED***
+
 "ada62","good_arrayCreation5.pika","array","[a, b, c]
 [l, m, n, o, p]
 [z]
@@ -47,11 +48,11 @@ program has errors.  no executable created.
 [l, m, n, o, p]
 [z]
 
-","","Unrecoverable compiler error or ASMEmu exception.","FAIL","0.0"
+","","Unrecoverable compiler error or ASMEmu exception.","FAIL","0.0" ***FIXED***
 
 "ada62","good_arrayCreation6.pika","array","[[(, )], [l, m, n, o, p], [z]]
 [[a, b, c], [l, m, n, o, p], [z]]
-","","Unrecoverable compiler error or ASMEmu exception.","FAIL","0.0"
+","","Unrecoverable compiler error or ASMEmu exception.","FAIL","0.0" ***FIXED***
 
 "ada62","good_cast_to_array1.pika","array","[2, 3, 5]
 ","","ASM file not generated 'output\ada62\array\good_cast_to_array1.asm'.","FAIL","0.0"

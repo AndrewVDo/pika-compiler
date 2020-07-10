@@ -1,3 +1,8 @@
 exec {
-  print [ _true_, _false_ ] == [1, 2, 3], _n_.
+    const AA := [[^a^, ^b^, ^c^], [^l^, ^m^, ^n^, ^o^, ^p^], [^z^]].
+    #const AA := [^a^, ^b^, ^c^].
+	const BB := clone AA.
+
+	print AA, _n_.
+	print BB, _n_.
 }

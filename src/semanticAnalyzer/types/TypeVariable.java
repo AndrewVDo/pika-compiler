@@ -11,7 +11,7 @@ public class TypeVariable implements Type{
         this.typeConstraint = PrimitiveType.NO_TYPE;
     }
 
-    public void setType(PrimitiveType type) {
+    public void setType(Type type) {
         this.typeConstraint = type;
     }
     public Type getType() {
@@ -42,7 +42,7 @@ public class TypeVariable implements Type{
             throw new RuntimeException("equivalent attempted on two types containing type variables");
         }
         if(this.getType() == PrimitiveType.NO_TYPE) {
-            setType((PrimitiveType) valueType);
+            setType(valueType);
             return true;
         }
         return this.getType().equivalent(valueType);
