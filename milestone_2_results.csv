@@ -17,22 +17,24 @@ program has errors.  no executable created.
 "ada62","err_equals_array_typecheck3.pika","array","Jul 03, 2020 5:54:16 PM logging.PikaLogger log
 SEVERE: operator == not defined for types [ARRAY[BOOLEAN], ARRAY[INTEGER]] at (..\pika0point2\input\pika-2TA\array\err_equals_array_typecheck3.pika line 2, character 28)
 program has errors.  no executable created.
-","","Unrecoverable compiler error or ASMEmu exception.","FAIL","0.0"
+","","Unrecoverable compiler error or ASMEmu exception.","FAIL","0.0" ***FIXED***
 
 "ada62","err_equals_array_typecheck4.pika","array","Jul 03, 2020 5:54:16 PM logging.PikaLogger log
 SEVERE: operator == not defined for types [ARRAY[INTEGER], ARRAY[ARRAY[INTEGER]]] at (..\pika0point2\input\pika-2TA\array\err_equals_array_typecheck4.pika line 2, character 17)
 program has errors.  no executable created.
-","","Unrecoverable compiler error or ASMEmu exception.","FAIL","0.0"
+","","Unrecoverable compiler error or ASMEmu exception.","FAIL","0.0" ***FIXED***
 
 "ada62","err_not_equals_array_typecheck3.pika","array","Jul 03, 2020 5:54:19 PM logging.PikaLogger log
 SEVERE: operator != not defined for types [ARRAY[BOOLEAN], ARRAY[INTEGER]] at (..\pika0point2\input\pika-2TA\array\err_not_equals_array_typecheck3.pika line 2, character 28)
 program has errors.  no executable created.
-","","Unrecoverable compiler error or ASMEmu exception.","FAIL","0.0"
+","","Unrecoverable compiler error or ASMEmu exception.","FAIL","0.0" ***FIXED***
 
 "ada62","err_not_equals_array_typecheck4.pika","array","Jul 03, 2020 5:54:19 PM logging.PikaLogger log
 SEVERE: operator != not defined for types [ARRAY[INTEGER], ARRAY[ARRAY[INTEGER]]] at (..\pika0point2\input\pika-2TA\array\err_not_equals_array_typecheck4.pika line 2, character 17)
 program has errors.  no executable created.
-","","Unrecoverable compiler error or ASMEmu exception.","FAIL","0.0"
+","","Unrecoverable compiler error or ASMEmu exception.","FAIL","0.0" ***FIXED***
+
+
 
 "ada62","good_arrayCreation4.pika","array","[[a, b, c], [l, m, n, o, p], [z]]
 [[a, b, c], [l, m, n, o, p], [z]]

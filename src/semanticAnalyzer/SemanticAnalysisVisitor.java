@@ -132,14 +132,13 @@ class SemanticAnalysisVisitor extends ParseNodeVisitor.Default {
 	public void visitLeave(ArrayNode node) {
 		assert(node.nChildren() > 0);
 
-		if(node.nChildren() == 2 && node.child(1).getType() != PrimitiveType.INTEGER) {
-			allocNonIntError(node);
-			node.setType(PrimitiveType.ERROR);
-			return;
-		}
-
 		if(node.nChildren() == 2 && node.child(0) instanceof TypeNode) {
 			ParseNode typeNode = node.child(0);
+			if(node.child(1).getType() != PrimitiveType.INTEGER) {
+				allocNonIntError(node);
+				node.setType(PrimitiveType.ERROR);
+				return;
+			}
 			node.setType(new ArrayType(typeNode.getType()));
 			return;
 		}
@@ -275,6 +274,10 @@ class SemanticAnalysisVisitor extends ParseNodeVisitor.Default {
 	}
 	private FunctionSignature findPromotableMatch(ParseNode node, FunctionSignatures signatures, List<Type> paramSignature) {
 		for(int i=0; i<node.nChildren(); i++) {//level 2+3
+			if(paramSignature.get(i) instanceof ArrayType) {
+				return null;
+			}
+
 			List<FunctionSignature> promotableMatches = signatures.promotableSignatures(paramSignature, i);
 
 			if(promotableMatches.size() == 1) {

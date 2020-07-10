@@ -1,4 +1,3 @@
 exec {
-	var farm := alloc[int](3.21).
-	print length farm, _n_.
+  print [ _true_, _false_ ] == [1, 2, 3], _n_.
 }
