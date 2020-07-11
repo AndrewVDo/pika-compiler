@@ -202,7 +202,11 @@ iteration 10 done.
 
 
 "ada62","good_promotion16.pika","promotion","true
-","","ASM file not generated 'output\ada62\promotion\good_promotion16.asm'.","FAIL","0.0"
+","","ASM file not generated 'output\ada62\promotion\good_promotion16.asm'.","FAIL","0.0" ***FIXED***
+
+
+
+
 
 "ada62","good_char_cast_to_rat2.pika","rational","0 0
 ","-_0/1 0

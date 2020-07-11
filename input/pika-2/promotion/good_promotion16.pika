@@ -1,0 +1,4 @@
+exec {
+	var x := alloc [int](200).
+	print x[^a^] == 0, _n_ .
+}
