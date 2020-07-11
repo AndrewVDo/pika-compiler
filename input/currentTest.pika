@@ -1,3 +1,8 @@
 exec {
-  print [[ 1, 2, 3 ], [0]] == [[ 5, 6], [0]], _n_.
+	if( _false_ && (17 / 0) > 1) {
+		print "bad", _n_.
+	}
+	else {
+		print "good", _n_.
+	}
 }

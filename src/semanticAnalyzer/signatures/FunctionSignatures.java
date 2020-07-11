@@ -162,11 +162,11 @@ public class FunctionSignatures extends ArrayList<FunctionSignature> {
 		);
 
 		new FunctionSignatures(Punctuator.BOOLEAN_AND,
-				new FunctionSignature(ASMOpcode.And, PrimitiveType.BOOLEAN, PrimitiveType.BOOLEAN, PrimitiveType.BOOLEAN)
+				new FunctionSignature(new ShortCircuitAnd(), PrimitiveType.BOOLEAN, PrimitiveType.BOOLEAN, PrimitiveType.BOOLEAN)
 		);
 
 		new FunctionSignatures(Punctuator.BOOLEAN_OR,
-				new FunctionSignature(ASMOpcode.Or, PrimitiveType.BOOLEAN, PrimitiveType.BOOLEAN, PrimitiveType.BOOLEAN)
+				new FunctionSignature(new ShortCircuitOr(), PrimitiveType.BOOLEAN, PrimitiveType.BOOLEAN, PrimitiveType.BOOLEAN)
 		);
 
 		new FunctionSignatures(Punctuator.BOOLEAN_NOT,

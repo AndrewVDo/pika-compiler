@@ -342,11 +342,7 @@ public class ASMCodeGenerator {
 		public void visitLeave(BinaryOperatorNode node) {
 			Lextant operator = node.getOperator();
 
-			if(operator == Punctuator.BOOLEAN_OR) {
-				//handle this in normal binary op, change opcode to fragment manufacturer
-				visitBooleanOrOperatorNode(node, operator);
-			}
-			else if(isComparisonOperator(operator)) {
+			if(isComparisonOperator(operator)) {
 				visitComparisonOperatorNode(node, operator);
 			}
 			else {
@@ -354,35 +350,6 @@ public class ASMCodeGenerator {
 			}
 		}
 
-		private void visitBooleanOrOperatorNode(BinaryOperatorNode node, Lextant operator) {
-			ASMCodeFragment arg1 = removeValueCode(node.child(0));
-			ASMCodeFragment arg2 = removeValueCode(node.child(1));
-
-			Labeller labeller = new Labeller("bool-or");
-			String arg1Label = labeller.newLabel("arg1");
-			String arg2Label = labeller.newLabel("arg2");
-			String trueLabel = labeller.newLabel("true-condition");
-			String falseLabel = labeller.newLabel("false-condition");
-			String endLabel = labeller.newLabel("end");
-
-			newValueCode(node);
-			code.add(Label, arg1Label);
-			code.append(arg1);
-			code.add(JumpTrue, trueLabel);
-			code.add(PushI, 0);
-			code.add(Label, arg2Label);
-			code.append(arg2);
-			code.add(Or);
-			code.add(JumpTrue, trueLabel);
-			code.add(Jump, falseLabel);
-			code.add(Label, trueLabel);
-			code.add(PushI, 1);
-			code.add(Jump, endLabel);
-			code.add(Label, falseLabel);
-			code.add(PushI, 0);
-			code.add(Label, endLabel);
-		}
-			
 		private boolean isComparisonOperator(Lextant operator) {
 			return operator == Punctuator.GREATER || operator == Punctuator.LESSER
 					|| operator == Punctuator.GREATEREQUAL || operator == Punctuator.LESSEREQUAL
@@ -446,6 +413,14 @@ public class ASMCodeGenerator {
 				ASMCodeFragment fragment = generator.generate(node);
 				code.append(fragment);
 				
+				if(fragment.isAddress()) {
+					code.markAsAddress();
+				}
+			}
+			else if(variant instanceof ShortCircuitCondition) {
+				ShortCircuitCondition generator = (ShortCircuitCondition) variant;
+				ASMCodeFragment fragment = generator.generate(node, arg1, arg2);
+
 				if(fragment.isAddress()) {
 					code.markAsAddress();
 				}

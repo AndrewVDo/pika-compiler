@@ -171,7 +171,7 @@ program has errors.  no executable created.
 
 "ada62","good_and_short_circuit.pika","nonarray","good
 ","Runtime error: integer divide by zero
-","Invalid ASM result.","FAIL","0.0"
+","Invalid ASM result.","FAIL","0.0" ***FIXED***
 
 "ada62","good_release3.pika","nonarray","iteration 1 done.
 iteration 2 done.
@@ -183,7 +183,7 @@ iteration 7 done.
 iteration 8 done.
 iteration 9 done.
 iteration 10 done.
-","","Unrecoverable compiler error or ASMEmu exception.","FAIL","0.0"
+","","Unrecoverable compiler error or ASMEmu exception.","FAIL","0.0"  ***FIXED***
 
 "ada62","good_release4.pika","nonarray","iteration 1 done.
 iteration 2 done.
@@ -195,7 +195,11 @@ iteration 7 done.
 iteration 8 done.
 iteration 9 done.
 iteration 10 done.
-","","Unrecoverable compiler error or ASMEmu exception.","FAIL","0.0"
+","","Unrecoverable compiler error or ASMEmu exception.","FAIL","0.0"  ***FIXED***
+
+
+
+
 
 "ada62","good_promotion16.pika","promotion","true
 ","","ASM file not generated 'output\ada62\promotion\good_promotion16.asm'.","FAIL","0.0"
