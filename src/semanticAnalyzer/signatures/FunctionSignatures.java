@@ -11,6 +11,7 @@ import semanticAnalyzer.types.Type;
 import semanticAnalyzer.types.TypeVariable;
 
 import java.util.*;
+import java.util.function.Function;
 
 
 public class FunctionSignatures extends ArrayList<FunctionSignature> {

@@ -1,5 +1,6 @@
 package semanticAnalyzer;
 
+import asmCodeGenerator.codeStorage.ASMOpcode;
 import lexicalAnalyzer.Keyword;
 import lexicalAnalyzer.Lextant;
 import logging.PikaLogger;
@@ -360,6 +361,12 @@ class SemanticAnalysisVisitor extends ParseNodeVisitor.Default {
 		if(signature.accepts(innerType)) {
 			node.setType(signature.resultType());
 			node.setSignature(signature);
+		}
+		else if((typeExpression.getType() instanceof ArrayType && innerExpression.getType() instanceof ArrayType) &&
+				(innerExpression.getType().equivalent(typeExpression.getType()))) {
+			//array cast to itself
+			node.setType(innerExpression.getType());
+			node.setSignature(new FunctionSignature(ASMOpcode.Nop, innerExpression.getType(), innerExpression.getType()));
 		}
 		else {
 			castTypeError(node.getType(), innerType.get(0));
