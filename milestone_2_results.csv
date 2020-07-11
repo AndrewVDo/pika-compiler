@@ -97,25 +97,30 @@ true
 18 28 38 48 58 
 ","","Unrecoverable compiler error or ASMEmu exception.","FAIL","0.0" ***FIXED***
 
+
+
+
+
+
 "ada62","err_ifelse2.pika","nonarray","Jul 03, 2020 5:55:03 PM logging.PikaLogger log
 SEVERE: condition of a while or if statement must be boolean, at (..\pika0point2\input\pika-2TA\nonarray\err_ifelse2.pika line 3, character 1)
 program has errors.  no executable created.
-","","ASM file generated 'output\ada62\nonarray\err_ifelse2.asm'.","FAIL","0.0"
+","","ASM file generated 'output\ada62\nonarray\err_ifelse2.asm'.","FAIL","0.0" ***FIXED***
 
 "ada62","err_ifelse3.pika","nonarray","Jul 03, 2020 5:55:04 PM logging.PikaLogger log
 SEVERE: condition of a while or if statement must be boolean, at (..\pika0point2\input\pika-2TA\nonarray\err_ifelse3.pika line 3, character 1)
 program has errors.  no executable created.
-","","ASM file generated 'output\ada62\nonarray\err_ifelse3.asm'.","FAIL","0.0"
+","","ASM file generated 'output\ada62\nonarray\err_ifelse3.asm'.","FAIL","0.0" ***FIXED***
 
 "ada62","err_ifelse4.pika","nonarray","Jul 03, 2020 5:55:04 PM logging.PikaLogger log
 SEVERE: condition of a while or if statement must be boolean, at (..\pika0point2\input\pika-2TA\nonarray\err_ifelse4.pika line 3, character 1)
 program has errors.  no executable created.
-","","ASM file generated 'output\ada62\nonarray\err_ifelse4.asm'.","FAIL","0.0"
+","","ASM file generated 'output\ada62\nonarray\err_ifelse4.asm'.","FAIL","0.0" ***FIXED***
 
 "ada62","err_ifelse5.pika","nonarray","Jul 03, 2020 5:55:04 PM logging.PikaLogger log
 SEVERE: condition of a while or if statement must be boolean, at (..\pika0point2\input\pika-2TA\nonarray\err_ifelse5.pika line 3, character 1)
 program has errors.  no executable created.
-","","ASM file generated 'output\ada62\nonarray\err_ifelse5.asm'.","FAIL","0.0"
+","","ASM file generated 'output\ada62\nonarray\err_ifelse5.asm'.","FAIL","0.0" ***FIXED***
 
 "ada62","err_scoping1.pika","nonarray","Jul 03, 2020 5:55:05 PM logging.PikaLogger log
 SEVERE: attempted assignment to a const left-hand side at (..\pika0point2\input\pika-2TA\nonarray\err_scoping1.pika line 5, character 12)

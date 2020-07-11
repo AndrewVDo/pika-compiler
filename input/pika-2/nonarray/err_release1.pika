@@ -1,0 +1,4 @@
+exec {
+	var x := 14.
+	dealloc x.
+}

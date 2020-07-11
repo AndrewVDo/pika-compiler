@@ -334,6 +334,14 @@ class SemanticAnalysisVisitor extends ParseNodeVisitor.Default {
 		visitLeave((CastExpressionNode) node.child(child));
 	}
 
+	@Override
+	public void visitLeave(ControlFlowNode node) {
+		ParseNode condition = node.child(0);
+		if(condition.getType() != PrimitiveType.BOOLEAN) {
+			conditionError(node);
+			node.setType(PrimitiveType.ERROR);
+		}
+	}
 
 	@Override
 	public void visitLeave(ArrayIndexNode node) {
@@ -450,6 +458,11 @@ class SemanticAnalysisVisitor extends ParseNodeVisitor.Default {
 		Token token = node.getToken();
 
 		logError("attempt to allocate array with non int size at " + token.getLocation());
+	}
+	private void conditionError(ParseNode node) {
+		Token token = node.getToken();
+
+		logError("condition must have type boolean at " + token.getLocation());
 	}
 
 	private void typeCheckError(ParseNode node, List<Type> operandTypes) {
