@@ -136,7 +136,7 @@ class SemanticAnalysisVisitor extends ParseNodeVisitor.Default {
 
 		if(node.nChildren() == 2 && node.child(0) instanceof TypeNode) {
 			ParseNode typeNode = node.child(0);
-			if(!checkAllocSizeArg(node)) {
+			if(!checkChildIntPromotion(node, 1)) {
 				allocNonIntError(node);
 				node.setType(PrimitiveType.ERROR);
 				return;
@@ -149,14 +149,14 @@ class SemanticAnalysisVisitor extends ParseNodeVisitor.Default {
 		node.setType(new ArrayType(subType));
 
 	}
-	private boolean checkAllocSizeArg(ParseNode node) {
-		ParseNode sizeArg = node.child(1);
+	private boolean checkChildIntPromotion(ParseNode node, int index) {
+		ParseNode sizeArg = node.child(index);
 
 		if(sizeArg.getType() != PrimitiveType.INTEGER) {
 			if(!sizeArg.getType().promotable(PrimitiveType.INTEGER)) {
 				return false;
 			}
-			promoteChild(node, PrimitiveType.INTEGER, 1);
+			promoteChild(node, PrimitiveType.INTEGER, index);
 		}
 		return true;
 	}
@@ -341,7 +341,7 @@ class SemanticAnalysisVisitor extends ParseNodeVisitor.Default {
 		ParseNode base = node.child(0);
 		ParseNode index = node.child(1);
 
-		if(index.getType() != PrimitiveType.INTEGER) {
+		if(!checkChildIntPromotion(node, 1)) {
 			arrayIndexError(node);
 			node.setType(PrimitiveType.ERROR);
 		}
