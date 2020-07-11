@@ -67,22 +67,22 @@ program has errors.  no executable created.
 ","","Unrecoverable compiler error or ASMEmu exception.","FAIL","0.0" ***FIXED***
 
 "ada62","good_not_equals_array_typecheck2.pika","array","true
-","","Unrecoverable compiler error or ASMEmu exception.","FAIL","0.0"
+","","Unrecoverable compiler error or ASMEmu exception.","FAIL","0.0" ***FIXED***
 
 "ada62","good_not_equals_array_typecheck3.pika","array","true
-","","Unrecoverable compiler error or ASMEmu exception.","FAIL","0.0"
+","","Unrecoverable compiler error or ASMEmu exception.","FAIL","0.0" ***FIXED***
 
 "ada62","good_result_equals_array_array_character.pika","array","false
 true
 false
 false
-","","Unrecoverable compiler error or ASMEmu exception.","FAIL","0.0"
+","","Unrecoverable compiler error or ASMEmu exception.","FAIL","0.0" ***FIXED***
 
 "ada62","good_result_not_equals_array_array_character.pika","array","false
 false
 true
 true
-","","Unrecoverable compiler error or ASMEmu exception.","FAIL","0.0"
+","","Unrecoverable compiler error or ASMEmu exception.","FAIL","0.0" ***FIXED***
 
 "ada62","rte_indexing13.pika","array","Runtime error: array index out of bounds
 ","","ASM file not generated 'output\ada62\array\rte_indexing13.asm'.","FAIL","0.0"

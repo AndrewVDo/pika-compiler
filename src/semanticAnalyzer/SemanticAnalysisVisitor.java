@@ -20,6 +20,7 @@ import tokens.Token;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Function;
 
 class SemanticAnalysisVisitor extends ParseNodeVisitor.Default {
 	@Override
@@ -135,7 +136,7 @@ class SemanticAnalysisVisitor extends ParseNodeVisitor.Default {
 
 		if(node.nChildren() == 2 && node.child(0) instanceof TypeNode) {
 			ParseNode typeNode = node.child(0);
-			if(node.child(1).getType() != PrimitiveType.INTEGER) {
+			if(!checkAllocSizeArg(node)) {
 				allocNonIntError(node);
 				node.setType(PrimitiveType.ERROR);
 				return;
@@ -147,6 +148,17 @@ class SemanticAnalysisVisitor extends ParseNodeVisitor.Default {
 		Type subType = nestedArrayFun(node);
 		node.setType(new ArrayType(subType));
 
+	}
+	private boolean checkAllocSizeArg(ParseNode node) {
+		ParseNode sizeArg = node.child(1);
+
+		if(sizeArg.getType() != PrimitiveType.INTEGER) {
+			if(!sizeArg.getType().promotable(PrimitiveType.INTEGER)) {
+				return false;
+			}
+			promoteChild(node, PrimitiveType.INTEGER, 1);
+		}
+		return true;
 	}
 	private Type nestedArrayFun(ParseNode node) {
 		List<Type> foundTypes = findArrayTypes(node);
@@ -210,23 +222,13 @@ class SemanticAnalysisVisitor extends ParseNodeVisitor.Default {
 		Lextant operator = operatorFor(node);
 		FunctionSignatures signatures = FunctionSignatures.signaturesOf(operator);
 
-		FunctionSignature pureMatch = findPureMatch(signatures, innerType);
-		if(pureMatch != null) {
-			node.setType(pureMatch.resultType());
-			node.setSignature(pureMatch);
+		FunctionSignature match = findMatch(node, signatures, innerType);
+		if(match == null) {
+			typeCheckError(node, innerType);
+			node.setType(PrimitiveType.ERROR);
 			return;
 		}
-
-		FunctionSignature promotableMatch = findPromotableMatch(node, signatures, innerType);
-		if(promotableMatch != null) {
-			signaturePromote(node, promotableMatch.getParamTypes(), innerType);
-			node.setType(promotableMatch.resultType());
-			node.setSignature(promotableMatch);
-			return;
-		}
-
-		typeCheckError(node, innerType);
-		node.setType(PrimitiveType.ERROR);
+		node.setSignature(match);
 	}
 	private Lextant operatorFor(UnaryOperatorNode node) {
 		LextantToken token = (LextantToken) node.getToken();
@@ -243,29 +245,35 @@ class SemanticAnalysisVisitor extends ParseNodeVisitor.Default {
 		Lextant operator = operatorFor(node);
 		FunctionSignatures signatures = FunctionSignatures.signaturesOf(operator);
 
-		FunctionSignature pureMatch = findPureMatch(signatures, childTypes);
-		if(pureMatch != null) {
-			node.setType(pureMatch.resultType());
-			node.setSignature(pureMatch);
+		FunctionSignature match = findMatch(node, signatures, childTypes);
+		if(match == null) {
+			typeCheckError(node, childTypes);
+			node.setType(PrimitiveType.ERROR);
 			return;
 		}
-
-		FunctionSignature promotableMatch = findPromotableMatch(node, signatures, childTypes);
-		if(promotableMatch != null) {
-			signaturePromote(node, promotableMatch.getParamTypes(), childTypes);
-			node.setType(promotableMatch.resultType());
-			node.setSignature(promotableMatch);
-			return;
-		}
-
-		typeCheckError(node, childTypes);
-		node.setType(PrimitiveType.ERROR);
+		node.setSignature(match);
 	}
 	private Lextant operatorFor(BinaryOperatorNode node) {
 		LextantToken token = (LextantToken) node.getToken();
 		return token.getLextant();
 	}
 
+	private FunctionSignature findMatch(ParseNode node, FunctionSignatures signatures, List<Type> paramSignature) {
+		FunctionSignature pureMatch = findPureMatch(signatures, paramSignature);
+		if(pureMatch != null) {
+			node.setType(pureMatch.resultType());
+			return pureMatch;
+		}
+
+		FunctionSignature promotableMatch = findPromotableMatch(node, signatures, paramSignature);
+		if(promotableMatch != null) {
+			signaturePromote(node, promotableMatch.getParamTypes(), paramSignature);
+			node.setType(promotableMatch.resultType());
+			return promotableMatch;
+		}
+
+		return null;
+	}
 	private FunctionSignature findPureMatch(FunctionSignatures signatures, List<Type> paramSignature) {
 		FunctionSignature pureMatch = signatures.acceptingSignature(paramSignature);
 		if (pureMatch.accepts(paramSignature)) {//level 1
