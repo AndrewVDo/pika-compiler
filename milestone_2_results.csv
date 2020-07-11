@@ -216,6 +216,10 @@ iteration 10 done.
 ","-_0/1 0
 ","Invalid ASM result.","FAIL","0.0" ***FIXED***
 
+
+
+
+
 "ada62","good_float_cast_to_rat1.pika","rational","3_31233001/223092870
 ","","ASM file not generated 'output\ada62\rational\good_float_cast_to_rat1.asm'.","FAIL","0.0"
 
@@ -226,25 +230,30 @@ iteration 10 done.
 ","-_0/1 0
 ","Invalid ASM result.","FAIL","0.0"
 
+
+
 "ada62","good_int_cast_to_rat2.pika","rational","0 0
 ","-_0/1 0
-","Invalid ASM result.","FAIL","0.0"
+","Invalid ASM result.","FAIL","0.0" ***FIXED***
 
 "ada62","good_multiply4.pika","rational","0 0
 ","-_0/1 0
-","Invalid ASM result.","FAIL","0.0"
+","Invalid ASM result.","FAIL","0.0" ***FIXED***
 
 "ada62","good_print10.pika","rational","0
 ","-_0/1
-","Invalid ASM result.","FAIL","0.0"
+","Invalid ASM result.","FAIL","0.0" ***FIXED***
 
 "ada62","good_print11.pika","rational","0
 ","-_0/1
-","Invalid ASM result.","FAIL","0.0"
+","Invalid ASM result.","FAIL","0.0" ***FIXED***
 
 "ada62","good_rationalize3.pika","rational","0 0 0
 ","-_0/1 -_0/1 0
-","Invalid ASM result.","FAIL","0.0"
+","Invalid ASM result.","FAIL","0.0" ***FIXED***
+
+
+
 
 "ada62","good_rat_cast_to_int3.pika","rational","6 0
 ","","Unrecoverable compiler error or ASMEmu exception.","FAIL","0.0"
