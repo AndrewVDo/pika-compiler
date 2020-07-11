@@ -142,6 +142,13 @@ public class RationalGenerator implements SimpleCodeGenerator {
         frag.add(DLabel, RATIONAL_DIVIDER);
         frag.add(DataS, "/");
         printInitHelper(frag, RATIONAL_PRINT);
+            getNumeratorHelper(frag, RATIONAL_PRINT);
+            frag.add(JumpTrue, RATIONAL_PRINT + "not-zero");
+                getNumeratorHelper(frag, RATIONAL_PRINT);
+                frag.add(PushD, INTEGER_PRINT_FORMAT);
+                frag.add(Printf);
+                frag.add(Jump, RATIONAL_PRINT + "-return");
+            frag.add(Label, RATIONAL_PRINT + "not-zero");
             isNegativeHelper(frag, RATIONAL_PRINT);
             frag.add(JumpFalse, RATIONAL_PRINT + "not-neg");
                 frag.add(PushD, NEGATIVE_STRING);
