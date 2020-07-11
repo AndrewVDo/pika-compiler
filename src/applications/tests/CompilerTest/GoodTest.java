@@ -42,12 +42,36 @@ public class GoodTest extends CompilerTestFixture{
         return findTestsByPrefix(PIKA_ONE, GOOD_TEST);
     }
 
+    public class TestThread extends Thread {
+        String inputName;
+        String outputName;
+
+        String programOutput;
+
+        TestThread(String inputName, String outputName) {
+            this.inputName = inputName;
+            this.outputName = outputName;
+        }
+        public void run() {
+            try {
+                PikaCompiler.compile(inputName);
+                programOutput = runEmulator(outputName);
+            }
+            catch(Exception e) {
+                System.out.println(e.getStackTrace());
+            }
+        }
+    }
+
     @ParameterizedTest(name = "Run {index}: inputName={0}, outputName={1}, expectedName={2}")
     @MethodSource("pika2data")
     public void testMilestoneTwoGood(String inputName, String outputName, String expectedName) throws Exception {
 
-        PikaCompiler.compile(inputName);
-        String programOutput = runEmulator(outputName);
+        TestThread tt = new TestThread(inputName, outputName);
+        tt.start();
+
+//        PikaCompiler.compile(inputName);
+        String programOutput = tt.programOutput;
         String expectedOutput = "";
 
         try {
