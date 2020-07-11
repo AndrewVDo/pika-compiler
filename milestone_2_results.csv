@@ -122,40 +122,52 @@ SEVERE: condition of a while or if statement must be boolean, at (..\pika0point2
 program has errors.  no executable created.
 ","","ASM file generated 'output\ada62\nonarray\err_ifelse5.asm'.","FAIL","0.0" ***FIXED***
 
+
+
+
+
 "ada62","err_scoping1.pika","nonarray","Jul 03, 2020 5:55:05 PM logging.PikaLogger log
 SEVERE: attempted assignment to a const left-hand side at (..\pika0point2\input\pika-2TA\nonarray\err_scoping1.pika line 5, character 12)
 program has errors.  no executable created.
-","","ASM file generated 'output\ada62\nonarray\err_scoping1.asm'.","FAIL","0.0"
+","","ASM file generated 'output\ada62\nonarray\err_scoping1.asm'.","FAIL","0.0"  ***FIXED***
 
 "ada62","err_scoping2.pika","nonarray","Jul 03, 2020 5:55:06 PM logging.PikaLogger log
 SEVERE: attempted assignment to a const left-hand side at (..\pika0point2\input\pika-2TA\nonarray\err_scoping2.pika line 7, character 12)
 program has errors.  no executable created.
-","","ASM file generated 'output\ada62\nonarray\err_scoping2.asm'.","FAIL","0.0"
+","","ASM file generated 'output\ada62\nonarray\err_scoping2.asm'.","FAIL","0.0"  ***FIXED***
+
+
+
 
 "ada62","err_target1.pika","nonarray","Jul 03, 2020 5:55:07 PM logging.PikaLogger log
 SEVERE: attempted assignment to a const left-hand side at (..\pika0point2\input\pika-2TA\nonarray\err_target1.pika line 4, character 5)
 program has errors.  no executable created.
-","","ASM file generated 'output\ada62\nonarray\err_target1.asm'.","FAIL","0.0"
+","","ASM file generated 'output\ada62\nonarray\err_target1.asm'.","FAIL","0.0"  ***FIXED***
 
 "ada62","err_while2.pika","nonarray","Jul 03, 2020 5:55:08 PM logging.PikaLogger log
 SEVERE: condition of a while or if statement must be boolean, at (..\pika0point2\input\pika-2TA\nonarray\err_while2.pika line 3, character 1)
 program has errors.  no executable created.
-","","ASM file generated 'output\ada62\nonarray\err_while2.asm'.","FAIL","0.0"
+","","ASM file generated 'output\ada62\nonarray\err_while2.asm'.","FAIL","0.0"  ***FIXED***
 
 "ada62","err_while3.pika","nonarray","Jul 03, 2020 5:55:08 PM logging.PikaLogger log
 SEVERE: condition of a while or if statement must be boolean, at (..\pika0point2\input\pika-2TA\nonarray\err_while3.pika line 3, character 1)
 program has errors.  no executable created.
-","","ASM file generated 'output\ada62\nonarray\err_while3.asm'.","FAIL","0.0"
+","","ASM file generated 'output\ada62\nonarray\err_while3.asm'.","FAIL","0.0"  ***FIXED***
 
 "ada62","err_while4.pika","nonarray","Jul 03, 2020 5:55:08 PM logging.PikaLogger log
 SEVERE: condition of a while or if statement must be boolean, at (..\pika0point2\input\pika-2TA\nonarray\err_while4.pika line 3, character 1)
 program has errors.  no executable created.
-","","ASM file generated 'output\ada62\nonarray\err_while4.asm'.","FAIL","0.0"
+","","ASM file generated 'output\ada62\nonarray\err_while4.asm'.","FAIL","0.0"  ***FIXED***
 
 "ada62","err_while5.pika","nonarray","Jul 03, 2020 5:55:09 PM logging.PikaLogger log
 SEVERE: condition of a while or if statement must be boolean, at (..\pika0point2\input\pika-2TA\nonarray\err_while5.pika line 3, character 1)
 program has errors.  no executable created.
-","","ASM file generated 'output\ada62\nonarray\err_while5.asm'.","FAIL","0.0"
+","","ASM file generated 'output\ada62\nonarray\err_while5.asm'.","FAIL","0.0"  ***FIXED***
+
+
+
+
+
 
 "ada62","good_and_short_circuit.pika","nonarray","good
 ","Runtime error: integer divide by zero
