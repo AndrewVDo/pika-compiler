@@ -154,6 +154,7 @@ public class FunctionSignatures extends ArrayList<FunctionSignature> {
 		new FunctionSignatures(PrimitiveType.RATIONAL,
 				new FunctionSignature(new IntToRat(), PrimitiveType.INTEGER, PrimitiveType.RATIONAL),
 				new FunctionSignature(new CharToRat(), PrimitiveType.CHARACTER, PrimitiveType.RATIONAL),
+				new FunctionSignature(new FloatToRat(), PrimitiveType.FLOATING, PrimitiveType.RATIONAL),
 				new FunctionSignature(ASMOpcode.Nop, PrimitiveType.RATIONAL, PrimitiveType.RATIONAL)
 		);
 

@@ -221,14 +221,14 @@ iteration 10 done.
 
 
 "ada62","good_float_cast_to_rat1.pika","rational","3_31233001/223092870
-","","ASM file not generated 'output\ada62\rational\good_float_cast_to_rat1.asm'.","FAIL","0.0"
+","","ASM file not generated 'output\ada62\rational\good_float_cast_to_rat1.asm'.","FAIL","0.0" ***FIXED***
 
 "ada62","good_float_cast_to_rat2.pika","rational","7_686083/2897310 0
-","","ASM file not generated 'output\ada62\rational\good_float_cast_to_rat2.asm'.","FAIL","0.0"
+","","ASM file not generated 'output\ada62\rational\good_float_cast_to_rat2.asm'.","FAIL","0.0" ***FIXED***
 
 "ada62","good_float_cast_to_rat3.pika","rational","0 0
 ","-_0/1 0
-","Invalid ASM result.","FAIL","0.0"
+","Invalid ASM result.","FAIL","0.0" ***FIXED***
 
 
 
