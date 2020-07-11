@@ -58,13 +58,13 @@ program has errors.  no executable created.
 ","","ASM file not generated 'output\ada62\array\good_cast_to_array1.asm'.","FAIL","0.0" ***FIXED***
 
 "ada62","good_equals_array_typecheck2.pika","array","false
-","","Unrecoverable compiler error or ASMEmu exception.","FAIL","0.0"
+","","Unrecoverable compiler error or ASMEmu exception.","FAIL","0.0" ***FIXED***
 
 "ada62","good_equals_array_typecheck3.pika","array","false
-","","Unrecoverable compiler error or ASMEmu exception.","FAIL","0.0"
+","","Unrecoverable compiler error or ASMEmu exception.","FAIL","0.0" ***FIXED***
 
 "ada62","good_length3.pika","array","2
-","","Unrecoverable compiler error or ASMEmu exception.","FAIL","0.0"
+","","Unrecoverable compiler error or ASMEmu exception.","FAIL","0.0" ***FIXED***
 
 "ada62","good_not_equals_array_typecheck2.pika","array","true
 ","","Unrecoverable compiler error or ASMEmu exception.","FAIL","0.0"

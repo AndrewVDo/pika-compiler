@@ -115,7 +115,7 @@ public class FunctionSignatures extends ArrayList<FunctionSignature> {
 			FunctionSignature SigC = new FunctionSignature(1, PrimitiveType.CHARACTER, PrimitiveType.CHARACTER, PrimitiveType.BOOLEAN);
 			FunctionSignature SigB = new FunctionSignature(1, PrimitiveType.BOOLEAN, PrimitiveType.BOOLEAN, PrimitiveType.BOOLEAN);
 			FunctionSignature SigS = new FunctionSignature(1, PrimitiveType.STRING, PrimitiveType.STRING, PrimitiveType.BOOLEAN);
-			FunctionSignature SigA = new FunctionSignature(1, SA, SA, PrimitiveType.BOOLEAN);
+			FunctionSignature SigA = new FunctionSignature(1, SetS, SA, SA, PrimitiveType.BOOLEAN);
 			FunctionSignature SigR = new FunctionSignature(1, PrimitiveType.RATIONAL, PrimitiveType.RATIONAL, PrimitiveType.BOOLEAN);
 			
 			if(comparison == Punctuator.EQUAL || comparison == Punctuator.NOTEQUAL) {
