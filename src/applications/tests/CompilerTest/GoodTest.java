@@ -53,6 +53,7 @@ public class GoodTest extends CompilerTestFixture{
         try {
             expectedOutput = getContents(expectedName);
         } catch (Exception e) {
+            //createExpected(programOutput, expectedName);
             warnUserNoExpectedFile(programOutput, expectedName);
             fail("Could not find expected output");
         }
