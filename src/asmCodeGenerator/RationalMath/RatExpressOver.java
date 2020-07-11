@@ -21,6 +21,8 @@ public class RatExpressOver extends RationalExpressOverIntUtility {
         initUtil(frag, RAT_EXPRESS_OVER);
             Macros.loadIFrom(frag, RAT_EXPRESS_OVER + "-num");
                 Macros.loadIFrom(frag, RAT_EXPRESS_OVER + "-int-arg");
+                    frag.add(Duplicate);
+                        frag.add(JumpFalse, RunTime.INTEGER_DIVIDE_BY_ZERO_RUNTIME_ERROR);
                 frag.add(Multiply);
             Macros.loadIFrom(frag, RAT_EXPRESS_OVER + "-den");
                     frag.add(Duplicate);

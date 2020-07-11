@@ -20,6 +20,9 @@ public class FloatExpressOver extends FloatExpressOverIntUtility {
     public static final void runtimeFloatExpressOver(ASMCodeFragment frag) {
         initUtil(frag, FLOAT_EXPRESS_OVER);
             Macros.loadIFrom(frag, FLOAT_EXPRESS_OVER + "-int-arg");
+                frag.add(JumpFalse, RunTime.INTEGER_DIVIDE_BY_ZERO_RUNTIME_ERROR);
+
+            Macros.loadIFrom(frag, FLOAT_EXPRESS_OVER + "-int-arg");
                 frag.add(ConvertF);
                 Macros.loadFFrom(frag, FLOAT_EXPRESS_OVER + "-float-arg");
                 frag.add(FMultiply);

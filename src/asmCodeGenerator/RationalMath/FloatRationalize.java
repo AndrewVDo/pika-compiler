@@ -3,6 +3,7 @@ package asmCodeGenerator.RationalMath;
 import asmCodeGenerator.Macros;
 import asmCodeGenerator.RationalGenerator;
 import asmCodeGenerator.codeStorage.ASMCodeFragment;
+import asmCodeGenerator.runtime.RunTime;
 import parseTree.ParseNode;
 
 import static asmCodeGenerator.RationalGenerator.RATIONAL_GCD;
@@ -20,6 +21,9 @@ public class FloatRationalize extends FloatExpressOverIntUtility {
     public static final String FLOAT_RATIONALIZE = "$float-rationalize-fn";
     public static final void runtimeFloatRationalize(ASMCodeFragment frag) {
         initUtil(frag, FLOAT_RATIONALIZE);
+            Macros.loadIFrom(frag, FLOAT_RATIONALIZE + "-int-arg");
+                frag.add(JumpFalse, RunTime.INTEGER_DIVIDE_BY_ZERO_RUNTIME_ERROR);
+
             Macros.loadIFrom(frag, FLOAT_RATIONALIZE + "-int-arg");
                 frag.add(ConvertF);
                 Macros.loadFFrom(frag, FLOAT_RATIONALIZE + "-float-arg");

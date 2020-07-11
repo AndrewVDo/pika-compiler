@@ -256,7 +256,7 @@ iteration 10 done.
 
 
 "ada62","good_rat_cast_to_int3.pika","rational","6 0
-","","Unrecoverable compiler error or ASMEmu exception.","FAIL","0.0"
+","","Unrecoverable compiler error or ASMEmu exception.","FAIL","0.0" ***DISABLED "+s" not used by sem-analyzer***
 
 "ada62","good_rat_cast_to_int4.pika","rational","0 0
-","","Unrecoverable compiler error or ASMEmu exception.","FAIL","0.0"
+","","Unrecoverable compiler error or ASMEmu exception.","FAIL","0.0" ***DISABLED "+s" not used by sem-analyzer***
