@@ -375,7 +375,7 @@ public class Parser {
 	}
 	
 	private boolean isComparisonLextant(Token token) {
-		return(token.isLextant(Punctuator.GREATER) || token.isLextant(Punctuator.LESSER) || 
+		return(token.isLextant(Punctuator.CLOSE_ANGLE) || token.isLextant(Punctuator.OPEN_ANGLE) ||
 			token.isLextant(Punctuator.GREATEREQUAL) || token.isLextant(Punctuator.LESSEREQUAL) ||
 			token.isLextant(Punctuator.EQUAL) || token.isLextant(Punctuator.NOTEQUAL) );
 	}

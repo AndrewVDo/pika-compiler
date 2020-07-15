@@ -10,8 +10,8 @@ public enum Punctuator implements Lextant {
 	MULTIPLY("*"),
 	DIVIDE("/"),
 
-	GREATER(">"),
-	LESSER("<"),
+	GREATER(""),
+	LESSER(""),
 	GREATEREQUAL(">="),
 	LESSEREQUAL("<="),
 	EQUAL("=="),
@@ -41,7 +41,12 @@ public enum Punctuator implements Lextant {
 
 	RAT_OP1("//"),
 	EXPRESS_OVER("///"),
-	RATIONALIZE("////")
+	RATIONALIZE("////"),
+
+	CLOSE_ANGLE(">"),
+	OPEN_ANGLE("<"),
+
+	RESULT_TYPE("->"),
 	;
 
 	private String lexeme;

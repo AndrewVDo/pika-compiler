@@ -1,4 +1,4 @@
-func weight< int numHydrogen, int numOxygen > -> float {
+func weight<int numHydrogen, int numOxygen> -> float {
     const g := 6.02E23 .
     const hy := 1.008 .
     const ox := 15.999 .

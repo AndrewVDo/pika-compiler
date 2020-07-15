@@ -7,17 +7,17 @@ package inputHandler;
 public class LocatedChar implements Locator {
 	Character character;
 	TextLocation location;
-	
+
 	public LocatedChar(Character character, TextLocation location) {
 		super();
 		this.character = character;
 		this.location = location;
 	}
 
-	
+
 	//////////////////////////////////////////////////////////////////////////////
 	// getters
-	
+
 	public Character getCharacter() {
 		return character;
 	}
@@ -27,12 +27,12 @@ public class LocatedChar implements Locator {
 	public boolean isChar(char c) {
 		return character == c;
 	}
-	
-	
-	
+
+
+
 	//////////////////////////////////////////////////////////////////////////////
 	// toString
-	
+
 	public String toString() {
 		return "(" + charString() + ", " + location + ")";
 	}
@@ -46,10 +46,10 @@ public class LocatedChar implements Locator {
 		}
 	}
 
-	
+
 	//////////////////////////////////////////////////////////////////////////////
 	// delegates
-	
+
 	public boolean isLowerCase() {
 		return Character.isLowerCase(character) || (character == '_');
 	}
@@ -83,4 +83,5 @@ public class LocatedChar implements Locator {
 	public boolean isStringStart() {
 		return character == '"';
 	}
+
 }

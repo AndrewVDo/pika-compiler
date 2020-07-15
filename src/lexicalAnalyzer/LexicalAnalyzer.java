@@ -53,7 +53,6 @@ public class LexicalAnalyzer extends ScannerImp implements Scanner {
 		}
 	}
 
-
 	private Token scanCharacter(LocatedChar first) {	
 		if(!first.isCharacterStart()) {
 			lexicalError(first);
@@ -129,7 +128,7 @@ public class LexicalAnalyzer extends ScannerImp implements Scanner {
 		LocatedChar currChar = firstChar;
 
 		if(currChar.isSign()) {
-			if(input.peek().isWhitespace() || input.peek().isSign()) {
+			if(input.peek().isWhitespace() || input.peek().isSign() || isPunctuatorStart(input.peek())) {
 				return PunctuatorScanner.scan(firstChar, input);
 			}
 			buffer.append(currChar.getCharacter());
@@ -240,7 +239,7 @@ public class LexicalAnalyzer extends ScannerImp implements Scanner {
 		case '+':
 			return LextantToken.make(location, "+", Punctuator.ADD);
 		case '>':
-			return LextantToken.make(location, ">", Punctuator.GREATER);
+			return LextantToken.make(location, ">", Punctuator.CLOSE_ANGLE);
 		case ':':
 			if(ch.getCharacter()=='=') {
 				return LextantToken.make(location, ":=", Punctuator.ASSIGN);

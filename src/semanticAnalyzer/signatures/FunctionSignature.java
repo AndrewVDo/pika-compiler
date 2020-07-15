@@ -136,7 +136,7 @@ public class FunctionSignature {
 		switch(punctuator) {
 		case ADD:		return addSignature;
 		case MULTIPLY:	return multiplySignature;
-		case GREATER:	return greaterSignature;
+		case CLOSE_ANGLE:	return greaterSignature;
 
 		default:
 			return neverMatchedSignature;

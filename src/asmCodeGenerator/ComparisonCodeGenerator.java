@@ -10,7 +10,6 @@ import semanticAnalyzer.types.ArrayType;
 import semanticAnalyzer.types.PrimitiveType;
 import semanticAnalyzer.types.Type;
 
-import static asmCodeGenerator.RationalGenerator.RATIONAL_GCD;
 import static asmCodeGenerator.RationalMath.RationalSubtract.RAT_SUB;
 import static asmCodeGenerator.codeStorage.ASMOpcode.*;
 import static asmCodeGenerator.runtime.RunTime.RATIONAL_TEMP;
@@ -99,11 +98,11 @@ public class ComparisonCodeGenerator {
 			fragment.add(subtract);
 		}
 		
-		if(operator == Punctuator.GREATER) {
+		if(operator == Punctuator.CLOSE_ANGLE) {
 			fragment.add(jumppos, trueLabel);
 			fragment.add(Jump, falseLabel);
 		}
-		else if(operator == Punctuator.LESSER) {
+		else if(operator == Punctuator.OPEN_ANGLE) {
 			fragment.add(jumpneg, trueLabel);
 			fragment.add(Jump, falseLabel);
 		}

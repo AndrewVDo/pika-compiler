@@ -351,7 +351,7 @@ public class ASMCodeGenerator {
 		}
 
 		private boolean isComparisonOperator(Lextant operator) {
-			return operator == Punctuator.GREATER || operator == Punctuator.LESSER
+			return operator == Punctuator.CLOSE_ANGLE || operator == Punctuator.OPEN_ANGLE
 					|| operator == Punctuator.GREATEREQUAL || operator == Punctuator.LESSEREQUAL
 					|| operator == Punctuator.EQUAL || operator == Punctuator.NOTEQUAL;
 		}

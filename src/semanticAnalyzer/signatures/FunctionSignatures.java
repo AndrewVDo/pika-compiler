@@ -11,7 +11,6 @@ import semanticAnalyzer.types.Type;
 import semanticAnalyzer.types.TypeVariable;
 
 import java.util.*;
-import java.util.function.Function;
 
 
 public class FunctionSignatures extends ArrayList<FunctionSignature> {
@@ -107,7 +106,7 @@ public class FunctionSignatures extends ArrayList<FunctionSignature> {
 			new FunctionSignature(new RationalDivide(), PrimitiveType.RATIONAL, PrimitiveType.RATIONAL, PrimitiveType.RATIONAL)
 		);
 		
-		Punctuator [] comparisons = {Punctuator.GREATER, Punctuator.LESSER, Punctuator.GREATEREQUAL, Punctuator.LESSEREQUAL, Punctuator.EQUAL, Punctuator.NOTEQUAL};
+		Punctuator [] comparisons = {Punctuator.CLOSE_ANGLE, Punctuator.OPEN_ANGLE, Punctuator.GREATEREQUAL, Punctuator.LESSEREQUAL, Punctuator.EQUAL, Punctuator.NOTEQUAL};
 		
 		for(Punctuator comparison : comparisons) {
 			FunctionSignature SigI = new FunctionSignature(1, PrimitiveType.INTEGER, PrimitiveType.INTEGER, PrimitiveType.BOOLEAN);
