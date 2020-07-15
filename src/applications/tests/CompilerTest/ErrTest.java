@@ -50,4 +50,20 @@ public class ErrTest extends NoExitTestFixture {
         return findTestsByPrefix(PIKA_TWO, ERR_TEST);
     }
 
+    @ParameterizedTest(name = "Run {index}: inputName={0}, outputName={1}, expectedName={2}")
+    @MethodSource("findPika3Err")
+    public void testMilestone3Err(String inputName, String outputName, String expectedName) throws Exception {
+        try {
+            setUp();
+            PikaCompiler.compile(inputName);
+        }
+        catch(ExitException e) {
+            return;
+        }
+        fail("Compiler should have exited");
+    }
+
+    public static Stream<Arguments> findPika3Err() throws Exception {
+        return findTestsByPrefix(PIKA_THREE, ERR_TEST);
+    }
 }

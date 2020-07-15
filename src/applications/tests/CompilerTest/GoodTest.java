@@ -66,6 +66,30 @@ public class GoodTest extends CompilerTestFixture{
         return findTestsByPrefix(PIKA_TWO, GOOD_TEST);
     }
 
+    @ParameterizedTest(name = "Run {index}: inputName={0}, outputName={1}, expectedName={2}")
+    @MethodSource("pika3data")
+    public void testMilestone3Good(String inputName, String outputName, String expectedName) throws Exception {
+
+        PikaCompiler.compile(inputName);
+        String programOutput = runEmulator(outputName);
+        String expectedOutput = "";
+
+        try {
+            expectedOutput = getContents(expectedName);
+        } catch (Exception e) {
+            //createExpected(programOutput, expectedName);
+            warnUserNoExpectedFile(programOutput, expectedName);
+            fail("Could not find expected output");
+        }
+
+        assertEquals(expectedOutput, programOutput);
+        System.out.println(programOutput);
+    }
+
+    public static Stream<Arguments> pika3data() throws Exception {
+        return findTestsByPrefix(PIKA_THREE, GOOD_TEST);
+    }
+
 
 
 

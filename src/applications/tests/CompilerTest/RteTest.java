@@ -44,4 +44,18 @@ public class RteTest extends CompilerTestFixture {
         return findTestsByPrefix(PIKA_TWO, RTE_TEST);
     }
 
+    @ParameterizedTest(name = "Run {index}: inputName={0}, outputName={1}, expectedName={2}")
+    @MethodSource("findMilestone3Files")
+    public void testMilestone3Rte(String inputName, String outputName, String expectedName) throws Exception {
+        PikaCompiler.compile(inputName);
+        String programOutput = runEmulator(outputName);
+        boolean findRunTimeError = programOutput.contains("Runtime error");
+
+        assertTrue(findRunTimeError);
+    }
+
+    public static Stream<Arguments> findMilestone3Files() throws Exception {
+        return findTestsByPrefix(PIKA_THREE, RTE_TEST);
+    }
+
 }

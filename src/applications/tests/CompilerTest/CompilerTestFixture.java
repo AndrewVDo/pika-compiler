@@ -12,6 +12,7 @@ import java.util.Scanner;
 public class CompilerTestFixture extends FileFixturesTestCase {
     public static final String PIKA_ONE = "input/pika-1/";
     public static final String PIKA_TWO = "input/pika-2/";
+    public static final String PIKA_THREE = "input/pika-3/";
 
     protected String CompilerOutput(String filename) throws Exception {
         return outputFor(new CompilerCommand(filename));
