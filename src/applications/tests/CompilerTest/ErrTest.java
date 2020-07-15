@@ -18,41 +18,32 @@ public class ErrTest extends NoExitTestFixture {
 
     @ParameterizedTest(name = "Run {index}: inputName={0}, outputName={1}, expectedName={2}")
     @MethodSource("findPikaOneErr")
-    public void testMilestoneOneErr(String inputName, String outputName, String expectedName) throws Exception {
-        try {
-            setUp();
-            PikaCompiler.compile(inputName);
-        }
-        catch(ExitException e) {
-            return;
-        }
-        fail("Compiler should have exited");
+    public void testErrM1(String inputName, String outputName, String expectedName) throws Exception {
+        runErrTest(inputName);
     }
-
     public static Stream<Arguments> findPikaOneErr() throws Exception {
         return findTestsByPrefix(PIKA_ONE, ERR_TEST);
     }
 
     @ParameterizedTest(name = "Run {index}: inputName={0}, outputName={1}, expectedName={2}")
     @MethodSource("findPikaTwoErr")
-    public void testMilestoneTwoErr(String inputName, String outputName, String expectedName) throws Exception {
-        try {
-            setUp();
-            PikaCompiler.compile(inputName);
-        }
-        catch(ExitException e) {
-            return;
-        }
-        fail("Compiler should have exited");
+    public void testErrM2(String inputName, String outputName, String expectedName) throws Exception {
+        runErrTest(inputName);
     }
-
     public static Stream<Arguments> findPikaTwoErr() throws Exception {
         return findTestsByPrefix(PIKA_TWO, ERR_TEST);
     }
 
     @ParameterizedTest(name = "Run {index}: inputName={0}, outputName={1}, expectedName={2}")
     @MethodSource("findPika3Err")
-    public void testMilestone3Err(String inputName, String outputName, String expectedName) throws Exception {
+    public void testErrM3(String inputName, String outputName, String expectedName) throws Exception {
+        runErrTest(inputName);
+    }
+    public static Stream<Arguments> findPika3Err() throws Exception {
+        return findTestsByPrefix(PIKA_THREE, ERR_TEST);
+    }
+
+    private void runErrTest(String inputName) {
         try {
             setUp();
             PikaCompiler.compile(inputName);
@@ -60,10 +51,9 @@ public class ErrTest extends NoExitTestFixture {
         catch(ExitException e) {
             return;
         }
-        fail("Compiler should have exited");
-    }
-
-    public static Stream<Arguments> findPika3Err() throws Exception {
-        return findTestsByPrefix(PIKA_THREE, ERR_TEST);
+        catch(Exception e) {
+            e.printStackTrace();
+        }
+        fail("Compiler did not exit");
     }
 }

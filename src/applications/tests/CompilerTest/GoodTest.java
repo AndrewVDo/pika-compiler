@@ -21,78 +21,52 @@ public class GoodTest extends CompilerTestFixture{
 
     @ParameterizedTest(name = "Run {index}: inputName={0}, outputName={1}, expectedName={2}")
     @MethodSource("pika1data")
-    public void testMilestoneOneGood(String inputName, String outputName, String expectedName) throws Exception {
-
-        PikaCompiler.compile(inputName);
-        String programOutput = runEmulator(outputName);
-        String expectedOutput = "";
-
-        try {
-            expectedOutput = getContents(expectedName);
-        } catch (Exception e) {
-            warnUserNoExpectedFile(programOutput, expectedName);
-            fail("Could not find expected output");
-        }
-
-        assertEquals(expectedOutput, programOutput);
-        System.out.println(programOutput);
+    public void testGoodM1(String inputName, String outputName, String expectedName) {
+        runGoodTest(inputName, outputName, expectedName);
     }
-
     public static Stream<Arguments> pika1data() throws Exception {
         return findTestsByPrefix(PIKA_ONE, GOOD_TEST);
     }
 
     @ParameterizedTest(name = "Run {index}: inputName={0}, outputName={1}, expectedName={2}")
     @MethodSource("pika2data")
-    public void testMilestoneTwoGood(String inputName, String outputName, String expectedName) throws Exception {
-
-        PikaCompiler.compile(inputName);
-        String programOutput = runEmulator(outputName);
-        String expectedOutput = "";
-
-        try {
-            expectedOutput = getContents(expectedName);
-        } catch (Exception e) {
-            //createExpected(programOutput, expectedName);
-            warnUserNoExpectedFile(programOutput, expectedName);
-            fail("Could not find expected output");
-        }
-
-        assertEquals(expectedOutput, programOutput);
-        System.out.println(programOutput);
+    public void testGoodM2(String inputName, String outputName, String expectedName) {
+        runGoodTest(inputName, outputName, expectedName);
     }
-
     public static Stream<Arguments> pika2data() throws Exception {
         return findTestsByPrefix(PIKA_TWO, GOOD_TEST);
     }
 
     @ParameterizedTest(name = "Run {index}: inputName={0}, outputName={1}, expectedName={2}")
     @MethodSource("pika3data")
-    public void testMilestone3Good(String inputName, String outputName, String expectedName) throws Exception {
-
-        PikaCompiler.compile(inputName);
-        String programOutput = runEmulator(outputName);
-        String expectedOutput = "";
-
-        try {
-            expectedOutput = getContents(expectedName);
-        } catch (Exception e) {
-            //createExpected(programOutput, expectedName);
-            warnUserNoExpectedFile(programOutput, expectedName);
-            fail("Could not find expected output");
-        }
-
-        assertEquals(expectedOutput, programOutput);
-        System.out.println(programOutput);
+    public void testGoodM3(String inputName, String outputName, String expectedName) {
+        runGoodTest(inputName, outputName, expectedName);
     }
-
     public static Stream<Arguments> pika3data() throws Exception {
         return findTestsByPrefix(PIKA_THREE, GOOD_TEST);
     }
 
+    private void runGoodTest(String inputName, String outputName, String expectedName) {
+        String programOutput = "";
+        String expectedOutput = "";
 
+        try {
+            PikaCompiler.compile(inputName);
+            programOutput = runEmulator(outputName);
+        } catch (Exception e) {
+            fail("Exception Caught");
+        }
 
+        try {
+            expectedOutput = getContents(expectedName);
+        } catch (Exception e) {
+            warnUserNoExpectedFile(programOutput, expectedName);
+            fail("Could not find expected output");
+        }
 
+        assertEquals(programOutput, expectedOutput);
+        System.out.println(programOutput);
+    }
 
     private void createExpected(String programOutput, String expectedName) {
         try {

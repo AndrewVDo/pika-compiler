@@ -18,7 +18,7 @@ public class CompilerTestFixture extends FileFixturesTestCase {
         return outputFor(new CompilerCommand(filename));
     };
 
-    protected static void warnUserNoExpectedFile(String programOutput, String expectedName) throws Exception {
+    protected static void warnUserNoExpectedFile(String programOutput, String expectedName) {
         System.out.println("ASMEmulator.exe produced the output : ");
         System.out.println(programOutput.toString());
         System.out.println("There is currently no " + expectedName + " file, you can save this output as expected output");
