@@ -28,6 +28,7 @@ public enum Keyword implements Lextant {
 	DEALLOC("dealloc"),
 	CLONE("clone"),
 	FUNCTION("func"),
+	RETURN("return"),
 	;
 
 	private String lexeme;
