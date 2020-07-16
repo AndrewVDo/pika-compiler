@@ -1,5 +1,6 @@
 package symbolTable;
 
+import asmCodeGenerator.runtime.MemoryManager;
 import inputHandler.TextLocation;
 import logging.PikaLogger;
 import parseTree.nodeTypes.IdentifierNode;
@@ -20,12 +21,25 @@ public class Scope {
 	public Scope createSubscope() {
 		return new Scope(allocator, this);
 	}
+//	public Scope createParameterScope(int numBytes) {
+//		return new Scope(negativeMemoryAllocator(numBytes), this);
+//	}
+//	public Scope createProcedureScope() {
+//		return new Scope(negativeMemoryAllocator(), this);
+//	}
 	
 	private static MemoryAllocator programScopeAllocator() {
 		return new PositiveMemoryAllocator(
 				MemoryAccessMethod.DIRECT_ACCESS_BASE, 
 				MemoryLocation.GLOBAL_VARIABLE_BLOCK);
 	}
+//	private static MemoryAllocator negativeMemoryAllocator(int numBytes) {
+//		return new NegativeMemoryAllocator(
+//				MemoryAccessMethod.DIRECT_ACCESS_BASE,
+//				base_address,
+//				numBytes
+//		);
+//	}
 	
 //////////////////////////////////////////////////////////////////////
 // private constructor.	
@@ -33,9 +47,10 @@ public class Scope {
 		super();
 		this.baseScope = (baseScope == null) ? this : baseScope;
 		this.symbolTable = new SymbolTable();
-		
 		this.allocator = allocator;
-		allocator.saveState();
+	}
+	public void enter() {
+		this.allocator.saveState();
 	}
 	
 ///////////////////////////////////////////////////////////////////////

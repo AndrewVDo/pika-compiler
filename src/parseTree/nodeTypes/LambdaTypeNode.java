@@ -21,14 +21,6 @@ public class LambdaTypeNode extends ParseNode {
         return lambdaTypeNode;
     }
 
-    private FunctionSignature functionSignature;
-    public void setFunctionSignature(FunctionSignature functionSignature) {
-        this.functionSignature = functionSignature;
-    }
-    public FunctionSignature getFunctionSignature() {
-        return this.functionSignature;
-    }
-
     public void accept(ParseNodeVisitor visitor) {
         visitor.visitEnter(this);
         visitChildren(visitor);

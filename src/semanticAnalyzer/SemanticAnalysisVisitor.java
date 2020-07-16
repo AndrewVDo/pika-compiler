@@ -17,6 +17,7 @@ import symbolTable.Scope;
 import tokens.LextantToken;
 import tokens.Token;
 
+import javax.lang.model.type.ErrorType;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -48,8 +49,7 @@ class SemanticAnalysisVisitor extends ParseNodeVisitor.Default {
 	///////////////////////////////////////////////////////////////////////////
 	// helper methods for scoping.
 	private void enterProgramScope(ParseNode node) {
-		Scope scope = Scope.createProgramScope();
-		node.setScope(scope);
+		node.getScope().enter();
 	}	
 	private void enterSubscope(ParseNode node) {
 		Scope baseScope = node.getLocalScope();
@@ -64,6 +64,13 @@ class SemanticAnalysisVisitor extends ParseNodeVisitor.Default {
 	// statements and declarations
 	@Override
 	public void visitLeave(PrintStatementNode node) {
+	}
+	@Override
+	public void visitLeave(FunctionNode node) {
+//		assert(node.nChildren() == 2);
+//		IdentifierNode identifierNode = (IdentifierNode) node.child(0);
+//		LambdaNode lambdaNode = (LambdaNode) node.child(1);
+
 	}
 	@Override
 	public void visitLeave(DeclarationNode node) {

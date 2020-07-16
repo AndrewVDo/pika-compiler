@@ -43,6 +43,10 @@ public class Parser {
 			return syntaxErrorNode("program");
 		}
 		ParseNode program = new ProgramNode(nowReading);
+
+		while(nowReading.isLextant(Keyword.FUNCTION)) {
+			program.appendChild(parseFunction());
+		}
 		
 		expect(Keyword.EXEC);
 		ParseNode mainBlock = parseBlockStatement();
@@ -55,7 +59,60 @@ public class Parser {
 		return program;
 	}
 	private boolean startsProgram(Token token) {
-		return token.isLextant(Keyword.EXEC);
+		return token.isLextant(Keyword.EXEC) || token.isLextant(Keyword.FUNCTION);
+	}
+
+	private ParseNode parseFunction() {
+		if(!nowReading.isLextant(Keyword.FUNCTION)) {
+			return syntaxErrorNode("parseFunction");
+		}
+		Token funcToken = nowReading;
+		readToken();
+		ParseNode identifier = parseIdentifier();
+		ParseNode lambda = parseLambda();
+
+		return FunctionNode.withChildren(funcToken, identifier, lambda);
+	}
+	private ParseNode parseLambda() {
+		if(!nowReading.isLextant(Punctuator.OPEN_ANGLE)) {
+			return syntaxErrorNode("parseLambda");
+		}
+		Token lambdaToken = nowReading;
+		ParseNode lambdaType = parseLambdaType();
+		ParseNode blockStatement = parseBlockStatement();
+
+		return LambdaNode.withChildren(lambdaToken, lambdaType, blockStatement);
+	}
+	private ParseNode parseLambdaType() {
+		if(!nowReading.isLextant(Punctuator.OPEN_ANGLE)) {
+			return syntaxErrorNode("parseLambdaType");
+		}
+		Token lambdaTypeToken = nowReading;
+		readToken();
+		List<ParseNode> paramList = parseParamList();
+		expect(Punctuator.CLOSE_ANGLE);
+		expect(Punctuator.RESULT_TYPE);
+		ParseNode resultType = parseType();
+
+		return LambdaTypeNode.withChildren(lambdaTypeToken, paramList, resultType);
+	}
+	private List<ParseNode> parseParamList() {
+		ArrayList<ParseNode> params = new ArrayList<>();
+
+		while(!nowReading.isLextant(Punctuator.CLOSE_ANGLE)) {
+			Token paramToken = nowReading;
+			ParseNode type = parseType();
+			ParseNode identifier = parseIdentifier();
+			params.add(ParameterNode.withChildren(paramToken, type, identifier));
+			if(!nowReading.isLextant(Punctuator.SEPARATOR, Punctuator.CLOSE_ANGLE)) {
+				return List.of(syntaxErrorNode("parseParamList"));
+			}
+			if(nowReading.isLextant(Punctuator.SEPARATOR)) {
+				expect(Punctuator.SEPARATOR);
+			}
+		}
+
+		return params;
 	}
 	
 	
