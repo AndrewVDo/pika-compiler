@@ -21,7 +21,7 @@ public class Scope {
 	public Scope createSubscope() {
 		return new Scope(allocator, this);
 	}
-	public Scope createParameterScope(int numBytes) {
+	public Scope createParameterScope() {
 		return new Scope(paramMemoryAllocator(), this);
 	}
 	public Scope createProcedureScope() {

@@ -22,7 +22,16 @@ public class LambdaType implements Type {
 
     @Override
     public String infoString() {
-        return null;
+        String info = new String("L(<");
+        for(Type t : paramTypes) {
+            info += t.infoString() + ", ";
+        }
+        if(info.length() > 1) {
+            info = info.substring(0, info.length()-2);
+        }
+        info += "> -> " + returnType.infoString() + ")";
+
+        return info;
     }
 
     @Override

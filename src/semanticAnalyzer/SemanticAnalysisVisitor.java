@@ -13,15 +13,14 @@ import semanticAnalyzer.types.ArrayType;
 import semanticAnalyzer.types.PrimitiveType;
 import semanticAnalyzer.types.Type;
 import symbolTable.Binding;
+import symbolTable.MemoryLocation;
 import symbolTable.Scope;
 import tokens.LextantToken;
 import tokens.Token;
 
-import javax.lang.model.type.ErrorType;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.function.Function;
 
 class SemanticAnalysisVisitor extends ParseNodeVisitor.Default {
 	@Override
@@ -39,7 +38,12 @@ class SemanticAnalysisVisitor extends ParseNodeVisitor.Default {
 		leaveScope(node);
 	}
 	public void visitEnter(BlockStatementNode node) {
-		enterSubscope(node);
+		if(node.getParent() instanceof LambdaNode) {
+			createProcedureScope(node);
+		}
+		else {
+			enterSubscope(node);
+		}
 	}
 	public void visitLeave(BlockStatementNode node) {
 		leaveScope(node);
@@ -56,7 +60,13 @@ class SemanticAnalysisVisitor extends ParseNodeVisitor.Default {
 		Scope scope = baseScope.createSubscope();
 		node.setScope(scope);
 		node.getScope().enter();
-	}		
+	}
+	private void createProcedureScope(ParseNode node) {
+		Scope baseScope = node.getLocalScope();
+		Scope scope = baseScope.createProcedureScope();
+		node.setScope(scope);
+		node.getScope().enter();
+	}
 	private void leaveScope(ParseNode node) {
 		node.getScope().leave();
 	}
@@ -67,11 +77,43 @@ class SemanticAnalysisVisitor extends ParseNodeVisitor.Default {
 	public void visitLeave(PrintStatementNode node) {
 	}
 	@Override
+	public void visitEnter(FunctionNode node) {
+		Scope localScope = node.getLocalScope();
+		Scope parameterScope = localScope.createParameterScope();
+		node.setScope(parameterScope);
+		parameterScope.enter();
+	}
+	@Override
 	public void visitLeave(FunctionNode node) {
-//		assert(node.nChildren() == 2);
-//		IdentifierNode identifierNode = (IdentifierNode) node.child(0);
-//		LambdaNode lambdaNode = (LambdaNode) node.child(1);
+		assert(node.nChildren() == 2);
+		IdentifierNode identifierNode = (IdentifierNode) node.child(0);
+		LambdaNode lambdaNode = (LambdaNode) node.child(1);
+		identifierNode.setType(lambdaNode.getType());
+		Scope parameterScope = node.getScope();
+		parameterScope.leave();
+	}
+	@Override
+	public void visitLeave(LambdaNode node) {
+		assert(node.nChildren() == 2);
+	}
+	@Override
+	public void visitLeave(LambdaParamTypeNode node) {
+		assert(node.nChildren() > 0);
+	}
+	@Override
+	public void visitLeave(ParameterNode node) {
+		assert(node.nChildren() == 2);
 
+		TypeNode typeNode = (TypeNode) node.child(0);
+		Type paramType = typeNode.getType();
+
+		IdentifierNode identifierNode = (IdentifierNode) node.child(1);
+		identifierNode.setType(paramType);
+		addBinding(identifierNode, paramType, false);
+
+//		todo probably do this stuff in the calling phase, not decleration phase
+//		Scope parameterScope = node.getLocalScope();
+//		MemoryLocation paramLocation = parameterScope.getAllocationStrategy().allocate(paramType.getSize());
 	}
 	@Override
 	public void visitLeave(DeclarationNode node) {
@@ -441,7 +483,7 @@ class SemanticAnalysisVisitor extends ParseNodeVisitor.Default {
 	}
 	private boolean isBeingDeclared(IdentifierNode node) {
 		ParseNode parent = node.getParent();
-		return (parent instanceof DeclarationNode) && (node == parent.child(0));
+		return ((parent instanceof DeclarationNode) && (node == parent.child(0)) || parent instanceof ParameterNode );
 	}
 	private void addBinding(IdentifierNode identifierNode, Type type, boolean isVar) {
 		Scope scope = identifierNode.getLocalScope();

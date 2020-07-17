@@ -33,11 +33,11 @@ public class FunctionBinderVisitor extends ParseNodeVisitor.Default {
     @Override
     public void visitLeave(LambdaNode node) {
         assert(node.nChildren() == 2);
-        LambdaTypeNode lambdaTypeNode = (LambdaTypeNode) node.child(0);
-        node.setType(lambdaTypeNode.getType());
+        LambdaParamTypeNode lambdaParamTypeNode = (LambdaParamTypeNode) node.child(0);
+        node.setType(lambdaParamTypeNode.getType());
     }
     @Override
-    public void visitLeave(LambdaTypeNode node) {
+    public void visitLeave(LambdaParamTypeNode node) {
         assert(node.nChildren() > 0);
         List<Type> paramTypes = new ArrayList<>();
         for(int i=0; i<node.nChildren()-1; i++) {
