@@ -21,25 +21,30 @@ public class Scope {
 	public Scope createSubscope() {
 		return new Scope(allocator, this);
 	}
-//	public Scope createParameterScope(int numBytes) {
-//		return new Scope(negativeMemoryAllocator(numBytes), this);
-//	}
-//	public Scope createProcedureScope() {
-//		return new Scope(negativeMemoryAllocator(), this);
-//	}
+	public Scope createParameterScope(int numBytes) {
+		return new Scope(paramMemoryAllocator(), this);
+	}
+	public Scope createProcedureScope() {
+		return new Scope(procedureMemoryAllocator(), this);
+	}
 	
 	private static MemoryAllocator programScopeAllocator() {
 		return new PositiveMemoryAllocator(
 				MemoryAccessMethod.DIRECT_ACCESS_BASE, 
 				MemoryLocation.GLOBAL_VARIABLE_BLOCK);
 	}
-//	private static MemoryAllocator negativeMemoryAllocator(int numBytes) {
-//		return new NegativeMemoryAllocator(
-//				MemoryAccessMethod.DIRECT_ACCESS_BASE,
-//				base_address,
-//				numBytes
-//		);
-//	}
+	private static MemoryAllocator paramMemoryAllocator() {
+		return new ParameterMemoryAllocator(
+				MemoryAccessMethod.DIRECT_ACCESS_BASE,
+				MemoryLocation.FRAME_POINTER, //todo maybe stack ptr?
+				0);
+	}
+	private static MemoryAllocator procedureMemoryAllocator() {
+		return new NegativeMemoryAllocator(
+				MemoryAccessMethod.DIRECT_ACCESS_BASE,
+				MemoryLocation.FRAME_POINTER, //todo maybe stack ptr?
+				8);
+	}
 	
 //////////////////////////////////////////////////////////////////////
 // private constructor.	

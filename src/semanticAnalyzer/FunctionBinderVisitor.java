@@ -17,17 +17,10 @@ public class FunctionBinderVisitor extends ParseNodeVisitor.Default {
     public void visitEnter(ProgramNode node) {
         allocateProgramScope(node);
     }
-    public void visitLeave(ProgramNode node) {
-        leaveScope(node);
-    }
 
     private void allocateProgramScope(ParseNode node) {
         Scope scope = Scope.createProgramScope();
         node.setScope(scope);
-        node.getScope().enter();
-    }
-    private void leaveScope(ParseNode node) {
-        node.getScope().leave();
     }
 
     @Override
@@ -59,10 +52,6 @@ public class FunctionBinderVisitor extends ParseNodeVisitor.Default {
         assert(node.nChildren() == 2);
         TypeNode typeNode = (TypeNode) node.child(0);
         node.setType(typeNode.getType());
-        IdentifierNode identifierNode = (IdentifierNode) node.child(1);
-        //todo figure out what to do with identitifer
-        //todo or make this node a leaf node
-        //todo or just dont do anythign in this binder
     }
 
     private void addBinding(IdentifierNode identifierNode, Type type) {

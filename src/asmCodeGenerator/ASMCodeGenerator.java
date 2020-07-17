@@ -54,6 +54,15 @@ public class ASMCodeGenerator {
 		ASMCodeFragment code = new ASMCodeFragment(GENERATES_VOID);
 		code.add(DLabel, RunTime.GLOBAL_MEMORY_BLOCK);
 		code.add(DataZ, globalBlockSize);
+		//todo edit
+		code.add(DLabel, RunTime.FUNCTION_POINTER);
+		code.add(DataZ, globalBlockSize);
+		code.add(Memtop);
+		code.add(DataD, RunTime.FUNCTION_POINTER);
+		code.add(DLabel, RunTime.STACK_POINTER);
+		code.add(DataZ, globalBlockSize);
+		code.add(Memtop);
+		code.add(DataD, RunTime.STACK_POINTER);
 		return code;
 	}
 	private ASMCodeFragment programASM() {
