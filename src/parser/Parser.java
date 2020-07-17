@@ -94,7 +94,7 @@ public class Parser {
 		expect(Punctuator.RESULT_TYPE);
 		ParseNode resultType = parseType();
 
-		return LambdaTypeNode.withChildren(lambdaTypeToken, paramList, resultType);
+		return LambdaParamTypeNode.withChildren(lambdaTypeToken, paramList, resultType);
 	}
 	private List<ParseNode> parseParamList() {
 		ArrayList<ParseNode> params = new ArrayList<>();

@@ -48,8 +48,8 @@ public interface ParseNodeVisitor {
 	void visitEnter(FunctionNode node);
 	void visitLeave(FunctionNode node);
 
-	void visitEnter(LambdaTypeNode node);
-	void visitLeave(LambdaTypeNode node);
+	void visitEnter(LambdaParamTypeNode node);
+	void visitLeave(LambdaParamTypeNode node);
 
 	void visitEnter(LambdaNode node);
 	void visitLeave(LambdaNode node);
@@ -157,8 +157,8 @@ public interface ParseNodeVisitor {
 		}
 		public void visitEnter(FunctionNode node) { defaultVisitEnter(node); }
 		public void visitLeave(FunctionNode node) { defaultVisitLeave(node); }
-		public void visitEnter(LambdaTypeNode node) { defaultVisitEnter(node); }
-		public void visitLeave(LambdaTypeNode node) { defaultVisitLeave(node); }
+		public void visitEnter(LambdaParamTypeNode node) { defaultVisitEnter(node); }
+		public void visitLeave(LambdaParamTypeNode node) { defaultVisitLeave(node); }
 		public void visitEnter(LambdaNode node) { defaultVisitEnter(node); }
 		public void visitLeave(LambdaNode node) { defaultVisitLeave(node); }
 		public void visitEnter(ParameterNode node) { defaultVisitEnter(node); }
