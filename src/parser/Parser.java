@@ -124,15 +124,15 @@ public class Parser {
 		if(!startsBlockStatement(nowReading)) {
 			return syntaxErrorNode("mainBlock");
 		}
-		ParseNode mainBlock = new BlockStatementNode(nowReading);
+		ParseNode blockStatement = new BlockStatementNode(nowReading);
 		expect(Punctuator.OPEN_BRACE);
 		
 		while(startsStatement(nowReading)) {
 			ParseNode statement = parseStatement();
-			mainBlock.appendChild(statement);
+			blockStatement.appendChild(statement);
 		}
 		expect(Punctuator.CLOSE_BRACE);
-		return mainBlock;
+		return blockStatement;
 	}
 	private boolean startsBlockStatement(Token token) {
 		return token.isLextant(Punctuator.OPEN_BRACE);
@@ -162,10 +162,28 @@ public class Parser {
 		if(startsControlFlowStatement(nowReading)) {
 			return parseControlFlowStatement();
 		}
+		if(startsReturnStatement(nowReading)) {
+			return parseReturnStatement();
+		}
 		if(startsDeallocStatement(nowReading)) {
 			return parseDeallocStatement();
 		}
 		return syntaxErrorNode("statement");
+	}
+
+	private ParseNode parseReturnStatement() {
+		if(!startsReturnStatement(nowReading)) {
+			return syntaxErrorNode("return statement");
+		}
+		Token returnToken = nowReading;
+		readToken();
+		ParseNode returnExpression = parseExpression();
+		expect(Punctuator.TERMINATOR);
+		return ReturnNode.withChildren(returnToken, returnExpression);
+	}
+
+	private boolean startsReturnStatement(Token token) {
+		return token.isLextant(Keyword.RETURN);
 	}
 
 	private ParseNode parseDeallocStatement() {
@@ -223,7 +241,8 @@ public class Parser {
 			   startsAssignmentStatement(token) ||
 			   startsDeclaration(token) ||
 				startsControlFlowStatement(token) ||
-				startsDeallocStatement(token);
+				startsDeallocStatement(token) ||
+				startsReturnStatement(token);
 	}
 	
 	// assignment -> target := expression .

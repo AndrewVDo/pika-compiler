@@ -57,6 +57,9 @@ public interface ParseNodeVisitor {
 	void visitEnter(ParameterNode node);
 	void visitLeave(ParameterNode node);
 
+	void visitEnter(ReturnNode node);
+	void visitLeave(ReturnNode node);
+
 	// leaf nodes: visitLeaf only
 	void visit(BooleanConstantNode node);
 	void visit(CharacterConstantNode node);
@@ -163,6 +166,12 @@ public interface ParseNodeVisitor {
 		public void visitLeave(LambdaNode node) { defaultVisitLeave(node); }
 		public void visitEnter(ParameterNode node) { defaultVisitEnter(node); }
 		public void visitLeave(ParameterNode node) { defaultVisitLeave(node); }
+		public void visitEnter(ReturnNode node) {
+			defaultVisitEnter(node);
+		}
+		public void visitLeave(ReturnNode node) {
+			defaultVisitLeave(node);
+		}
 
 
 		public void visit(BooleanConstantNode node) {

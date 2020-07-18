@@ -10,10 +10,12 @@ import parseTree.nodeTypes.*;
 import semanticAnalyzer.signatures.FunctionSignature;
 import semanticAnalyzer.signatures.FunctionSignatures;
 import semanticAnalyzer.types.ArrayType;
+import semanticAnalyzer.types.LambdaType;
 import semanticAnalyzer.types.PrimitiveType;
 import semanticAnalyzer.types.Type;
 import symbolTable.Binding;
 import symbolTable.MemoryLocation;
+import symbolTable.NegativeMemoryAllocator;
 import symbolTable.Scope;
 import tokens.LextantToken;
 import tokens.Token;
@@ -78,6 +80,7 @@ class SemanticAnalysisVisitor extends ParseNodeVisitor.Default {
 	}
 	@Override
 	public void visitEnter(FunctionNode node) {
+		//todo error checking for this and it's child + it's pre-visitor
 		Scope localScope = node.getLocalScope();
 		Scope parameterScope = localScope.createParameterScope();
 		node.setScope(parameterScope);
@@ -114,6 +117,40 @@ class SemanticAnalysisVisitor extends ParseNodeVisitor.Default {
 //		todo probably do this stuff in the calling phase, not decleration phase
 //		Scope parameterScope = node.getLocalScope();
 //		MemoryLocation paramLocation = parameterScope.getAllocationStrategy().allocate(paramType.getSize());
+	}
+	@Override
+	public void visitLeave(ReturnNode node) {
+		assert(node.nChildren() == 1);
+
+		Scope localScope = node.getLocalScope();
+		if(!(localScope.getAllocationStrategy() instanceof NegativeMemoryAllocator)) {
+			returnScopeError(node);
+			node.setType(PrimitiveType.ERROR);
+			return;
+		}
+
+		ParseNode expressionNode = node.child(0);
+		Type expressionType = expressionNode.getType();
+		ParseNode lambdaNode = node;
+		do {
+			if(lambdaNode instanceof ProgramNode) {
+				returnScopeError(node);
+				node.setType(PrimitiveType.ERROR);
+				return;
+			}
+			lambdaNode = lambdaNode.getParent();
+		} while(!(lambdaNode instanceof LambdaNode));
+		LambdaType lambdaType = (LambdaType) lambdaNode.getType();
+		Type returnType = lambdaType.getReturnType();
+		if(!expressionType.equivalent(returnType)) {
+			if(!expressionType.promotable(returnType)) {
+				returnTypeError(node);
+				node.setType(PrimitiveType.ERROR);
+				return;
+			}
+			promoteChild(node, returnType, 0);
+		}
+		return;
 	}
 	@Override
 	public void visitLeave(DeclarationNode node) {
@@ -527,5 +564,18 @@ class SemanticAnalysisVisitor extends ParseNodeVisitor.Default {
 	private void logError(String message) {
 		PikaLogger log = PikaLogger.getLogger("compiler.semanticAnalyzer");
 		log.severe(message);
+	}
+
+	private void returnTypeError(ParseNode node) {
+		Token token = node.getToken();
+		//Type expectedType = node.getLocalScope();
+		Type expectedType = PrimitiveType.ERROR;
+		Type actualType = node.child(0).getType();
+		logError("Expected return type: " + expectedType + " Actual return type: " + actualType + " at " + token.getLocation());
+	}
+
+	private void returnScopeError(ParseNode node) {
+		Token token = node.getToken();
+		logError("Return may only be called from procedure scope at " + token.getLocation());
 	}
 }

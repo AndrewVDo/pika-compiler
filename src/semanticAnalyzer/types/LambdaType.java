@@ -14,6 +14,9 @@ public class LambdaType implements Type {
 
     //todo retrieve/manufacture function sig
 
+    public Type getReturnType() {
+        return this.returnType;
+    }
 
     @Override
     public int getSize() {
@@ -41,7 +44,7 @@ public class LambdaType implements Type {
 
     @Override
     public boolean isReference() {
-        return false;
+        return true;
     }
 
     @Override

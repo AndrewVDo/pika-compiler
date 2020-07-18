@@ -3,7 +3,7 @@ func weight< int numHydrogen, int numOxygen > -> float {
     const hy := 1.008 .
     const ox := 15.999 .
     const molecularWeight := hy * [numHydrogen |float] + ox * [numOxygen |float].
-    #return molecularWeight * g .
+    return molecularWeight * g .
 }
 exec {
     #do nothing
