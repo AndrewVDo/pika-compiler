@@ -153,6 +153,22 @@ class SemanticAnalysisVisitor extends ParseNodeVisitor.Default {
 		return;
 	}
 	@Override
+	public void visitLeave(CallNode node) {
+		assert(node.nChildren() > 0);
+
+		ParseNode functionIdentifier = node.child(0);
+		if(!(functionIdentifier instanceof IdentifierNode)) {
+			//todo error
+		}
+		Type functionType = ((IdentifierNode)functionIdentifier).getBinding().getType();
+		if(!(functionType instanceof LambdaType)) {
+			//todo error
+		}
+		//todo get lambda sig
+		//todo get argument sig
+		//todo compare sig
+	}
+	@Override
 	public void visitLeave(DeclarationNode node) {
 		assert(node.nChildren() == 2);
 		IdentifierNode identifier = (IdentifierNode) node.child(0);
