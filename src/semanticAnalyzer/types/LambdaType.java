@@ -1,5 +1,7 @@
 package semanticAnalyzer.types;
 
+import semanticAnalyzer.signatures.FunctionSignature;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,6 +15,12 @@ public class LambdaType implements Type {
     }
 
     //todo retrieve/manufacture function sig
+
+    public FunctionSignature getSignature() {
+        Type[] formattedArray = paramTypes.toArray(new Type[paramTypes.size() + 1]);
+        formattedArray[formattedArray.length-1] = this.getReturnType();
+        return new FunctionSignature(1, formattedArray);
+    }
 
     public Type getReturnType() {
         return this.returnType;
