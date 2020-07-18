@@ -162,6 +162,9 @@ public class Parser {
 		if(startsControlFlowStatement(nowReading)) {
 			return parseControlFlowStatement();
 		}
+		if(startsCallStatement(nowReading)) {
+			return parseCallStatement();
+		}
 		if(startsReturnStatement(nowReading)) {
 			return parseReturnStatement();
 		}
@@ -169,6 +172,56 @@ public class Parser {
 			return parseDeallocStatement();
 		}
 		return syntaxErrorNode("statement");
+	}
+
+	private ParseNode parseCallStatement() {
+		if(!startsCallStatement(nowReading)) {
+			return syntaxErrorNode("call statement");
+		}
+		Token callToken = nowReading;
+		readToken();
+		ParseNode lambdaExpression = parseExpression();
+		ParseNode callNode = parseFunctionInvocation(lambdaExpression);
+		expect(Punctuator.TERMINATOR);
+
+		return callNode;
+	}
+
+	private ParseNode parseFunctionInvocation(ParseNode lambdaExpression) {
+		if(!nowReading.isLextant(Punctuator.OPEN_PARANTHESES)) {
+			return syntaxErrorNode("function invocation");
+		}
+		Token invocationToken = lambdaExpression.getToken();
+		List<ParseNode> argumentNodes = parseFunctionArguments(lambdaExpression);
+		return CallNode.withChildren(invocationToken, lambdaExpression, argumentNodes);
+	}
+
+	private List<ParseNode> parseFunctionArguments(ParseNode lambdaExpression) {
+		List<ParseNode> argumentNodes = new ArrayList<>();
+		expect(Punctuator.OPEN_PARANTHESES);
+		while(startsExpression(nowReading)) {
+			ParseNode argument = parseExpression();
+			argumentNodes.add(argument);
+			if(nowReading.isLextant(Punctuator.SEPARATOR)) {
+				expect(Punctuator.SEPARATOR);
+			}
+			else if(nowReading.isLextant(Punctuator.CLOSE_PARANTHESES)) {
+				break;
+			}
+			else {
+				syntaxError(nowReading, "Function argument missing close bracket or argument seperator");
+			}
+		}
+		expect(Punctuator.CLOSE_PARANTHESES);
+		return argumentNodes;
+	}
+
+	private boolean startsFunctionInvocation(Token token) {
+		return startsExpression(token);
+	}
+
+	private boolean startsCallStatement(Token token) {
+		return token.isLextant(Keyword.CALL);
 	}
 
 	private ParseNode parseReturnStatement() {
@@ -252,6 +305,11 @@ public class Parser {
 		}
 		
 		ParseNode target = parseExpression();
+
+		if(target instanceof CallNode) {
+			expect(Punctuator.TERMINATOR);
+			return target;
+		}
 
 		if(!(target instanceof IdentifierNode) && !(target instanceof ArrayIndexNode)) {
 			return syntaxErrorNode("non target lhs");
@@ -387,7 +445,12 @@ public class Parser {
 		if(!startsExpression(nowReading)) {
 			return syntaxErrorNode("expression");
 		}
-		return parseBooleanOrExpression();
+		ParseNode expression = parseBooleanOrExpression();
+		if(nowReading.isLextant(Punctuator.OPEN_PARANTHESES)) {
+			return parseFunctionInvocation(expression);
+		}
+		//todo for lambda
+		return expression;
 	}
 	private boolean startsExpression(Token token) {
 		return startsComparisonExpression(token);
