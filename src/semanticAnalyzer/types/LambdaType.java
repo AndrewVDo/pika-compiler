@@ -25,6 +25,7 @@ public class LambdaType implements Type {
     public Type getReturnType() {
         return this.returnType;
     }
+    public List<Type> getParamTypes() { return this.paramTypes; }
 
     @Override
     public int getSize() {

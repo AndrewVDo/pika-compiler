@@ -180,8 +180,7 @@ public class Parser {
 		}
 		Token callToken = nowReading;
 		readToken();
-		ParseNode lambdaExpression = parseExpression();
-		ParseNode callNode = parseFunctionInvocation(lambdaExpression);
+		ParseNode callNode = parseExpression();
 		expect(Punctuator.TERMINATOR);
 
 		return callNode;
@@ -295,7 +294,8 @@ public class Parser {
 			   startsDeclaration(token) ||
 				startsControlFlowStatement(token) ||
 				startsDeallocStatement(token) ||
-				startsReturnStatement(token);
+				startsReturnStatement(token) ||
+				startsCallStatement(token);
 	}
 	
 	// assignment -> target := expression .

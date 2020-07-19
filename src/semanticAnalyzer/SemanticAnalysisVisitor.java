@@ -158,11 +158,13 @@ class SemanticAnalysisVisitor extends ParseNodeVisitor.Default {
 
 		ParseNode functionIdentifier = node.child(0);
 		if(!(functionIdentifier instanceof IdentifierNode)) {
-			//todo error
+			functionCallError(node);
+			node.setType(PrimitiveType.ERROR);
 		}
 		Type functionType = ((IdentifierNode)functionIdentifier).getBinding().getType();
 		if(!(functionType instanceof LambdaType)) {
-			//todo error
+			functionCallError(node);
+			node.setType(PrimitiveType.ERROR);
 		}
 
 		List<Type> argumentTypes = new ArrayList<>();
@@ -170,16 +172,29 @@ class SemanticAnalysisVisitor extends ParseNodeVisitor.Default {
 			argumentTypes.add(node.child(i).getType());
 		}
 
-		FunctionSignature functionSignature = ((LambdaType)functionType).getSignature(); //todo fs generator for this type
-		FunctionSignature match = findMatch(node, functionSignature, argumentTypes); //todo promotion strategy for this function doesn't apply to a CallNode (currently tailored for arrays)
-		if(match == null) {
-			typeCheckError(node, argumentTypes);
-			node.setType(PrimitiveType.ERROR);
-			return;
-		}
-		//todo match found
 
+		boolean argumentCheck = matchLambdaDefinition(node, (LambdaType)functionType, argumentTypes);
+		if(!argumentCheck) {
+			functionCallError(node);
+			node.setType(PrimitiveType.ERROR);
+		}
+		node.setType(((LambdaType) functionType).getReturnType());
 	}
+	private boolean matchLambdaDefinition(ParseNode node, LambdaType lambdaDefinition, List<Type> argumentTypes) {
+		List<Type> paramTypes = lambdaDefinition.getParamTypes();
+		for(int i=0; i<argumentTypes.size(); i++) {
+			Type argumentType = argumentTypes.get(i);
+			Type paramType = paramTypes.get(i);
+			if(!argumentType.equivalent(paramType)) {
+				if(!argumentType.promotable(paramType)) {
+					return false;
+				}
+				promoteChild(node, paramType, i+1);
+			}
+		}
+		return true;
+	}
+
 	@Override
 	public void visitLeave(DeclarationNode node) {
 		assert(node.nChildren() == 2);
@@ -371,11 +386,6 @@ class SemanticAnalysisVisitor extends ParseNodeVisitor.Default {
 	private Lextant operatorFor(BinaryOperatorNode node) {
 		LextantToken token = (LextantToken) node.getToken();
 		return token.getLextant();
-	}
-
-	private FunctionSignature findMatch(ParseNode node, FunctionSignature signature, List<Type> paramSignature) {
-		FunctionSignatures signatures = new FunctionSignatures(signature); //todo fix this
-		return findMatch(node, signatures, paramSignature);
 	}
 
 	private FunctionSignature findMatch(ParseNode node, FunctionSignatures signatures, List<Type> paramSignature) {
@@ -610,5 +620,10 @@ class SemanticAnalysisVisitor extends ParseNodeVisitor.Default {
 	private void returnScopeError(ParseNode node) {
 		Token token = node.getToken();
 		logError("Return may only be called from procedure scope at " + token.getLocation());
+	}
+
+	private void functionCallError(ParseNode node) {
+		Token token = node.getToken();
+		logError("Function call error at " + token.getLocation());
 	}
 }

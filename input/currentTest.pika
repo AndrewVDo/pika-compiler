@@ -6,5 +6,6 @@ func weight< int numHydrogen, int numOxygen > -> float {
     return molecularWeight * g .
 }
 exec {
-    weight(1, 2 + 3).
+    weight(^a^, 2 + 3).
+    call weight(^a^, ^b^).
 }
