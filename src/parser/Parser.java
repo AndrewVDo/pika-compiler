@@ -229,9 +229,13 @@ public class Parser {
 		}
 		Token returnToken = nowReading;
 		readToken();
-		ParseNode returnExpression = parseExpression();
+		if(!nowReading.isLextant(Punctuator.TERMINATOR)) {
+			ParseNode returnExpression = parseExpression();
+			expect(Punctuator.TERMINATOR);
+			return ReturnNode.withChildren(returnToken, returnExpression);
+		}
 		expect(Punctuator.TERMINATOR);
-		return ReturnNode.withChildren(returnToken, returnExpression);
+		return ReturnNode.nullChildren(returnToken);
 	}
 
 	private boolean startsReturnStatement(Token token) {
@@ -657,7 +661,7 @@ public class Parser {
 		return TypeNode.with(type, arrayDepth);
 	}
 	private boolean startsType(Token token) {
-		return token.isLextant(Keyword.FLOAT, Keyword.INT, Keyword.CHAR, Keyword.BOOL, Keyword.STRING, Punctuator.OPEN_BRACKET, Keyword.RAT);
+		return token.isLextant(Keyword.FLOAT, Keyword.INT, Keyword.CHAR, Keyword.BOOL, Keyword.STRING, Punctuator.OPEN_BRACKET, Keyword.RAT, Keyword.NULL);
 	}
 	
 	private ParseNode parseBracketedExpression() {

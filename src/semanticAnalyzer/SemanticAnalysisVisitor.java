@@ -119,7 +119,7 @@ class SemanticAnalysisVisitor extends ParseNodeVisitor.Default {
 	}
 	@Override
 	public void visitLeave(ReturnNode node) {
-		assert(node.nChildren() == 1);
+		assert(node.nChildren() < 2);
 
 		Scope localScope = node.getLocalScope();
 		if(!(localScope.getAllocationStrategy() instanceof NegativeMemoryAllocator)) {
@@ -128,8 +128,12 @@ class SemanticAnalysisVisitor extends ParseNodeVisitor.Default {
 			return;
 		}
 
-		ParseNode expressionNode = node.child(0);
-		Type expressionType = expressionNode.getType();
+		Type expressionType = PrimitiveType.NULL;
+		if(node.nChildren() == 1) {
+			ParseNode expressionNode = node.child(0);
+			expressionType = expressionNode.getType();
+		}
+
 		ParseNode lambdaNode = node;
 		do {
 			if(lambdaNode instanceof ProgramNode) {
@@ -160,11 +164,19 @@ class SemanticAnalysisVisitor extends ParseNodeVisitor.Default {
 		if(!(functionIdentifier instanceof IdentifierNode)) {
 			functionCallError(node);
 			node.setType(PrimitiveType.ERROR);
+			return;
 		}
 		Type functionType = ((IdentifierNode)functionIdentifier).getBinding().getType();
 		if(!(functionType instanceof LambdaType)) {
 			functionCallError(node);
 			node.setType(PrimitiveType.ERROR);
+			return;
+		}
+		ParseNode parent = node.getParent();
+		if((!(parent instanceof CallNode)) && ((LambdaType) functionType).getReturnType() == PrimitiveType.NULL) {
+			functionCallError(node);
+			node.setType(PrimitiveType.ERROR);
+			return;
 		}
 
 		List<Type> argumentTypes = new ArrayList<>();
@@ -266,6 +278,11 @@ class SemanticAnalysisVisitor extends ParseNodeVisitor.Default {
 
 		if(node.nChildren() == 2 && node.child(0) instanceof TypeNode) {
 			ParseNode typeNode = node.child(0);
+			if(typeNode.getType() == PrimitiveType.NULL) {
+				nullArrayBaseError(node);
+				node.setType(PrimitiveType.ERROR);
+				return;
+			}
 			if(!checkChildIntPromotion(node, 1)) {
 				allocNonIntError(node);
 				node.setType(PrimitiveType.ERROR);
@@ -613,7 +630,13 @@ class SemanticAnalysisVisitor extends ParseNodeVisitor.Default {
 		Token token = node.getToken();
 		//Type expectedType = node.getLocalScope();
 		Type expectedType = PrimitiveType.ERROR;
-		Type actualType = node.child(0).getType();
+		Type actualType = PrimitiveType.NULL;
+		try {
+			node.child(0).getType();
+		}
+		catch(Exception e) {
+			//do nothing
+		}
 		logError("Expected return type: " + expectedType + " Actual return type: " + actualType + " at " + token.getLocation());
 	}
 
@@ -625,5 +648,10 @@ class SemanticAnalysisVisitor extends ParseNodeVisitor.Default {
 	private void functionCallError(ParseNode node) {
 		Token token = node.getToken();
 		logError("Function call error at " + token.getLocation());
+	}
+
+	private void nullArrayBaseError(ParseNode node) {
+		Token token = node.getToken();
+		logError("Arrays can't be initialized with NULL type at " + token.getLocation());
 	}
 }

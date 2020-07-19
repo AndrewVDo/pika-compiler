@@ -1,0 +1,8 @@
+func badboi <null illegal> -> null {
+    print 1; 2; 3, _n_.
+}
+
+exec {
+    call badboi(_false_);
+    call badboi();
+}

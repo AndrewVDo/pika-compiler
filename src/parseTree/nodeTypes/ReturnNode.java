@@ -15,6 +15,11 @@ public class ReturnNode extends ParseNode {
         return returnNode;
     }
 
+    public static ReturnNode nullChildren(Token token) {
+        ReturnNode returnNode = new ReturnNode(token);
+        return returnNode;
+    }
+
     public void accept(ParseNodeVisitor visitor) {
         visitor.visitEnter(this);
         visitChildren(visitor);
