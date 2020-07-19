@@ -180,10 +180,10 @@ public class Parser {
 		}
 		Token callToken = nowReading;
 		readToken();
-		ParseNode callNode = parseExpression();
+		ParseNode functionInvocation = parseExpression();
 		expect(Punctuator.TERMINATOR);
 
-		return callNode;
+		return CallNode.withChildren(callToken, functionInvocation);
 	}
 
 	private ParseNode parseFunctionInvocation(ParseNode lambdaExpression) {
@@ -192,7 +192,7 @@ public class Parser {
 		}
 		Token invocationToken = lambdaExpression.getToken();
 		List<ParseNode> argumentNodes = parseFunctionArguments(lambdaExpression);
-		return CallNode.withChildren(invocationToken, lambdaExpression, argumentNodes);
+		return FunctionInvocationNode.withChildren(invocationToken, lambdaExpression, argumentNodes);
 	}
 
 	private List<ParseNode> parseFunctionArguments(ParseNode lambdaExpression) {
@@ -306,7 +306,7 @@ public class Parser {
 		
 		ParseNode target = parseExpression();
 
-		if(target instanceof CallNode) {
+		if(target instanceof FunctionInvocationNode) {
 			expect(Punctuator.TERMINATOR);
 			return target;
 		}

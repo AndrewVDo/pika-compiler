@@ -14,7 +14,6 @@ import semanticAnalyzer.types.LambdaType;
 import semanticAnalyzer.types.PrimitiveType;
 import semanticAnalyzer.types.Type;
 import symbolTable.Binding;
-import symbolTable.MemoryLocation;
 import symbolTable.NegativeMemoryAllocator;
 import symbolTable.Scope;
 import tokens.LextantToken;
@@ -143,17 +142,18 @@ class SemanticAnalysisVisitor extends ParseNodeVisitor.Default {
 		LambdaType lambdaType = (LambdaType) lambdaNode.getType();
 		Type returnType = lambdaType.getReturnType();
 		if(!expressionType.equivalent(returnType)) {
-			if(!expressionType.promotable(returnType)) {
+//			todo: consider if this should do promotions
+//			if(!expressionType.promotable(returnType)) {
 				returnTypeError(node);
 				node.setType(PrimitiveType.ERROR);
 				return;
-			}
-			promoteChild(node, returnType, 0);
+//			}
+//			promoteChild(node, returnType, 0);
 		}
 		return;
 	}
 	@Override
-	public void visitLeave(CallNode node) {
+	public void visitLeave(FunctionInvocationNode node) {
 		assert(node.nChildren() > 0);
 
 		ParseNode functionIdentifier = node.child(0);

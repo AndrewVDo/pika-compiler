@@ -11,12 +11,9 @@ public class CallNode extends ParseNode {
         super(token);
     }
 
-    public static CallNode withChildren(Token token, ParseNode lambdaExpression, List<ParseNode> arguments) {
+    public static CallNode withChildren(Token token, ParseNode functionInvocation) {
         CallNode callNode = new CallNode(token);
-        callNode.appendChild(lambdaExpression);
-        for(ParseNode n : arguments) {
-            callNode.appendChild(n);
-        }
+        callNode.appendChild(functionInvocation);
         return callNode;
     }
 
