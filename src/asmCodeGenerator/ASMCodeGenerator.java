@@ -53,7 +53,6 @@ public class ASMCodeGenerator {
 		ASMCodeFragment code = new ASMCodeFragment(GENERATES_VOID);
 		code.add(DLabel, RunTime.GLOBAL_MEMORY_BLOCK);
 		code.add(DataZ, globalBlockSize);
-		//todo edit
 		code.add(DLabel, RunTime.FRAME_POINTER);
 		code.add(DataZ, globalBlockSize);
 		code.add(Memtop);
@@ -231,63 +230,90 @@ public class ASMCodeGenerator {
 		}
 
 		public void visitLeave(FunctionNode node) {
+			newVoidCode(node);
 		}
 
 		public void visitLeave(LambdaNode node) {
+			newVoidCode(node);
 		}
 
 		public void visitLeave(LambdaParamTypeNode node) {
+			newVoidCode(node);
 		}
 
 		public void visitLeave(ParameterNode node) {
+			newVoidCode(node);
 		}
 
 		public void visitLeave(ReturnNode node) {
-			newVoidCode(node);
-			code.add(Nop);
-//			assert node.nChildren() < 2;
-//			if(node.nChildren() == 1) {
-//				newValueCode(node);
-//				ASMCodeFragment addressCode = removeAddressCode(node.child(0));
-//				code.append(addressCode);
-//				code.append()
-//			}
-		}
-		private void exitHandshake() {
-			//place return address on stack
-//			code.add(PushI, RunTime.FRAME_POINTER);
-//			code.add(PushI, 8);
-//			code.add(Subtract);
-//			code.add(LoadI);
-//
-//			//replace the frame pointer
-//			code.add(PushI, RunTime.FRAME_POINTER);
-//			code.add(PushI, 4);
-//			code.add(Subtract);
-//			code.add(DataZ, RunTime.FRAME_POINTER);
-//
-//			code.add(Return);
-			//todo value returned is then placed at top of ASM Stack by exchange?
+			newValueCode(node);
+			assert node.nChildren() < 2;
+			if(node.nChildren() == 1) {
+				ASMCodeFragment addressCode = removeAddressCode(node.child(0));
+				code.append(addressCode);
+			}
+			Macros.loadIFrom(code, RunTime.FRAME_POINTER);
+			code.add(PushI, 8);
+			code.add(Subtract);
+			code.add(LoadI);
+			code.add(Return);
+
+			Macros.loadIFrom(code, RunTime.FRAME_POINTER);
+			code.add(PushI, 4);
+			code.add(Subtract);
+			code.add(LoadI);
+			Macros.storeITo(code, RunTime.FRAME_POINTER);
+
+			//todo increase stack ptr by arg size + procedure size - size of return
+
+			Macros.loadIFrom(code, RunTime.STACK_POINTER);
+			code.add()
+
+
 		}
 
 		public void visitLeave(CallNode node) {
+			newVoidCode(node);
 		}
 
 		public void visitLeave(FunctionInvocationNode node) {
 			assert node.nChildren() > 0;
+			newValueCode(node);
 
 			IdentifierNode functionIdentifier = (IdentifierNode) node.child(0);
 			Scope parameterScope = functionIdentifier.getBinding().getScope();
 			ParameterMemoryAllocator parameterAllocator = (ParameterMemoryAllocator)parameterScope.getAllocationStrategy();
 
 			for(int i=1; i<node.nChildren(); i++){
-				parameterAllocator.getParam(i-1);
-				ASMCodeFragment argumentCode = removeValueCode(node.child(i));
-				code.append(argumentCode);
-				//todo access the mem location and fill it with the child info
+				//MemoryLocation paramLocation = parameterAllocator.getParam(i-1);
+				//paramLocation.generateAddress(code, paramLocation.toString());
+				Macros.loadIFrom(code, RunTime.STACK_POINTER);
+				code.add(PushI, node.child(i).getType().getSize());
+				code.add(Subtract);
+
+				code.add(Duplicate);
+				Macros.storeITo(code, RunTime.STACK_POINTER);
+
+				code.append(removeValueCode(node.child(i)));
+				code.add(opcodeForStore(node.child(i).getType()));
 			}
 
-			//code.add(Call, functionIdentifier.getCodeLabel())
+			//dynamic link
+			Macros.loadIFrom(code, RunTime.STACK_POINTER);
+			code.add(PushI, 4);
+			code.add(Subtract);
+				Macros.loadIFrom(code, RunTime.FRAME_POINTER);
+				code.add(StoreI);
+			//return address
+			Macros.loadIFrom(code, RunTime.STACK_POINTER);
+			code.add(PushI, 8);
+			code.add(Subtract);
+				code.add(Call, functionIdentifier.getBinding().getLabel());
+				code.add(StoreI);
+			//update frame pointer
+			Macros.loadIFrom(code, RunTime.STACK_POINTER);
+			Macros.storeITo(code, RunTime.FRAME_POINTER);
+			//todo move stack ptr down by 8, add procedure vars
 		}
 		
 		public void visitLeave(AssignmentStatementNode node) {

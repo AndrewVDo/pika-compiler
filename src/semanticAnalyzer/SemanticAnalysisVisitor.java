@@ -1,5 +1,6 @@
 package semanticAnalyzer;
 
+import asmCodeGenerator.Labeller;
 import asmCodeGenerator.codeStorage.ASMOpcode;
 import lexicalAnalyzer.Keyword;
 import lexicalAnalyzer.Lextant;
@@ -24,6 +25,13 @@ import java.util.Arrays;
 import java.util.List;
 
 class SemanticAnalysisVisitor extends ParseNodeVisitor.Default {
+	private static Labeller functionLabeller;
+
+	public SemanticAnalysisVisitor () {
+		super();
+		functionLabeller = new Labeller("function");
+	}
+
 	@Override
 	public void visitLeave(ParseNode node) {
 		throw new RuntimeException("Node class unimplemented in SemanticAnalysisVisitor: " + node.getClass());
@@ -96,6 +104,7 @@ class SemanticAnalysisVisitor extends ParseNodeVisitor.Default {
 		identifierNode.setType(lambdaNode.getType());
 		Scope parameterScope = node.getScope();
 		identifierNode.getBinding().setScope(parameterScope);
+		identifierNode.getBinding().setLabel(functionLabeller.newLabel(""));
 		parameterScope.leave();
 	}
 	@Override
@@ -116,10 +125,6 @@ class SemanticAnalysisVisitor extends ParseNodeVisitor.Default {
 		IdentifierNode identifierNode = (IdentifierNode) node.child(1);
 		identifierNode.setType(paramType);
 		addBinding(identifierNode, paramType, false);
-
-//		todo probably do this stuff in the calling phase, not decleration phase
-//		Scope parameterScope = node.getLocalScope();
-//		MemoryLocation paramLocation = parameterScope.getAllocationStrategy().allocate(paramType.getSize());
 	}
 	@Override
 	public void visitLeave(ReturnNode node) {
