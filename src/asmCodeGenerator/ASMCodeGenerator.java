@@ -11,6 +11,7 @@ import parseTree.ParseNode;
 import parseTree.ParseNodeVisitor;
 import parseTree.nodeTypes.*;
 import semanticAnalyzer.types.ArrayType;
+import semanticAnalyzer.types.LambdaType;
 import semanticAnalyzer.types.PrimitiveType;
 import semanticAnalyzer.types.Type;
 import symbolTable.*;
@@ -230,27 +231,37 @@ public class ASMCodeGenerator {
 		}
 
 		public void visitLeave(FunctionNode node) {
+			assert node.nChildren() == 2;
 			newVoidCode(node);
+
+			//add call label for function code
+			Binding functionBinding = ((IdentifierNode)node.child(0)).getBinding();
+			String functionLabel = functionBinding.getLabel();
+			code.add(Label, functionLabel);
+
+			//append code from definition
+			ASMCodeFragment functionCode = removeVoidCode(node.child(1));
+			code.append(functionCode);
+
+			//run time error if nothing was returned
+			code.add(Jump, RunTime.NO_RETURN_RUNTIME_ERROR);
 		}
 
 		public void visitLeave(LambdaNode node) {
+			assert node.nChildren() == 2;
 			newVoidCode(node);
-		}
 
-		public void visitLeave(LambdaParamTypeNode node) {
-			newVoidCode(node);
-		}
-
-		public void visitLeave(ParameterNode node) {
-			newVoidCode(node);
+			//append code from function definition
+			ASMCodeFragment functionCode = removeVoidCode(node.child(1));
+			code.append(functionCode);
 		}
 
 		public void visitLeave(ReturnNode node) {
-			newValueCode(node);
+			newVoidCode(node);
 			assert node.nChildren() < 2;
 			if(node.nChildren() == 1) {
-				ASMCodeFragment addressCode = removeAddressCode(node.child(0));
-				code.append(addressCode);
+				ASMCodeFragment valueCode = removeValueCode(node.child(0));
+				code.append(valueCode);
 			}
 			Macros.loadIFrom(code, RunTime.FRAME_POINTER);
 			code.add(PushI, 8);
@@ -264,12 +275,31 @@ public class ASMCodeGenerator {
 			code.add(LoadI);
 			Macros.storeITo(code, RunTime.FRAME_POINTER);
 
-			//todo increase stack ptr by arg size + procedure size - size of return
+			int argumentSize = getArgumentScope(node).getAllocatedSize();
+			int procedureSize = node.getLocalScope().getAllocatedSize();
+			Type returnType = getFunctionReturnType(node);
 
-			Macros.loadIFrom(code, RunTime.STACK_POINTER);
-			code.add()
+			code.add(PushI, argumentSize);
+			code.add(PushI, procedureSize);
+			code.add(Add);
+				code.add(PushI, returnType.getSize());
+				code.add(Subtract);
+			Macros.addITo(code, RunTime.STACK_POINTER);
+		}
 
-
+		private Scope getArgumentScope(ParseNode node) {
+			ParseNode functionNode = node;
+			do {
+				functionNode = functionNode.getParent();
+			} while(!(functionNode instanceof FunctionNode));
+			return functionNode.getScope();
+		}
+		private Type getFunctionReturnType(ParseNode node) {
+			ParseNode lambdaNode = node;
+			do {
+				lambdaNode = lambdaNode.getParent();
+			} while(!(lambdaNode instanceof LambdaNode));
+			return ((LambdaType)lambdaNode.getType()).getReturnType();
 		}
 
 		public void visitLeave(CallNode node) {
@@ -281,12 +311,8 @@ public class ASMCodeGenerator {
 			newValueCode(node);
 
 			IdentifierNode functionIdentifier = (IdentifierNode) node.child(0);
-			Scope parameterScope = functionIdentifier.getBinding().getScope();
-			ParameterMemoryAllocator parameterAllocator = (ParameterMemoryAllocator)parameterScope.getAllocationStrategy();
 
 			for(int i=1; i<node.nChildren(); i++){
-				//MemoryLocation paramLocation = parameterAllocator.getParam(i-1);
-				//paramLocation.generateAddress(code, paramLocation.toString());
 				Macros.loadIFrom(code, RunTime.STACK_POINTER);
 				code.add(PushI, node.child(i).getType().getSize());
 				code.add(Subtract);

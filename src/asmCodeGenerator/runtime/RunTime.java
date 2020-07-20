@@ -50,6 +50,7 @@ public class RunTime {
 	public static final String NULL_PTR_RUNTIME_ERROR = "$$null-ptr";
 	public static final String DELETED_RECORD_RUNTIME_ERROR = "$$deleted-record";
 	public static final String IMMUTABLE_RECORD_RUNTIME_ERROR = "$$immutable-record";
+	public static final String NO_RETURN_RUNTIME_ERROR = "$$no-return";
 
 	public static final String RECORD_PRINT_FORMAT = "$record-print-format";
 	public static final String RECORD_PRINT_BOOL_FLAG = "$record-print-bool";
@@ -129,6 +130,7 @@ public class RunTime {
 		nullPtrError(frag);
 		deletedRecordError(frag);
 		immutableRecordError(frag);
+		noReturnError(frag);
 		
 		return frag;
 	}
@@ -211,6 +213,16 @@ public class RunTime {
 		frag.add(DataS, "immutable record");
 
 		frag.add(Label, IMMUTABLE_RECORD_RUNTIME_ERROR);
+		frag.add(PushD, msg);
+		frag.add(Jump, GENERAL_RUNTIME_ERROR);
+	}
+	private void noReturnError(ASMCodeFragment frag) {
+		String msg = "$errors-no-return";
+
+		frag.add(DLabel, msg);
+		frag.add(DataS, "no return");
+
+		frag.add(Label, NO_RETURN_RUNTIME_ERROR);
 		frag.add(PushD, msg);
 		frag.add(Jump, GENERAL_RUNTIME_ERROR);
 	}
