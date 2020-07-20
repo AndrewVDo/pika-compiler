@@ -79,7 +79,10 @@ class SemanticAnalysisVisitor extends ParseNodeVisitor.Default {
 	}
 	@Override
 	public void visitEnter(FunctionNode node) {
-		//todo error checking for this and it's child + it's pre-visitor
+		if(!(node.getParent() instanceof ProgramNode)) {
+			logError("Function must be a child of ProgramNode");
+		}
+
 		Scope localScope = node.getLocalScope();
 		Scope parameterScope = localScope.createParameterScope();
 		node.setScope(parameterScope);
@@ -92,6 +95,7 @@ class SemanticAnalysisVisitor extends ParseNodeVisitor.Default {
 		LambdaNode lambdaNode = (LambdaNode) node.child(1);
 		identifierNode.setType(lambdaNode.getType());
 		Scope parameterScope = node.getScope();
+		identifierNode.getBinding().setScope(parameterScope);
 		parameterScope.leave();
 	}
 	@Override
@@ -154,6 +158,7 @@ class SemanticAnalysisVisitor extends ParseNodeVisitor.Default {
 //			}
 //			promoteChild(node, returnType, 0);
 		}
+		node.setType(returnType);
 		return;
 	}
 	@Override

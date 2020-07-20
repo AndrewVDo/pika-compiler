@@ -11,6 +11,7 @@ public class Binding {
 	private MemoryLocation memoryLocation;
 	private String lexeme;
 	private boolean isVar;
+	private Scope scope;
 	
 	public Binding(Type type, boolean isVar, TextLocation location, MemoryLocation memoryLocation, String lexeme) {
 		super();
@@ -45,6 +46,12 @@ public class Binding {
 	}
 	public void generateAddress(ASMCodeFragment code) {
 		memoryLocation.generateAddress(code, "%% " + lexeme);
+	}
+	public Scope getScope() {
+		return this.scope;
+	}
+	public void setScope(Scope scope) {
+		this.scope = scope;
 	}
 	
 ////////////////////////////////////////////////////////////////////////////////////

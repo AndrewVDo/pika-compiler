@@ -39,7 +39,7 @@ public class RunTime {
 	public static final String USABLE_MEMORY_START    = "$usable-memory-start";
 	public static final String MAIN_PROGRAM_LABEL     = "$$main";
 
-	public static final String FUNCTION_POINTER		  = "$function-pointer";
+	public static final String FRAME_POINTER = "$frame-pointer";
 	public static final String STACK_POINTER 		  = "$stack-pointer";
 
 	public static final String GENERAL_RUNTIME_ERROR = "$$general-runtime-error";

@@ -39,6 +39,10 @@ public class ParameterMemoryAllocator implements MemoryAllocator {
 		}
 	}
 
+	public MemoryLocation getParam(int index) {
+		return this.params.get(index);
+	}
+
 	@Override
 	public String getBaseAddress() {
 		return baseAddress;
