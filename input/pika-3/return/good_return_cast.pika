@@ -1,8 +1,0 @@
-func holdMyBeans <> -> int {
-    return 5.5.
-}
-
-exec {
-    const a := holdMyBeans().
-    print a.
-}

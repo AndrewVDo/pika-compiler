@@ -161,14 +161,9 @@ class SemanticAnalysisVisitor extends ParseNodeVisitor.Default {
 		LambdaType lambdaType = (LambdaType) lambdaNode.getType();
 		Type returnType = lambdaType.getReturnType();
 		if(!expressionType.equivalent(returnType)) {
-			if(returnType == PrimitiveType.NULL || expressionType == PrimitiveType.NULL) {
 				returnTypeError(node);
 				node.setType(PrimitiveType.ERROR);
 				return;
-			}
-			else {
-				promoteChild(node, returnType, 0);
-			}
 		}
 		node.setType(returnType);
 		return;
@@ -215,8 +210,7 @@ class SemanticAnalysisVisitor extends ParseNodeVisitor.Default {
 			Type argumentType = argumentTypes.get(i);
 			Type paramType = paramTypes.get(i);
 			if(!argumentType.equivalent(paramType)) {
-				//todo all cast, maybe add some safety checks?
-				promoteChild(node, paramType, i+1);
+				return false;
 			}
 		}
 		return true;
