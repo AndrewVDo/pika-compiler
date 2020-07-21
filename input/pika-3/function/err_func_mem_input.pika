@@ -1,0 +1,10 @@
+func fn<[int] trouble> -> null {
+    print trouble.
+    return.
+}
+exec {
+    var a := [1, 2, 3].
+    var b := [^a^, ^b^, ^c^].
+    call fn(a).
+    call fn(b).
+}

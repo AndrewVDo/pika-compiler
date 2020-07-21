@@ -571,21 +571,34 @@ public class Parser {
 		return base;
 	}
 	private boolean startsIndexExpression(Token token) {
-		return startsLambdaExpression(token);
+		return startsFunctionInvocation(token);
 	}
 
 	private ParseNode parseFunctionInvocation() {
-		if(!startsLambdaExpression(nowReading)) {
+		if(!startsFunctionInvocation(nowReading)) {
 			return syntaxErrorNode("function invocation");
 		}
 
 		Token token = nowReading;
-		ParseNode base = parseHighPrecedenceExpression();
+		ParseNode base = parseLambda2();
 		if(nowReading.isLextant(Punctuator.OPEN_PARANTHESES)) {
 			List<ParseNode> argumentNodes = parseFunctionArguments(base);
 			return FunctionInvocationNode.withChildren(token, base, argumentNodes);
 		}
 		return base;
+	}
+
+	private ParseNode parseLambda2() {
+		if(!startsLambdaExpression(nowReading)) {
+			return syntaxErrorNode("lambda");
+		}
+
+		if(nowReading.isLextant(Punctuator.OPEN_ANGLE)) {
+			return parseLambda();
+		}
+		else {
+			return parseHighPrecedenceExpression();
+		}
 	}
 
 	private List<ParseNode> parseFunctionArguments(ParseNode lambdaExpression) {
@@ -608,9 +621,10 @@ public class Parser {
 		return argumentNodes;
 	}
 
-	private boolean startsLambdaExpression(Token token) {
-		return startsHighPrecedenceExpression(token);
+	private boolean startsFunctionInvocation(Token token) {
+		return startsLambdaExpression(token);
 	}
+	private boolean startsLambdaExpression(Token token) { return startsHighPrecedenceExpression(token); }
 
 	private ParseNode parseHighPrecedenceExpression() {
 		if(!startsHighPrecedenceExpression(nowReading)) {
@@ -727,7 +741,7 @@ public class Parser {
 		return startsBracketedExpression(token) || token.isLextant(Keyword.ALLOC);
 	}
 	private boolean startsBracketedExpression(Token token) {
-		return startsAtomicExpression(token) || token.isLextant(Punctuator.OPEN_BRACKET, Punctuator.OPEN_PARANTHESES);
+		return startsAtomicExpression(token) || token.isLextant(Punctuator.OPEN_BRACKET, Punctuator.OPEN_PARANTHESES, Punctuator.OPEN_ANGLE);
 	}
 	
 	// atomicExpression -> literal

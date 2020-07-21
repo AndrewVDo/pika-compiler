@@ -1,0 +1,8 @@
+func fn<int size> -> [int] {
+    return alloc [int] (size).
+}
+exec {
+    print fn(2).
+    print fn(4).
+    print fn(6).
+}
