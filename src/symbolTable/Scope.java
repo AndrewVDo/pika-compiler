@@ -105,6 +105,10 @@ public class Scope {
 		return result;
 	}
 
+	public String getHashCode() {
+		return "" + hashCode();
+	}
+
 ////////////////////////////////////////////////////////////////////////////////////
 //Null Scope object - lazy singleton (Lazy Holder) implementation pattern
 	public static Scope nullInstance() {

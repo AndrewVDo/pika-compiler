@@ -180,43 +180,13 @@ public class Parser {
 		}
 		Token callToken = nowReading;
 		readToken();
-		ParseNode functionInvocation = parseExpression();
+		ParseNode functionInvocation = parseFunctionInvocation();
+		if(!(functionInvocation instanceof FunctionInvocationNode)) {
+			return syntaxErrorNode("call statement");
+		}
 		expect(Punctuator.TERMINATOR);
 
 		return CallNode.withChildren(callToken, functionInvocation);
-	}
-
-	private ParseNode parseFunctionInvocation(ParseNode lambdaExpression) {
-		if(!nowReading.isLextant(Punctuator.OPEN_PARANTHESES)) {
-			return syntaxErrorNode("function invocation");
-		}
-		Token invocationToken = lambdaExpression.getToken();
-		List<ParseNode> argumentNodes = parseFunctionArguments(lambdaExpression);
-		return FunctionInvocationNode.withChildren(invocationToken, lambdaExpression, argumentNodes);
-	}
-
-	private List<ParseNode> parseFunctionArguments(ParseNode lambdaExpression) {
-		List<ParseNode> argumentNodes = new ArrayList<>();
-		expect(Punctuator.OPEN_PARANTHESES);
-		while(startsExpression(nowReading)) {
-			ParseNode argument = parseExpression();
-			argumentNodes.add(argument);
-			if(nowReading.isLextant(Punctuator.SEPARATOR)) {
-				expect(Punctuator.SEPARATOR);
-			}
-			else if(nowReading.isLextant(Punctuator.CLOSE_PARANTHESES)) {
-				break;
-			}
-			else {
-				syntaxError(nowReading, "Function argument missing close bracket or argument seperator");
-			}
-		}
-		expect(Punctuator.CLOSE_PARANTHESES);
-		return argumentNodes;
-	}
-
-	private boolean startsFunctionInvocation(Token token) {
-		return startsExpression(token);
 	}
 
 	private boolean startsCallStatement(Token token) {
@@ -450,10 +420,6 @@ public class Parser {
 			return syntaxErrorNode("expression");
 		}
 		ParseNode expression = parseBooleanOrExpression();
-		if(nowReading.isLextant(Punctuator.OPEN_PARANTHESES)) {
-			return parseFunctionInvocation(expression);
-		}
-		//todo for lambda
 		return expression;
 	}
 	private boolean startsExpression(Token token) {
@@ -592,7 +558,7 @@ public class Parser {
 			return syntaxErrorNode("array index");
 		}
 
-		ParseNode base = parseHighPrecedenceExpression();
+		ParseNode base = parseFunctionInvocation();
 		while(nowReading.isLextant(Punctuator.OPEN_BRACKET)) {
 			Token indexOperator = nowReading;
 			Token indexToken = LextantToken.artificial(indexOperator, Punctuator.ARRAY_INDEXING);
@@ -605,6 +571,44 @@ public class Parser {
 		return base;
 	}
 	private boolean startsIndexExpression(Token token) {
+		return startsLambdaExpression(token);
+	}
+
+	private ParseNode parseFunctionInvocation() {
+		if(!startsLambdaExpression(nowReading)) {
+			return syntaxErrorNode("function invocation");
+		}
+
+		Token token = nowReading;
+		ParseNode base = parseHighPrecedenceExpression();
+		if(nowReading.isLextant(Punctuator.OPEN_PARANTHESES)) {
+			List<ParseNode> argumentNodes = parseFunctionArguments(base);
+			return FunctionInvocationNode.withChildren(token, base, argumentNodes);
+		}
+		return base;
+	}
+
+	private List<ParseNode> parseFunctionArguments(ParseNode lambdaExpression) {
+		List<ParseNode> argumentNodes = new ArrayList<>();
+		expect(Punctuator.OPEN_PARANTHESES);
+		while(startsExpression(nowReading)) {
+			ParseNode argument = parseExpression();
+			argumentNodes.add(argument);
+			if(nowReading.isLextant(Punctuator.SEPARATOR)) {
+				expect(Punctuator.SEPARATOR);
+			}
+			else if(nowReading.isLextant(Punctuator.CLOSE_PARANTHESES)) {
+				break;
+			}
+			else {
+				syntaxError(nowReading, "Function argument missing close bracket or argument seperator");
+			}
+		}
+		expect(Punctuator.CLOSE_PARANTHESES);
+		return argumentNodes;
+	}
+
+	private boolean startsLambdaExpression(Token token) {
 		return startsHighPrecedenceExpression(token);
 	}
 

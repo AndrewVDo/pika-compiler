@@ -104,7 +104,7 @@ class SemanticAnalysisVisitor extends ParseNodeVisitor.Default {
 		identifierNode.setType(lambdaNode.getType());
 		Scope parameterScope = node.getScope();
 		identifierNode.getBinding().setScope(parameterScope);
-		identifierNode.getBinding().setLabel(functionLabeller.newLabel(""));
+		identifierNode.getBinding().setLabel(functionLabeller.newLabel(parameterScope.getHashCode()));
 		parameterScope.leave();
 	}
 	@Override
@@ -155,13 +155,14 @@ class SemanticAnalysisVisitor extends ParseNodeVisitor.Default {
 		LambdaType lambdaType = (LambdaType) lambdaNode.getType();
 		Type returnType = lambdaType.getReturnType();
 		if(!expressionType.equivalent(returnType)) {
-//			todo: consider if this should do promotions
-//			if(!expressionType.promotable(returnType)) {
+			if(returnType == PrimitiveType.NULL || expressionType == PrimitiveType.NULL) {
 				returnTypeError(node);
 				node.setType(PrimitiveType.ERROR);
 				return;
-//			}
-//			promoteChild(node, returnType, 0);
+			}
+			else {
+				promoteChild(node, returnType, 0);
+			}
 		}
 		node.setType(returnType);
 		return;
@@ -208,9 +209,7 @@ class SemanticAnalysisVisitor extends ParseNodeVisitor.Default {
 			Type argumentType = argumentTypes.get(i);
 			Type paramType = paramTypes.get(i);
 			if(!argumentType.equivalent(paramType)) {
-				if(!argumentType.promotable(paramType)) {
-					return false;
-				}
+				//todo all cast, maybe add some safety checks?
 				promoteChild(node, paramType, i+1);
 			}
 		}
