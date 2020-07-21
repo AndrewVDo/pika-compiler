@@ -35,15 +35,14 @@ public class Scope {
 	}
 	private static MemoryAllocator paramMemoryAllocator() {
 		return new ParameterMemoryAllocator(
-				MemoryAccessMethod.DIRECT_ACCESS_BASE,
-				MemoryLocation.FRAME_POINTER, //todo maybe stack ptr?
-				0);
+				MemoryAccessMethod.INDIRECT_ACCESS_BASE,
+				MemoryLocation.FRAME_POINTER);
 	}
 	private static MemoryAllocator procedureMemoryAllocator() {
 		return new NegativeMemoryAllocator(
-				MemoryAccessMethod.DIRECT_ACCESS_BASE,
-				MemoryLocation.FRAME_POINTER, //todo maybe stack ptr?
-				8);
+				MemoryAccessMethod.INDIRECT_ACCESS_BASE,
+				MemoryLocation.FRAME_POINTER,
+				-8);
 	}
 	
 //////////////////////////////////////////////////////////////////////

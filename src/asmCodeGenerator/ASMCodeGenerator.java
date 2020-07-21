@@ -54,14 +54,6 @@ public class ASMCodeGenerator {
 		ASMCodeFragment code = new ASMCodeFragment(GENERATES_VOID);
 		code.add(DLabel, RunTime.GLOBAL_MEMORY_BLOCK);
 		code.add(DataZ, globalBlockSize);
-		code.add(DLabel, RunTime.FRAME_POINTER);
-		code.add(DataZ, globalBlockSize);
-		code.add(Memtop);
-		code.add(DataD, RunTime.FRAME_POINTER);
-		code.add(DLabel, RunTime.STACK_POINTER);
-		code.add(DataZ, globalBlockSize);
-		code.add(Memtop);
-		code.add(DataD, RunTime.STACK_POINTER);
 		return code;
 	}
 	private ASMCodeFragment programASM() {
@@ -69,10 +61,21 @@ public class ASMCodeGenerator {
 		
 		code.add(    Label, RunTime.MAIN_PROGRAM_LABEL);
 		code.append(MemoryManager.codeForInitialization());
+		code.append(initFrameStack());
 		code.append( programCode());
 		code.add(    Halt );
 		
 		return code;
+	}
+	private ASMCodeFragment initFrameStack() {
+		ASMCodeFragment frag = new ASMCodeFragment(GENERATES_VOID);
+
+		frag.add(Memtop);
+		Macros.storeITo(frag, RunTime.FRAME_POINTER);
+		frag.add(Memtop);
+		Macros.storeITo(frag, RunTime.STACK_POINTER);
+
+		return frag;
 	}
 	private ASMCodeFragment programCode() {
 		CodeVisitor visitor = new CodeVisitor();
@@ -211,20 +214,27 @@ public class ASMCodeGenerator {
 		}
 
 		private ASMOpcode opcodeForStore(Type type) {
-			if (type == PrimitiveType.INTEGER) {
+			if (type == PrimitiveType.INTEGER || type == PrimitiveType.STRING || type instanceof ArrayType) {
 				return StoreI;
 			}
 			if (type == PrimitiveType.FLOATING || type == PrimitiveType.RATIONAL) {
 				return StoreF;
 			}
-			if (type == PrimitiveType.BOOLEAN) {
+			if (type == PrimitiveType.BOOLEAN || type == PrimitiveType.CHARACTER) {
 				return StoreC;
 			}
-			if (type == PrimitiveType.CHARACTER) {
-				return StoreC;
+			assert false : "Type " + type + " unimplemented in opcodeForStore()";
+			return null;
+		}
+		private ASMOpcode opcodeForLoad(Type type) {
+			if (type == PrimitiveType.INTEGER || type == PrimitiveType.STRING || type instanceof ArrayType) {
+				return LoadI;
 			}
-			if (type == PrimitiveType.STRING || type instanceof ArrayType) {
-				return StoreI;
+			if (type == PrimitiveType.FLOATING || type == PrimitiveType.RATIONAL) {
+				return LoadF;
+			}
+			if (type == PrimitiveType.BOOLEAN || type == PrimitiveType.CHARACTER) {
+				return LoadC;
 			}
 			assert false : "Type " + type + " unimplemented in opcodeForStore()";
 			return null;
@@ -237,7 +247,19 @@ public class ASMCodeGenerator {
 			//add call label for function code
 			Binding functionBinding = ((IdentifierNode)node.child(0)).getBinding();
 			String functionLabel = functionBinding.getLabel();
+			code.add(Jump, functionLabel + "skip");
 			code.add(Label, functionLabel);
+
+			//place return address on stack
+			Macros.loadIFrom(code, RunTime.STACK_POINTER);
+			code.add(Exchange);
+			code.add(StoreI);
+
+			//update frame ptr
+			Macros.loadIFrom(code, RunTime.STACK_POINTER);
+			code.add(PushI, 8);
+			code.add(Add);
+			Macros.storeITo(code, RunTime.FRAME_POINTER);
 
 			//append code from definition
 			ASMCodeFragment functionCode = removeVoidCode(node.child(1));
@@ -245,6 +267,7 @@ public class ASMCodeGenerator {
 
 			//run time error if nothing was returned
 			code.add(Jump, RunTime.NO_RETURN_RUNTIME_ERROR);
+			code.add(Label, functionLabel + "skip");
 		}
 
 		public void visitLeave(LambdaNode node) {
@@ -267,17 +290,24 @@ public class ASMCodeGenerator {
 			code.add(PushI, 8);
 			code.add(Subtract);
 			code.add(LoadI);
-			code.add(Return);
+			//code.add(Return);
 
+			//restore dynamic link
 			Macros.loadIFrom(code, RunTime.FRAME_POINTER);
 			code.add(PushI, 4);
 			code.add(Subtract);
 			code.add(LoadI);
 			Macros.storeITo(code, RunTime.FRAME_POINTER);
 
+			//calculate return position
 			int argumentSize = getArgumentScope(node).getAllocatedSize();
 			int procedureSize = node.getLocalScope().getAllocatedSize();
 			Type returnType = getFunctionReturnType(node);
+
+			//exchange so that return val at top
+			if(node.nChildren() == 1) {
+				code.add(Exchange);
+			}
 
 			code.add(PushI, argumentSize);
 			code.add(PushI, procedureSize);
@@ -285,6 +315,15 @@ public class ASMCodeGenerator {
 				code.add(PushI, returnType.getSize());
 				code.add(Subtract);
 			Macros.addITo(code, RunTime.STACK_POINTER);
+
+			//place return value at return location
+			if (node.nChildren() == 1) {
+				Macros.loadIFrom(code, RunTime.STACK_POINTER);
+				code.add(Exchange);
+				code.add(opcodeForStore(returnType));
+			}
+
+			code.add(Return);
 		}
 
 		private Scope getArgumentScope(ParseNode node) {
@@ -313,35 +352,35 @@ public class ASMCodeGenerator {
 			IdentifierNode functionIdentifier = (IdentifierNode) node.child(0);
 
 			for(int i=1; i<node.nChildren(); i++){
+				Type argType = node.child(i).getType();
+
+				//update stack ptr
+				Macros.decStackPtr(code, argType.getSize());
+
+				//place argument
 				Macros.loadIFrom(code, RunTime.STACK_POINTER);
-				code.add(PushI, node.child(i).getType().getSize());
-				code.add(Subtract);
-
-				code.add(Duplicate);
-				Macros.storeITo(code, RunTime.STACK_POINTER);
-
 				code.append(removeValueCode(node.child(i)));
-				code.add(opcodeForStore(node.child(i).getType()));
+				code.add(opcodeForStore(argType));
 			}
 
-			//dynamic link
+			//store old dynamic link without moving stack ptr
 			Macros.loadIFrom(code, RunTime.STACK_POINTER);
 			code.add(PushI, 4);
 			code.add(Subtract);
 				Macros.loadIFrom(code, RunTime.FRAME_POINTER);
 				code.add(StoreI);
-			//return address
+			//post update for stack ptr
+			Macros.decStackPtr(code, 4);
+			//make room for return address
+			Macros.decStackPtr(code, 4);
+			code.add(Call, functionIdentifier.getBinding().getLabel());
+			//control transferred to function -> resumes:
+			//get value from stack ptr
+			Type returnType = ((LambdaType)functionIdentifier.getType()).getReturnType();
 			Macros.loadIFrom(code, RunTime.STACK_POINTER);
-			code.add(PushI, 8);
-			code.add(Subtract);
-				code.add(Call, functionIdentifier.getBinding().getLabel());
-				code.add(StoreI);
-			//update frame pointer
-			Macros.loadIFrom(code, RunTime.STACK_POINTER);
-			Macros.storeITo(code, RunTime.FRAME_POINTER);
-			//todo move stack ptr down by 8, add procedure vars
+			code.add(opcodeForLoad(returnType));
 		}
-		
+
 		public void visitLeave(AssignmentStatementNode node) {
 			newVoidCode(node);
 			ASMCodeFragment lvalue = removeAddressCode(node.child(0));

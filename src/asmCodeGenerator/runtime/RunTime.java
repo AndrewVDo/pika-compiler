@@ -39,7 +39,7 @@ public class RunTime {
 	public static final String USABLE_MEMORY_START    = "$usable-memory-start";
 	public static final String MAIN_PROGRAM_LABEL     = "$$main";
 
-	public static final String FRAME_POINTER = "$frame-pointer";
+	public static final String FRAME_POINTER 		  = "$frame-pointer";
 	public static final String STACK_POINTER 		  = "$stack-pointer";
 
 	public static final String GENERAL_RUNTIME_ERROR = "$$general-runtime-error";
@@ -71,6 +71,8 @@ public class RunTime {
 		Macros.declareI(result, RECORD_PRINT_BOOL_FLAG);
 		Macros.declareI(result, RECORD_PRINT_RAT_FLAG);
 		Macros.declareF(result, RATIONAL_TEMP);
+		Macros.declareI(result, FRAME_POINTER);
+		Macros.declareI(result, STACK_POINTER);
 		result.add(DLabel, USABLE_MEMORY_START);
 		return result;
 	}

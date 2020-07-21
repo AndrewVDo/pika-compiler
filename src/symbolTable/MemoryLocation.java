@@ -37,7 +37,7 @@ public class MemoryLocation {
 	}
 
 	public void incrementBaseAddress(int value) {
-		this.baseAddress = this.baseAddress + value;
+		this.offset = this.offset + value;
 	}
 	
 	

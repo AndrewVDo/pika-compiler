@@ -1,6 +1,7 @@
 package asmCodeGenerator;
 
 import asmCodeGenerator.codeStorage.ASMCodeFragment;
+import asmCodeGenerator.runtime.RunTime;
 
 import static asmCodeGenerator.codeStorage.ASMOpcode.*;
 
@@ -116,4 +117,16 @@ public class Macros {
 		code.add(Printf);
 		code.add(PStack);
 	}
+	//reserve space for stack
+	public static void decStackPtr(ASMCodeFragment frag, int size) {
+		frag.add(PushI, -size);
+		Macros.addITo(frag, RunTime.STACK_POINTER);
+	}
+	//reclaim space for stack
+	public static void incStackPtr(ASMCodeFragment frag, int size) {
+		frag.add(PushI, size);
+		Macros.addITo(frag, RunTime.STACK_POINTER);
+	}
+
+
 }

@@ -29,7 +29,7 @@ public class LambdaType implements Type {
 
     @Override
     public int getSize() {
-        return 4;
+        return this.returnType.getSize();
     }
 
     @Override
