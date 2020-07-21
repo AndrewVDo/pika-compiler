@@ -6,6 +6,5 @@ func recurse<int numTries> -> int {
     return recurse(numTries - 1).
 }
 exec {
-    const arr := alloc [int] (10).
-    print recurse(100000).
+    print recurse(1000).
 }

@@ -236,6 +236,9 @@ public class ASMCodeGenerator {
 			if (type == PrimitiveType.BOOLEAN || type == PrimitiveType.CHARACTER) {
 				return LoadC;
 			}
+			if (type == PrimitiveType.NULL) {
+				return Nop;
+			}
 			assert false : "Type " + type + " unimplemented in opcodeForStore()";
 			return null;
 		}
@@ -309,12 +312,7 @@ public class ASMCodeGenerator {
 				code.add(Exchange);
 			}
 
-			code.add(PushI, argumentSize);
-			code.add(PushI, procedureSize);
-			code.add(Add);
-				code.add(PushI, returnType.getSize());
-				code.add(Subtract);
-			Macros.addITo(code, RunTime.STACK_POINTER);
+			Macros.incStackPtr(code, argumentSize + procedureSize - returnType.getSize());
 
 			//place return value at return location
 			if (node.nChildren() == 1) {
@@ -343,6 +341,8 @@ public class ASMCodeGenerator {
 
 		public void visitLeave(CallNode node) {
 			newVoidCode(node);
+			code.append(removeValueCode(node.child(0)));
+			code.add(Pop);
 		}
 
 		public void visitLeave(FunctionInvocationNode node) {
@@ -378,7 +378,12 @@ public class ASMCodeGenerator {
 			//get value from stack ptr
 			Type returnType = ((LambdaType)functionIdentifier.getType()).getReturnType();
 			Macros.loadIFrom(code, RunTime.STACK_POINTER);
-			code.add(opcodeForLoad(returnType));
+			if(returnType == PrimitiveType.NULL) {
+				code.add(PushI, 0); //dummy
+			}
+			else {
+				code.add(opcodeForLoad(returnType));
+			}
 		}
 
 		public void visitLeave(AssignmentStatementNode node) {

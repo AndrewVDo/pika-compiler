@@ -4,6 +4,8 @@ import asmCodeGenerator.codeStorage.ASMCodeFragment;
 import asmCodeGenerator.runtime.RunTime;
 
 import static asmCodeGenerator.codeStorage.ASMOpcode.*;
+import static asmCodeGenerator.runtime.MemoryManager.MEM_MANAGER_HEAP_END_PTR;
+import static asmCodeGenerator.runtime.MemoryManager.MEM_MANAGER_HEAP_START_PTR;
 
 public class Macros {
 	
@@ -121,6 +123,14 @@ public class Macros {
 	public static void decStackPtr(ASMCodeFragment frag, int size) {
 		frag.add(PushI, -size);
 		Macros.addITo(frag, RunTime.STACK_POINTER);
+
+		//check stack smashing
+		Macros.loadIFrom(frag, RunTime.STACK_POINTER);
+		Macros.loadIFrom(frag, MEM_MANAGER_HEAP_END_PTR);
+		frag.add(Subtract);
+		frag.add(Duplicate);
+		frag.add(JumpNeg, RunTime.STACK_SMASHING_RUNTIME_ERROR);
+		frag.add(JumpFalse, RunTime.STACK_SMASHING_RUNTIME_ERROR);
 	}
 	//reclaim space for stack
 	public static void incStackPtr(ASMCodeFragment frag, int size) {

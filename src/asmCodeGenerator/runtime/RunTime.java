@@ -51,6 +51,8 @@ public class RunTime {
 	public static final String DELETED_RECORD_RUNTIME_ERROR = "$$deleted-record";
 	public static final String IMMUTABLE_RECORD_RUNTIME_ERROR = "$$immutable-record";
 	public static final String NO_RETURN_RUNTIME_ERROR = "$$no-return";
+	public static final String STACK_SMASHING_RUNTIME_ERROR = "$$stack-smashing";
+
 
 	public static final String RECORD_PRINT_FORMAT = "$record-print-format";
 	public static final String RECORD_PRINT_BOOL_FLAG = "$record-print-bool";
@@ -133,6 +135,7 @@ public class RunTime {
 		deletedRecordError(frag);
 		immutableRecordError(frag);
 		noReturnError(frag);
+		stackError(frag);
 		
 		return frag;
 	}
@@ -225,6 +228,16 @@ public class RunTime {
 		frag.add(DataS, "no return");
 
 		frag.add(Label, NO_RETURN_RUNTIME_ERROR);
+		frag.add(PushD, msg);
+		frag.add(Jump, GENERAL_RUNTIME_ERROR);
+	}
+	private void stackError(ASMCodeFragment frag) {
+		String msg = "$errors-stack-smash";
+
+		frag.add(DLabel, msg);
+		frag.add(DataS, "stack smashing");
+
+		frag.add(Label, STACK_SMASHING_RUNTIME_ERROR);
 		frag.add(PushD, msg);
 		frag.add(Jump, GENERAL_RUNTIME_ERROR);
 	}

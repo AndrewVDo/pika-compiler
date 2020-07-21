@@ -22,8 +22,8 @@ public class MemoryManager {
 	private static final String MEM_MANAGER_REMOVE_BLOCK = "-mem-manager-remove-block";
 	
 	// Main memory manager variables.
-	private static final String MEM_MANAGER_HEAP_START_PTR =   "$heap-start-ptr";
-	private static final String MEM_MANAGER_HEAP_END_PTR =     "$heap-after-ptr";
+	public static final String MEM_MANAGER_HEAP_START_PTR =   "$heap-start-ptr";
+	public static final String MEM_MANAGER_HEAP_END_PTR =     "$heap-after-ptr";
 	private static final String MEM_MANAGER_FIRST_FREE_BLOCK = "$heap-first-free";
 	private static final String MEM_MANAGER_HEAP =             "$heap-memory";
 	

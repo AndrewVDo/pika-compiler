@@ -1,0 +1,8 @@
+func holdMyBeans <> -> float {
+    return ^a^.
+}
+
+exec {
+    const a := holdMyBeans().
+    print a.
+}
