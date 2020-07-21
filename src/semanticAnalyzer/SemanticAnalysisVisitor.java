@@ -4,6 +4,7 @@ import asmCodeGenerator.Labeller;
 import asmCodeGenerator.codeStorage.ASMOpcode;
 import lexicalAnalyzer.Keyword;
 import lexicalAnalyzer.Lextant;
+import lexicalAnalyzer.Punctuator;
 import logging.PikaLogger;
 import parseTree.ParseNode;
 import parseTree.ParseNodeVisitor;
@@ -20,16 +21,21 @@ import symbolTable.Scope;
 import tokens.LextantToken;
 import tokens.Token;
 
+import javax.naming.ldap.Control;
+import java.security.Key;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 class SemanticAnalysisVisitor extends ParseNodeVisitor.Default {
 	private static Labeller functionLabeller;
+	private static Labeller whileLabeller;
+
 
 	public SemanticAnalysisVisitor () {
 		super();
 		functionLabeller = new Labeller("function");
+		whileLabeller = new Labeller("while");
 	}
 
 	@Override
@@ -491,12 +497,43 @@ class SemanticAnalysisVisitor extends ParseNodeVisitor.Default {
 	}
 
 	@Override
+	public void visitEnter(ControlFlowNode node) {
+		if(node.getToken().isLextant(Keyword.WHILE)) {
+			node.label = new Labeller("while");
+			node.conty = node.label.newLabel("conty");
+			node.breaky = node.label.newLabel("breaky");
+
+		}
+	}
+
+	@Override
 	public void visitLeave(ControlFlowNode node) {
 		ParseNode condition = node.child(0);
 		if(condition.getType() != PrimitiveType.BOOLEAN) {
 			conditionError(node);
 			node.setType(PrimitiveType.ERROR);
 		}
+	}
+
+	@Override
+	public void visit(BreakFlowNode node) {
+		Token x;
+		ParseNode controlFlowNode = node;
+		do {
+			if(controlFlowNode instanceof ProgramNode) {
+				returnScopeError(node);
+				node.setType(PrimitiveType.ERROR);
+				return;
+			}
+			controlFlowNode = controlFlowNode.getParent();
+
+			if(controlFlowNode instanceof ControlFlowNode && ( ((ControlFlowNode)controlFlowNode).getControlFlowStatement() == Keyword.WHILE)) {
+				break;
+			}
+		} while(true);
+
+		node.breaky = ((ControlFlowNode) controlFlowNode).breaky;
+		node.conty = ((ControlFlowNode) controlFlowNode).conty;
 	}
 
 	@Override

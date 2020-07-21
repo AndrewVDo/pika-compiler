@@ -1,12 +1,12 @@
-func wow<int a> -> int {
-    return a + 1.
-}
 exec {
-    const wow2 := <int a> -> int { return a + 2. } .
+    var numTries := 5.
+    while(numTries > 0) {
+        if(numTries == 3) {
+            continue.
+        }
 
-    const a := 10.
-    var b:= a + 5.
-
-    print wow(b), _n_.
-    print wow2(b), _n_.
+        print numTries; .
+                numTries := numTries - 1.
+    }
+    print numTries.
 }

@@ -428,12 +428,23 @@ public class ASMCodeGenerator {
 			String conditionLabel = labeller.newLabel("check-condition");
 			String endLabel = labeller.newLabel("end");
 
+			code.add(Label, node.conty);
 			code.add(Label, conditionLabel);
 			code.append(condition);
 			code.add(JumpFalse, endLabel);
 			code.append(innerExpression);
 			code.add(Jump, conditionLabel);
 			code.add(Label, endLabel);
+			code.add(Label, node.breaky);
+		}
+		public void visit(BreakFlowNode node) {
+			newVoidCode(node);
+			if(node.getToken().isLextant(Keyword.CONTINUE)) {
+				code.add(Jump, node.conty);
+			}
+			else {
+				code.add(Jump, node.breaky);
+			}
 		}
 		private void visitIfStatement(ControlFlowNode node) {
 			newVoidCode(node);

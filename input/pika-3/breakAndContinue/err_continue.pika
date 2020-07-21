@@ -1,3 +1,6 @@
 exec {
-
+    if (_true_ == _true_) {
+        continue.
+    }
+    print 1.
 }

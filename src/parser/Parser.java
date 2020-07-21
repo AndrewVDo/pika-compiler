@@ -162,6 +162,9 @@ public class Parser {
 		if(startsControlFlowStatement(nowReading)) {
 			return parseControlFlowStatement();
 		}
+		if(startsBreakStatement(nowReading)) {
+			return parseBreakStatement();
+		}
 		if(startsCallStatement(nowReading)) {
 			return parseCallStatement();
 		}
@@ -226,6 +229,16 @@ public class Parser {
 		return nowReading.isLextant(Keyword.DEALLOC);
 	}
 
+	private ParseNode parseBreakStatement() {
+		if(!startsBreakStatement(nowReading)) {
+			return syntaxErrorNode("breakFlow");
+		}
+		Token breakToken = nowReading;
+		readToken();
+		expect(Punctuator.TERMINATOR);
+		return new BreakFlowNode(breakToken);
+	}
+
 	private ParseNode parseControlFlowStatement() {
 		if(!startsControlFlowStatement(nowReading)) {
 			return syntaxErrorNode("controlFlow");
@@ -267,9 +280,14 @@ public class Parser {
 			   startsAssignmentStatement(token) ||
 			   startsDeclaration(token) ||
 				startsControlFlowStatement(token) ||
+				startsBreakStatement(token) ||
 				startsDeallocStatement(token) ||
 				startsReturnStatement(token) ||
 				startsCallStatement(token);
+	}
+
+	private boolean startsBreakStatement(Token token) {
+		return token.isLextant(Keyword.BREAK, Keyword.CONTINUE);
 	}
 	
 	// assignment -> target := expression .
