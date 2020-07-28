@@ -1,0 +1,32 @@
+func syracuse <int number> -> int {
+	if((number / 2)*2 == number) {
+		return number / 2.
+	} 
+	else {
+		return 3 * number + 1.
+	}
+}
+
+func sequence <int startingNumber> -> null {
+	print _n_.
+	
+	var num := startingNumber.
+	while (num != 1) {
+		print num, _n_.
+		num := syracuse(num).
+	}
+	print num, _n_.
+	return.
+}
+
+exec {
+	const min := 90.
+	const max := 100.
+	
+	var count := min.
+	while (count < max) {
+		call sequence(count).
+		count := count + 1.
+	}
+	print "done.", _n_.
+}

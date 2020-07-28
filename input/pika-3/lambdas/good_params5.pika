@@ -1,0 +1,20 @@
+func holler <char c> -> null {
+	print c, _n_.
+	
+	var n := 0.
+	
+	while (n < c - [^0^ | int]) {
+		print "Yoo hoo!!!!", _n_.
+		n := n + 1.
+	}
+	return.
+}
+
+exec {
+	call holler( ^4^ ).
+	
+	var m := 0.34.
+	call holler( ^2^ ).
+	
+	print "all done.", _n_.
+}

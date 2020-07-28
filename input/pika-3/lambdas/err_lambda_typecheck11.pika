@@ -1,0 +1,11 @@
+func pax <int b, float c, int d> -> int {
+	if (b < c) {
+	    return d.
+	}
+	return 1.
+}
+
+exec {
+	const max := 14.
+	print pax(max, 2.4), _n_.
+}

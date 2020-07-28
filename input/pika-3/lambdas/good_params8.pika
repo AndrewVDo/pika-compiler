@@ -1,0 +1,26 @@
+func holler <[int] array> -> null {
+	print array, _n_.
+	
+	var n := 0.
+	while (n < array[0]) {
+		print "Yoo !!!!", _n_.
+		n := n + 1.
+	}
+	
+	n := 0.
+	while (n < array[1]) {
+		print "    hoo!!!!", _n_.
+		n := n + 1.
+	}
+	
+	return.
+}
+
+exec {
+	call holler( [3, 2, 1, 0] ).
+	
+	var m := 0.34.
+	call holler( [2, 4, 8, 16, 32, 64, 128]).
+	
+	print "all done.", _n_.
+}

@@ -1,0 +1,24 @@
+func holler <<int>->int max> -> null {
+	const limit := max(4).
+	
+	var n := 0.
+	while (n < limit) {
+		print "Yoo hoo!!!!", _n_.
+		n := n + 1.
+	}
+}
+func doldrums <int n> -> int {
+	return n * n - n.
+}
+func bliss <int n> -> int {
+	return 2 * n.
+}
+
+exec {
+	call holler( doldrums ).
+	
+	var m := 0.34.
+	call holler( bliss ).
+	
+	print "all done.", _n_.
+}

@@ -1,0 +1,15 @@
+
+
+func horse <int w> -> <int, int> -> string {
+	return <int x, int y> -> string {
+		print x; y;.
+		return "golly!".
+	}.
+}
+
+exec {
+	print horse(3)(4, 5), _n_.
+	print horse(19)(10, 20), _n_.
+
+	print "all done.", _n_.
+}

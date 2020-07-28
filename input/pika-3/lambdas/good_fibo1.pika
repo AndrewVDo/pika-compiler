@@ -1,0 +1,32 @@
+func printTwoPlaces <int number> -> null {
+	if(number < 10) {
+		print ^ ^, number.
+	}
+	else {
+		print number.
+	}
+	return.
+}
+
+func printFiboLine <int index, int fiboNumber> -> null {
+	call printTwoPlaces(index).
+	print " ", fiboNumber, _n_.
+	return.
+}
+
+exec {
+	const max := 40.
+	var prevFib := 0.
+	var thisFib := 1.
+	var n := 1.
+	print " ", 0; prevFib, _n_.
+	print " ", 1; thisFib, _n_.
+	while (n < max) {
+		const prevHolder := thisFib.
+		thisFib := thisFib + prevFib.
+		prevFib := prevHolder.
+		n := n + 1.
+		
+		call printFiboLine(n, thisFib).
+	}
+}

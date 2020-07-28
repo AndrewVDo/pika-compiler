@@ -1,0 +1,36 @@
+
+func cow <int a, int b, int c, int d> -> [int] {
+	const e := a.
+	const f := a + b.
+	const g := a + b + c.
+	const h := a + b + c + d.
+	const result := [e, f, g, h].
+	return result.
+}
+
+func goat <int x, int y> -> int {
+	return x + y.
+}
+
+exec {
+	const mx := <int a, int b> -> int {
+		if (a > b) {
+			return a.
+		}
+		return b.
+	}.
+	const mn := <int a, int b> -> int {
+		if (a < b) {
+			return a.
+		}
+		return b.
+	}.
+	
+	var array := [goat, mx, mn].
+	print array[0](33, 44), _n_.
+	print array[1](33, 44), _n_.
+	print array[2](33, 44), _n_.
+
+	
+	print "all done.", _n_.
+}

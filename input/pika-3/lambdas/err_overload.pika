@@ -1,0 +1,21 @@
+func pax <int a, int b> -> int {
+	if (a < b) {
+	    return a.
+	}
+	return b + pax(a, 3*b).
+}
+func pax <float a, float b> -> float {
+	if (a < b) {
+	    return a.
+	}
+	return b + pax(a, 3*b).
+}
+
+exec {
+	const max := 5.
+	
+	var count := 0.
+	print pax(128, 4), _n_.
+	
+	print "all done.", _n_.
+}

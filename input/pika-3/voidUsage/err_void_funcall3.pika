@@ -1,0 +1,10 @@
+func printXNum <int x, <int> -> [null] funcle> -> int {
+	print ^ ^, 10.
+	return 5.
+}
+
+exec {
+	const max := 77.
+	call printXNum(max, printXNum).
+}
+

@@ -1,0 +1,32 @@
+
+func cow <int a, int b, int c, int d> -> [int] {
+	const e := a.
+	const f := a + b.
+	const g := a + b + c.
+	const h := a + b + c + d.
+	const result := [e, f, g, h].
+	return result.
+}
+
+func goat <int w, int x, int y> -> float {
+	const a := [w | float] / x.
+	const b :=  [w | float] / y.
+	
+	if (w > 24) {
+	    return a.
+	}
+	return b.
+}
+
+exec {
+	const mx := 5.
+	const my := 7.
+	
+	print cow(3, 4, [goat(21, 10, 3) | int], 5), _n_.
+	print cow(3, 4, [goat(21, 10, 3) | int], 5)[2], _n_.
+	
+	var AA := cow(1, 2, cow(3, 4, [goat(21, 10, 3) | int], 5)[2], 9).
+	print AA, _n_.
+	
+	print "all done.", _n_.
+}

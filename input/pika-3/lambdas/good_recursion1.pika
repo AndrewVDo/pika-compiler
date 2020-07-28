@@ -1,0 +1,16 @@
+func pax <int a, int b> -> int {
+	print "pax(", a, ", ", b, ")", _n_.
+	if (a < b) {
+	    return a.
+	}
+	return b + pax(a, 3*b).
+}
+
+exec {
+	const max := 5.
+	
+	var count := 0.
+	print pax(128256, 4), _n_.
+	
+	print "all done.", _n_.
+}

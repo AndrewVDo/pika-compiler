@@ -1,0 +1,35 @@
+
+func apply <[int] a, <int>->float fun> -> null {
+	const result := alloc [float](length a).
+	
+	var i := 0.
+	while (i < length a) {
+		result[i] := fun(a[i]).
+		i := i + 1.
+	}
+	print result.
+	return.
+}
+
+func pax <int b> -> int {
+	if (b < 4) {
+	    return b.
+	}
+	return b - b / 3 .
+}
+
+exec {
+	const max := 5.
+	
+	if(max > 3) {
+		print pax, _n_.
+	}
+	
+	var AA := [1, 3, 5, 7, 11].
+	print AA, _n_.
+	call apply(AA, pax).	
+	var count := 0.
+	print pax(1234), _n_.
+	
+	print "all done.", _n_.
+}

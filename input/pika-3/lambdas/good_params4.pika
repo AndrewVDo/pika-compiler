@@ -1,0 +1,20 @@
+func holler <rat number> -> null {
+	print number, _n_.
+	
+	var n := 0.
+	
+	while ([n | rat] < number) {
+		print "Yoo hoo!!!!", _n_.
+		n := n + 1.
+	}
+	return.
+}
+
+exec {
+	call holler( 17 // 4 ).
+	
+	var m := 0.34.
+	call holler( 51 // 8 ).
+	
+	print "all done.", _n_.
+}

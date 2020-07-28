@@ -1,0 +1,10 @@
+func printNum <null number> -> null {
+	print ^ ^, 10.
+	return.
+}
+
+exec {
+	const max := 10.
+	call printNum(max).
+}
+

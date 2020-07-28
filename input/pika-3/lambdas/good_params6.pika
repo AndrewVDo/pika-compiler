@@ -1,0 +1,20 @@
+func holler <string str> -> null {
+	print str, _n_.
+	
+	var n := 0.
+	
+	while (n < 2) {
+		print "Yoo hoo!!!!", _n_.
+		n := n + 1.
+	}
+	return.
+}
+
+exec {
+	call holler( "4123" ).
+	
+	var m := 0.34.
+	call holler( "dabc" ).
+	
+	print "all done.", _n_.
+}

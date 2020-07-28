@@ -1,0 +1,54 @@
+
+func cow <int a, int b> -> string {
+	print "moocow:";a; b*b; _n_.
+	return "  moo".
+}
+
+func pig <int a, int b> -> string {
+	print  "oink:";a; b, _n_.
+	return "  oink".
+}
+
+func horse <int w> -> <int, int> -> string {
+	return <int x, int y> -> string {
+		print "neigh:"; x; _n_.
+		return "  golly!".
+	}.
+}
+func mod <int n, int modulus> -> int {
+	var dividend := n / modulus.
+	return n - (dividend * modulus).
+}
+
+func mice <int x> -> [<int, int> -> string] {
+	const result := alloc [<int, int> -> string](x).
+
+	var index := 0.
+	while (index < length result) {
+		if(mod(index, 3) == 0) {
+			result[index] := horse(index).
+		}
+		else {
+			if(mod(index,2) == 0) {
+				result[index] := pig.
+			}
+			else {
+				result[index] := cow.
+			}
+		}
+		index := index + 1.
+	}	
+	return result. 
+}
+
+exec {
+	var moose := mice(8).
+	
+	var index := 0.
+	while (index < length moose) {
+		print moose[index](index, 10*index), _n_.
+		index := index + 1.
+	}
+	
+	print "all done.", _n_.
+}
