@@ -54,7 +54,7 @@ class SemanticAnalysisVisitor extends ParseNodeVisitor.Default {
 	}
 	public void visitEnter(BlockStatementNode node) {
 		if(node.getParent() instanceof LambdaNode) {
-			createProcedureScope(node); //todo move this to asm
+			createProcedureScope(node);
 		}
 		else {
 			enterSubscope(node);

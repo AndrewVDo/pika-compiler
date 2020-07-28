@@ -14,8 +14,6 @@ public class LambdaType implements Type {
         this.returnType = returnType;
     }
 
-    //todo retrieve/manufacture function sig
-
     public FunctionSignature getSignature() {
         Type[] formattedArray = paramTypes.toArray(new Type[paramTypes.size() + 1]);
         formattedArray[formattedArray.length-1] = this.getReturnType();

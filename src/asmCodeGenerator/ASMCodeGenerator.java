@@ -328,7 +328,7 @@ public class ASMCodeGenerator {
 			ParseNode functionNode = node;
 			do {
 				functionNode = functionNode.getParent();
-			} while(!(functionNode instanceof FunctionNode));
+			} while(!(functionNode instanceof FunctionNode)); //FunctionNode needs to be changed to lambda node
 			return functionNode.getScope();
 		}
 		private Type getFunctionReturnType(ParseNode node) {

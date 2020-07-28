@@ -17,7 +17,6 @@ public class CallNode extends ParseNode {
         return callNode;
     }
 
-    //todo generate sig
 
     public void accept(ParseNodeVisitor visitor) {
         visitor.visitEnter(this);

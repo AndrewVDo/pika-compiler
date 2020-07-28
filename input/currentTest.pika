@@ -1,12 +1,16 @@
-exec {
-    var numTries := 5.
-    while(numTries > 0) {
-        if(numTries == 3) {
-            continue.
-        }
 
-        print numTries; .
-                numTries := numTries - 1.
-    }
-    print numTries.
+exec {
+	const mx := <int a, int b> -> int {
+		if (a > b) {
+			return a.
+		}
+		return b.
+	}.
+	const my := 7.
+	
+	print mx(21, 10), _n_.
+	print mx(11, 22), _n_.
+
+	
+	print "all done.", _n_.
 }

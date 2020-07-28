@@ -20,8 +20,6 @@ public class FunctionInvocationNode extends ParseNode {
         return functionInvocationNode;
     }
 
-    //todo generate sig
-
     public void accept(ParseNodeVisitor visitor) {
         visitor.visitEnter(this);
         visitChildren(visitor);
