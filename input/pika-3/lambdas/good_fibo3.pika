@@ -1,0 +1,38 @@
+func printTwoPlaces <int number> -> null {
+	if(number < 10) {
+		print ^ ^, number.
+	}
+	else {
+		print number.
+	}
+	return.
+}
+
+func printFiboLine <int index, int fiboNumber> -> null {
+	call printTwoPlaces(index).
+	print " ", fiboNumber, _n_.
+	return.
+}
+
+func fibonacciNumber <int index> -> int {
+	if(index <= 0) {
+		return 0.
+	}
+	if(index == 1) {
+		return 1.
+	}
+	return fibonacciNumber(index - 1) + fibonacciNumber(index - 2).
+}
+
+exec {
+	const max := 20.
+
+	var n := 0.
+	while (n < max) {
+		const thisFib := fibonacciNumber(n).
+		call printFiboLine(n, thisFib).
+		n := n + 1.
+	}
+	
+	print "all done.", _n_.
+}

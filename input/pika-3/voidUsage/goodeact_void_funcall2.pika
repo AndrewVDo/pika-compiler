@@ -1,0 +1,14 @@
+func printNum <int number> -> null {
+	print ^ ^, number, _n_.
+	return.
+}
+
+func applyFunc<int number, <int> -> null fun> -> int {
+	call fun(number).
+	return 42.
+}
+
+exec {
+	const max := 40.
+	call applyFunc(max, printNum).
+}

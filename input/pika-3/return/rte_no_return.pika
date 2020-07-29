@@ -1,0 +1,8 @@
+func holdMyBeans <> -> int {
+    print 5.
+}
+
+exec {
+    const a := holdMyBeans().
+    print a.
+}

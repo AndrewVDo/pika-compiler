@@ -1,8 +1,10 @@
 package semanticAnalyzer;
 
+import asmCodeGenerator.Labeller;
 import asmCodeGenerator.codeStorage.ASMOpcode;
 import lexicalAnalyzer.Keyword;
 import lexicalAnalyzer.Lextant;
+import lexicalAnalyzer.Punctuator;
 import logging.PikaLogger;
 import parseTree.ParseNode;
 import parseTree.ParseNodeVisitor;
@@ -10,19 +12,30 @@ import parseTree.nodeTypes.*;
 import semanticAnalyzer.signatures.FunctionSignature;
 import semanticAnalyzer.signatures.FunctionSignatures;
 import semanticAnalyzer.types.ArrayType;
+import semanticAnalyzer.types.LambdaType;
 import semanticAnalyzer.types.PrimitiveType;
 import semanticAnalyzer.types.Type;
 import symbolTable.Binding;
+import symbolTable.NegativeMemoryAllocator;
 import symbolTable.Scope;
 import tokens.LextantToken;
 import tokens.Token;
 
+import javax.naming.ldap.Control;
+import java.security.Key;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.function.Function;
 
 class SemanticAnalysisVisitor extends ParseNodeVisitor.Default {
+	private static Labeller whileLabeller;
+
+
+	public SemanticAnalysisVisitor () {
+		super();
+		whileLabeller = new Labeller("while");
+	}
+
 	@Override
 	public void visitLeave(ParseNode node) {
 		throw new RuntimeException("Node class unimplemented in SemanticAnalysisVisitor: " + node.getClass());
@@ -38,7 +51,12 @@ class SemanticAnalysisVisitor extends ParseNodeVisitor.Default {
 		leaveScope(node);
 	}
 	public void visitEnter(BlockStatementNode node) {
-		enterSubscope(node);
+		if(node.getParent() instanceof LambdaNode) {
+			createProcedureScope(node);
+		}
+		else {
+			enterSubscope(node);
+		}
 	}
 	public void visitLeave(BlockStatementNode node) {
 		leaveScope(node);
@@ -48,14 +66,20 @@ class SemanticAnalysisVisitor extends ParseNodeVisitor.Default {
 	///////////////////////////////////////////////////////////////////////////
 	// helper methods for scoping.
 	private void enterProgramScope(ParseNode node) {
-		Scope scope = Scope.createProgramScope();
-		node.setScope(scope);
+		node.getScope().enter();
 	}	
 	private void enterSubscope(ParseNode node) {
 		Scope baseScope = node.getLocalScope();
 		Scope scope = baseScope.createSubscope();
 		node.setScope(scope);
-	}		
+		node.getScope().enter();
+	}
+	private void createProcedureScope(ParseNode node) {
+		Scope baseScope = node.getLocalScope();
+		Scope scope = baseScope.createProcedureScope();
+		node.setScope(scope);
+		node.getScope().enter();
+	}
 	private void leaveScope(ParseNode node) {
 		node.getScope().leave();
 	}
@@ -65,6 +89,124 @@ class SemanticAnalysisVisitor extends ParseNodeVisitor.Default {
 	@Override
 	public void visitLeave(PrintStatementNode node) {
 	}
+	@Override
+	public void visitEnter(FunctionNode node) {
+		if(!(node.getParent() instanceof ProgramNode)) {
+			logError("Function must be a child of ProgramNode");
+		}
+	}
+	@Override
+	public void visitEnter(LambdaNode node) {
+		assert(node.nChildren() == 2);
+
+		if(!(node.child(0) instanceof LambdaParamTypeNode)) {
+			//todo error
+		}
+		else if(!(node.child(1) instanceof BlockStatementNode)) {
+			//todo error
+		}
+		Scope parameterScope = node.getScope();
+		parameterScope.enter();
+	}
+	@Override
+	public void visitLeave(LambdaNode node) {
+		Scope parameterScope = node.getScope();
+		parameterScope.leave();
+	}
+	@Override
+	public void visitLeave(LambdaParamTypeNode node) {
+		assert(node.nChildren() > 0);
+	}
+	@Override
+	public void visitLeave(ParameterNode node) {
+		assert(node.nChildren() == 2);
+
+		TypeNode typeNode = (TypeNode) node.child(0);
+		Type paramType = typeNode.getType();
+
+		IdentifierNode identifierNode = (IdentifierNode) node.child(1);
+		identifierNode.setType(paramType);
+		addBinding(identifierNode, paramType, false);
+	}
+	@Override
+	public void visitLeave(ReturnNode node) {
+		assert(node.nChildren() < 2);
+
+		Scope localScope = node.getLocalScope();
+		if(!(localScope.getAllocationStrategy() instanceof NegativeMemoryAllocator)) {
+			returnScopeError(node);
+			node.setType(PrimitiveType.ERROR);
+			return;
+		}
+
+		Type expressionType = PrimitiveType.NULL;
+		if(node.nChildren() == 1) {
+			ParseNode expressionNode = node.child(0);
+			expressionType = expressionNode.getType();
+		}
+
+		ParseNode lambdaNode = node;
+		do {
+			if(lambdaNode instanceof ProgramNode) {
+				returnScopeError(node);
+				node.setType(PrimitiveType.ERROR);
+				return;
+			}
+			lambdaNode = lambdaNode.getParent();
+		} while(!(lambdaNode instanceof LambdaNode));
+		LambdaType lambdaType = (LambdaType) lambdaNode.getType();
+		Type returnType = lambdaType.getReturnType();
+		if(!expressionType.equivalent(returnType)) {
+				returnTypeError(node);
+				node.setType(PrimitiveType.ERROR);
+				return;
+		}
+		node.setType(returnType);
+		return;
+	}
+	@Override
+	public void visitLeave(FunctionInvocationNode node) {
+		assert(node.nChildren() > 0);
+
+		if(!(node.child(0).getType() instanceof LambdaType)) {
+			functionCallError(node);
+			node.setType(PrimitiveType.ERROR);
+			return;
+		}
+		LambdaType functionType = (LambdaType) node.child(0).getType();
+
+		ParseNode parent = node.getParent();
+		if ((!(parent instanceof CallNode)) && functionType.getReturnType() == PrimitiveType.NULL) {
+			functionCallError(node);
+			node.setType(PrimitiveType.ERROR);
+			return;
+		}
+
+		List<Type> argumentTypes = new ArrayList<>();
+		for(int i=1; i< node.nChildren(); i++) {
+			argumentTypes.add(node.child(i).getType());
+		}
+
+		if(!matchLambdaDefinition(node, functionType, argumentTypes)) {
+			functionCallError(node);
+			node.setType(PrimitiveType.ERROR);
+			return;
+		}
+		node.setType(functionType.getReturnType());
+	}
+	private boolean matchLambdaDefinition(ParseNode node, LambdaType lambdaDefinition, List<Type> argumentTypes) {
+		List<Type> paramTypes = lambdaDefinition.getParamTypes();
+		if(paramTypes.size() != argumentTypes.size()) return false;
+		for(int i=0; i<argumentTypes.size(); i++) {
+			Type argumentType = argumentTypes.get(i);
+			Type paramType = paramTypes.get(i);
+			if(!argumentType.equivalent(paramType)) {
+				return false;
+			}
+		}
+		return true;
+	}
+
 	@Override
 	public void visitLeave(DeclarationNode node) {
 		assert(node.nChildren() == 2);
@@ -136,6 +278,11 @@ class SemanticAnalysisVisitor extends ParseNodeVisitor.Default {
 
 		if(node.nChildren() == 2 && node.child(0) instanceof TypeNode) {
 			ParseNode typeNode = node.child(0);
+			if(typeNode.getType() == PrimitiveType.NULL) {
+				nullArrayBaseError(node);
+				node.setType(PrimitiveType.ERROR);
+				return;
+			}
 			if(!checkChildIntPromotion(node, 1)) {
 				allocNonIntError(node);
 				node.setType(PrimitiveType.ERROR);
@@ -162,8 +309,32 @@ class SemanticAnalysisVisitor extends ParseNodeVisitor.Default {
 	}
 	private Type nestedArrayFun(ParseNode node) {
 		List<Type> foundTypes = findArrayTypes(node);
+
+		int lt = 0;
+		int nlt = 0;
+
+		//lambda type check
+		for(Type t : foundTypes) {
+			if(t instanceof LambdaType) lt++;
+			else nlt++;
+		}
+		if(lt > 0 && nlt > 0) {
+			typeCheckError(node, foundTypes);
+			return PrimitiveType.ERROR;
+		}
+		else if(lt > 0 && nlt == 0) {
+			for(Type t : foundTypes) {
+				if(!t.equivalent(foundTypes.get(0))) {
+					return PrimitiveType.ERROR;
+				}
+			}
+			return foundTypes.get(0);
+		}
+
 		int at = 0;
 		int pt = 0;
+
+		//array type check
 		for(Type t : foundTypes) {
 			if(t instanceof ArrayType) at++;
 			else pt++;
@@ -172,6 +343,7 @@ class SemanticAnalysisVisitor extends ParseNodeVisitor.Default {
 			typeCheckError(node, foundTypes);
 			return PrimitiveType.ERROR;
 		}
+
 		else if(pt == 0 && at > 0) {
 			for(int i=0; i<foundTypes.size(); i++) {
 				for(int j=i; j<foundTypes.size(); j++) {
@@ -335,12 +507,43 @@ class SemanticAnalysisVisitor extends ParseNodeVisitor.Default {
 	}
 
 	@Override
+	public void visitEnter(ControlFlowNode node) {
+		if(node.getToken().isLextant(Keyword.WHILE)) {
+			node.label = new Labeller("while");
+			node.conty = node.label.newLabel("conty");
+			node.breaky = node.label.newLabel("breaky");
+
+		}
+	}
+
+	@Override
 	public void visitLeave(ControlFlowNode node) {
 		ParseNode condition = node.child(0);
 		if(condition.getType() != PrimitiveType.BOOLEAN) {
 			conditionError(node);
 			node.setType(PrimitiveType.ERROR);
 		}
+	}
+
+	@Override
+	public void visit(BreakFlowNode node) {
+		Token x;
+		ParseNode controlFlowNode = node;
+		do {
+			if(controlFlowNode instanceof ProgramNode) {
+				returnScopeError(node);
+				node.setType(PrimitiveType.ERROR);
+				return;
+			}
+			controlFlowNode = controlFlowNode.getParent();
+
+			if(controlFlowNode instanceof ControlFlowNode && ( ((ControlFlowNode)controlFlowNode).getControlFlowStatement() == Keyword.WHILE)) {
+				break;
+			}
+		} while(true);
+
+		node.breaky = ((ControlFlowNode) controlFlowNode).breaky;
+		node.conty = ((ControlFlowNode) controlFlowNode).conty;
 	}
 
 	@Override
@@ -433,7 +636,7 @@ class SemanticAnalysisVisitor extends ParseNodeVisitor.Default {
 	}
 	private boolean isBeingDeclared(IdentifierNode node) {
 		ParseNode parent = node.getParent();
-		return (parent instanceof DeclarationNode) && (node == parent.child(0));
+		return ((parent instanceof DeclarationNode) && (node == parent.child(0)) || parent instanceof ParameterNode );
 	}
 	private void addBinding(IdentifierNode identifierNode, Type type, boolean isVar) {
 		Scope scope = identifierNode.getLocalScope();
@@ -477,5 +680,34 @@ class SemanticAnalysisVisitor extends ParseNodeVisitor.Default {
 	private void logError(String message) {
 		PikaLogger log = PikaLogger.getLogger("compiler.semanticAnalyzer");
 		log.severe(message);
+	}
+
+	private void returnTypeError(ParseNode node) {
+		Token token = node.getToken();
+		//Type expectedType = node.getLocalScope();
+		Type expectedType = PrimitiveType.ERROR;
+		Type actualType = PrimitiveType.NULL;
+		try {
+			node.child(0).getType();
+		}
+		catch(Exception e) {
+			//do nothing
+		}
+		logError("Expected return type: " + expectedType + " Actual return type: " + actualType + " at " + token.getLocation());
+	}
+
+	private void returnScopeError(ParseNode node) {
+		Token token = node.getToken();
+		logError("Return may only be called from procedure scope at " + token.getLocation());
+	}
+
+	private void functionCallError(ParseNode node) {
+		Token token = node.getToken();
+		logError("Function call error at " + token.getLocation());
+	}
+
+	private void nullArrayBaseError(ParseNode node) {
+		Token token = node.getToken();
+		logError("Arrays can't be initialized with NULL type at " + token.getLocation());
 	}
 }

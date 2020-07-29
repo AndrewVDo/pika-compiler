@@ -1,0 +1,3 @@
+exec {
+    var a := alloc [null] (5).
+}

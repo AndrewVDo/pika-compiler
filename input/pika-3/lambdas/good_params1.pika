@@ -1,0 +1,22 @@
+func holler <bool truth> -> null {
+	var n := 0.
+	const number := 2.
+	print truth, _n_.
+	if(truth) {
+		while (n < number) {
+			print "Yoo hoo!!!!", _n_.
+			n := n + 1.
+		}
+	}
+	return.
+}
+
+exec {
+	const max := 6.
+	call holler(_true_).
+	
+	var n := 0.34.
+	call holler(_false_).
+	
+	print "all done.", _n_.
+}

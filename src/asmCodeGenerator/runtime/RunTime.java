@@ -38,7 +38,10 @@ public class RunTime {
 	public static final String GLOBAL_MEMORY_BLOCK    = "$global-memory-block";
 	public static final String USABLE_MEMORY_START    = "$usable-memory-start";
 	public static final String MAIN_PROGRAM_LABEL     = "$$main";
-	
+
+	public static final String FRAME_POINTER 		  = "$frame-pointer";
+	public static final String STACK_POINTER 		  = "$stack-pointer";
+
 	public static final String GENERAL_RUNTIME_ERROR = "$$general-runtime-error";
 	public static final String INTEGER_DIVIDE_BY_ZERO_RUNTIME_ERROR = "$$i-divide-by-zero";
 	public static final String FLOATING_DIVIDE_BY_ZERO_RUNTIME_ERROR = "$$f-divide-by-zero";
@@ -47,6 +50,9 @@ public class RunTime {
 	public static final String NULL_PTR_RUNTIME_ERROR = "$$null-ptr";
 	public static final String DELETED_RECORD_RUNTIME_ERROR = "$$deleted-record";
 	public static final String IMMUTABLE_RECORD_RUNTIME_ERROR = "$$immutable-record";
+	public static final String NO_RETURN_RUNTIME_ERROR = "$$no-return";
+	public static final String STACK_SMASHING_RUNTIME_ERROR = "$$stack-smashing";
+
 
 	public static final String RECORD_PRINT_FORMAT = "$record-print-format";
 	public static final String RECORD_PRINT_BOOL_FLAG = "$record-print-bool";
@@ -67,6 +73,8 @@ public class RunTime {
 		Macros.declareI(result, RECORD_PRINT_BOOL_FLAG);
 		Macros.declareI(result, RECORD_PRINT_RAT_FLAG);
 		Macros.declareF(result, RATIONAL_TEMP);
+		Macros.declareI(result, FRAME_POINTER);
+		Macros.declareI(result, STACK_POINTER);
 		result.add(DLabel, USABLE_MEMORY_START);
 		return result;
 	}
@@ -126,6 +134,8 @@ public class RunTime {
 		nullPtrError(frag);
 		deletedRecordError(frag);
 		immutableRecordError(frag);
+		noReturnError(frag);
+		stackError(frag);
 		
 		return frag;
 	}
@@ -208,6 +218,26 @@ public class RunTime {
 		frag.add(DataS, "immutable record");
 
 		frag.add(Label, IMMUTABLE_RECORD_RUNTIME_ERROR);
+		frag.add(PushD, msg);
+		frag.add(Jump, GENERAL_RUNTIME_ERROR);
+	}
+	private void noReturnError(ASMCodeFragment frag) {
+		String msg = "$errors-no-return";
+
+		frag.add(DLabel, msg);
+		frag.add(DataS, "no return");
+
+		frag.add(Label, NO_RETURN_RUNTIME_ERROR);
+		frag.add(PushD, msg);
+		frag.add(Jump, GENERAL_RUNTIME_ERROR);
+	}
+	private void stackError(ASMCodeFragment frag) {
+		String msg = "$errors-stack-smash";
+
+		frag.add(DLabel, msg);
+		frag.add(DataS, "stack smashing");
+
+		frag.add(Label, STACK_SMASHING_RUNTIME_ERROR);
 		frag.add(PushD, msg);
 		frag.add(Jump, GENERAL_RUNTIME_ERROR);
 	}

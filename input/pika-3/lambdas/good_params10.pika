@@ -1,0 +1,21 @@
+func holler <int a, int b, int c, int d, int e> -> null {
+	# checking multiple arguments
+	print a; b; c; d; e, _n_.
+	print stomp(3, 5, 7, 9), _n_.
+	return.
+}
+func stomp <int w, int x, int y, int z> -> int {
+	print "  ", z; y; x; w; _n_.
+	return w*x*y*z.
+}
+
+exec {
+	call holler(1, 2, 3, 4, 5).
+	
+	var m := 0.34.
+	call holler(2, 4, 6, 8, 10).
+	
+	print m, _n_.
+	
+	print "all done.", _n_.
+}

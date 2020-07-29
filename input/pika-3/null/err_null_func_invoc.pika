@@ -1,0 +1,7 @@
+func wrench <int howMany> -> null {
+    print "processing", _n_.
+    return.
+}
+exec {
+    const inTheEngine := wrench(5).
+}

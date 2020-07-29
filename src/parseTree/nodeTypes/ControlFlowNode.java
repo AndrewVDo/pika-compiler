@@ -1,5 +1,6 @@
 package parseTree.nodeTypes;
 
+import asmCodeGenerator.Labeller;
 import lexicalAnalyzer.Lextant;
 import parseTree.ParseNode;
 import parseTree.ParseNodeVisitor;
@@ -7,6 +8,10 @@ import tokens.LextantToken;
 import tokens.Token;
 
 public class ControlFlowNode extends ParseNode {
+	public Labeller label;
+	public String conty;
+	public String breaky;
+
 	public ControlFlowNode(Token token) {
 		super(token);
 		assert(token instanceof LextantToken);

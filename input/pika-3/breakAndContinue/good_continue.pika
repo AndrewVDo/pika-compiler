@@ -1,0 +1,13 @@
+exec {
+    var numTries := 5.
+    while(numTries > 0) {
+        if(numTries == 3) {
+            numTries := numTries - 1.
+            continue.
+        }
+
+        print numTries; .
+        numTries := numTries - 1.
+    }
+    print numTries.
+}

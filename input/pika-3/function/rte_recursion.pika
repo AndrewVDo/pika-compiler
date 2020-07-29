@@ -1,0 +1,11 @@
+func recurse<int numTries> -> int {
+    print numTries; .
+    if(numTries == 0) {
+        return numTries.
+    }
+    return recurse(numTries - 1).
+}
+exec {
+    const arr := alloc [int] (10).
+    print recurse(100000).
+}

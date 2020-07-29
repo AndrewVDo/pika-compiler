@@ -1,0 +1,15 @@
+
+exec {
+
+	const my := <int a, int b> -> int {
+		if (a > b) {
+			return a.
+		}
+		return b.
+	}(3, 4).
+	
+	print my, _n_.
+
+	
+	print "all done.", _n_.
+}

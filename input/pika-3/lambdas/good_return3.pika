@@ -1,0 +1,23 @@
+func holler <int number> -> char {
+	print number; isOdd(number);.
+	return [ number + ^a^ - 1 | char ].
+}
+func isOdd <int number> -> bool {
+	return number != (number / 2) * 2.
+}
+
+
+exec {
+	const max := 6.
+	
+	var count := 0.
+	while (count <= max) {
+		var result := holler(count).
+		print result, _n_.
+		count := count + 1.
+	}
+	
+	print max*max; isOdd(max*max), _n_.
+	
+	print "all done.", _n_.
+}

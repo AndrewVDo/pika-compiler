@@ -1,0 +1,10 @@
+func printXNum <int x, null number> -> null {
+	print ^ ^, 10.
+	return.
+}
+
+exec {
+	const max := 77.
+	call printXNum(max, max).
+}
+

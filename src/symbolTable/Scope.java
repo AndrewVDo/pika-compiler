@@ -1,5 +1,6 @@
 package symbolTable;
 
+import asmCodeGenerator.runtime.MemoryManager;
 import inputHandler.TextLocation;
 import logging.PikaLogger;
 import parseTree.nodeTypes.IdentifierNode;
@@ -20,11 +21,28 @@ public class Scope {
 	public Scope createSubscope() {
 		return new Scope(allocator, this);
 	}
+	public Scope createParameterScope() {
+		return new Scope(paramMemoryAllocator(), this);
+	}
+	public Scope createProcedureScope() {
+		return new Scope(procedureMemoryAllocator(), this);
+	}
 	
 	private static MemoryAllocator programScopeAllocator() {
 		return new PositiveMemoryAllocator(
 				MemoryAccessMethod.DIRECT_ACCESS_BASE, 
 				MemoryLocation.GLOBAL_VARIABLE_BLOCK);
+	}
+	private static MemoryAllocator paramMemoryAllocator() {
+		return new ParameterMemoryAllocator(
+				MemoryAccessMethod.INDIRECT_ACCESS_BASE,
+				MemoryLocation.FRAME_POINTER);
+	}
+	private static MemoryAllocator procedureMemoryAllocator() {
+		return new NegativeMemoryAllocator(
+				MemoryAccessMethod.INDIRECT_ACCESS_BASE,
+				MemoryLocation.FRAME_POINTER,
+				-8);
 	}
 	
 //////////////////////////////////////////////////////////////////////
@@ -33,9 +51,10 @@ public class Scope {
 		super();
 		this.baseScope = (baseScope == null) ? this : baseScope;
 		this.symbolTable = new SymbolTable();
-		
 		this.allocator = allocator;
-		allocator.saveState();
+	}
+	public void enter() {
+		this.allocator.saveState();
 	}
 	
 ///////////////////////////////////////////////////////////////////////
@@ -84,6 +103,10 @@ public class Scope {
 		result += " hash "+ hashCode() + "\n";
 		result += symbolTable;
 		return result;
+	}
+
+	public String getHashCode() {
+		return "" + hashCode();
 	}
 
 ////////////////////////////////////////////////////////////////////////////////////

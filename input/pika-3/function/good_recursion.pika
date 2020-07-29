@@ -1,0 +1,10 @@
+func recurse<int numTries> -> int {
+    print numTries; .
+    if(numTries == 0) {
+        return numTries.
+    }
+    return recurse(numTries - 1).
+}
+exec {
+    print recurse(1000).
+}

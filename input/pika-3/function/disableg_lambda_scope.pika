@@ -1,0 +1,12 @@
+func wow<int a> -> int {
+    return a + 1.
+}
+exec {
+    const wow2 := <int a> -> int { return a + 2. }.
+
+    const a := 10.
+    var b:= a + 5.
+
+    print wow(b), _n_.
+    print wow2(b), _n_.
+}

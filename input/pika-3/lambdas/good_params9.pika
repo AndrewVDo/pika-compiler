@@ -1,0 +1,16 @@
+func holler <int a, int b, int c, int d, int e> -> null {
+	# checking multiple arguments
+	print a; b; c; d; e, _n_.
+	return.
+}
+
+exec {
+	call holler(1, 2, 3, 4, 5).
+	
+	var m := 0.34.
+	call holler(2, 4, 6, 8, 10).
+	
+	print m, _n_.
+	
+	print "all done.", _n_.
+}

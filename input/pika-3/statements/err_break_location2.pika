@@ -1,0 +1,44 @@
+func mod <int number, int modulus> -> int {
+	if(number <= 0) {
+		return 0.
+	}
+	const dividend := number / modulus.
+	const remainder := number - (dividend * modulus).
+	return remainder.
+}
+
+func syrup <int number> -> int {
+	var habanero := 0.
+	if(mod(number, 2) == 0) {
+		habanero := number / 2.
+	} 
+	else {
+		habanero := 3 * number + 1.
+	}
+	break.
+	return habanero.
+}
+
+func sequence <int startingNumber> -> null {
+	print _n_.
+	
+	var num := startingNumber.
+	while (num != 1) {
+		num := syrup(num).
+		print num, _n_.
+	}
+	print num, _n_.
+	return.
+}
+
+exec {
+	const min := 10.
+	const max := 100.
+	
+	var count := min.
+	while (count < max) {
+		call sequence(count).
+		count := count + 1.
+	}
+	print "done.", _n_.
+}

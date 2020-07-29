@@ -1,0 +1,9 @@
+func timber <> -> null {
+    print 1; 2; 3, _n_.
+    return.
+}
+
+exec {
+    call timber().
+    call timber().
+}

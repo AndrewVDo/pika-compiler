@@ -1,0 +1,9 @@
+func printNum <int number> -> null {
+	print ^ ^, number, _n_.
+	return.
+}
+
+exec {
+	const max := 40.
+	call printNum(max).
+}
