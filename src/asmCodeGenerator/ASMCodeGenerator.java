@@ -313,7 +313,7 @@ public class ASMCodeGenerator {
 
 			//calculate return position
 			int argumentSize = getArgumentScope(node).getAllocatedSize();
-			int procedureSize = node.getLocalScope().getAllocatedSize();
+			int procedureSize = node.getLocalScope().getAllocatedSize() + 8;
 			Type returnType = getFunctionReturnType(node);
 
 			//exchange so that return val at top
@@ -352,6 +352,9 @@ public class ASMCodeGenerator {
 			newVoidCode(node);
 			code.append(removeValueCode(node.child(0)));
 			code.add(Pop);
+
+			int returnOffset = node.child(0).getType().getSize();
+			Macros.incStackPtr(code, returnOffset);
 		}
 
 		public void visitLeave(FunctionInvocationNode node) {

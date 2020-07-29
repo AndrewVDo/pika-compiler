@@ -562,7 +562,6 @@ public class Parser {
 			return UnaryOperatorNode.withChildren(unaryOperator, parseUnaryExpression());
 		}
 
-//		return parseArrayIndexExpression();
 		return parseFunctionInvocation();
 
 	}
@@ -590,6 +589,18 @@ public class Parser {
 		}
 		return base;
 	}
+	private ParseNode parseArrayIndexExpression2(ParseNode base) {
+		while(nowReading.isLextant(Punctuator.OPEN_BRACKET)) {
+			Token indexOperator = nowReading;
+			Token indexToken = LextantToken.artificial(indexOperator, Punctuator.ARRAY_INDEXING);
+			readToken();
+			ParseNode index = parseExpression();
+			expect(Punctuator.CLOSE_BRACKET);
+
+			base = ArrayIndexNode.withChildren(indexToken, base, index);
+		}
+		return base;
+	}
 	private boolean startsIndexExpression(Token token) {
 		return startsFunctionInvocation(token);
 	}
@@ -603,7 +614,10 @@ public class Parser {
 		ParseNode base = parseArrayIndexExpression();
 		if(nowReading.isLextant(Punctuator.OPEN_PARANTHESES)) {
 			List<ParseNode> argumentNodes = parseFunctionArguments(base);
-			return FunctionInvocationNode.withChildren(token, base, argumentNodes);
+			base = FunctionInvocationNode.withChildren(token, base, argumentNodes);
+			if(nowReading.isLextant(Punctuator.OPEN_BRACKET)) {
+				base = parseArrayIndexExpression2(base);
+			}
 		}
 		return base;
 	}
