@@ -406,7 +406,7 @@ public class ASMCodeGenerator {
 			
 			code.append(lvalue);
 			code.append(rvalue);
-			
+
 			Type type = node.getType();
 			code.add(opcodeForStore(type));
 		}

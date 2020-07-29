@@ -196,6 +196,7 @@ class SemanticAnalysisVisitor extends ParseNodeVisitor.Default {
 	}
 	private boolean matchLambdaDefinition(ParseNode node, LambdaType lambdaDefinition, List<Type> argumentTypes) {
 		List<Type> paramTypes = lambdaDefinition.getParamTypes();
+		if(paramTypes.size() != argumentTypes.size()) return false;
 		for(int i=0; i<argumentTypes.size(); i++) {
 			Type argumentType = argumentTypes.get(i);
 			Type paramType = paramTypes.get(i);

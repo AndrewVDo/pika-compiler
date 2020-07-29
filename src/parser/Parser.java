@@ -8,6 +8,7 @@ import lexicalAnalyzer.Scanner;
 import logging.PikaLogger;
 import parseTree.ParseNode;
 import parseTree.nodeTypes.*;
+import semanticAnalyzer.types.Type;
 import tokens.*;
 
 import java.util.ArrayList;
@@ -690,6 +691,28 @@ public class Parser {
 		return ArrayNode.with(allocToken, type, length);
 	}
 	private ParseNode parseType() {
+		if(nowReading.isLextant(Punctuator.OPEN_ANGLE)) {
+			ArrayList<Type> params = new ArrayList<>();
+			Token token = nowReading;
+			readToken();
+			while(!nowReading.isLextant(Punctuator.CLOSE_ANGLE)) {
+				Token paramToken = nowReading;
+				ParseNode type = parseType();
+				params.add(type.getType());
+				if(!nowReading.isLextant(Punctuator.SEPARATOR, Punctuator.CLOSE_ANGLE)) {
+					return syntaxErrorNode("parseType");
+				}
+				if(nowReading.isLextant(Punctuator.SEPARATOR)) {
+					expect(Punctuator.SEPARATOR);
+				}
+			}
+			expect(Punctuator.CLOSE_ANGLE);
+			expect(Punctuator.RESULT_TYPE);
+			ParseNode resultType = parseType();
+
+			return TypeNode.with(token, params, resultType.getType());
+		}
+
 		if(!startsType(nowReading)) {
 			return syntaxErrorNode("typeExpression");
 		}

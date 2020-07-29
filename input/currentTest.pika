@@ -1,28 +1,32 @@
-func holler <<int>->int max> -> null {
-	print _n_.
-#	print max, _n_.
-	const limit := max(4).
 
-	var n := 0.
-	while (n < limit) {
-		print "Yoo hoo!!!!", _n_.
-		n := n + 1.
+func apply <[int] a, <int>->float fun> -> [float] {
+	const result := alloc [float](length a).
+
+	var i := 0.
+	while (i < length a) {
+	    print result[0], _n_.
+		result[0] := fun(a[i]).
+		print result[0], _n_.
+		i := i + 1.
 	}
+	return result.
+}
 
-	return.
-}
-func doldrums <int n> -> int {
-	return n * n - n.
-}
-func bliss <int n> -> int {
-	return 2 * n.
+func pax <int b> -> float {
+	if (b < 4) {
+	    return 3.14.
+	}
+	return b / 3.0 .
 }
 
 exec {
-	call holler( doldrums ).
+	const max := 5.
 
-	var m := 0.34.
-	call holler( bliss ).
+	var AA := [1, 3, 5, 7, 11].
+	print AA, _n_.
+	print apply(AA, pax), _n_.
+	var count := 0.
+	print  _n_.
 
 	print "all done.", _n_.
 }
