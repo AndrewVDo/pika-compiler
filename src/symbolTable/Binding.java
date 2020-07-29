@@ -12,7 +12,7 @@ public class Binding {
 	private String lexeme;
 	private boolean isVar;
 	private Scope scope;
-	private String label;
+//	private String label;
 	
 	public Binding(Type type, boolean isVar, TextLocation location, MemoryLocation memoryLocation, String lexeme) {
 		super();
@@ -54,12 +54,12 @@ public class Binding {
 	public void setScope(Scope scope) {
 		this.scope = scope;
 	}
-	public String getLabel() {
-		return this.label;
-	}
-	public void setLabel(String label) {
-		this.label = label;
-	}
+//	public String getLabel() {
+//		return this.label;
+//	}
+//	public void setLabel(String label) {
+//		this.label = label;
+//	}
 
 
 ////////////////////////////////////////////////////////////////////////////////////

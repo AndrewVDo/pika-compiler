@@ -159,7 +159,7 @@ public class ASMCodeGenerator {
 				code.add(LoadC);
 			} else if (node.getType() == PrimitiveType.CHARACTER) {
 				code.add(LoadC);
-			} else if (node.getType() == PrimitiveType.STRING || node.getType() instanceof ArrayType) {
+			} else if (node.getType() == PrimitiveType.STRING || node.getType() instanceof ArrayType || node.getType() instanceof LambdaType) {
 				code.add(LoadI);
 			} else {
 				assert false : "node " + node;
@@ -214,7 +214,7 @@ public class ASMCodeGenerator {
 		}
 
 		private ASMOpcode opcodeForStore(Type type) {
-			if (type == PrimitiveType.INTEGER || type == PrimitiveType.STRING || type instanceof ArrayType) {
+			if (type == PrimitiveType.INTEGER || type == PrimitiveType.STRING || type instanceof ArrayType || type instanceof LambdaType) {
 				return StoreI;
 			}
 			if (type == PrimitiveType.FLOATING || type == PrimitiveType.RATIONAL) {
@@ -227,7 +227,7 @@ public class ASMCodeGenerator {
 			return null;
 		}
 		private ASMOpcode opcodeForLoad(Type type) {
-			if (type == PrimitiveType.INTEGER || type == PrimitiveType.STRING || type instanceof ArrayType) {
+			if (type == PrimitiveType.INTEGER || type == PrimitiveType.STRING || type instanceof ArrayType || type instanceof LambdaType) {
 				return LoadI;
 			}
 			if (type == PrimitiveType.FLOATING || type == PrimitiveType.RATIONAL) {
@@ -247,11 +247,29 @@ public class ASMCodeGenerator {
 			assert node.nChildren() == 2;
 			newVoidCode(node);
 
+			ASMCodeFragment lvalue = removeAddressCode(node.child(0));
+			ASMCodeFragment rvalue = removeValueCode(node.child(1));
+
+			code.append(lvalue);
+			code.append(rvalue);
+
+			code.add(opcodeForStore(node.child(1).getType()));
+		}
+
+		public void visitLeave(LambdaNode node) {
+			assert node.nChildren() == 2;
+			newValueCode(node);
+
 			//add call label for function code
-			Binding functionBinding = ((IdentifierNode)node.child(0)).getBinding();
-			String functionLabel = functionBinding.getLabel();
-			code.add(Jump, functionLabel + "skip");
-			code.add(Label, functionLabel);
+			String uniqueScopeHash = node.getScope().getHashCode();
+
+			//pushes the labelled address below the skip
+			code.add(PushPC);
+			code.add(PushI, 3);
+			code.add(Add);
+
+			code.add(Jump, uniqueScopeHash + "skip");
+			code.add(Label, uniqueScopeHash);
 
 			//place return address on stack
 			Macros.loadIFrom(code, RunTime.STACK_POINTER);
@@ -270,16 +288,7 @@ public class ASMCodeGenerator {
 
 			//run time error if nothing was returned
 			code.add(Jump, RunTime.NO_RETURN_RUNTIME_ERROR);
-			code.add(Label, functionLabel + "skip");
-		}
-
-		public void visitLeave(LambdaNode node) {
-			assert node.nChildren() == 2;
-			newVoidCode(node);
-
-			//append code from function definition
-			ASMCodeFragment functionCode = removeVoidCode(node.child(1));
-			code.append(functionCode);
+			code.add(Label, uniqueScopeHash + "skip");
 		}
 
 		public void visitLeave(ReturnNode node) {
@@ -325,11 +334,11 @@ public class ASMCodeGenerator {
 		}
 
 		private Scope getArgumentScope(ParseNode node) {
-			ParseNode functionNode = node;
+			ParseNode lambdaNode = node;
 			do {
-				functionNode = functionNode.getParent();
-			} while(!(functionNode instanceof FunctionNode)); //FunctionNode needs to be changed to lambda node
-			return functionNode.getScope();
+				lambdaNode = lambdaNode.getParent();
+			} while(!(lambdaNode instanceof LambdaNode));
+			return lambdaNode.getScope();
 		}
 		private Type getFunctionReturnType(ParseNode node) {
 			ParseNode lambdaNode = node;
@@ -349,7 +358,8 @@ public class ASMCodeGenerator {
 			assert node.nChildren() > 0;
 			newValueCode(node);
 
-			IdentifierNode functionIdentifier = (IdentifierNode) node.child(0);
+			Type returnType = ((LambdaType)node.child(0).getType()).getReturnType();
+			ASMCodeFragment functionCallNumber = removeValueCode(node.child(0));
 
 			for(int i=1; i<node.nChildren(); i++){
 				Type argType = node.child(i).getType();
@@ -373,10 +383,10 @@ public class ASMCodeGenerator {
 			Macros.decStackPtr(code, 4);
 			//make room for return address
 			Macros.decStackPtr(code, 4);
-			code.add(Call, functionIdentifier.getBinding().getLabel());
+			code.append(functionCallNumber);
+			code.add(CallV);
 			//control transferred to function -> resumes:
 			//get value from stack ptr
-			Type returnType = ((LambdaType)functionIdentifier.getType()).getReturnType();
 			Macros.loadIFrom(code, RunTime.STACK_POINTER);
 			if(returnType == PrimitiveType.NULL) {
 				code.add(PushI, 0); //dummy

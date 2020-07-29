@@ -27,7 +27,7 @@ public class LambdaType implements Type {
 
     @Override
     public int getSize() {
-        return this.returnType.getSize();
+        return 4;
     }
 
     @Override
@@ -56,6 +56,12 @@ public class LambdaType implements Type {
 
     @Override
     public boolean equivalent(Type valueType) {
+        if(valueType instanceof LambdaType) {
+            if(this.returnType != ((LambdaType) valueType).getReturnType()) {
+                return false;
+            }
+            return this.paramTypes.equals(((LambdaType) valueType).paramTypes);
+        }
         return false;
     }
 

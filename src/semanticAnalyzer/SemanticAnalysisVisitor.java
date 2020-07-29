@@ -28,13 +28,11 @@ import java.util.Arrays;
 import java.util.List;
 
 class SemanticAnalysisVisitor extends ParseNodeVisitor.Default {
-	private static Labeller functionLabeller;
 	private static Labeller whileLabeller;
 
 
 	public SemanticAnalysisVisitor () {
 		super();
-		functionLabeller = new Labeller("function");
 		whileLabeller = new Labeller("while");
 	}
 
@@ -96,26 +94,24 @@ class SemanticAnalysisVisitor extends ParseNodeVisitor.Default {
 		if(!(node.getParent() instanceof ProgramNode)) {
 			logError("Function must be a child of ProgramNode");
 		}
+	}
+	@Override
+	public void visitEnter(LambdaNode node) {
+		assert(node.nChildren() == 2);
 
-		Scope localScope = node.getLocalScope();
-		Scope parameterScope = localScope.createParameterScope();
-		node.setScope(parameterScope);
+		if(!(node.child(0) instanceof LambdaParamTypeNode)) {
+			//todo error
+		}
+		else if(!(node.child(1) instanceof BlockStatementNode)) {
+			//todo error
+		}
+		Scope parameterScope = node.getScope();
 		parameterScope.enter();
 	}
 	@Override
-	public void visitLeave(FunctionNode node) {
-		assert(node.nChildren() == 2);
-		IdentifierNode identifierNode = (IdentifierNode) node.child(0);
-		LambdaNode lambdaNode = (LambdaNode) node.child(1);
-		identifierNode.setType(lambdaNode.getType());
-		Scope parameterScope = node.getScope();
-		identifierNode.getBinding().setScope(parameterScope);
-		identifierNode.getBinding().setLabel(functionLabeller.newLabel(parameterScope.getHashCode()));
-		parameterScope.leave();
-	}
-	@Override
 	public void visitLeave(LambdaNode node) {
-		assert(node.nChildren() == 2);
+		Scope parameterScope = node.getScope();
+		parameterScope.leave();
 	}
 	@Override
 	public void visitLeave(LambdaParamTypeNode node) {
@@ -172,20 +168,15 @@ class SemanticAnalysisVisitor extends ParseNodeVisitor.Default {
 	public void visitLeave(FunctionInvocationNode node) {
 		assert(node.nChildren() > 0);
 
-		ParseNode functionIdentifier = node.child(0);
-		if(!(functionIdentifier instanceof IdentifierNode)) {
+		if(!(node.child(0).getType() instanceof LambdaType)) {
 			functionCallError(node);
 			node.setType(PrimitiveType.ERROR);
 			return;
 		}
-		Type functionType = ((IdentifierNode)functionIdentifier).getBinding().getType();
-		if(!(functionType instanceof LambdaType)) {
-			functionCallError(node);
-			node.setType(PrimitiveType.ERROR);
-			return;
-		}
+		LambdaType functionType = (LambdaType) node.child(0).getType();
+
 		ParseNode parent = node.getParent();
-		if((!(parent instanceof CallNode)) && ((LambdaType) functionType).getReturnType() == PrimitiveType.NULL) {
+		if ((!(parent instanceof CallNode)) && functionType.getReturnType() == PrimitiveType.NULL) {
 			functionCallError(node);
 			node.setType(PrimitiveType.ERROR);
 			return;
@@ -196,13 +187,12 @@ class SemanticAnalysisVisitor extends ParseNodeVisitor.Default {
 			argumentTypes.add(node.child(i).getType());
 		}
 
-
-		boolean argumentCheck = matchLambdaDefinition(node, (LambdaType)functionType, argumentTypes);
-		if(!argumentCheck) {
+		if(!matchLambdaDefinition(node, functionType, argumentTypes)) {
 			functionCallError(node);
 			node.setType(PrimitiveType.ERROR);
+			return;
 		}
-		node.setType(((LambdaType) functionType).getReturnType());
+		node.setType(functionType.getReturnType());
 	}
 	private boolean matchLambdaDefinition(ParseNode node, LambdaType lambdaDefinition, List<Type> argumentTypes) {
 		List<Type> paramTypes = lambdaDefinition.getParamTypes();
@@ -318,8 +308,32 @@ class SemanticAnalysisVisitor extends ParseNodeVisitor.Default {
 	}
 	private Type nestedArrayFun(ParseNode node) {
 		List<Type> foundTypes = findArrayTypes(node);
+
+		int lt = 0;
+		int nlt = 0;
+
+		//lambda type check
+		for(Type t : foundTypes) {
+			if(t instanceof LambdaType) lt++;
+			else nlt++;
+		}
+		if(lt > 0 && nlt > 0) {
+			typeCheckError(node, foundTypes);
+			return PrimitiveType.ERROR;
+		}
+		else if(lt > 0 && nlt == 0) {
+			for(Type t : foundTypes) {
+				if(!t.equivalent(foundTypes.get(0))) {
+					return PrimitiveType.ERROR;
+				}
+			}
+			return foundTypes.get(0);
+		}
+
 		int at = 0;
 		int pt = 0;
+
+		//array type check
 		for(Type t : foundTypes) {
 			if(t instanceof ArrayType) at++;
 			else pt++;
@@ -328,6 +342,7 @@ class SemanticAnalysisVisitor extends ParseNodeVisitor.Default {
 			typeCheckError(node, foundTypes);
 			return PrimitiveType.ERROR;
 		}
+
 		else if(pt == 0 && at > 0) {
 			for(int i=0; i<foundTypes.size(); i++) {
 				for(int j=i; j<foundTypes.size(); j++) {

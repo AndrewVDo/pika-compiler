@@ -562,7 +562,9 @@ public class Parser {
 			return UnaryOperatorNode.withChildren(unaryOperator, parseUnaryExpression());
 		}
 
-		return parseArrayIndexExpression();
+//		return parseArrayIndexExpression();
+		return parseFunctionInvocation();
+
 	}
 	private boolean isUnaryOperator(Token token) {
 		return token.isLextant(Punctuator.BOOLEAN_NOT, Keyword.LENGTH, Keyword.CLONE);
@@ -576,7 +578,7 @@ public class Parser {
 			return syntaxErrorNode("array index");
 		}
 
-		ParseNode base = parseFunctionInvocation();
+		ParseNode base = parseLambda2();
 		while(nowReading.isLextant(Punctuator.OPEN_BRACKET)) {
 			Token indexOperator = nowReading;
 			Token indexToken = LextantToken.artificial(indexOperator, Punctuator.ARRAY_INDEXING);
@@ -598,7 +600,7 @@ public class Parser {
 		}
 
 		Token token = nowReading;
-		ParseNode base = parseLambda2();
+		ParseNode base = parseArrayIndexExpression();
 		if(nowReading.isLextant(Punctuator.OPEN_PARANTHESES)) {
 			List<ParseNode> argumentNodes = parseFunctionArguments(base);
 			return FunctionInvocationNode.withChildren(token, base, argumentNodes);

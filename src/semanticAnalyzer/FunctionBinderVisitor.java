@@ -1,5 +1,6 @@
 package semanticAnalyzer;
 
+import asmCodeGenerator.Labeller;
 import parseTree.ParseNode;
 import parseTree.ParseNodeVisitor;
 import parseTree.nodeTypes.*;
@@ -12,6 +13,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FunctionBinderVisitor extends ParseNodeVisitor.Default {
+    private static Labeller functionLabeller;
+
+    public FunctionBinderVisitor () {
+        super();
+        functionLabeller = new Labeller("function");
+    }
 
     @Override
     public void visitEnter(ProgramNode node) {
@@ -26,15 +33,33 @@ public class FunctionBinderVisitor extends ParseNodeVisitor.Default {
     @Override
     public void visitLeave(FunctionNode node) {
         assert(node.nChildren() == 2);
+
+        if(!(node.child(0) instanceof IdentifierNode)) {
+            //todo error
+        }
+        if(!(node.child(1) instanceof LambdaNode)) {
+            //todo error
+        }
+
         IdentifierNode identifierNode = (IdentifierNode) node.child(0);
         LambdaNode lambdaNode = (LambdaNode) node.child(1);
-        addBinding(identifierNode, lambdaNode.getType());
+        Type lambdaType = lambdaNode.getType();
+
+        identifierNode.setType(lambdaType);
+        addBinding(identifierNode, lambdaType);
     }
     @Override
     public void visitLeave(LambdaNode node) {
         assert(node.nChildren() == 2);
+
+        //type
         LambdaParamTypeNode lambdaParamTypeNode = (LambdaParamTypeNode) node.child(0);
         node.setType(lambdaParamTypeNode.getType());
+
+        //scope
+        Scope localScope = node.getLocalScope();
+        Scope parameterScope = localScope.createParameterScope();
+        node.setScope(parameterScope);
     }
     @Override
     public void visitLeave(LambdaParamTypeNode node) {
