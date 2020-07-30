@@ -4,7 +4,6 @@ import asmCodeGenerator.Labeller;
 import asmCodeGenerator.codeStorage.ASMOpcode;
 import lexicalAnalyzer.Keyword;
 import lexicalAnalyzer.Lextant;
-import lexicalAnalyzer.Punctuator;
 import logging.PikaLogger;
 import parseTree.ParseNode;
 import parseTree.ParseNodeVisitor;
@@ -21,8 +20,6 @@ import symbolTable.Scope;
 import tokens.LextantToken;
 import tokens.Token;
 
-import javax.naming.ldap.Control;
-import java.security.Key;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -225,7 +222,7 @@ class SemanticAnalysisVisitor extends ParseNodeVisitor.Default {
 		assert(node.nChildren() == 2);
 		List types = List.of(node.child(0).getType(), node.child(1).getType());
 
-		if(!(node.child(0) instanceof IdentifierNode) && !(node.child(0) instanceof ArrayIndexNode)) {
+		if(!(node.child(0) instanceof IdentifierNode) && !(node.child(0) instanceof IndexNode)) {
 			typeCheckError(node, types);
 			node.setType(PrimitiveType.ERROR);
 			return;
@@ -547,23 +544,28 @@ class SemanticAnalysisVisitor extends ParseNodeVisitor.Default {
 	}
 
 	@Override
-	public void visitLeave(ArrayIndexNode node) {
+	public void visitLeave(IndexNode node) {
 		assert node.nChildren() == 2;
+
 		ParseNode base = node.child(0);
-		ParseNode index = node.child(1);
 
 		if(!checkChildIntPromotion(node, 1)) {
-			arrayIndexError(node);
+			IndexError(node);
 			node.setType(PrimitiveType.ERROR);
 		}
 
-		if(!(base.getType() instanceof ArrayType)) {
-			arrayIndexError(node);
-			node.setType(PrimitiveType.ERROR);
-			return;
+		if(base.getType() instanceof ArrayType) {
+			Type arraySubtype = ((ArrayType) base.getType()).getSubtype();
+			node.setType(arraySubtype);
 		}
-		Type arraySubtype = ((ArrayType) base.getType()).getSubtype();
-		node.setType(arraySubtype);
+		else if (base.getType() == PrimitiveType.STRING) {
+			//does not include the [i,j] substring op
+			node.setType(PrimitiveType.CHARACTER);
+		}
+		else {
+			IndexError(node);
+			node.setType(PrimitiveType.ERROR);
+		}
 	}
 	
 	@Override
@@ -647,7 +649,7 @@ class SemanticAnalysisVisitor extends ParseNodeVisitor.Default {
 	///////////////////////////////////////////////////////////////////////////
 	// error logging/printing
 
-	private void arrayIndexError(ParseNode node) {
+	private void IndexError(ParseNode node) {
 		Token token = node.getToken();
 
 		logError("Indexing incorrect types" + token.getLocation());

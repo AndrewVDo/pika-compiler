@@ -1,28 +1,4 @@
-
-func cow <int a, int b, int c, int d> -> [int] {
-	const e := a.
-	const f := a + b.
-	const g := a + b + c.
-	const h := a + b + c + d.
-	const result := [e, f, g, h].
-	return result.
-}
-
-func goat <int w, int x, int y> -> float {
-	const a := [w | float] / x.
-	const b :=  [w | float] / y.
-
-	if (w > 24) {
-	    return a.
-	}
-	return b.
-}
-
 exec {
-    #print cow(1, 2, 3, 4), _n_.
-	#print cow(1, 2, 3, cow(4,5,6,7)[2]).
-
-	const a := [cow, cow].
-
-	print a[0](1,2,3,4).
+    var s := "abcd".
+    print s[5]; s[2]; s[1]; s[0], _n_.
 }

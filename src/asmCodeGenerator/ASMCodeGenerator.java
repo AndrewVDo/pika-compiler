@@ -656,7 +656,7 @@ public class ASMCodeGenerator {
 			}
 		}
 
-		public void visitLeave(ArrayIndexNode node) {
+		public void visitLeave(IndexNode node) {
 			assert(node.nChildren() == 2);
 			newAddressCode(node);
 

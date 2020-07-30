@@ -262,7 +262,7 @@ public class Parser {
 			return target;
 		}
 
-		if(!(target instanceof IdentifierNode) && !(target instanceof ArrayIndexNode)) {
+		if(!(target instanceof IdentifierNode) && !(target instanceof IndexNode)) {
 			return syntaxErrorNode("non target lhs");
 		}
 
@@ -571,7 +571,7 @@ public class Parser {
 				ParseNode index = parseExpression();
 				expect(Punctuator.CLOSE_BRACKET);
 
-				base = ArrayIndexNode.withChildren(indexToken, base, index);
+				base = IndexNode.withChildren(indexToken, base, index);
 			}
 
 		}
