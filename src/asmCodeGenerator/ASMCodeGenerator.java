@@ -489,18 +489,15 @@ public class ASMCodeGenerator {
 		public void visitLeave(UnaryOperatorNode node) {
 			Lextant operator = node.getOperator();
 
-			if(operator == Punctuator.BOOLEAN_NOT) {
-				visitBooleanNotOperator(node);
-			}
-			else if(operator == Keyword.LENGTH) {
-				visitLengthOperator(node);
-			}
-			else if(operator == Keyword.CLONE) {
+			if(operator == Keyword.CLONE) {
 				visitCloneOperator(node);
+			}
+			else {
+				visitGeneratingUnary(node);
 			}
 		}
 
-		private void visitBooleanNotOperator(UnaryOperatorNode node) {
+		private void visitGeneratingUnary(UnaryOperatorNode node) {
 			newValueCode(node);
 			ASMCodeFragment innerCode = removeValueCode(node.child(0));
 
@@ -511,18 +508,16 @@ public class ASMCodeGenerator {
 				ASMOpcode opcode = (ASMOpcode)variant;
 				code.add(opcode);
 			}
+			else if(variant instanceof SimpleCodeGenerator) {
+				SimpleCodeGenerator generator = (SimpleCodeGenerator) variant;
+				ASMCodeFragment frag = generator.generate(node);
+				code.append(frag);
+			}
 			else {
 				throw new Error("Compiler error: unary operation failed");
 			}
 		}
-		private void visitLengthOperator(UnaryOperatorNode node) {
-			assert(node.nChildren() == 1);
-			newValueCode(node);
-
-			code.append(removeValueCode(node.child(0)));
-			code.add(Call, Record.RECORD_GET_LENGTH);
-		}
-		private void visitCloneOperator(UnaryOperatorNode node) {
+		private void visitCloneOperator(UnaryOperatorNode node) { //todo clean this up so that visit unary can be condensed
 			assert(node.nChildren() == 1);
 			newValueCode(node);
 

@@ -3,6 +3,7 @@ package semanticAnalyzer.signatures;
 import asmCodeGenerator.*;
 import asmCodeGenerator.RationalMath.*;
 import asmCodeGenerator.codeStorage.ASMOpcode;
+import asmCodeGenerator.lengthOperator.LengthCode;
 import lexicalAnalyzer.Keyword;
 import lexicalAnalyzer.Punctuator;
 import semanticAnalyzer.types.ArrayType;
@@ -176,7 +177,9 @@ public class FunctionSignatures extends ArrayList<FunctionSignature> {
 
 
 		new FunctionSignatures(Keyword.LENGTH,
-				new FunctionSignature(1, SetS, SA, PrimitiveType.INTEGER)
+				//code is identical because record headers exactly the same
+				new FunctionSignature(new LengthCode(), SetS, SA, PrimitiveType.INTEGER),
+				new FunctionSignature(new LengthCode(), PrimitiveType.STRING, PrimitiveType.INTEGER)
 		);
 		new FunctionSignatures(Keyword.CLONE,
 				new FunctionSignature(1, SetS, SA, SA)
