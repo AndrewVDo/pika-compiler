@@ -1,0 +1,4 @@
+exec {
+    var s := "abcdefgh".
+    print length s, _n_.
+}
