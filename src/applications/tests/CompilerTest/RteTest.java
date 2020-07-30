@@ -43,6 +43,15 @@ public class RteTest extends CompilerTestFixture {
         return findTestsByPrefix(PIKA_THREE, RTE_TEST);
     }
 
+    @ParameterizedTest(name = "Run {index}: inputName={0}, outputName={1}, expectedName={2}")
+    @MethodSource("findMilestone4Files")
+    public void testRteM4(String inputName, String outputName, String expectedName) {
+        runRteTest(inputName, outputName);
+    }
+    public static Stream<Arguments> findMilestone4Files() throws Exception {
+        return findTestsByPrefix(PIKA_FOUR, RTE_TEST);
+    }
+
     private void runRteTest(String inputName, String outputName) {
         String programOutput = "";
         try {
