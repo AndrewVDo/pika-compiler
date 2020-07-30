@@ -32,7 +32,12 @@ public enum Keyword implements Lextant {
 	CALL("call"),
 	BREAK("break"),
 	CONTINUE("continue"),
-	NULL("null")
+	NULL("null"),
+	REVERSE("reverse"),
+	ZIP("zip"),
+	MAP("map"),
+	REDUCE("reduce"),
+	FOLD("")
 	;
 
 	private String lexeme;

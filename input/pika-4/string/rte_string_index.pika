@@ -1,0 +1,4 @@
+exec {
+    var s := "abcd".
+    print s[4]; s[2]; s[1]; s[0], _n_.
+}
