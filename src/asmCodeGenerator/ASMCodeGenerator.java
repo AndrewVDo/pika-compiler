@@ -657,15 +657,30 @@ public class ASMCodeGenerator {
 		}
 
 		public void visitLeave(IndexNode node) {
-			assert(node.nChildren() == 2);
-			newAddressCode(node);
+			if(node.nChildren() == 2) {
+				newAddressCode(node);
 
-			ASMCodeFragment arrayCode = removeValueCode(node.child(0));
-			ASMCodeFragment indexCode = removeValueCode(node.child(1));
+				ASMCodeFragment baseCode = removeValueCode(node.child(0));
+				ASMCodeFragment indexCode = removeValueCode(node.child(1));
 
-			code.append(arrayCode);
-			code.append(indexCode);             		//[... BASE INDEX]
-			code.add(Call, Record.RECORD_GET_ELEMENT); 	//[... INDEXED_ADDRESS]
+				code.append(baseCode);
+				code.append(indexCode);                    //[... BASE INDEX]
+				code.add(Call, Record.RECORD_GET_ELEMENT);    //[... INDEXED_ADDRESS]
+			}
+			else {
+				//sub array
+				assert node.nChildren() == 2;
+				newValueCode(node);
+
+				ASMCodeFragment baseCode = removeValueCode(node.child(0));
+				ASMCodeFragment indexCode = removeValueCode(node.child(1));
+				ASMCodeFragment endIndexCode = removeValueCode(node.child(2));
+
+				code.append(baseCode);
+				code.append(indexCode);
+				code.append(endIndexCode);
+				//todo call the function
+			}
 		}
 
 		

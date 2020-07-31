@@ -569,9 +569,17 @@ public class Parser {
 
 				readToken();
 				ParseNode index = parseExpression();
-				expect(Punctuator.CLOSE_BRACKET);
 
-				base = IndexNode.withChildren(indexToken, base, index);
+				if(nowReading.isLextant(Punctuator.SEPARATOR)) {
+					expect(Punctuator.SEPARATOR);
+					ParseNode endIndex = parseExpression();
+					expect(Punctuator.CLOSE_BRACKET);
+					base = IndexNode.withChildren(indexToken, base, index, endIndex);
+				}
+				else {
+					expect(Punctuator.CLOSE_BRACKET);
+					base = IndexNode.withChildren(indexToken, base, index);
+				}
 			}
 
 		}

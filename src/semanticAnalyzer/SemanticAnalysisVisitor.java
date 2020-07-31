@@ -545,22 +545,32 @@ class SemanticAnalysisVisitor extends ParseNodeVisitor.Default {
 
 	@Override
 	public void visitLeave(IndexNode node) {
-		assert node.nChildren() == 2;
+		assert node.nChildren() == 2 || node.nChildren() == 3;
 
 		ParseNode base = node.child(0);
 
 		if(!checkChildIntPromotion(node, 1)) {
 			IndexError(node);
 			node.setType(PrimitiveType.ERROR);
+			return;
 		}
 
-		if(base.getType() instanceof ArrayType) {
+		if(base.getType() instanceof ArrayType && node.nChildren() == 2) {
 			Type arraySubtype = ((ArrayType) base.getType()).getSubtype();
 			node.setType(arraySubtype);
 		}
 		else if (base.getType() == PrimitiveType.STRING) {
-			//does not include the [i,j] substring op
-			node.setType(PrimitiveType.CHARACTER);
+			if(node.nChildren() == 2) {
+				node.setType(PrimitiveType.CHARACTER);
+			}
+			else {
+				if(!checkChildIntPromotion(node, 2)) {
+					IndexError(node);
+					node.setType(PrimitiveType.ERROR);
+					return;
+				}
+				node.setType(PrimitiveType.STRING);
+			}
 		}
 		else {
 			IndexError(node);

@@ -38,6 +38,14 @@ public class IndexNode extends ParseNode {
 		node.appendChild(index);
 		return node;
 	}
+
+	public static IndexNode withChildren(Token token, ParseNode array, ParseNode index, ParseNode endIndex) {
+		IndexNode node = new IndexNode(token);
+		node.appendChild(array);
+		node.appendChild(index);
+		node.appendChild(endIndex);
+		return node;
+	}
 	
 	
 	///////////////////////////////////////////////////////////
