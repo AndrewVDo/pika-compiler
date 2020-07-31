@@ -1,12 +1,11 @@
 exec {
-    var s := "mary had a ".
+    var s := "mary ".
+    var s2 := "had".
+    var c := ^a^.
+    var s3 := "little".
+    var s4 := " lamb".
 
-    var s2 := s + ^l^.
-    var s3 := s2 + ^i^.
-    var s4 := s3 + ^t^.
-    var s5 := s4 + ^t^.
-    var s6 := s5 + ^l^.
-    var s7 := s6 + ^e^.
+    var s5 := s + s2 + ^ ^ + c + ^ ^ + s3 + s4.
 
-    print s, _n_, s2, _n_, s3, _n_, s4, _n_, s5, _n_, s6, _n_, s7, _n_.
+    print s, _n_, s2, _n_, c, _n_, s3, _n_, s4, _n_, s5.
 }
