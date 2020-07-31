@@ -4,6 +4,9 @@ import asmCodeGenerator.*;
 import asmCodeGenerator.RationalMath.*;
 import asmCodeGenerator.codeStorage.ASMOpcode;
 import asmCodeGenerator.lengthOperator.LengthCode;
+import asmCodeGenerator.stringConcat.ConcatCharString;
+import asmCodeGenerator.stringConcat.ConcatStringChar;
+import asmCodeGenerator.stringConcat.ConcatStringString;
 import lexicalAnalyzer.Keyword;
 import lexicalAnalyzer.Punctuator;
 import semanticAnalyzer.types.ArrayType;
@@ -86,7 +89,10 @@ public class FunctionSignatures extends ArrayList<FunctionSignature> {
 		new FunctionSignatures(Punctuator.ADD,
 		    new FunctionSignature(ASMOpcode.Add, PrimitiveType.INTEGER, PrimitiveType.INTEGER, PrimitiveType.INTEGER),
 		    new FunctionSignature(ASMOpcode.FAdd, PrimitiveType.FLOATING, PrimitiveType.FLOATING, PrimitiveType.FLOATING),
-			new FunctionSignature(new RationalAdd(), PrimitiveType.RATIONAL, PrimitiveType.RATIONAL, PrimitiveType.RATIONAL)
+			new FunctionSignature(new RationalAdd(), PrimitiveType.RATIONAL, PrimitiveType.RATIONAL, PrimitiveType.RATIONAL),
+			new FunctionSignature(new ConcatStringString(), PrimitiveType.STRING, PrimitiveType.STRING, PrimitiveType.STRING),
+			new FunctionSignature(new ConcatStringChar(), PrimitiveType.STRING, PrimitiveType.CHARACTER, PrimitiveType.STRING),
+			new FunctionSignature(new ConcatCharString(), PrimitiveType.CHARACTER, PrimitiveType.STRING, PrimitiveType.STRING)
 		);
 		
 		new FunctionSignatures(Punctuator.SUBTRACT,

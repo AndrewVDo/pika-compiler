@@ -138,5 +138,23 @@ public class Macros {
 		Macros.addITo(frag, RunTime.STACK_POINTER);
 	}
 
+	public static void runtimeLoop(ASMCodeFragment frag, String indexLabel, String indexLimitLabel, ASMCodeFragment loopContents) {
+		Labeller runtimeLoopLabeller = new Labeller("runtime-loop");
+		String startLabel = runtimeLoopLabeller.newLabel("start");
+		String endLabel = runtimeLoopLabeller.newLabel("end");
+
+		frag.add(Label, startLabel);
+			//check index
+		Macros.loadIFrom(frag, indexLabel);
+		Macros.loadIFrom(frag, indexLimitLabel);
+			frag.add(Subtract);
+			frag.add(JumpFalse, endLabel);
+				frag.append(loopContents);
+				Macros.incrementInteger(frag, indexLabel);
+				frag.add(Jump, startLabel);
+		frag.add(Label, endLabel);
+
+	}
+
 
 }
