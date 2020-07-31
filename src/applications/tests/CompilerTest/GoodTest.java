@@ -74,7 +74,7 @@ public class GoodTest extends CompilerTestFixture{
             fail("Could not find expected output");
         }
 
-        assertEquals(programOutput, expectedOutput);
+        assertEquals(expectedOutput, programOutput);
         System.out.println(programOutput);
     }
 

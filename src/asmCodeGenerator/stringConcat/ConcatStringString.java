@@ -13,31 +13,14 @@ import static asmCodeGenerator.codeStorage.ASMOpcode.*;
 
 public class ConcatStringString implements SimpleCodeGenerator {
     static private Labeller labeller = new Labeller("ConcatStringString");
-    static private boolean initialized = false;
-    static private boolean injected = false; //used so that init code is injected only once
-    static private ASMCodeFragment initInjection;
+    static private String stringArg = labeller.newLabel("string-arg");
+    static private String stringArgLength = labeller.newLabel("string-arg-length");
+    static private String stringArgLoop = labeller.newLabel("string-copy-loop");
+    static private String stringArg2 = labeller.newLabel("string-arg2");
+    static private String stringArgLength2 = labeller.newLabel("string-arg-length2");
+    static private String stringResult = labeller.newLabel("string-result");
 
-    static private String stringArg;
-    static private String stringArgLength;
-    static private String stringArgLoop;
-    static private String stringArg2;
-    static private String stringArgLength2;
-    static private String stringResult;
-
-    public ConcatStringString() {
-        if (initialized == true) {
-            return;
-        }
-        initialized = true;
-
-        stringArg = labeller.newLabel("string-arg");
-        stringArgLength = labeller.newLabel("string-arg-length");
-        stringArgLoop = labeller.newLabel("string-copy-loop");
-        stringArg2 = labeller.newLabel("string-arg2");
-        stringArgLength2 = labeller.newLabel("string-arg-length2");
-        stringResult = labeller.newLabel("string-result");
-
-        ASMCodeFragment frag = new ASMCodeFragment(ASMCodeFragment.CodeType.GENERATES_VOID);
+    public static final void declareLabels(ASMCodeFragment frag) {
         frag.add(DLabel, stringArg);
         frag.add(DataZ, 4);
         frag.add(DLabel, stringArgLength);
@@ -50,18 +33,12 @@ public class ConcatStringString implements SimpleCodeGenerator {
         frag.add(DataZ, 4);
         frag.add(DLabel, stringResult);
         frag.add(DataZ, 4);
-        initInjection = frag;
     }
 
 
     @Override
     public ASMCodeFragment generate(ParseNode Node) {
         ASMCodeFragment frag = new ASMCodeFragment(ASMCodeFragment.CodeType.GENERATES_VALUE);
-
-        if (!injected) {
-            frag.append(initInjection);
-        }
-        injected = true;
 
         //[string-address string-address]
         Macros.storeITo(frag, stringArg2);

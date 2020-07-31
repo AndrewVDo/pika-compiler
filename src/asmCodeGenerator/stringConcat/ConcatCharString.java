@@ -12,30 +12,14 @@ import static asmCodeGenerator.Record.RECORD_INIT_ELEMENT;
 import static asmCodeGenerator.codeStorage.ASMOpcode.*;
 
 public class ConcatCharString implements SimpleCodeGenerator {
-    static private Labeller labeller = new Labeller("ConcatCharString");
-    static private boolean initialized = false;
-    static private boolean injected = false; //used so that init code is injected only once
-    static private ASMCodeFragment initInjection;
+    static private Labeller labeller = new Labeller("ConcatStringString");
+    static private String stringArg = labeller.newLabel("string-arg");
+    static private String stringArgLength = labeller.newLabel("string-arg-length");
+    static private String stringArgLoop = labeller.newLabel("string-copy-loop");
+    static private String charArg = labeller.newLabel("char-arg");
+    static private String stringResult = labeller.newLabel("string-result");
 
-    static private String stringArg;
-    static private String stringArgLength;
-    static private String stringArgLoop;
-    static private String charArg;
-    static private String stringResult;
-
-    public ConcatCharString() {
-        if (initialized == true) {
-            return;
-        }
-        initialized = true;
-
-        stringArg = labeller.newLabel("string-arg");
-        stringArgLength = labeller.newLabel("string-arg-length");
-        stringArgLoop = labeller.newLabel("string-copy-loop");
-        charArg = labeller.newLabel("char-arg");
-        stringResult = labeller.newLabel("string-result");
-
-        ASMCodeFragment frag = new ASMCodeFragment(ASMCodeFragment.CodeType.GENERATES_VOID);
+    public static final void declareLabels(ASMCodeFragment frag) {
         frag.add(DLabel, stringArg);
         frag.add(DataZ, 4);
         frag.add(DLabel, stringArgLength);
@@ -46,7 +30,6 @@ public class ConcatCharString implements SimpleCodeGenerator {
         frag.add(DataZ, 4);
         frag.add(DLabel, stringResult);
         frag.add(DataZ, 4);
-        initInjection = frag;
     }
 
 
@@ -54,10 +37,6 @@ public class ConcatCharString implements SimpleCodeGenerator {
     public ASMCodeFragment generate(ParseNode Node) {
         ASMCodeFragment frag = new ASMCodeFragment(ASMCodeFragment.CodeType.GENERATES_VALUE);
 
-        if (!injected) {
-            frag.append(initInjection);
-        }
-        injected = true;
 
         //[char-value string-address]
         Macros.storeITo(frag, stringArg);
