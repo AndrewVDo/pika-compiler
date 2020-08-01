@@ -4,6 +4,7 @@ import asmCodeGenerator.codeStorage.ASMCodeFragment;
 import asmCodeGenerator.codeStorage.ASMOpcode;
 import asmCodeGenerator.runtime.MemoryManager;
 import asmCodeGenerator.runtime.RunTime;
+import asmCodeGenerator.stringConcat.Substring;
 import lexicalAnalyzer.Keyword;
 import lexicalAnalyzer.Lextant;
 import lexicalAnalyzer.Punctuator;
@@ -669,7 +670,7 @@ public class ASMCodeGenerator {
 			}
 			else {
 				//sub array
-				assert node.nChildren() == 2;
+				assert node.nChildren() == 3;
 				newValueCode(node);
 
 				ASMCodeFragment baseCode = removeValueCode(node.child(0));
@@ -679,7 +680,7 @@ public class ASMCodeGenerator {
 				code.append(baseCode);
 				code.append(indexCode);
 				code.append(endIndexCode);
-				//todo call the function
+				Substring.generate(code);
 			}
 		}
 

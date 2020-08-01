@@ -5,6 +5,7 @@ import asmCodeGenerator.codeStorage.ASMCodeFragment;
 import asmCodeGenerator.stringConcat.ConcatCharString;
 import asmCodeGenerator.stringConcat.ConcatStringChar;
 import asmCodeGenerator.stringConcat.ConcatStringString;
+import asmCodeGenerator.stringConcat.Substring;
 
 import static asmCodeGenerator.RationalGenerator.runtimeRationalGCD;
 import static asmCodeGenerator.RationalGenerator.runtimeRationalPrint;
@@ -284,5 +285,6 @@ public class RunTime {
 		ConcatStringString.declareLabels(frag);
 		ConcatCharString.declareLabels(frag);
 		ConcatStringChar.declareLabels(frag);
+		Substring.declareLabels(frag);
 	}
 }
