@@ -7,6 +7,7 @@ import asmCodeGenerator.lengthOperator.LengthCode;
 import asmCodeGenerator.stringConcat.ConcatCharString;
 import asmCodeGenerator.stringConcat.ConcatStringChar;
 import asmCodeGenerator.stringConcat.ConcatStringString;
+import asmCodeGenerator.stringConcat.ReverseCode;
 import lexicalAnalyzer.Keyword;
 import lexicalAnalyzer.Punctuator;
 import semanticAnalyzer.types.ArrayType;
@@ -15,6 +16,7 @@ import semanticAnalyzer.types.Type;
 import semanticAnalyzer.types.TypeVariable;
 
 import java.util.*;
+import java.util.function.Function;
 
 
 public class FunctionSignatures extends ArrayList<FunctionSignature> {
@@ -189,6 +191,9 @@ public class FunctionSignatures extends ArrayList<FunctionSignature> {
 		);
 		new FunctionSignatures(Keyword.CLONE,
 				new FunctionSignature(1, SetS, SA, SA)
+		);
+		new FunctionSignatures(Keyword.REVERSE,
+				new FunctionSignature(new ReverseCode(), PrimitiveType.STRING, PrimitiveType.STRING)
 		);
 		
 		new FunctionSignatures(Punctuator.ARRAY_INDEXING,

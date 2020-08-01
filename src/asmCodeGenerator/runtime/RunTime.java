@@ -2,10 +2,7 @@ package asmCodeGenerator.runtime;
 
 import asmCodeGenerator.Macros;
 import asmCodeGenerator.codeStorage.ASMCodeFragment;
-import asmCodeGenerator.stringConcat.ConcatCharString;
-import asmCodeGenerator.stringConcat.ConcatStringChar;
-import asmCodeGenerator.stringConcat.ConcatStringString;
-import asmCodeGenerator.stringConcat.Substring;
+import asmCodeGenerator.stringConcat.*;
 
 import static asmCodeGenerator.RationalGenerator.runtimeRationalGCD;
 import static asmCodeGenerator.RationalGenerator.runtimeRationalPrint;
@@ -286,5 +283,6 @@ public class RunTime {
 		ConcatCharString.declareLabels(frag);
 		ConcatStringChar.declareLabels(frag);
 		Substring.declareLabels(frag);
+		ReverseCode.declareLabels(frag);
 	}
 }
