@@ -1,0 +1,10 @@
+exec {
+    var s := " had a little".
+
+    var s2 := ^y^ + s.
+    var s3 := ^r^ + s2.
+    var s4 := ^a^ + s3.
+    var s5 := ^m^ + s4.
+
+    print s, _n_, s2, _n_, s3, _n_, s4, _n_, s5.
+}

@@ -43,6 +43,15 @@ public class ErrTest extends NoExitTestFixture {
         return findTestsByPrefix(PIKA_THREE, ERR_TEST);
     }
 
+    @ParameterizedTest(name = "Run {index}: inputName={0}, outputName={1}, expectedName={2}")
+    @MethodSource("findPika4Err")
+    public void testErrM4(String inputName, String outputName, String expectedName) throws Exception {
+        runErrTest(inputName);
+    }
+    public static Stream<Arguments> findPika4Err() throws Exception {
+        return findTestsByPrefix(PIKA_FOUR, ERR_TEST);
+    }
+
     private void runErrTest(String inputName) {
         try {
             setUp();

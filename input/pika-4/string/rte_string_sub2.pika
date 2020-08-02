@@ -1,0 +1,10 @@
+exec {
+    var s:= "abcdefghijk".
+
+    var a:= s[2, 20].
+    var b:= s[5, 7].
+    var c:= a.
+    c := c + b.
+
+    print s, _n_, a, _n_, b, _n_, c, _n_.
+}

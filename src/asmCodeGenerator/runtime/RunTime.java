@@ -2,6 +2,7 @@ package asmCodeGenerator.runtime;
 
 import asmCodeGenerator.Macros;
 import asmCodeGenerator.codeStorage.ASMCodeFragment;
+import asmCodeGenerator.stringConcat.*;
 
 import static asmCodeGenerator.RationalGenerator.runtimeRationalGCD;
 import static asmCodeGenerator.RationalGenerator.runtimeRationalPrint;
@@ -69,6 +70,7 @@ public class RunTime {
 		result.append(runtimeErrors());
 		recordFunctions(result);
 		rationalFunctions(result);
+		stringFunctions(result);
 		Macros.declareI(result, RECORD_PRINT_FORMAT);
 		Macros.declareI(result, RECORD_PRINT_BOOL_FLAG);
 		Macros.declareI(result, RECORD_PRINT_RAT_FLAG);
@@ -275,5 +277,12 @@ public class RunTime {
 		runtimeFloatExpressOver(frag);
 		runtimeFloatRationalize(frag);
 		runtimeRatRationalize(frag);
+	}
+	private void stringFunctions(ASMCodeFragment frag) {
+		ConcatStringString.declareLabels(frag);
+		ConcatCharString.declareLabels(frag);
+		ConcatStringChar.declareLabels(frag);
+		Substring.declareLabels(frag);
+		ReverseCode.declareLabels(frag);
 	}
 }

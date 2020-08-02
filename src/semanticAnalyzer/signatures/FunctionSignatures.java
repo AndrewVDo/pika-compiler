@@ -3,6 +3,11 @@ package semanticAnalyzer.signatures;
 import asmCodeGenerator.*;
 import asmCodeGenerator.RationalMath.*;
 import asmCodeGenerator.codeStorage.ASMOpcode;
+import asmCodeGenerator.lengthOperator.LengthCode;
+import asmCodeGenerator.stringConcat.ConcatCharString;
+import asmCodeGenerator.stringConcat.ConcatStringChar;
+import asmCodeGenerator.stringConcat.ConcatStringString;
+import asmCodeGenerator.stringConcat.ReverseCode;
 import lexicalAnalyzer.Keyword;
 import lexicalAnalyzer.Punctuator;
 import semanticAnalyzer.types.ArrayType;
@@ -11,6 +16,7 @@ import semanticAnalyzer.types.Type;
 import semanticAnalyzer.types.TypeVariable;
 
 import java.util.*;
+import java.util.function.Function;
 
 
 public class FunctionSignatures extends ArrayList<FunctionSignature> {
@@ -85,7 +91,10 @@ public class FunctionSignatures extends ArrayList<FunctionSignature> {
 		new FunctionSignatures(Punctuator.ADD,
 		    new FunctionSignature(ASMOpcode.Add, PrimitiveType.INTEGER, PrimitiveType.INTEGER, PrimitiveType.INTEGER),
 		    new FunctionSignature(ASMOpcode.FAdd, PrimitiveType.FLOATING, PrimitiveType.FLOATING, PrimitiveType.FLOATING),
-			new FunctionSignature(new RationalAdd(), PrimitiveType.RATIONAL, PrimitiveType.RATIONAL, PrimitiveType.RATIONAL)
+			new FunctionSignature(new RationalAdd(), PrimitiveType.RATIONAL, PrimitiveType.RATIONAL, PrimitiveType.RATIONAL),
+			new FunctionSignature(new ConcatStringString(), PrimitiveType.STRING, PrimitiveType.STRING, PrimitiveType.STRING),
+			new FunctionSignature(new ConcatStringChar(), PrimitiveType.STRING, PrimitiveType.CHARACTER, PrimitiveType.STRING),
+			new FunctionSignature(new ConcatCharString(), PrimitiveType.CHARACTER, PrimitiveType.STRING, PrimitiveType.STRING)
 		);
 		
 		new FunctionSignatures(Punctuator.SUBTRACT,
@@ -176,10 +185,15 @@ public class FunctionSignatures extends ArrayList<FunctionSignature> {
 
 
 		new FunctionSignatures(Keyword.LENGTH,
-				new FunctionSignature(1, SetS, SA, PrimitiveType.INTEGER)
+				//code is identical because record headers exactly the same
+				new FunctionSignature(new LengthCode(), SetS, SA, PrimitiveType.INTEGER),
+				new FunctionSignature(new LengthCode(), PrimitiveType.STRING, PrimitiveType.INTEGER)
 		);
 		new FunctionSignatures(Keyword.CLONE,
 				new FunctionSignature(1, SetS, SA, SA)
+		);
+		new FunctionSignatures(Keyword.REVERSE,
+				new FunctionSignature(new ReverseCode(), PrimitiveType.STRING, PrimitiveType.STRING)
 		);
 		
 		new FunctionSignatures(Punctuator.ARRAY_INDEXING,

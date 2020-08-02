@@ -1,0 +1,4 @@
+exec {
+    var s := "abcd".
+    var s[1] := "a".
+}

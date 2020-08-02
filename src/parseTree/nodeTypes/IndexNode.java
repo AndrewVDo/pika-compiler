@@ -6,14 +6,14 @@ import parseTree.ParseNodeVisitor;
 import tokens.LextantToken;
 import tokens.Token;
 
-public class ArrayIndexNode extends ParseNode {
+public class IndexNode extends ParseNode {
 
-	public ArrayIndexNode(Token token) {
+	public IndexNode(Token token) {
 		super(token);
 		assert(token instanceof LextantToken);
 	}
 
-	public ArrayIndexNode(ParseNode node) {
+	public IndexNode(ParseNode node) {
 		super(node);
 	}
 	
@@ -32,10 +32,18 @@ public class ArrayIndexNode extends ParseNode {
 	////////////////////////////////////////////////////////////
 	// convenience factory
 	
-	public static ArrayIndexNode withChildren(Token token, ParseNode array, ParseNode index) {
-		ArrayIndexNode node = new ArrayIndexNode(token);
+	public static IndexNode withChildren(Token token, ParseNode array, ParseNode index) {
+		IndexNode node = new IndexNode(token);
 		node.appendChild(array);
 		node.appendChild(index);
+		return node;
+	}
+
+	public static IndexNode withChildren(Token token, ParseNode array, ParseNode index, ParseNode endIndex) {
+		IndexNode node = new IndexNode(token);
+		node.appendChild(array);
+		node.appendChild(index);
+		node.appendChild(endIndex);
 		return node;
 	}
 	

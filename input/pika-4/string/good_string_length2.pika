@@ -1,0 +1,5 @@
+exec {
+    var s := "abcdefgh".
+    var s2 := "xyz".
+    print length s + length s2, _n_.
+}

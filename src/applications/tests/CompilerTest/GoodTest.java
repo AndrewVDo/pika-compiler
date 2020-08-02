@@ -46,6 +46,15 @@ public class GoodTest extends CompilerTestFixture{
         return findTestsByPrefix(PIKA_THREE, GOOD_TEST);
     }
 
+    @ParameterizedTest(name = "Run {index}: inputName={0}, outputName={1}, expectedName={2}")
+    @MethodSource("pika4data")
+    public void testGoodM4(String inputName, String outputName, String expectedName) {
+        runGoodTest(inputName, outputName, expectedName);
+    }
+    public static Stream<Arguments> pika4data() throws Exception {
+        return findTestsByPrefix(PIKA_FOUR, GOOD_TEST);
+    }
+
     private void runGoodTest(String inputName, String outputName, String expectedName) {
         String programOutput = "";
         String expectedOutput = "";
@@ -65,7 +74,7 @@ public class GoodTest extends CompilerTestFixture{
             fail("Could not find expected output");
         }
 
-        assertEquals(programOutput, expectedOutput);
+        assertEquals(expectedOutput, programOutput);
         System.out.println(programOutput);
     }
 
