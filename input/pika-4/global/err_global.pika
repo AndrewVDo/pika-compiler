@@ -1,0 +1,6 @@
+const a := "missing exec".
+
+func printer<> -> null {
+    print a.
+    return.
+}

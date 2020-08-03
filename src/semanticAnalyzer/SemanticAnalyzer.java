@@ -16,6 +16,7 @@ public class SemanticAnalyzer {
 	
 	public ParseNode analyze() {
 		ASTree.accept(new FunctionBinderVisitor());
+		ASTree.accept(new GlobalDeclerationVisitor());
 		ASTree.accept(new SemanticAnalysisVisitor());
 		
 		return ASTree;

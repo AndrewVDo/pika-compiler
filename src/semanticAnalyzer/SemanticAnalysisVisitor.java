@@ -207,6 +207,11 @@ class SemanticAnalysisVisitor extends ParseNodeVisitor.Default {
 	@Override
 	public void visitLeave(DeclarationNode node) {
 		assert(node.nChildren() == 2);
+
+		if(node.getParent() instanceof ProgramNode) {
+			return;
+		}
+
 		IdentifierNode identifier = (IdentifierNode) node.child(0);
 		ParseNode initializer = node.child(1);
 		

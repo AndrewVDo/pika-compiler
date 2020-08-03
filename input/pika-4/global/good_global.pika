@@ -1,0 +1,23 @@
+var a := 1.
+const b := 2.
+const c := a + b.
+
+func foo <>-> null {
+    a := 11.
+    print a; b; c; _n_.
+    return.
+}
+
+exec {
+    print a; b; _n_.
+    call foo().
+    var d := 4.
+    print a; b; _n_.
+
+    var e := <float a>->float {
+        return a + b.
+    }(5.1).
+
+    print a; b; e; _n_.
+}
+
