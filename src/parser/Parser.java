@@ -66,7 +66,7 @@ public class Parser {
 			}
 		}
 
-		if(!(nowReading instanceof NullToken)) {
+		if(!(nowReading instanceof NullToken) || mainBlock == null) {
 			return syntaxErrorNode("end of program");
 		}
 		
