@@ -37,7 +37,8 @@ public enum Keyword implements Lextant {
 	ZIP("zip"),
 	MAP("map"),
 	REDUCE("reduce"),
-	FOLD("")
+	FOLD("fold"),
+	STATIC("static")
 	;
 
 	private String lexeme;

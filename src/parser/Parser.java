@@ -376,6 +376,13 @@ public class Parser {
 		if(!startsDeclaration(nowReading)) {
 			return syntaxErrorNode("declaration");
 		}
+
+		boolean isStatic = false;
+		if(nowReading.isLextant(Keyword.STATIC)) {
+			isStatic = true;
+			expect(Keyword.STATIC);
+		}
+
 		Token declarationToken = nowReading;
 		readToken();
 		
@@ -384,10 +391,10 @@ public class Parser {
 		ParseNode initializer = parseExpression();
 		expect(Punctuator.TERMINATOR);
 		
-		return DeclarationNode.withChildren(declarationToken, identifier, initializer);
+		return DeclarationNode.withChildren(declarationToken, identifier, initializer, isStatic);
 	}
 	private boolean startsDeclaration(Token token) {
-		return token.isLextant(Keyword.CONST, Keyword.VAR);
+		return token.isLextant(Keyword.CONST, Keyword.VAR, Keyword.STATIC);
 	}
 
 

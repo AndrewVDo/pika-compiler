@@ -1,23 +1,16 @@
-var a := 1.
-const b := 2.
-const c := a + b.
-
-func foo <>-> null {
-    a := 11.
-    print a; b; c; _n_.
-    return.
-}
+var globalV := 5.
 
 exec {
-    print a; b; _n_.
-    call foo().
-    var d := 4.
-    print a; b; _n_.
+    var condition := 5.
 
-    var e := <float a>->float {
-        return a + b.
-    }(5.1).
+    while (condition > 0) {
+        static var billyJoeBob := 15.
 
-    print a; b; e; _n_.
+        print condition; billyJoeBob, _n_.
+
+        billyJoeBob := billyJoeBob * 10.
+        condition := condition - 1.
+    }
+
+    print "done".
 }
-

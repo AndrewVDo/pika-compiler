@@ -18,22 +18,21 @@ public class GlobalDeclerationVisitor extends ParseNodeVisitor.Default {
 
     @Override
     public void visitEnter(DeclarationNode node) {
-
-        if(!isGlobal(node)) {
-            return;
+        if(isGlobal(node)) {
+            node.accept(new SemanticAnalysisVisitor());
         }
-
-        node.accept(new SemanticAnalysisVisitor());
     }
 
     @Override
     public void visitLeave(DeclarationNode node) {
         assert node.nChildren() == 2;
-
-        if(!isGlobal(node)) {
-            return;
+        if(isGlobal(node)) {
+            GlobalDeclaration(node);
         }
+        return;
+    }
 
+    private void GlobalDeclaration(DeclarationNode node) {
         IdentifierNode identifierNode = (IdentifierNode) node.child(0);
         ParseNode initializer = node.child(1);
 
@@ -43,7 +42,6 @@ public class GlobalDeclerationVisitor extends ParseNodeVisitor.Default {
         identifierNode.setType(declarationType);
         boolean isVar = node.getToken().isLextant(Keyword.VAR);
         addBinding(identifierNode, declarationType, isVar);
-
     }
 
     private boolean isGlobal(ParseNode node) {
