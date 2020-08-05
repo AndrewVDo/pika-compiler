@@ -44,23 +44,36 @@ public class Parser {
 			return syntaxErrorNode("program");
 		}
 		ParseNode program = new ProgramNode(nowReading);
+		ParseNode mainBlock = null;
 
-		while(nowReading.isLextant(Keyword.FUNCTION)) {
-			program.appendChild(parseFunction());
+		while(startsProgram(nowReading)) {
+			if(nowReading.isLextant(Keyword.FUNCTION)) {
+				program.appendChild(parseFunction());
+			}
+			else if(nowReading.isLextant(Keyword.VAR, Keyword.CONST)) {
+				program.appendChild(parseDeclaration());
+			}
+			else if(nowReading.isLextant(Keyword.EXEC)) {
+				expect(Keyword.EXEC);
+				if(mainBlock != null) {
+					return syntaxErrorNode("multiple exec blocks");
+				}
+				mainBlock = parseBlockStatement();
+				program.appendChild(mainBlock);
+			}
+			else {
+				return syntaxErrorNode("not implemented for global scope");
+			}
 		}
-		
-		expect(Keyword.EXEC);
-		ParseNode mainBlock = parseBlockStatement();
-		program.appendChild(mainBlock);
-		
-		if(!(nowReading instanceof NullToken)) {
+
+		if(!(nowReading instanceof NullToken) || mainBlock == null) {
 			return syntaxErrorNode("end of program");
 		}
 		
 		return program;
 	}
 	private boolean startsProgram(Token token) {
-		return token.isLextant(Keyword.EXEC) || token.isLextant(Keyword.FUNCTION);
+		return token.isLextant(Keyword.EXEC, Keyword.FUNCTION, Keyword.VAR, Keyword.CONST); //todo any other globals?
 	}
 
 	private ParseNode parseFunction() {

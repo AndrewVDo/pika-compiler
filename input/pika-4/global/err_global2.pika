@@ -1,0 +1,6 @@
+const a := b + 1.
+const b := a - 1.
+
+exec {
+    print a; b, _n_.
+}
