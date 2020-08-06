@@ -1,5 +1,6 @@
 package parseTree.nodeTypes;
 
+import asmCodeGenerator.Labeller;
 import lexicalAnalyzer.Keyword;
 import lexicalAnalyzer.Lextant;
 import parseTree.ParseNode;
@@ -33,13 +34,36 @@ public class DeclarationNode extends ParseNode {
 	////////////////////////////////////////////////////////////
 	// convenience factory
 	
-	public static DeclarationNode withChildren(Token token, ParseNode declaredName, ParseNode initializer) {
+	public static DeclarationNode withChildren(Token token, ParseNode declaredName, ParseNode initializer, boolean isStatic) {
 		DeclarationNode node = new DeclarationNode(token);
 		node.appendChild(declaredName);
 		node.appendChild(initializer);
+		node.setStatic(isStatic);
+		if(isStatic) {
+			node.setAnonymousGlobalSymbol();
+		}
 		return node;
 	}
-	
+
+	private boolean isStatic;
+	public boolean isStatic() {
+		return isStatic;
+	}
+	public void setStatic(boolean value) {
+		isStatic = value;
+	}
+
+	private String anonymousGlobalSymbol;
+	private void setAnonymousGlobalSymbol() {
+		if(anonymousGlobalSymbol != null) {
+			return;
+		}
+		Labeller labeller = new Labeller("Anonymous-Global-Symbol");
+		this.anonymousGlobalSymbol = labeller.newLabel(this.child(0).getToken().getLexeme());
+	}
+	public String getAnonymousGlobalSymbol() {
+		return this.anonymousGlobalSymbol;
+	}
 	
 	///////////////////////////////////////////////////////////
 	// boilerplate for visitors

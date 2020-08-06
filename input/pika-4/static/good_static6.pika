@@ -1,0 +1,17 @@
+exec {
+    var condition := 5.
+
+    static var authentic := 0.
+
+    while (condition > 0) {
+        var x := <> -> int {
+            authentic := authentic + 1.
+            return authentic.
+        } ().
+
+        print authentic; x, _n_.
+        condition := condition - 1.
+    }
+
+    print "done".
+}

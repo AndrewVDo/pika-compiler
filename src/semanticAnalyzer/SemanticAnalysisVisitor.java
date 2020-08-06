@@ -17,6 +17,7 @@ import semanticAnalyzer.types.Type;
 import symbolTable.Binding;
 import symbolTable.NegativeMemoryAllocator;
 import symbolTable.Scope;
+import symbolTable.SymbolTable;
 import tokens.LextantToken;
 import tokens.Token;
 
@@ -220,8 +221,14 @@ class SemanticAnalysisVisitor extends ParseNodeVisitor.Default {
 		
 		identifier.setType(declarationType);
 		boolean isVar = node.getToken().isLextant(Keyword.VAR);
-		addBinding(identifier, declarationType, isVar);
+
+		if(node.isStatic()) {
+			addStaticBinding(node, declarationType, isVar);
+		} else {
+			addBinding(identifier, declarationType, isVar);
+		}
 	}
+
 	@Override
 	public void visitLeave(AssignmentStatementNode node) {
 		assert(node.nChildren() == 2);
@@ -655,6 +662,18 @@ class SemanticAnalysisVisitor extends ParseNodeVisitor.Default {
 		ParseNode parent = node.getParent();
 		return ((parent instanceof DeclarationNode) && (node == parent.child(0)) || parent instanceof ParameterNode );
 	}
+
+	private void addStaticBinding(DeclarationNode node, Type type, boolean isVar) {
+		assert node.child(0) instanceof IdentifierNode;
+		IdentifierNode identifierNode = (IdentifierNode) node.child(0);
+
+		Scope localScope = identifierNode.getLocalScope();
+		Scope globalScope = localScope.getGlobalScope();
+
+		Binding binding = globalScope.createStaticBinding(identifierNode, type, isVar, node.getAnonymousGlobalSymbol(), localScope);
+		identifierNode.setBinding(binding);
+	}
+
 	private void addBinding(IdentifierNode identifierNode, Type type, boolean isVar) {
 		Scope scope = identifierNode.getLocalScope();
 		Binding binding = scope.createBinding(identifierNode, type, isVar);

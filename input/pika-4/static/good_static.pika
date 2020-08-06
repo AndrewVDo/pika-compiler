@@ -1,0 +1,16 @@
+var globalV := 5.
+
+exec {
+    var condition := 5.
+
+    while (condition > 0) {
+        static var billyJoeBob := 15.
+
+        print condition; billyJoeBob, _n_.
+
+        billyJoeBob := billyJoeBob * 10.
+        condition := condition - 1.
+    }
+
+    print "done".
+}

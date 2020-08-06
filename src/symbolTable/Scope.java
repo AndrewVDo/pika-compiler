@@ -62,6 +62,13 @@ public class Scope {
 	public Scope getBaseScope() {
 		return baseScope;
 	}
+	public Scope getGlobalScope() {
+		Scope result = this;
+		while(result.getBaseScope() != nullInstance()) {
+			result = result.getBaseScope();
+		}
+		return result;
+	}
 	public MemoryAllocator getAllocationStrategy() {
 		return allocator;
 	}
@@ -88,6 +95,20 @@ public class Scope {
 		String lexeme = token.getLexeme();
 		Binding binding = allocateNewBinding(type, isVar, token.getLocation(), lexeme);	
 		symbolTable.install(lexeme, binding);
+
+		return binding;
+	}
+	//meant to be called on the global scope
+	public Binding createStaticBinding(IdentifierNode identifierNode, Type type, boolean isVar, String anonymousSymbol, Scope localScope) {
+		Token token = identifierNode.getToken();
+
+		String lexeme = token.getLexeme();
+		Binding binding = allocateNewBinding(type, isVar, token.getLocation(), lexeme);
+		symbolTable.install(anonymousSymbol, binding);
+
+		SymbolTable localSymbolTable = localScope.getSymbolTable();
+		localSymbolTable.errorIfAlreadyDefined(token);
+		localSymbolTable.install(lexeme, binding);
 
 		return binding;
 	}
