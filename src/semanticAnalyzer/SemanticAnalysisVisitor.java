@@ -21,6 +21,7 @@ import symbolTable.SymbolTable;
 import tokens.LextantToken;
 import tokens.Token;
 
+import javax.naming.ldap.Control;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -54,6 +55,12 @@ class SemanticAnalysisVisitor extends ParseNodeVisitor.Default {
 		}
 		else {
 			enterSubscope(node);
+
+			ParseNode parent = node.getParent();
+			Token token = parent.getToken();
+			if(parent instanceof ControlFlowNode && token.isLextant(Keyword.FOR) && node.getParent().child(2) == node) {
+				addIterationBinding((ControlFlowNode) parent);
+			}
 		}
 	}
 	public void visitLeave(BlockStatementNode node) {
@@ -527,10 +534,29 @@ class SemanticAnalysisVisitor extends ParseNodeVisitor.Default {
 
 	@Override
 	public void visitLeave(ControlFlowNode node) {
+		if(node.getToken().isLextant(Keyword.FOR)) {
+			visitForStatement(node);
+			return;
+		}
 		ParseNode condition = node.child(0);
 		if(condition.getType() != PrimitiveType.BOOLEAN) {
 			conditionError(node);
 			node.setType(PrimitiveType.ERROR);
+		}
+	}
+
+	private void visitForStatement(ControlFlowNode node) {
+		//work was done before block statement child, this just checks for errors
+		assert node.nChildren() == 3;
+		if(
+			!(node.child(0) instanceof IdentifierNode) ||
+			(!(node.child(1).getType() instanceof ArrayType) && !(node.child(1).getType() == PrimitiveType.STRING))  ||
+			!(node.child(2) instanceof BlockStatementNode) ||
+			!node.getIteration().isLextant(Keyword.INDEX, Keyword.ELEM)
+		) {
+			forLoopError(node);
+			node.setType(PrimitiveType.ERROR);
+			return;
 		}
 	}
 
@@ -650,7 +676,7 @@ class SemanticAnalysisVisitor extends ParseNodeVisitor.Default {
 	// IdentifierNodes, with helper methods
 	@Override
 	public void visit(IdentifierNode node) {
-		if(!isBeingDeclared(node)) {		
+		if(!isBeingDeclared(node) && !isIteration(node)) {
 			Binding binding = node.findVariableBinding();
 			
 			node.setType(binding.getType());
@@ -661,6 +687,18 @@ class SemanticAnalysisVisitor extends ParseNodeVisitor.Default {
 	private boolean isBeingDeclared(IdentifierNode node) {
 		ParseNode parent = node.getParent();
 		return ((parent instanceof DeclarationNode) && (node == parent.child(0)) || parent instanceof ParameterNode );
+	}
+	private boolean isIteration(IdentifierNode node) {
+		ParseNode parent = node.getParent();
+		return (parent instanceof ControlFlowNode && parent.getToken().isLextant(Keyword.FOR) && node == parent.child(0));
+	}
+
+	private void addIterationBinding(ControlFlowNode node) {
+		IdentifierNode identifier = (IdentifierNode)node.child(0);
+		Type type = identifier.getType();
+		Scope scope = node.child(2).getScope();
+		Binding binding = scope.createBinding(identifier, type, false);
+		identifier.setBinding(binding);
 	}
 
 	private void addStaticBinding(DeclarationNode node, Type type, boolean isVar) {
@@ -745,5 +783,10 @@ class SemanticAnalysisVisitor extends ParseNodeVisitor.Default {
 	private void nullArrayBaseError(ParseNode node) {
 		Token token = node.getToken();
 		logError("Arrays can't be initialized with NULL type at " + token.getLocation());
+	}
+
+	private void forLoopError(ParseNode node) {
+		Token token = node.getToken();
+		logError("for loop error");
 	}
 }
