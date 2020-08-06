@@ -3,15 +3,7 @@ exec {
 
     while (condition > 0) {
         static var a := 1.
-
-        {
-            a := a + 1.
-            print a;.
-        }
-        {
-            var a := 69.
-            print a;.
-        }
+        static var a := 2.
 
         print a, _n_.
 

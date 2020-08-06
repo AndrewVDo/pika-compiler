@@ -204,6 +204,20 @@ public class ASMCodeGenerator {
 
 		public void visitLeave(DeclarationNode node) {
 			newVoidCode(node);
+
+			if(node.isStatic()) {
+				String baseLabel = node.getAnonymousGlobalSymbol();
+				assert !baseLabel.isEmpty();
+				String isDeclaredLabel = baseLabel + "-declared";
+				String skipLabel = baseLabel + "-skip";
+
+				code.add(DLabel, isDeclaredLabel);
+				code.add(DataZ, 4);
+
+				Macros.loadIFrom(code, isDeclaredLabel);
+				code.add(JumpTrue, skipLabel);
+			}
+
 			ASMCodeFragment lvalue = removeAddressCode(node.child(0));
 			ASMCodeFragment rvalue = removeValueCode(node.child(1));
 
@@ -212,6 +226,17 @@ public class ASMCodeGenerator {
 
 			Type type = node.getType();
 			code.add(opcodeForStore(type));
+
+			if(node.isStatic()) {
+				String baseLabel = node.getAnonymousGlobalSymbol();
+				assert !baseLabel.isEmpty();
+				String isDeclaredLabel = baseLabel + "-declared";
+				String skipLabel = baseLabel + "-skip";
+
+				code.add(PushI, 1);
+				Macros.storeITo(code, isDeclaredLabel);
+				code.add(Label, skipLabel);
+			}
 		}
 
 		private ASMOpcode opcodeForStore(Type type) {

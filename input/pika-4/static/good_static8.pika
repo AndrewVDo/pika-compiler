@@ -1,0 +1,26 @@
+func increment <> -> int {
+    static var dontmix := 0.
+    dontmix := dontmix + 1.
+    return dontmix.
+}
+
+func increment2 <> -> int {
+    static var dontmix := 0.
+    dontmix := dontmix + 1.
+    return dontmix.
+}
+
+exec {
+    var condition := 5.
+
+    while (condition > 0) {
+        var a := increment().
+        var b := increment2().
+
+        print a; b, _n_.
+
+        condition := condition - 1.
+    }
+
+    print "done".
+}

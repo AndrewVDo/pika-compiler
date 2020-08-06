@@ -12,5 +12,8 @@ exec {
         condition := condition - 1.
     }
 
+    var billyJoeBob := 10.
+    print billyJoeBob, _n_.
+
     print "done".
 }

@@ -64,15 +64,6 @@ public class DeclarationNode extends ParseNode {
 	public String getAnonymousGlobalSymbol() {
 		return this.anonymousGlobalSymbol;
 	}
-
-	private boolean isStaticallyDeclared;
-	public boolean isStaticallyDeclared() {
-		return isStaticallyDeclared;
-	}
-	public void setStaticallyDeclared() {
-		isStaticallyDeclared = true;
-	}
-	
 	
 	///////////////////////////////////////////////////////////
 	// boilerplate for visitors

@@ -101,13 +101,13 @@ public class Scope {
 	//meant to be called on the global scope
 	public Binding createStaticBinding(IdentifierNode identifierNode, Type type, boolean isVar, String anonymousSymbol, Scope localScope) {
 		Token token = identifierNode.getToken();
-		symbolTable.errorIfAlreadyDefined(token);
 
 		String lexeme = token.getLexeme();
 		Binding binding = allocateNewBinding(type, isVar, token.getLocation(), lexeme);
 		symbolTable.install(anonymousSymbol, binding);
 
 		SymbolTable localSymbolTable = localScope.getSymbolTable();
+		localSymbolTable.errorIfAlreadyDefined(token);
 		localSymbolTable.install(lexeme, binding);
 
 		return binding;

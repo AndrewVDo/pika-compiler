@@ -1,0 +1,18 @@
+static var authentic := 0.
+
+func increment <> -> null {
+    print "The one the only ", authentic, _n_.
+    authentic := authentic + 1.
+    return.
+}
+
+exec {
+    var condition := 5.
+
+    while (condition > 0) {
+        call increment().
+        condition := condition - 1.
+    }
+
+    print "done".
+}

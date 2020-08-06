@@ -1,0 +1,17 @@
+func increment <int lostboy> -> null {
+    static var lostboy := 420.
+    print "The one the only ", lostboy, _n_.
+    lostboy := lostboy + 1.
+    return.
+}
+
+exec {
+    var condition := 5.
+
+    while (condition > 0) {
+        call increment(1).
+        condition := condition - 1.
+    }
+
+    print "done".
+}

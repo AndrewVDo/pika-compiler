@@ -50,7 +50,7 @@ public class Parser {
 			if(nowReading.isLextant(Keyword.FUNCTION)) {
 				program.appendChild(parseFunction());
 			}
-			else if(nowReading.isLextant(Keyword.VAR, Keyword.CONST)) {
+			else if(nowReading.isLextant(Keyword.VAR, Keyword.CONST, Keyword.STATIC)) {
 				program.appendChild(parseDeclaration());
 			}
 			else if(nowReading.isLextant(Keyword.EXEC)) {
@@ -73,7 +73,7 @@ public class Parser {
 		return program;
 	}
 	private boolean startsProgram(Token token) {
-		return token.isLextant(Keyword.EXEC, Keyword.FUNCTION, Keyword.VAR, Keyword.CONST); //todo any other globals?
+		return token.isLextant(Keyword.EXEC, Keyword.FUNCTION, Keyword.VAR, Keyword.CONST, Keyword.STATIC);
 	}
 
 	private ParseNode parseFunction() {
