@@ -390,6 +390,7 @@ public class ASMCodeGenerator {
 			Type returnType = ((LambdaType)node.child(0).getType()).getReturnType();
 			ASMCodeFragment functionCallNumber = removeValueCode(node.child(0));
 
+			//todo isolate the code here into a code generator?/usable by other functions
 			for(int i=1; i<node.nChildren(); i++){
 				Type argType = node.child(i).getType();
 

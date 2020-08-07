@@ -1,13 +1,11 @@
+func recurse<int numTries> -> int {
+    print numTries; .
+    if(numTries == 0) {
+        return numTries.
+    }
+    return recurse(numTries - 1).
+}
 exec {
-    var a := [10, 20, 30, 40, 50].
-    var s := "ducky".
-    var a2 := [ [1, 2], [2, 3], [3, 4] ].
-
-
-    for elem e of a {
-        #e := 5.
-
-   }
-    print e.
-    print "done".
+    const arr := alloc [int] (10).
+    print recurse(100000).
 }

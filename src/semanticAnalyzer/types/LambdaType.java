@@ -55,12 +55,21 @@ public class LambdaType implements Type {
     }
 
     @Override
-    public boolean equivalent(Type valueType) {
-        if(valueType instanceof LambdaType) {
-            if(this.returnType != ((LambdaType) valueType).getReturnType()) {
+    public boolean equivalent(Type otherType) {
+        if(otherType instanceof LambdaType) {
+            LambdaType otherLambdaType = (LambdaType) otherType;
+            Type otherReturnType = otherLambdaType.getReturnType();
+            if(!this.returnType.equivalent(otherReturnType)) {
                 return false;
             }
-            return this.paramTypes.equals(((LambdaType) valueType).paramTypes);
+            for(int i=0; i<paramTypes.size(); i++) {
+                Type paramType = paramTypes.get(i);
+                Type otherParamType = otherLambdaType.getParamTypes().get(i);
+                if(!paramType.equivalent(otherParamType)) {
+                    return false;
+                }
+            }
+            return true;
         }
         return false;
     }

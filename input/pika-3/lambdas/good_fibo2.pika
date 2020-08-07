@@ -8,8 +8,8 @@ func printTwoPlaces <int number> -> null {
 	return.
 }
 
-func printFiboLine <int index, int fiboNumber> -> null {
-	call printTwoPlaces(index).
+func printFiboLine <int index1, int fiboNumber> -> null {
+	call printTwoPlaces(index1).
 	print " ", fiboNumber, _n_.
 	return.
 }

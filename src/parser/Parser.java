@@ -11,7 +11,6 @@ import parseTree.nodeTypes.*;
 import semanticAnalyzer.types.Type;
 import tokens.*;
 
-import java.security.Key;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -571,9 +570,10 @@ public class Parser {
 
 		while(nowReading.isLextant(Keyword.MAP, Keyword.REDUCE)) {
 			Token token = nowReading;
+			readToken();
 			ParseNode right = parseTier3Expression();
 
-			//todo: left = tier4Node.withChildren(token, left, right);
+			left = BinaryOperatorNode.withChildren(token, left, right);
 		}
 		return left;
 	}
