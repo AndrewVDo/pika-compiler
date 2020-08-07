@@ -523,16 +523,6 @@ class SemanticAnalysisVisitor extends ParseNodeVisitor.Default {
 	}
 
 	@Override
-	public void visitEnter(ControlFlowNode node) {
-		if(node.getToken().isLextant(Keyword.WHILE)) {
-			node.label = new Labeller("while");
-			node.conty = node.label.newLabel("conty");
-			node.breaky = node.label.newLabel("breaky");
-
-		}
-	}
-
-	@Override
 	public void visitLeave(ControlFlowNode node) {
 		if(node.getToken().isLextant(Keyword.FOR)) {
 			visitForStatement(node);
@@ -577,8 +567,8 @@ class SemanticAnalysisVisitor extends ParseNodeVisitor.Default {
 			}
 		} while(true);
 
-		node.breaky = ((ControlFlowNode) controlFlowNode).breaky;
-		node.conty = ((ControlFlowNode) controlFlowNode).conty;
+		node.breakLabel = ((ControlFlowNode) controlFlowNode).getBreakStatement();
+		node.continueLabel = ((ControlFlowNode) controlFlowNode).getContinueStatement();
 	}
 
 	@Override

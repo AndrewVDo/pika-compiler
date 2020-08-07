@@ -452,9 +452,75 @@ public class ASMCodeGenerator {
 			else if(controlFlowStatement == Keyword.WHILE) {
 				visitWhileStatement(node);
 			}
+			else if(controlFlowStatement == Keyword.FOR) {
+				visitForStatement(node);
+			}
 			else {
 				throw new Error("Compiler error: control flow statement");
 			}
+		}
+		private void visitForStatement(ControlFlowNode node) {
+			assert node.nChildren() == 3;
+			newVoidCode(node);
+
+			//save record expression in a variable
+			//find the length of record
+			//initialize index
+			//	a. if using index - copy to identifier
+			//	b. if using elem - load from record to identifier
+			//loop code (can use macro)
+			//break-skip
+
+			String recordLabel = node.labeller.newLabel("record");
+			String lengthLabel = node.labeller.newLabel("length");
+			String indexLabel = node.labeller.newLabel("index");
+			String iteratorLabel = node.labeller.newLabel("iterator-address");
+
+			code.add(DLabel, recordLabel);
+			code.add(DataZ, 4);
+			code.add(DLabel, indexLabel);
+			code.add(DataZ, 4);
+			code.add(DLabel, iteratorLabel);
+			code.add(DataZ, 4);
+
+			ASMCodeFragment iteratorCode = removeAddressCode(node.child(0));
+			ASMCodeFragment recordExpressionCode = removeValueCode(node.child(1));
+			ASMCodeFragment expressionCode = removeVoidCode(node.child(2));
+
+			//save address of iterator
+			code.append(iteratorCode);
+			Macros.storeITo(code, iteratorLabel);
+			//initialize indexer
+			code.add(PushI, 0);
+			Macros.storeITo(code, indexLabel);
+			//save record location
+			code.append(recordExpressionCode);
+			Macros.storeITo(code, recordLabel);
+			//get and save length of record
+			Macros.loadIFrom(code, recordLabel);
+			code.add(Call, Record.RECORD_GET_LENGTH);
+			Macros.storeITo(code, lengthLabel);
+
+			code.add(Label, node.getContinueStatement());
+
+				ASMCodeFragment loopCode = new ASMCodeFragment(GENERATES_VOID);
+				if(node.getIteration().isLextant(Keyword.ELEM)) {
+					Macros.loadIFrom(loopCode, iteratorLabel);
+					Macros.loadIFrom(loopCode, recordLabel);
+					Macros.loadIFrom(loopCode, indexLabel);
+					loopCode.add(Call, Record.RECORD_GET_ELEMENT);
+					loopCode.add(opcodeForLoad(node.child(0).getType()));
+					loopCode.add(opcodeForStore(node.child(0).getType()));
+				}
+				else {
+					Macros.loadIFrom(loopCode, iteratorLabel);
+					Macros.loadIFrom(loopCode, indexLabel);
+					loopCode.add(StoreI);
+				}
+				loopCode.append(expressionCode);
+				Macros.runtimeLoop(code, indexLabel, lengthLabel, loopCode);
+				code.add(Label, node.getBreakStatement());
+
 		}
 		private void visitWhileStatement(ControlFlowNode node) {
 			assert(node.nChildren() == 2);
@@ -467,22 +533,22 @@ public class ASMCodeGenerator {
 			String conditionLabel = labeller.newLabel("check-condition");
 			String endLabel = labeller.newLabel("end");
 
-			code.add(Label, node.conty);
+			code.add(Label, node.getContinueStatement());
 			code.add(Label, conditionLabel);
 			code.append(condition);
 			code.add(JumpFalse, endLabel);
 			code.append(innerExpression);
 			code.add(Jump, conditionLabel);
 			code.add(Label, endLabel);
-			code.add(Label, node.breaky);
+			code.add(Label, node.getBreakStatement());
 		}
 		public void visit(BreakFlowNode node) {
 			newVoidCode(node);
 			if(node.getToken().isLextant(Keyword.CONTINUE)) {
-				code.add(Jump, node.conty);
+				code.add(Jump, node.continueLabel);
 			}
 			else {
-				code.add(Jump, node.breaky);
+				code.add(Jump, node.breakLabel);
 			}
 		}
 		private void visitIfStatement(ControlFlowNode node) {

@@ -14,17 +14,18 @@ import tokens.LextantToken;
 import tokens.Token;
 
 public class ControlFlowNode extends ParseNode {
-	public Labeller label;
-	public String conty;
-	public String breaky;
+	public Labeller labeller;
+	public String getBreakStatement() {
+		return labeller.newLabel("break");
+	}
+	public String getContinueStatement() {
+		return labeller.newLabel("continue");
+	}
 
 	public ControlFlowNode(Token token) {
 		super(token);
 		assert(token instanceof LextantToken);
-	}
-
-	public ControlFlowNode(ParseNode node) {
-		super(node);
+		labeller = new Labeller("control-flow-" + ((LextantToken) token).getLextant());
 	}
 	
 	
