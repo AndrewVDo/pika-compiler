@@ -1,0 +1,28 @@
+exec {
+    var a := [10, 20, 30, 40, 50].
+    var s := "ducky".
+    var a2 := [ [1, 2], [2, 3], [3, 4] ].
+
+    for index i of a {
+        if(i == 2) {
+            continue.
+        }
+        print i, _n_.
+
+        for index j of a {
+            if(j == 3) {
+                continue.
+            }
+            print _t_, j, _n_.
+
+            for index k of a2 {
+                if(k == 1) {
+                    continue.
+                }
+                print _t_, _t_, k, _n_.
+            }
+        }
+    }
+
+    print "done".
+}

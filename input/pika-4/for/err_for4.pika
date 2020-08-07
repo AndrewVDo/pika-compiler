@@ -5,7 +5,7 @@ exec {
 
 
     for elem e of a {
-        #e := 5.
+        e := 5.
 
    }
     print e.
