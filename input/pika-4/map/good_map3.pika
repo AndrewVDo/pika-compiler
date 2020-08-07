@@ -1,0 +1,13 @@
+func int2string <[int] input> -> [float]  {
+    var x := alloc [float] (2).
+    x[0] := [ input[0] | float ] + 0.5.
+    x[1] := [ input[1] | float ] + 0.5.
+    return x.
+}
+
+exec {
+    var aI := [ [1, 2], [3, 4] ].
+    var aS := aI map int2string.
+
+    print aI, _n_, aS.
+}

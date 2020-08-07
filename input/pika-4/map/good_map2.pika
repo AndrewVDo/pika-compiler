@@ -1,0 +1,10 @@
+func int2string <int input> -> string  {
+    return "too lazy".
+}
+
+exec {
+    var aI := alloc [int] (0).
+    var aS := aI map int2string.
+
+    print aI, _n_, aS.
+}

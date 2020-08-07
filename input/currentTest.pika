@@ -1,31 +1,11 @@
-func int2string <int input> -> string {
-    if(input == 0) {
-        return "zero".
+func recurse<int numTries> -> int {
+    print numTries; .
+    if(numTries == 0) {
+        return numTries.
     }
-    if(input == 1) {
-        return "one".
-    }
-    if(input == 2) {
-        return "two".
-    }
-    if(input == 3) {
-        return "three".
-    }
-    if(input == 4) {
-        return "four".
-    }
-    if(input == 5) {
-        return "five".
-    }
-    if(input == 6) {
-        return "six".
-    }
-    return "too lazy".
+    return recurse(numTries - 1).
 }
-
 exec {
-    var aI := [ 0, 1, 2, 3, 4, 5, 6, 7, 8 ].
-    var aS := aI map int2string.
-
-    print aI, _n_, aS.
+    const arr := alloc [int] (10).
+    print recurse(100000).
 }

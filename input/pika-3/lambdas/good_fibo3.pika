@@ -8,20 +8,20 @@ func printTwoPlaces <int number> -> null {
 	return.
 }
 
-func printFiboLine <int index, int fiboNumber> -> null {
-	call printTwoPlaces(index).
+func printFiboLine <int index1, int fiboNumber> -> null {
+	call printTwoPlaces(index1).
 	print " ", fiboNumber, _n_.
 	return.
 }
 
-func fibonacciNumber <int index> -> int {
-	if(index <= 0) {
+func fibonacciNumber <int index1> -> int {
+	if(index1 <= 0) {
 		return 0.
 	}
-	if(index == 1) {
+	if(index1 == 1) {
 		return 1.
 	}
-	return fibonacciNumber(index - 1) + fibonacciNumber(index - 2).
+	return fibonacciNumber(index1 - 1) + fibonacciNumber(index1 - 2).
 }
 
 exec {
