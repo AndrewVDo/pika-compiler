@@ -3,11 +3,9 @@ exec {
     var s := "ducky".
     var a2 := [ [1, 2], [2, 3], [3, 4] ].
 
-
     for elem e of a {
-        #e := 5.
+        e := 5.
+    }
 
-   }
-    print e.
     print "done".
 }

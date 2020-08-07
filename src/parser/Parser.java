@@ -11,6 +11,7 @@ import parseTree.nodeTypes.*;
 import semanticAnalyzer.types.Type;
 import tokens.*;
 
+import java.security.Key;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -218,6 +219,9 @@ public class Parser {
 		if(nowReading.isLextant(Keyword.ELSE)) {
 			return syntaxErrorNode("else statement without if");
 		}
+		if(nowReading.isLextant(Keyword.FOR)) {
+			return parseForStatement();
+		}
 
 		Token controlStatement = nowReading;
 		readToken();
@@ -242,8 +246,33 @@ public class Parser {
 
 		return ControlFlowNode.withChildren(controlStatement, condition, innerBlockStatement);
 	}
+
+	private ParseNode parseForStatement() {
+		if(!nowReading.isLextant(Keyword.FOR)) {
+			return syntaxErrorNode("for statement");
+		}
+
+		Token forToken = nowReading;
+		expect(Keyword.FOR);
+
+		if(!nowReading.isLextant(Keyword.ELEM, Keyword.INDEX)) {
+			return syntaxErrorNode("for statement");
+		}
+
+		Token iterationToken = nowReading;
+		readToken();
+
+		ParseNode identifier = parseIdentifier();
+		expect(Keyword.OF);
+
+		ParseNode record = parseExpression();
+		ParseNode block = parseBlockStatement();
+
+		return ControlFlowNode.withChildren(forToken, iterationToken, identifier, record, block);
+	}
+
 	private boolean startsControlFlowStatement(Token token) {
-		return token.isLextant(Keyword.IF, Keyword.WHILE, Keyword.ELSE);
+		return token.isLextant(Keyword.IF, Keyword.WHILE, Keyword.ELSE, Keyword.FOR);
 	}
 
 	private boolean startsStatement(Token token) {

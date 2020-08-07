@@ -1,0 +1,15 @@
+exec {
+    var a := [10, 20, 30, 40, 50].
+    var s := "ducky".
+    var a2 := [ [1, 2], [2, 3], [3, 4] ].
+
+    for index i of a {
+        print i; a[i], _n_.
+        if (i < (length a - 1)) {
+            a[ i + 1 ] := a[ i + 1 ] + 7.
+        }
+    }
+
+    print a, _n_.
+    print "done".
+}
