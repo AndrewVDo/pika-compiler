@@ -499,6 +499,10 @@ public class ASMCodeGenerator {
 			//get and save length of record
 			Macros.loadIFrom(code, recordLabel);
 			code.add(Call, Record.RECORD_GET_LENGTH);
+			if(node.child(1).getType() == PrimitiveType.STRING) {
+				code.add(PushI, 1);
+				code.add(Subtract);
+			}
 			Macros.storeITo(code, lengthLabel);
 
 			code.add(Label, node.getContinueStatement());
