@@ -7,6 +7,8 @@ import tokens.Token;
 public class BreakFlowNode extends ParseNode {
     public String breakLabel;
     public String continueLabel;
+    public String indexLabel;
+    public ControlFlowNode controlNode;
 
     public BreakFlowNode(Token token) {
         super(token);

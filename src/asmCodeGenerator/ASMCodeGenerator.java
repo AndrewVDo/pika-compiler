@@ -478,6 +478,8 @@ public class ASMCodeGenerator {
 
 			code.add(DLabel, recordLabel);
 			code.add(DataZ, 4);
+			code.add(DLabel, lengthLabel);
+			code.add(DataZ, 4);
 			code.add(DLabel, indexLabel);
 			code.add(DataZ, 4);
 			code.add(DLabel, iteratorLabel);
@@ -549,6 +551,9 @@ public class ASMCodeGenerator {
 		public void visit(BreakFlowNode node) {
 			newVoidCode(node);
 			if(node.getToken().isLextant(Keyword.CONTINUE)) {
+				if(node.controlNode.getToken().isLextant(Keyword.FOR)) {
+					Macros.incrementInteger(code, node.indexLabel);
+				}
 				code.add(Jump, node.continueLabel);
 			}
 			else {

@@ -4,12 +4,9 @@ exec {
     var a2 := [ [1, 2], [2, 3], [3, 4] ].
 
     for index i of a {
-        print i, _n_.
-        print length a, _n_.
         for index j of a {
-            print _t_, j, _n_.
             for index k of a2 {
-                print _t_, _t_, k, _n_.
+                print i; j; k, _n_.
             }
         }
     }

@@ -562,13 +562,15 @@ class SemanticAnalysisVisitor extends ParseNodeVisitor.Default {
 			}
 			controlFlowNode = controlFlowNode.getParent();
 
-			if(controlFlowNode instanceof ControlFlowNode && ( ((ControlFlowNode)controlFlowNode).getControlFlowStatement() == Keyword.WHILE)) {
+			if(controlFlowNode instanceof ControlFlowNode && ( controlFlowNode.getToken().isLextant(Keyword.WHILE, Keyword.FOR))) {
 				break;
 			}
 		} while(true);
 
-		node.breakLabel = ((ControlFlowNode) controlFlowNode).getBreakStatement();
-		node.continueLabel = ((ControlFlowNode) controlFlowNode).getContinueStatement();
+		node.controlNode = (ControlFlowNode) controlFlowNode;
+		node.breakLabel = node.controlNode.getBreakStatement();
+		node.continueLabel = node.controlNode.getContinueStatement();
+		node.indexLabel = node.controlNode.labeller.newLabel("index");
 	}
 
 	@Override
