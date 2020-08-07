@@ -1,0 +1,10 @@
+func int2string <string input> -> string {
+    return "too lazy".
+}
+
+exec {
+    var aI := [ 0, 1, 2, 3, 4, 5, 6, 7, 8 ].
+    var aS := aI map int2string.
+
+    print aI, _n_, aS.
+}

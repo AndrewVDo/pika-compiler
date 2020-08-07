@@ -1,6 +1,8 @@
 package semanticAnalyzer.signatures;
 
 import asmCodeGenerator.*;
+import asmCodeGenerator.MapReduce.MapCode;
+import asmCodeGenerator.MapReduce.ReduceCode;
 import asmCodeGenerator.RationalMath.*;
 import asmCodeGenerator.codeStorage.ASMOpcode;
 import asmCodeGenerator.lengthOperator.LengthCode;
@@ -10,10 +12,7 @@ import asmCodeGenerator.stringConcat.ConcatStringString;
 import asmCodeGenerator.stringConcat.ReverseCode;
 import lexicalAnalyzer.Keyword;
 import lexicalAnalyzer.Punctuator;
-import semanticAnalyzer.types.ArrayType;
-import semanticAnalyzer.types.PrimitiveType;
-import semanticAnalyzer.types.Type;
-import semanticAnalyzer.types.TypeVariable;
+import semanticAnalyzer.types.*;
 
 import java.util.*;
 import java.util.function.Function;
@@ -219,6 +218,19 @@ public class FunctionSignatures extends ArrayList<FunctionSignature> {
 		);
 
 
+		TypeVariable map_si = new TypeVariable("no_type");
+		TypeVariable map_so = new TypeVariable("no_type");
+		List<TypeVariable> set_map = Arrays.asList(map_si, map_so);
+		LambdaType map_l = new LambdaType(List.of(map_si), map_so);
+		ArrayType map_ai = new ArrayType(map_si);
+		ArrayType map_ao = new ArrayType(map_so);
+
+		new FunctionSignatures(Keyword.MAP,
+				new FunctionSignature(new MapCode(), set_map, map_ai, map_l, map_ao)
+		);
+		new FunctionSignatures(Keyword.REDUCE,
+				new FunctionSignature(new ReduceCode(), set_map, map_ai, map_l, map_ao)
+		);
 
 	}
 
