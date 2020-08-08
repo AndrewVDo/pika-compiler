@@ -2,6 +2,7 @@ package asmCodeGenerator.runtime;
 
 import asmCodeGenerator.Macros;
 import asmCodeGenerator.MapReduce.MapCode;
+import asmCodeGenerator.MapReduce.ReduceCode;
 import asmCodeGenerator.codeStorage.ASMCodeFragment;
 import asmCodeGenerator.stringConcat.*;
 
@@ -289,5 +290,8 @@ public class RunTime {
 	}
 	private void newFunctions(ASMCodeFragment frag) {
 		MapCode.declareLabels(frag);
+		ReduceCode.declareLabels(frag);
+		//FoldCode.declareLabels(frag);
+		//ZipCode.declareLabels(frag);
 	}
 }

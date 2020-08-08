@@ -1,11 +1,7 @@
-func recurse<int numTries> -> int {
-    print numTries; .
-    if(numTries == 0) {
-        return numTries.
-    }
-    return recurse(numTries - 1).
-}
 exec {
-    const arr := alloc [int] (10).
-    print recurse(100000).
+    var numbers := [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].
+    var isOdd := <int x> -> bool { return x != ( x / 2 ) * 2 . }.
+    var oddities := numbers reduce isOdd.
+
+    print numbers, _n_, oddities.
 }
