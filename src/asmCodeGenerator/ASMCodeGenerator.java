@@ -638,6 +638,10 @@ public class ASMCodeGenerator {
 			}
 		}
 
+		public void visitLeave(TrinaryOperatorNode node) {
+			//todo
+		}
+
 		private boolean isComparisonOperator(Lextant operator) {
 			return operator == Punctuator.CLOSE_ANGLE || operator == Punctuator.OPEN_ANGLE
 					|| operator == Punctuator.GREATEREQUAL || operator == Punctuator.LESSEREQUAL

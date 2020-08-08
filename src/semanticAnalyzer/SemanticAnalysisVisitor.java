@@ -441,6 +441,29 @@ class SemanticAnalysisVisitor extends ParseNodeVisitor.Default {
 		}
 		node.setSignature(match);
 	}
+	@Override
+	public void visitLeave(TrinaryOperatorNode node) {
+		assert node.nChildren() == 3;
+		ParseNode left  = node.child(0);
+		ParseNode middle = node.child(1);
+		ParseNode right = node.child(2);
+		List<Type> childTypes = Arrays.asList(left.getType(), middle.getType(), right.getType());
+
+		Lextant operator = operatorFor(node);
+		FunctionSignatures signatures = FunctionSignatures.signaturesOf(operator);
+
+		FunctionSignature match = findMatch(node, signatures, childTypes);
+		if(match == null) {
+			typeCheckError(node, childTypes);
+			node.setType(PrimitiveType.ERROR);
+			return;
+		}
+		node.setSignature(match);
+	}
+	private Lextant operatorFor(TrinaryOperatorNode node) {
+		LextantToken token = (LextantToken) node.getToken();
+		return token.getLextant();
+	}
 	private Lextant operatorFor(BinaryOperatorNode node) {
 		LextantToken token = (LextantToken) node.getToken();
 		return token.getLextant();

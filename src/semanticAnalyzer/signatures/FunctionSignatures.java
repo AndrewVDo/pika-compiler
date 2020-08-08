@@ -1,6 +1,8 @@
 package semanticAnalyzer.signatures;
 
 import asmCodeGenerator.*;
+import asmCodeGenerator.Fold.MapReduce.FoldBaseCode;
+import asmCodeGenerator.Fold.MapReduce.FoldCode;
 import asmCodeGenerator.MapReduce.MapCode;
 import asmCodeGenerator.MapReduce.ReduceCode;
 import asmCodeGenerator.RationalMath.*;
@@ -237,6 +239,19 @@ public class FunctionSignatures extends ArrayList<FunctionSignature> {
 
 		new FunctionSignatures(Keyword.REDUCE,
 				new FunctionSignature(new ReduceCode(), set_reduce, reduce_ai, reduce_l, reduce_ai)
+		);
+
+		TypeVariable fold_si = new TypeVariable("no_type");
+		TypeVariable fold_base = new TypeVariable("no_type");
+		List<TypeVariable> set_fold = Arrays.asList(fold_si, fold_base);
+		LambdaType fold_l = new LambdaType(List.of(fold_si, fold_si), fold_si);
+		LambdaType fold_lb = new LambdaType(List.of(fold_base, fold_si), fold_base);
+		ArrayType fold_ai = new ArrayType(fold_si);
+
+
+		new FunctionSignatures(Keyword.FOLD,
+				new FunctionSignature(new FoldCode(), set_fold, fold_ai, fold_l, fold_si),
+				new FunctionSignature(new FoldBaseCode(), set_fold, fold_ai, fold_base, fold_lb, fold_base)
 		);
 
 	}
