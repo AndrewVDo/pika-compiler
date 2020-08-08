@@ -1,5 +1,5 @@
 exec {
-    var numbers := [1, 5, 3, 9, 2].
+    var numbers := [1].
     var max := <int x, int y> -> int {
         print x; y, _n_.
         if ( x > y ) { return x. }

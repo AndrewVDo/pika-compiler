@@ -17,24 +17,19 @@ import static asmCodeGenerator.Record.RECORD_GET_LENGTH;
 import static asmCodeGenerator.codeStorage.ASMOpcode.*;
 
 public class MapCode implements SimpleCodeGenerator {
-    private static Labeller labeller = new Labeller("map");
-    private static String input = labeller.newLabel("input-array");
-    private static String length = labeller.newLabel("input-length");
-    private static String lambda = labeller.newLabel("lambda");
-    private static String index = labeller.newLabel("index");
-    private static String result = labeller.newLabel("result");
+    private String input;
+    private String length;
+    private String lambda;
+    private String index;
+    private String result;
 
-    public static void declareLabels(ASMCodeFragment frag) {
-        frag.add(DLabel, input);
-        frag.add(DataZ, 4);
-        frag.add(DLabel, length);
-        frag.add(DataZ, 4);
-        frag.add(DLabel, lambda);
-        frag.add(DataZ, 4);
-        frag.add(DLabel, index);
-        frag.add(DataZ, 4);
-        frag.add(DLabel, result);
-        frag.add(DataZ, 4);
+    public void declareLabels() {
+        Labeller labeller = new Labeller("map");
+        input = labeller.newLabel("input-array");
+        length = labeller.newLabel("input-length");
+        lambda = labeller.newLabel("lambda");
+        index = labeller.newLabel("index");
+        result = labeller.newLabel("result");
     }
 
     private ASMOpcode opcodeForStore(Type type) {
@@ -70,6 +65,17 @@ public class MapCode implements SimpleCodeGenerator {
     @Override
     public ASMCodeFragment generate(ParseNode node) {
         ASMCodeFragment frag = new ASMCodeFragment(ASMCodeFragment.CodeType.GENERATES_VALUE);
+        declareLabels();
+        frag.add(DLabel, input);
+        frag.add(DataZ, 4);
+        frag.add(DLabel, length);
+        frag.add(DataZ, 4);
+        frag.add(DLabel, lambda);
+        frag.add(DataZ, 4);
+        frag.add(DLabel, index);
+        frag.add(DataZ, 4);
+        frag.add(DLabel, result);
+        frag.add(DataZ, 4);
 
         //[input-array, lambda-address]
         Macros.storeITo(frag, lambda);

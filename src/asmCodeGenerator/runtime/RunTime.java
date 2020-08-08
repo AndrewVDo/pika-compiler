@@ -74,7 +74,6 @@ public class RunTime {
 		recordFunctions(result);
 		rationalFunctions(result);
 		stringFunctions(result);
-		newFunctions(result);
 		Macros.declareI(result, RECORD_PRINT_FORMAT);
 		Macros.declareI(result, RECORD_PRINT_BOOL_FLAG);
 		Macros.declareI(result, RECORD_PRINT_RAT_FLAG);
