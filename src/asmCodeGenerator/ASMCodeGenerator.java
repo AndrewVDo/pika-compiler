@@ -642,7 +642,7 @@ public class ASMCodeGenerator {
 			newValueCode(node);
 			ASMCodeFragment arg1 = removeValueCode(node.child(0));
 			ASMCodeFragment arg2 = removeValueCode(node.child(1));
-			ASMCodeFragment arg3 = removeValueCode(node.child(1));
+			ASMCodeFragment arg3 = removeValueCode(node.child(2));
 
 			code.append(arg1);
 			code.append(arg2);

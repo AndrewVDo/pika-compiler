@@ -16,9 +16,7 @@ import lexicalAnalyzer.Keyword;
 import lexicalAnalyzer.Punctuator;
 import semanticAnalyzer.types.*;
 
-import java.lang.reflect.Array;
 import java.util.*;
-import java.util.function.Function;
 
 
 public class FunctionSignatures extends ArrayList<FunctionSignature> {
