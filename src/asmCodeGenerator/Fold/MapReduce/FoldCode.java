@@ -17,24 +17,22 @@ import static asmCodeGenerator.Record.RECORD_GET_LENGTH;
 import static asmCodeGenerator.codeStorage.ASMOpcode.*;
 
 public class FoldCode implements SimpleCodeGenerator {
-    private static Labeller labeller = new Labeller("map");
-    private static String input = labeller.newLabel("input-array");
-    private static String length = labeller.newLabel("input-length");
-    private static String lambda = labeller.newLabel("lambda");
-    private static String index = labeller.newLabel("index");
-    private static String result = labeller.newLabel("result");
+    private String input;
+    private String length;
+    private String lambda;
+    private String index;
+    private String result;
+    private String ret;
 
-    public static void declareLabels(ASMCodeFragment frag) {
-        frag.add(DLabel, input);
-        frag.add(DataZ, 4);
-        frag.add(DLabel, length);
-        frag.add(DataZ, 4);
-        frag.add(DLabel, lambda);
-        frag.add(DataZ, 4);
-        frag.add(DLabel, index);
-        frag.add(DataZ, 4);
-        frag.add(DLabel, result);
-        frag.add(DataZ, 4);
+    private void declareLabels() {
+        Labeller labeller = new Labeller("fold");
+        input = labeller.newLabel("input-array");
+        length = labeller.newLabel("input-length");
+        lambda = labeller.newLabel("lambda");
+        index = labeller.newLabel("index");
+        result = labeller.newLabel("result");
+
+       ret = labeller.newLabel("ret");
     }
 
     private ASMOpcode opcodeForStore(Type type) {
@@ -69,7 +67,25 @@ public class FoldCode implements SimpleCodeGenerator {
 
     @Override
     public ASMCodeFragment generate(ParseNode node) {
+        ParseNode arrayNode = node.child(0);
+        ParseNode lambdaNode = node.child(1);
+
+        LambdaType lambdaType = (LambdaType) lambdaNode.getType();
+        Type inputSubType = lambdaType.getParamTypes().get(0);
+//        Type resultSubType = lambdaType.getReturnType();
+
         ASMCodeFragment frag = new ASMCodeFragment(ASMCodeFragment.CodeType.GENERATES_VALUE);
+        declareLabels();
+        frag.add(DLabel, input);
+        frag.add(DataZ, 4);
+        frag.add(DLabel, length);
+        frag.add(DataZ, 4);
+        frag.add(DLabel, lambda);
+        frag.add(DataZ, 4);
+        frag.add(DLabel, index);
+        frag.add(DataZ, 4);
+        frag.add(DLabel, result);
+        frag.add(DataZ, 8);
 
         //[input-array, lambda-address]
         Macros.storeITo(frag, lambda);
@@ -79,28 +95,37 @@ public class FoldCode implements SimpleCodeGenerator {
         frag.add(Call, RECORD_GET_LENGTH);
         Macros.storeITo(frag, length);
 
+        //length == 0 rte
+        Macros.loadIFrom(frag, length);
+        frag.add(JumpFalse, RunTime.GENERAL_RUNTIME_ERROR);
+
+        //preload a[0] into result
+        frag.add(PushD, result);
+        Macros.loadIFrom(frag, input);
         frag.add(PushI, 0);
+        frag.add(Call, Record.RECORD_GET_ELEMENT);
+        frag.add(opcodeForLoad(inputSubType));
+        frag.add(opcodeForStore(inputSubType));
+
+        //length == 1 return
+        Macros.loadIFrom(frag, length);
+        frag.add(PushI, 1);
+        frag.add(Subtract);
+        frag.add(JumpFalse, ret);
+
+        frag.add(PushI, 1);
         Macros.storeITo(frag, index);
 
-        ParseNode arrayNode = node.child(0);
-        ParseNode lambdaNode = node.child(1);
-
-        LambdaType lambdaType = (LambdaType) lambdaNode.getType();
-        Type inputSubType = lambdaType.getParamTypes().get(0);
-        Type resultSubType = lambdaType.getReturnType();
-
-        Macros.loadIFrom(frag, length);
-        frag.add(PushI, resultSubType.getSize());
-        frag.add(PushI, Record.generateStatus(false, resultSubType.isReference(), false, false));
-        frag.add(PushI, Record.ARRAY_TYPE_IDENTIFIER);     					//[... length subtypeSize status typeid]
-        frag.add(Call, Record.RECORD_ALLOCATE_FUNCTION);   					//[... record]
-        Macros.storeITo(frag, result);
-
         ASMCodeFragment loopCode = new ASMCodeFragment(ASMCodeFragment.CodeType.GENERATES_VOID);
-        //update stackptr
+        //update stackptr for arg 1
         Macros.decStackPtr(loopCode, inputSubType.getSize());
+        Macros.loadIFrom(loopCode, RunTime.STACK_POINTER);
+        loopCode.add(PushD, result);
+        loopCode.add(opcodeForLoad(inputSubType));
+        loopCode.add(opcodeForStore(inputSubType));
 
-        //place argument
+        //update stack ptr for arg 2
+        Macros.decStackPtr(loopCode, inputSubType.getSize());
         Macros.loadIFrom(loopCode, RunTime.STACK_POINTER);
         Macros.loadIFrom(loopCode, input);
         Macros.loadIFrom(loopCode, index);
@@ -124,18 +149,18 @@ public class FoldCode implements SimpleCodeGenerator {
         //call
         loopCode.add(CallV);
 
-        //get returned & restore stack ptr
+        //get returned & restore stack ptr & store at result
+        loopCode.add(PushD, result);
         Macros.loadIFrom(loopCode, RunTime.STACK_POINTER);
-        loopCode.add(opcodeForLoad(resultSubType));
-        Macros.incStackPtr(loopCode, resultSubType.getSize());
+        loopCode.add(opcodeForLoad(inputSubType));
+        Macros.incStackPtr(loopCode, inputSubType.getSize());
+        loopCode.add(opcodeForStore(inputSubType));
 
-        //set the result at index
-        Macros.loadIFrom(loopCode, result);
-        Macros.loadIFrom(loopCode, index);
-        loopCode.add(Call, Record.RECORD_INIT_ELEMENT);
         Macros.runtimeLoop(frag, index, length, loopCode);
 
-        Macros.loadIFrom(frag, result);
+        frag.add(Label, ret);
+        frag.add(PushD, result);
+        frag.add(opcodeForLoad(inputSubType));
 
         return frag;
     }
