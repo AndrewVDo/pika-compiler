@@ -14,6 +14,7 @@ import lexicalAnalyzer.Keyword;
 import lexicalAnalyzer.Punctuator;
 import semanticAnalyzer.types.*;
 
+import java.lang.reflect.Array;
 import java.util.*;
 import java.util.function.Function;
 
@@ -228,8 +229,14 @@ public class FunctionSignatures extends ArrayList<FunctionSignature> {
 		new FunctionSignatures(Keyword.MAP,
 				new FunctionSignature(new MapCode(), set_map, map_ai, map_l, map_ao)
 		);
+
+		TypeVariable reduce_si = new TypeVariable("no_type");
+		List<TypeVariable> set_reduce = Arrays.asList(map_si, map_so);
+		LambdaType reduce_l = new LambdaType(List.of(reduce_si), PrimitiveType.BOOLEAN);
+		ArrayType reduce_ai = new ArrayType(reduce_si);
+
 		new FunctionSignatures(Keyword.REDUCE,
-				new FunctionSignature(new ReduceCode(), set_map, map_ai, map_l, map_ao)
+				new FunctionSignature(new ReduceCode(), set_reduce, reduce_ai, reduce_l, reduce_ai)
 		);
 
 	}
