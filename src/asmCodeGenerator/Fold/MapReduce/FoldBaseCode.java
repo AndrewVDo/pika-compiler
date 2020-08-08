@@ -1,4 +1,4 @@
-package asmCodeGenerator.MapReduce;
+package asmCodeGenerator.Fold.MapReduce;
 
 import asmCodeGenerator.Labeller;
 import asmCodeGenerator.Macros;
@@ -16,20 +16,23 @@ import semanticAnalyzer.types.Type;
 import static asmCodeGenerator.Record.RECORD_GET_LENGTH;
 import static asmCodeGenerator.codeStorage.ASMOpcode.*;
 
-public class MapCode implements SimpleCodeGenerator {
+public class FoldBaseCode implements SimpleCodeGenerator {
     private String input;
     private String length;
     private String lambda;
     private String index;
     private String result;
+    private String ret;
 
-    public void declareLabels() {
-        Labeller labeller = new Labeller("map");
+    private void declareLabels() {
+        Labeller labeller = new Labeller("fold");
         input = labeller.newLabel("input-array");
         length = labeller.newLabel("input-length");
         lambda = labeller.newLabel("lambda");
         index = labeller.newLabel("index");
         result = labeller.newLabel("result");
+
+       ret = labeller.newLabel("ret");
     }
 
     private ASMOpcode opcodeForStore(Type type) {
@@ -64,6 +67,13 @@ public class MapCode implements SimpleCodeGenerator {
 
     @Override
     public ASMCodeFragment generate(ParseNode node) {
+        ParseNode arrayNode = node.child(0);
+        ParseNode lambdaNode = node.child(2);
+
+        LambdaType lambdaType = (LambdaType) lambdaNode.getType();
+        Type inputSubType = lambdaType.getParamTypes().get(1);
+        Type baseType = lambdaType.getReturnType();
+
         ASMCodeFragment frag = new ASMCodeFragment(ASMCodeFragment.CodeType.GENERATES_VALUE);
         declareLabels();
         frag.add(DLabel, input);
@@ -75,38 +85,36 @@ public class MapCode implements SimpleCodeGenerator {
         frag.add(DLabel, index);
         frag.add(DataZ, 4);
         frag.add(DLabel, result);
-        frag.add(DataZ, 4);
+        frag.add(DataZ, 8);
 
         //[input-array, lambda-address]
         Macros.storeITo(frag, lambda);
+        frag.add(PushD, result);
+        frag.add(Exchange);
+        frag.add(opcodeForStore(baseType));
         Macros.storeITo(frag, input);
 
         Macros.loadIFrom(frag, input);
         frag.add(Call, RECORD_GET_LENGTH);
         Macros.storeITo(frag, length);
 
+        //length == 0 return base
+        Macros.loadIFrom(frag, length);
+        frag.add(JumpFalse, ret);
+
         frag.add(PushI, 0);
         Macros.storeITo(frag, index);
 
-        ParseNode arrayNode = node.child(0);
-        ParseNode lambdaNode = node.child(1);
-
-        LambdaType lambdaType = (LambdaType) lambdaNode.getType();
-        Type inputSubType = lambdaType.getParamTypes().get(0);
-        Type resultSubType = lambdaType.getReturnType();
-
-        Macros.loadIFrom(frag, length);
-        frag.add(PushI, resultSubType.getSize());
-        frag.add(PushI, Record.generateStatus(false, resultSubType.isReference(), false, false));
-        frag.add(PushI, Record.ARRAY_TYPE_IDENTIFIER);     					//[... length subtypeSize status typeid]
-        frag.add(Call, Record.RECORD_ALLOCATE_FUNCTION);   					//[... record]
-        Macros.storeITo(frag, result);
-
         ASMCodeFragment loopCode = new ASMCodeFragment(ASMCodeFragment.CodeType.GENERATES_VOID);
-        //update stackptr
-        Macros.decStackPtr(loopCode, inputSubType.getSize());
+        //update stackptr for arg 1
+        Macros.decStackPtr(loopCode, baseType.getSize());
+        Macros.loadIFrom(loopCode, RunTime.STACK_POINTER);
+        loopCode.add(PushD, result);
+        loopCode.add(opcodeForLoad(baseType));
+        loopCode.add(opcodeForStore(baseType));
 
-        //place argument
+        //update stack ptr for arg 2
+        Macros.decStackPtr(loopCode, inputSubType.getSize());
         Macros.loadIFrom(loopCode, RunTime.STACK_POINTER);
         Macros.loadIFrom(loopCode, input);
         Macros.loadIFrom(loopCode, index);
@@ -130,18 +138,18 @@ public class MapCode implements SimpleCodeGenerator {
         //call
         loopCode.add(CallV);
 
-        //get returned & restore stack ptr
+        //get returned & restore stack ptr & store at result
+        loopCode.add(PushD, result);
         Macros.loadIFrom(loopCode, RunTime.STACK_POINTER);
-        loopCode.add(opcodeForLoad(resultSubType));
-        Macros.incStackPtr(loopCode, resultSubType.getSize());
+        loopCode.add(opcodeForLoad(baseType));
+        Macros.incStackPtr(loopCode, baseType.getSize());
+        loopCode.add(opcodeForStore(baseType));
 
-        //set the result at index
-        Macros.loadIFrom(loopCode, result);
-        Macros.loadIFrom(loopCode, index);
-        loopCode.add(Call, Record.RECORD_INIT_ELEMENT);
         Macros.runtimeLoop(frag, index, length, loopCode);
 
-        Macros.loadIFrom(frag, result);
+        frag.add(Label, ret);
+        frag.add(PushD, result);
+        frag.add(opcodeForLoad(baseType));
 
         return frag;
     }

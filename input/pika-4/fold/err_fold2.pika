@@ -1,0 +1,8 @@
+exec {
+    var numbers := [1, 5, 3, 9, 2].
+    var catNumber := <string s, int x>-> int { return 5. }
+    var numList := numbers fold [ “list:”] catNumber.
+
+
+    print numbers, _n_, numList.
+}

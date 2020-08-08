@@ -1,5 +1,6 @@
 package asmCodeGenerator.runtime;
 
+import asmCodeGenerator.Fold.MapReduce.FoldCode;
 import asmCodeGenerator.Macros;
 import asmCodeGenerator.MapReduce.MapCode;
 import asmCodeGenerator.MapReduce.ReduceCode;
@@ -73,7 +74,6 @@ public class RunTime {
 		recordFunctions(result);
 		rationalFunctions(result);
 		stringFunctions(result);
-		newFunctions(result);
 		Macros.declareI(result, RECORD_PRINT_FORMAT);
 		Macros.declareI(result, RECORD_PRINT_BOOL_FLAG);
 		Macros.declareI(result, RECORD_PRINT_RAT_FLAG);
@@ -287,11 +287,5 @@ public class RunTime {
 		ConcatStringChar.declareLabels(frag);
 		Substring.declareLabels(frag);
 		ReverseCode.declareLabels(frag);
-	}
-	private void newFunctions(ASMCodeFragment frag) {
-		MapCode.declareLabels(frag);
-		ReduceCode.declareLabels(frag);
-		//FoldCode.declareLabels(frag);
-		//ZipCode.declareLabels(frag);
 	}
 }

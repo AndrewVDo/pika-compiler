@@ -18,19 +18,30 @@ import static asmCodeGenerator.codeStorage.ASMOpcode.*;
 
 public class ReduceCode implements SimpleCodeGenerator {
 
-    private static Labeller labeller = new Labeller("reduce");
-    private static String input = labeller.newLabel("input-array");
-    private static String length = labeller.newLabel("input-length");
-    private static String lambda = labeller.newLabel("lambda");
-    private static String index = labeller.newLabel("index");
-    private static String temp_array = labeller.newLabel("temp-array");
+    private  String input;
+    private  String length;
+    private  String lambda;
+    private  String index;
+    private  String temp_array;
 
-    private static String result_length = labeller.newLabel("result-length");
-    private static String result = labeller.newLabel("result");
+    private  String result_length ;
+    private  String result ;
 
-    private static String false_pred = labeller.newLabel("false-pred");
+    private  String false_pred ;
 
-    public static void declareLabels(ASMCodeFragment frag) {
+    public  void declareLabels(ASMCodeFragment frag) {
+          Labeller labeller = new Labeller("reduce");
+           input = labeller.newLabel("input-array");
+           length = labeller.newLabel("input-length");
+           lambda = labeller.newLabel("lambda");
+           index = labeller.newLabel("index");
+           temp_array = labeller.newLabel("temp-array");
+
+           result_length = labeller.newLabel("result-length");
+           result = labeller.newLabel("result");
+
+           false_pred = labeller.newLabel("false-pred");
+
         frag.add(DLabel, input);
         frag.add(DataZ, 4);
         frag.add(DLabel, length);
@@ -80,6 +91,7 @@ public class ReduceCode implements SimpleCodeGenerator {
     @Override
     public ASMCodeFragment generate(ParseNode node) {
         ASMCodeFragment frag = new ASMCodeFragment(ASMCodeFragment.CodeType.GENERATES_VALUE);
+        declareLabels(frag);
 
         //[input-array, lambda-address]
         Macros.storeITo(frag, lambda);

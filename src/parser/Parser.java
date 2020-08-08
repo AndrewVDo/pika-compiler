@@ -554,10 +554,21 @@ public class Parser {
 
 		while(nowReading.isLextant(Keyword.FOLD)) {
 			Token token = nowReading;
-			//todo optional base
-			ParseNode right = parseTier4Expression();
+			readToken();
 
-			//todo: left = tier5Node.withChildren(token, left, right, base);
+			if(nowReading.isLextant(Punctuator.OPEN_BRACKET)) {
+				readToken();
+				ParseNode middle = parseExpression();
+				expect(Punctuator.CLOSE_BRACKET);
+
+				ParseNode right = parseTier4Expression();
+				left = TrinaryOperatorNode.withChildren(token, left, middle, right);
+			}
+			else {
+				ParseNode right = parseTier4Expression();
+				left = BinaryOperatorNode.withChildren(token, left, right);
+			}
+
 		}
 		return left;
 	}

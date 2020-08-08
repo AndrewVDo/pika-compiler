@@ -1,0 +1,17 @@
+exec {
+    var numbers := [1, 5, 3, 9, 2].
+    var max := <int x, int y> -> int {
+        print x; y, _n_.
+        if ( x > y ) { return x. }
+        else { return y. }
+    }.
+    var min := <int x, int y> -> float {
+        print x; y, _n_.
+        if ( x > y ) { return 5.1. }
+        else { return 5.2. }
+    }.
+    var maxV := numbers fold max.
+    var minV := numbers fold min.
+
+    print numbers, _n_, maxV; minV.
+}

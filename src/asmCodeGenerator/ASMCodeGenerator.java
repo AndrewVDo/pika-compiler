@@ -638,6 +638,32 @@ public class ASMCodeGenerator {
 			}
 		}
 
+		public void visitLeave(TrinaryOperatorNode node) {
+			newValueCode(node);
+			ASMCodeFragment arg1 = removeValueCode(node.child(0));
+			ASMCodeFragment arg2 = removeValueCode(node.child(1));
+			ASMCodeFragment arg3 = removeValueCode(node.child(2));
+
+			code.append(arg1);
+			code.append(arg2);
+			code.append(arg3);
+
+			Object variant = node.getSignature().getVariant();
+
+			if(variant instanceof SimpleCodeGenerator) {
+				SimpleCodeGenerator generator = (SimpleCodeGenerator) variant;
+				ASMCodeFragment fragment = generator.generate(node);
+				code.append(fragment);
+
+				if(fragment.isAddress()) {
+					code.markAsAddress();
+				}
+			}
+			else {
+				throw new Error("Compiler error: binary operation failed");
+			}
+		}
+
 		private boolean isComparisonOperator(Lextant operator) {
 			return operator == Punctuator.CLOSE_ANGLE || operator == Punctuator.OPEN_ANGLE
 					|| operator == Punctuator.GREATEREQUAL || operator == Punctuator.LESSEREQUAL
